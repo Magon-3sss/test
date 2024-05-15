@@ -1,0 +1,49 @@
+digraph "classes_noa" {
+rankdir=BT
+charset="utf-8"
+"app.models.AlimentationCamera" [color="black", fontcolor="black", label=<{AlimentationCamera|alimentation_camera : CharField<br ALIGN="LEFT"/>|}>, shape="record", style="solid"];
+"app.models.CategorieEngrais" [color="black", fontcolor="black", label=<{CategorieEngrais|categorie_engrais : CharField<br ALIGN="LEFT"/>|}>, shape="record", style="solid"];
+"app.models.CategorieGrainesPousses" [color="black", fontcolor="black", label=<{CategorieGrainesPousses|categorie_graines_pousses : CharField<br ALIGN="LEFT"/>|}>, shape="record", style="solid"];
+"app.models.CategorieTraitement" [color="black", fontcolor="black", label=<{CategorieTraitement|categorie_traitement : CharField<br ALIGN="LEFT"/>|}>, shape="record", style="solid"];
+"app.models.ColorReference" [color="black", fontcolor="black", label=<{ColorReference|color_css : CharField<br ALIGN="LEFT"/>description : TextField<br ALIGN="LEFT"/>value : CharField<br ALIGN="LEFT"/>|}>, shape="record", style="solid"];
+"app.models.Filtre" [color="black", fontcolor="black", label=<{Filtre|abreviation : CharField<br ALIGN="LEFT"/>descriptionAr : TextField<br ALIGN="LEFT"/>descriptionFr : TextField<br ALIGN="LEFT"/>|}>, shape="record", style="solid"];
+"app.models.MachinesNew" [color="black", fontcolor="black", label=<{MachinesNew|allocation : CharField<br ALIGN="LEFT"/>carte_grise : CharField<br ALIGN="LEFT"/>date_achat : CharField<br ALIGN="LEFT"/>date_assurance : CharField<br ALIGN="LEFT"/>date_location : CharField<br ALIGN="LEFT"/>date_vignette : CharField<br ALIGN="LEFT"/>date_visite : CharField<br ALIGN="LEFT"/>description : TextField<br ALIGN="LEFT"/>marque : CharField<br ALIGN="LEFT"/>matricule : CharField<br ALIGN="LEFT"/>prix_achat : DecimalField<br ALIGN="LEFT"/>prix_heure : DecimalField<br ALIGN="LEFT"/>prix_jour : DecimalField<br ALIGN="LEFT"/>prix_mois : DecimalField<br ALIGN="LEFT"/>type : CharField<br ALIGN="LEFT"/>|}>, shape="record", style="solid"];
+"app.models.MapForm" [color="black", fontcolor="black", label=<{MapForm|client : CharField<br ALIGN="LEFT"/>department : CharField<br ALIGN="LEFT"/>geozone : ForeignKey<br ALIGN="LEFT"/>project_category : CharField<br ALIGN="LEFT"/>project_date : CharField<br ALIGN="LEFT"/>project_name : CharField<br ALIGN="LEFT"/>|}>, shape="record", style="solid"];
+"app.models.MapFormParcelle" [color="black", fontcolor="black", label=<{MapFormParcelle|client : CharField<br ALIGN="LEFT"/>department : CharField<br ALIGN="LEFT"/>geozone : ForeignKey<br ALIGN="LEFT"/>id_projet : TextField<br ALIGN="LEFT"/>parcelle_category : CharField<br ALIGN="LEFT"/>parcelle_date : CharField<br ALIGN="LEFT"/>parcelle_name : CharField<br ALIGN="LEFT"/>|}>, shape="record", style="solid"];
+"app.models.MarqueControleAcces" [color="black", fontcolor="black", label=<{MarqueControleAcces|marque_controle_acces : CharField<br ALIGN="LEFT"/>|}>, shape="record", style="solid"];
+"app.models.MarqueDvrNvr" [color="black", fontcolor="black", label=<{MarqueDvrNvr|marque_dvr_nvr : CharField<br ALIGN="LEFT"/>|}>, shape="record", style="solid"];
+"app.models.NbrChaineDvrNvr" [color="black", fontcolor="black", label=<{NbrChaineDvrNvr|nbr_chaine_dvr_nvr : CharField<br ALIGN="LEFT"/>|}>, shape="record", style="solid"];
+"app.models.Point" [color="black", fontcolor="black", label=<{Point|geozone : ForeignKey<br ALIGN="LEFT"/>latt : CharField<br ALIGN="LEFT"/>long : CharField<br ALIGN="LEFT"/>|}>, shape="record", style="solid"];
+"app.models.PointParcelle" [color="black", fontcolor="black", label=<{PointParcelle|geozone : ForeignKey<br ALIGN="LEFT"/>latt : CharField<br ALIGN="LEFT"/>long : CharField<br ALIGN="LEFT"/>|}>, shape="record", style="solid"];
+"app.models.SectionVanne" [color="black", fontcolor="black", label=<{SectionVanne|section_vanne : CharField<br ALIGN="LEFT"/>|}>, shape="record", style="solid"];
+"app.models.Test" [color="black", fontcolor="black", label=<{Test|nom : CharField<br ALIGN="LEFT"/>type : CharField<br ALIGN="LEFT"/>|}>, shape="record", style="solid"];
+"app.models.TypeAntiIncendie" [color="black", fontcolor="black", label=<{TypeAntiIncendie|type_anti_incendie : CharField<br ALIGN="LEFT"/>|}>, shape="record", style="solid"];
+"app.models.TypeCarburant" [color="black", fontcolor="black", label=<{TypeCarburant|type_carburant : CharField<br ALIGN="LEFT"/>|}>, shape="record", style="solid"];
+"app.models.TypeCarburantGenerateur" [color="black", fontcolor="black", label=<{TypeCarburantGenerateur|type_carburant_generateur : CharField<br ALIGN="LEFT"/>|}>, shape="record", style="solid"];
+"app.models.TypeCompteurPoste" [color="black", fontcolor="black", label=<{TypeCompteurPoste|type_compteur_poste : CharField<br ALIGN="LEFT"/>|}>, shape="record", style="solid"];
+"app.models.TypeControleAcces" [color="black", fontcolor="black", label=<{TypeControleAcces|type_controle_acces : CharField<br ALIGN="LEFT"/>|}>, shape="record", style="solid"];
+"app.models.TypeCouplageMoteur" [color="black", fontcolor="black", label=<{TypeCouplageMoteur|type_couplage_moteur : CharField<br ALIGN="LEFT"/>|}>, shape="record", style="solid"];
+"app.models.TypeDetectionIntrusion" [color="black", fontcolor="black", label=<{TypeDetectionIntrusion|type_detection_intrusion : CharField<br ALIGN="LEFT"/>|}>, shape="record", style="solid"];
+"app.models.TypeEngrais" [color="black", fontcolor="black", label=<{TypeEngrais|type_engrais : CharField<br ALIGN="LEFT"/>|}>, shape="record", style="solid"];
+"app.models.TypeFrigo" [color="black", fontcolor="black", label=<{TypeFrigo|type_frigo : CharField<br ALIGN="LEFT"/>|}>, shape="record", style="solid"];
+"app.models.TypeGrainesPousses" [color="black", fontcolor="black", label=<{TypeGrainesPousses|type_graines_pousses : CharField<br ALIGN="LEFT"/>|}>, shape="record", style="solid"];
+"app.models.TypeHangerDepot" [color="black", fontcolor="black", label=<{TypeHangerDepot|type_hanger_depot : CharField<br ALIGN="LEFT"/>|}>, shape="record", style="solid"];
+"app.models.TypeLocalTechnique" [color="black", fontcolor="black", label=<{TypeLocalTechnique|type_local_technique : CharField<br ALIGN="LEFT"/>|}>, shape="record", style="solid"];
+"app.models.TypeMachineEngins" [color="black", fontcolor="black", label=<{TypeMachineEngins|type_machine_engins : CharField<br ALIGN="LEFT"/>|}>, shape="record", style="solid"];
+"app.models.TypeMaisonVilla" [color="black", fontcolor="black", label=<{TypeMaisonVilla|type_Maison_Villa : CharField<br ALIGN="LEFT"/>|}>, shape="record", style="solid"];
+"app.models.TypeMoteur" [color="black", fontcolor="black", label=<{TypeMoteur|type_moteur : CharField<br ALIGN="LEFT"/>|}>, shape="record", style="solid"];
+"app.models.TypeOutilsAgricoles" [color="black", fontcolor="black", label=<{TypeOutilsAgricoles|type_outils_agricoles : CharField<br ALIGN="LEFT"/>|}>, shape="record", style="solid"];
+"app.models.TypePieces" [color="black", fontcolor="black", label=<{TypePieces|type_pieces : CharField<br ALIGN="LEFT"/>|}>, shape="record", style="solid"];
+"app.models.TypePivot" [color="black", fontcolor="black", label=<{TypePivot|type_pivot : CharField<br ALIGN="LEFT"/>|}>, shape="record", style="solid"];
+"app.models.TypePuit" [color="black", fontcolor="black", label=<{TypePuit|type_puit : CharField<br ALIGN="LEFT"/>|}>, shape="record", style="solid"];
+"app.models.TypePulverisateuraxiale" [color="black", fontcolor="black", label=<{TypePulverisateuraxiale|type_pulverisateur_axiale : CharField<br ALIGN="LEFT"/>|}>, shape="record", style="solid"];
+"app.models.TypeReservoir" [color="black", fontcolor="black", label=<{TypeReservoir|type_reservoir : CharField<br ALIGN="LEFT"/>|}>, shape="record", style="solid"];
+"app.models.TypeRh" [color="black", fontcolor="black", label=<{TypeRh|type_rh : CharField<br ALIGN="LEFT"/>|}>, shape="record", style="solid"];
+"app.models.TypeSvsCamera" [color="black", fontcolor="black", label=<{TypeSvsCamera|type_svs_camera : CharField<br ALIGN="LEFT"/>|}>, shape="record", style="solid"];
+"app.models.TypeTensionGenerateur" [color="black", fontcolor="black", label=<{TypeTensionGenerateur|type_tension_generateur : CharField<br ALIGN="LEFT"/>|}>, shape="record", style="solid"];
+"app.models.TypeTensionMoteur" [color="black", fontcolor="black", label=<{TypeTensionMoteur|type_tension_moteur : CharField<br ALIGN="LEFT"/>|}>, shape="record", style="solid"];
+"app.models.TypeTraitement" [color="black", fontcolor="black", label=<{TypeTraitement|type_traitement : CharField<br ALIGN="LEFT"/>|}>, shape="record", style="solid"];
+"app.models.TypeVanne" [color="black", fontcolor="black", label=<{TypeVanne|type_vanne : CharField<br ALIGN="LEFT"/>|}>, shape="record", style="solid"];
+"app.models.Zone" [color="black", fontcolor="black", label=<{Zone|area : CharField<br ALIGN="LEFT"/>circle_radius : CharField<br ALIGN="LEFT"/>type : CharField<br ALIGN="LEFT"/>|}>, shape="record", style="solid"];
+"app.models.ZoneParcelle" [color="black", fontcolor="black", label=<{ZoneParcelle|area : CharField<br ALIGN="LEFT"/>circle_radius : CharField<br ALIGN="LEFT"/>id_projet : TextField<br ALIGN="LEFT"/>type : CharField<br ALIGN="LEFT"/>|}>, shape="record", style="solid"];
+}

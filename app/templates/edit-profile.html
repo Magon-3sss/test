@@ -1,0 +1,17 @@
+<form id="image-form" method="post" enctype="multipart/form-data" action="{% url 'edit-profile' %}">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <label for="id_profile_image">Image de profil :</label>
+    <p>Actuelle : <img src="{{ profile_user.profile_image.url }}" alt="Image de profil actuelle"></p>
+    <p>Changer : <input type="file" name="profile_image" id="id_profile_image"></p>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+        <button type="submit" class="btn btn-primary">Enregistrer les modifications</button>
+    </div>
+</form>
+
+{% comment %} <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Enregistrer les modifications</button>
+</form> {% endcomment %}

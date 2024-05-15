@@ -1,0 +1,94 @@
+{
+    "headers": {
+        "accept": "image/png",
+        "content-type": "application/json"
+    },
+    "payload": {
+        "evalscript": "\n      //VERSION=3\n        function evaluatePixel(samples) {\n            let val = index(samples.B08, samples.B06);\n            return [val, samples.dataMask];\n        }\n\n        function setup() {\n        return {\n            input: [{\n            bands: [\n                \"B06\",\n                \"B08\",\n                \"dataMask\"\n            ]\n            }],\n            output: {\n            bands: 2\n            }\n        }\n        }\n    ",
+        "input": {
+            "bounds": {
+                "bbox": [
+                    8.837471,
+                    34.658967,
+                    8.850217,
+                    34.669591
+                ],
+                "geometry": {
+                    "coordinates": [
+                        [
+                            [
+                                8.843522,
+                                34.669309
+                            ],
+                            [
+                                8.843522,
+                                34.669309
+                            ],
+                            [
+                                8.850217,
+                                34.66352
+                            ],
+                            [
+                                8.850217,
+                                34.66352
+                            ],
+                            [
+                                8.846183,
+                                34.658967
+                            ],
+                            [
+                                8.846183,
+                                34.658967
+                            ],
+                            [
+                                8.837471,
+                                34.666415
+                            ],
+                            [
+                                8.837471,
+                                34.666415
+                            ],
+                            [
+                                8.843608,
+                                34.669591
+                            ],
+                            [
+                                8.843522,
+                                34.669309
+                            ]
+                        ]
+                    ],
+                    "type": "Polygon"
+                },
+                "properties": {
+                    "crs": "http://www.opengis.net/def/crs/EPSG/0/4326"
+                }
+            },
+            "data": [
+                {
+                    "dataFilter": {
+                        "timeRange": {
+                            "from": "2024-04-04T00:00:00Z",
+                            "to": "2024-04-04T23:59:59Z"
+                        }
+                    },
+                    "type": "sentinel-2-l2a"
+                }
+            ]
+        },
+        "output": {
+            "height": 512,
+            "responses": [
+                {
+                    "format": {
+                        "type": "image/png"
+                    },
+                    "identifier": "default"
+                }
+            ],
+            "width": 512
+        }
+    },
+    "timestamp": "2024-05-06T14:37:58.037077",
+    "url": "https://services.sentinel-hub.com/api/v1/process"
+}

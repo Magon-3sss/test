@@ -1,0 +1,581 @@
+{% extends 'components/base.html' %}
+{% load static %}
+
+    {% block styles %}
+
+    <style>
+        .input-icon {
+            position: relative;
+        }
+        
+        .input-icon .icon {
+            position: absolute;
+            top: 50%;
+            right: 50px;
+            transform: translateY(-50%);
+            display: none;
+        }
+        
+        .input-icon .icon i {
+            color: #aaa;
+        }
+        
+        .input-icon .icon i:hover {
+            color: #333;
+            cursor: pointer;
+        }
+        .traitement_image{
+            width: 100%;
+            border-radius: 10%;
+        }
+        .img{
+            width:30px;
+        }
+        
+    </style>
+
+    {% endblock %}
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/js/bootstrap.min.js"></script> 
+
+    
+        {% block content %}
+        
+                            <!-- PAGE-HEADER -->
+                            <div class="page-header">
+                                <input id="data-id" style="display: none;" value="{{ data }}" />
+                                <div>
+                                    <h1 class="page-title">Traitements</h1>
+                                </div>
+                                <div class="ms-auto pageheader-btn">
+                                    <ol class="breadcrumb">
+                                        <li class="breadcrumb-item">Logistiques</li>
+                                        <li class="breadcrumb-item"><a href="logistiques">Logistiques</a></li>
+                                        <li class="breadcrumb-item active" aria-current="page">Traitements</li>
+                                    </ol>
+                                </div>
+                            </div>
+                            <!-- PAGE-HEADER END -->
+                                                
+                            <!--ROW OPENED-->
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="card">
+                                                <div class="card-body project-type-container projects p-4">
+                                                    <h4 class="m-0" id="typeTitle">All Traitements</h4>
+                                                    <div class="d-sm-flex align-items-center">
+                                                        <div class="btn-list mx-4">
+                                                            <a class="btn btn-outline-primary"  data-bs-target="#modalQuill" data-bs-toggle="modal" href="javascript:void(0)">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path d="M0 0h24v24H0z" fill="none"/>
+                                                                    <path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                                                </svg>
+                                                            </a>                                                                                                
+                                                            <a class="btn btn-primary" href="#">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" class="w-inner-icn text-white" enable-background="new 0 0 24 24" viewBox="0 0 24 24"><path d="M21.5,13h-8.0005493C13.2234497,13.0001831,12.9998169,13.223999,13,13.5v8.0005493C13.0001831,21.7765503,13.223999,22.0001831,13.5,22h8.0006104C21.7765503,21.9998169,22.0001831,21.776001,22,21.5v-8.0006104C21.9998169,13.2234497,21.776001,12.9998169,21.5,13z M21,21h-7v-7h7V21z M10.5,2H2.4993896C2.2234497,2.0001831,1.9998169,2.223999,2,2.5v8.0005493C2.0001831,10.7765503,2.223999,11.0001831,2.5,11h8.0006104C10.7765503,10.9998169,11.0001831,10.776001,11,10.5V2.4993896C10.9998169,2.2234497,10.776001,1.9998169,10.5,2z M10,10H3V3h7V10z M10.5,13H2.4993896C2.2234497,13.0001831,1.9998169,13.223999,2,13.5v8.0005493C2.0001831,21.7765503,2.223999,22.0001831,2.5,22h8.0006104C10.7765503,21.9998169,11.0001831,21.776001,11,21.5v-8.0006104C10.9998169,13.2234497,10.776001,12.9998169,10.5,13z M10,21H3v-7h7V21z M21.5,2h-8.0005493C13.2234497,2.0001831,12.9998169,2.223999,13,2.5v8.0005493C13.0001831,10.7765503,13.223999,11.0001831,13.5,11h8.0006104C21.7765503,10.9998169,22.0001831,10.776001,22,10.5V2.4993896C21.9998169,2.2234497,21.776001,1.9998169,21.5,2z M21,10h-7V3h7V10z"/></svg>
+                                                            </a>
+                                                            <a class="btn btn-outline-primary" href="logistiques-list">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" class="w-inner-icn" enable-background="new 0 0 24 24" viewBox="0 0 24 24"><path d="M3.5,12C3.223877,12,3,12.223877,3,12.5S3.223877,13,3.5,13S4,12.776123,4,12.5S3.776123,12,3.5,12z M6.5,8h15C21.776123,8,22,7.776123,22,7.5S21.776123,7,21.5,7h-15C6.223877,7,6,7.223877,6,7.5S6.223877,8,6.5,8z M3.5,17C3.223877,17,3,17.223877,3,17.5S3.223877,18,3.5,18S4,17.776123,4,17.5S3.776123,17,3.5,17z M21.5,12h-15C6.223877,12,6,12.223877,6,12.5S6.223877,13,6.5,13h15c0.276123,0,0.5-0.223877,0.5-0.5S21.776123,12,21.5,12z M3.5,7C3.223877,7,3,7.223877,3,7.5S3.223877,8,3.5,8S4,7.776123,4,7.5S3.776123,7,3.5,7z M21.5,17h-15C6.223877,17,6,17.223877,6,17.5S6.223877,18,6.5,18h15c0.276123,0,0.5-0.223877,0.5-0.5S21.776123,17,21.5,17z"/></svg>
+                                                            </a>
+                                                        </div>
+                                                    </div>
+													<div class="modal">
+														<div class="modal-dialog modal-lg" role="document">
+															<div class="modal-content">
+																<div class="modal-header pd-20">
+																	<h6 class="modal-title">Create New Document</h6><button aria-label="Close" class="btn-close" data-bs-dismiss="modal" ><span aria-hidden="true">&times;</span></button>
+																</div>
+																<div class="modal-body pd-0">
+																	<div class="ql-wrapper ql-wrapper-modal ht-250">
+																		<div class="flex-1" id="quillEditorModal">
+																			<p><strong>Quill</strong> is a free, open source <a href="https://github.com/quilljs/quill/">WYSIWYG editor</a> built for the modern web. With its <a href="https://quilljs.com/docs/modules/">modular architecture</a> and expressive API, it is completely customizable to fit any need.</p><br>
+																			<p>The icons use here as a replacement to default svg icons are from <a href="https://icons8.com/line-awesome">Line Awesome Icons</a>.</p>
+																		</div>
+																	</div>
+																</div>
+																<div class="modal-footer pd-20">
+																	<button class="btn btn-primary" >Save changes</button> <button class="btn btn-light" data-bs-dismiss="modal" aria-label="Close">Cancel</button>
+																</div>
+															</div>
+														</div>
+													</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row ">
+                                        <div class="tab-content">
+                                            <div class="tab-pane active h-100" id="allLogostiques">
+                                                <div class="row">
+
+                                                    {% for data in data %}
+                                                        {% for traitement in data.traitements %}
+                                                    
+                                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-4">
+                                                        <div class="card">
+                                                            <div class="card-body">
+                                                                <div class="row">
+                                                                    <div class="col-md-12">
+                                                                        <div class="row">
+                                                                            <div class="col">
+                                                                                <div class="d-sm-flex align-items-center">
+                                                                                    <div class="image_div">
+                                                                                        <img src="{{ traitement.image.url }}" class="traitement_image" style="width: 100px;height: 100px;"/>
+                                                                                    </div>
+                                                                                    {% comment %} <div class="avatar mb-2 p-2 lh-1 mb-sm-0 avatar-md rounded-circle bg-primary me-2">
+                                                                                        <img src="{% static 'assets/images/icons/excavator.png' %}" class="side-menu__icon" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
+                                                                                    </div> {% endcomment %}
+                                                                                    <div class="ms-1">
+                                                                                        <h6 class="mb-1"> <a href="#" class="float-start">{{traitement.nom}}</a> </h6>
+                                                                                        <h6 class="mb-1"> <a href="#" class="float-start">{{traitement.type}}</a> </h6>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="col-auto">
+                                                                                <div class="d-flex align-items-center">
+                                                                                    <div class="stars-main me-3">
+                                                                                        <i class="fa fa-star text-light star"></i>
+                                                                                    </div>
+                                                                                    <a href="#" class="option-dots" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fe fe-more-vertical"></i></a>
+                                                                                    <div class="dropdown-menu dropdown-menu-start">
+                                                                                        <a class="dropdown-item" href="#"><i class="fe fe-edit me-2"></i> Edit</a>
+                                                                                        <a class="dropdown-item" href="#"><i class="fe fe-share me-2"></i> Share</a>
+                                                                                        <a class="dropdown-item" href="#"><i class="fe fe-download me-2"></i> Clone</a>
+                                                                                        <a class="dropdown-item" href="#"><i class="fe fe-trash me-2"></i> Delete</a>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    {% endfor %}
+                                                    {% endfor %}
+                                                    {% comment %} <div class="col-sm-12 col-md-12 col-lg-12 col-xl-4">
+                                                        <div class="card">
+                                                            <div class="card-body">
+                                                                <div class="row">
+                                                                    <div class="col-md-12">
+                                                                        <div class="row">
+                                                                            <div class="col">
+                                                                                <div class="d-sm-flex align-items-center">
+                                                                                    <div class="avatar mb-2 p-2 lh-1 mb-sm-0 avatar-md rounded-circle bg-info me-2">
+                                                                                        <img src="{% static 'assets/images/icons/shovel-and-rake.png' %}" class="side-menu__icon" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
+                                                                                    </div>
+                                                                                    <div class="ms-1">
+                                                                                        <h6 class="mb-1 text-normal"> <a href="project-details" class="float-start">Outils Agricoles</a> </h6>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="col-auto">
+                                                                                <div class="d-flex align-items-center">
+                                                                                    <div class="stars-main me-3">
+                                                                                        <i class="fa fa-star text-light star"></i>
+                                                                                    </div>
+                                                                                    <a href="#" class="option-dots" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fe fe-more-vertical"></i></a>
+                                                                                    <div class="dropdown-menu dropdown-menu-start">
+                                                                                        <a class="dropdown-item" href="project-edit"><i class="fe fe-edit me-2"></i> Edit</a>
+                                                                                        <a class="dropdown-item" href="#"><i class="fe fe-share me-2"></i> Suspend</a>
+                                                                                        <a class="dropdown-item" href="#"><i class="fe fe-trash me-2"></i> Delete</a>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-4">
+                                                        <div class="card">
+                                                            <div class="card-body">
+                                                                <div class="row">
+                                                                    <div class="col-md-12">
+                                                                        <div class="row">
+                                                                            <div class="col">
+                                                                                <div class="d-sm-flex align-items-center">
+                                                                                    <div class="avatar mb-2 p-2 lh-1 mb-sm-0 avatar-md rounded-circle bg-warning me-2">
+                                                                                        <img src="{% static 'assets/images/icons/infrastructure.png' %}" class="side-menu__icon" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
+                                                                                    </div>
+                                                                                    <div class="ms-1">
+                                                                                        <h6 class="mb-1 text-normal"> <a href="project-details" class="float-start">Infrastructure </a> </h6>   
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="col-auto">
+                                                                                <div class="d-flex align-items-center">
+                                                                                    <div class="stars-main me-3">
+                                                                                        <i class="fa fa-star text-light star"></i>
+                                                                                    </div>
+                                                                                    <a href="#" class="option-dots" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fe fe-more-vertical"></i></a>
+                                                                                    <div class="dropdown-menu dropdown-menu-start">
+                                                                                        <a class="dropdown-item" href="#"><i class="fe fe-edit me-2"></i> Edit</a>
+                                                                                        <a class="dropdown-item" href="#"><i class="fe fe-share me-2"></i> Share</a>
+                                                                                        <a class="dropdown-item" href="#"><i class="fe fe-download me-2"></i> Clone</a>
+                                                                                        <a class="dropdown-item" href="#"><i class="fe fe-trash me-2"></i> Delete</a>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-4">
+                                                        <div class="card">
+                                                            <div class="card-body">
+                                                                <div class="row">
+                                                                    <div class="col-md-12">
+                                                                        <div class="row">
+                                                                            <div class="col">
+                                                                                <div class="d-sm-flex align-items-center">
+                                                                                    <div class="avatar mb-2 p-2 lh-1 mb-sm-0 avatar-md rounded-circle bg-info me-2">
+                                                                                        <img src="{% static 'assets/images/icons/fertilize.png' %}" class="side-menu__icon" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
+                                                                                    </div>
+                                                                                    <div class="ms-1">
+                                                                                        <h6 class="mb-1 text-normal"> <a href="project-details" class="float-start">Fertilisants et Traitements</a></h6>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="col-auto">
+                                                                                <div class="d-flex align-items-center">
+                                                                                    <div class="stars-main me-3">
+                                                                                        <i class="fa fa-star text-light star"></i>
+                                                                                    </div>
+                                                                                    <a href="#" class="option-dots" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fe fe-more-vertical"></i></a>
+                                                                                    <div class="dropdown-menu dropdown-menu-start">
+                                                                                        <a class="dropdown-item" href="#"><i class="fe fe-edit me-2"></i> Edit</a>
+                                                                                        <a class="dropdown-item" href="#"><i class="fe fe-share me-2"></i> Share</a>
+                                                                                        <a class="dropdown-item" href="#"><i class="fe fe-download me-2"></i> Clone</a>
+                                                                                        <a class="dropdown-item" href="#"><i class="fe fe-trash me-2"></i> Delete</a>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-4">
+                                                        <div class="card">
+                                                            <div class="card-body">
+                                                                <div class="row">
+                                                                    <div class="col-md-12">
+                                                                        <div class="row">
+                                                                            <div class="col">
+                                                                                <div class="d-sm-flex align-items-center">
+                                                                                    <div class="avatar mb-2 p-2 lh-1 mb-sm-0 avatar-md rounded-circle bg-primary me-2">
+                                                                                        <img src="{% static 'assets/images/icons/wheat-sack.png' %}" class="side-menu__icon" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
+                                                                                    </div>
+                                                                                    <div class="ms-1">
+                                                                                        <h6 class="mb-1 text-normal"> <a href="project-details" class="float-start">Graines et Pousses</a> </h6>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="col-auto">
+                                                                                <div class="d-flex align-items-center">
+                                                                                    <div class="stars-main me-3">
+                                                                                        <i class="fa fa-star text-light star"></i>
+                                                                                    </div>
+                                                                                    <a href="#" class="option-dots" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fe fe-more-vertical"></i></a>
+                                                                                    <div class="dropdown-menu dropdown-menu-start">
+                                                                                        <a class="dropdown-item" href="#"><i class="fe fe-edit me-2"></i> Edit</a>
+                                                                                        <a class="dropdown-item" href="#"><i class="fe fe-share me-2"></i> Share</a>
+                                                                                        <a class="dropdown-item" href="#"><i class="fe fe-download me-2"></i> Clone</a>
+                                                                                        <a class="dropdown-item" href="#"><i class="fe fe-trash me-2"></i> Delete</a>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-4">
+                                                        <div class="card">
+                                                            <div class="card-body">
+                                                                <div class="row">
+                                                                    <div class="col-md-12">
+                                                                        <div class="row">
+                                                                            <div class="col">
+                                                                                <div class="d-sm-flex align-items-center">
+                                                                                    <div class="avatar mb-2 p-2 lh-1 mb-sm-0 avatar-md rounded-circle bg-orange me-2">
+                                                                                        <img src="{% static 'assets/images/icons/gasoline.png' %}" class="side-menu__icon" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
+                                                                                    </div>
+                                                                                    <div class="ms-1">
+                                                                                        <h6 class="mb-1 text-normal"> <a href="project-details" class="float-start">Carburant</a> </h6>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="col-auto">
+                                                                                <div class="d-flex align-items-center">
+                                                                                    <div class="stars-main me-3">
+                                                                                        <i class="fa fa-star text-light star"></i>
+                                                                                    </div>
+                                                                                    <a href="#" class="option-dots" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fe fe-more-vertical"></i></a>
+                                                                                    <div class="dropdown-menu dropdown-menu-start">
+                                                                                        <a class="dropdown-item" href="#"><i class="fe fe-edit me-2"></i> Edit</a>
+                                                                                        <a class="dropdown-item" href="#"><i class="fe fe-share me-2"></i> Share</a>
+                                                                                        <a class="dropdown-item" href="#"><i class="fe fe-download me-2"></i> Clone</a>
+                                                                                        <a class="dropdown-item" href="#"><i class="fe fe-trash me-2"></i> Delete</a>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-4">
+                                                        <div class="card">
+                                                            <div class="card-body">
+                                                                <div class="row">
+                                                                    <div class="col-md-12">
+                                                                        <div class="row">
+                                                                            <div class="col">
+                                                                                <div class="d-sm-flex align-items-center">
+                                                                                    <div class="avatar mb-2 p-2 lh-1 mb-sm-0 avatar-md rounded-circle bg-warning me-2">
+                                                                                        <img src="{% static 'assets/images/icons/tire.png' %}" class="side-menu__icon" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
+                                                                                    </div>
+                                                                                    <div class="ms-1">
+                                                                                        <h6 class="mb-1 text-normal"> <a href="project-details" class="float-start">Pièces de rechange</a> </h6>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="col-auto">
+                                                                                <div class="d-flex align-items-center">
+                                                                                    <div class="stars-main me-3">
+                                                                                        <i class="fa fa-star text-light star"></i>
+                                                                                    </div>
+                                                                                    <a href="#" class="option-dots" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fe fe-more-vertical"></i></a>
+                                                                                    <div class="dropdown-menu dropdown-menu-start">
+                                                                                        <a class="dropdown-item" href="#"><i class="fe fe-edit me-2"></i> Edit</a>
+                                                                                        <a class="dropdown-item" href="#"><i class="fe fe-share me-2"></i> Share</a>
+                                                                                        <a class="dropdown-item" href="#"><i class="fe fe-download me-2"></i> Clone</a>
+                                                                                        <a class="dropdown-item" href="#"><i class="fe fe-trash me-2"></i> Delete</a>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-4">
+                                                        <div class="card">
+                                                            <div class="card-body">
+                                                                <div class="row">
+                                                                    <div class="col-md-12">
+                                                                        <div class="row">
+                                                                            <div class="col">
+                                                                                <div class="d-sm-flex align-items-center">
+                                                                                    <div class="avatar mb-2 p-2 lh-1 mb-sm-0 avatar-md rounded-circle bg-info me-2">
+                                                                                        <img src="{% static 'assets/images/icons/rh.png' %}" class="side-menu__icon" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
+                                                                                    </div>
+                                                                                    <div class="ms-1">
+                                                                                        <h6 class="mb-1 text-normal"> <a href="project-details" class="float-start">Ressources Humaines</a></h6>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="col-auto">
+                                                                                <div class="d-flex align-items-center">
+                                                                                    <div class="stars-main me-3">
+                                                                                        <i class="fa fa-star text-light star"></i>
+                                                                                    </div>
+                                                                                    <a href="#" class="option-dots" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fe fe-more-vertical"></i></a>
+                                                                                    <div class="dropdown-menu dropdown-menu-start">
+                                                                                        <a class="dropdown-item" href="#"><i class="fe fe-edit me-2"></i> Edit</a>
+                                                                                        <a class="dropdown-item" href="#"><i class="fe fe-share me-2"></i> Share</a>
+                                                                                        <a class="dropdown-item" href="#"><i class="fe fe-download me-2"></i> Clone</a>
+                                                                                        <a class="dropdown-item" href="#"><i class="fe fe-trash me-2"></i> Delete</a>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div> {% endcomment %}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--ROW CLOSED-->
+                            
+        {% endblock %} 
+		{% block modal %}
+
+		<!--Modal-->
+		<div class="modal fade"  id="modalQuill">
+			<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+                        <div class="avatar mb-2 p-2 lh-1 mb-sm-0 avatar-md rounded-circle  me-2">
+                            <img src="{% static 'assets/images/icons/traitement.png' %}" class="side-menu__icon img" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
+                        </div>
+						<h6 class="modal-title">Ajouter Traitement </h6><button aria-label="Close" class="btn-close" data-bs-dismiss="modal" ><span aria-hidden="true">&times;</span></button>
+					</div>
+					<div class="modal-body pd-0">
+						<form id="traitement-form" method="post" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <div class="form-row">
+                              <div class="col-md-6 mb-3">
+                                <div class="avatar mb-2 p-2 lh-1 mb-sm-0 avatar-md rounded-circle  me-2">
+                                    <img src="{% static 'assets/images/icons/traitement-de-texte.png' %}" class="side-menu__icon img" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
+                                </div>
+                                <label for="nom">Nom :</label>
+                                <input class="form-control" id="nom" type="text" name="nom" placeholder="Entrer le nom de la graine ou de la pousse" required>
+                              </div>
+                              <div class="col-md-6 mb-3">
+                                <div class="avatar mb-2 p-2 lh-1 mb-sm-0 avatar-md rounded-circle  me-2">
+                                    <img src="{% static 'assets/images/icons/choix.png' %}" class="side-menu__icon img" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
+                                </div>
+                                <label for="type">Type :</label>
+                                <select class="form-control" id="type_traitement" name="type_traitement" required>
+                                <option value="" selected disabled>graine</option>
+                                {% for data in data %}
+                                    {% for type in data.types %}
+                                    <option value="{{ type.type_traitement }}">{{ type.type_traitement }}</option>
+                                    {% endfor %}
+                                {% endfor %}
+                                </select>
+                              </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="col-md-6 mb-3">
+                                    <div class="avatar mb-2 p-2 lh-1 mb-sm-0 avatar-md rounded-circle  me-2">
+                                        <img src="{% static 'assets/images/icons/categorie.png' %}" class="side-menu__icon img" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
+                                    </div>
+                                    <label for="categorie">Catégorie :</label>
+                                    <select class="form-control" id="categorie_traitement" name="categorie_traitement" required>
+                                    <option value="" selected disabled>A</option>
+                                    {% for data in data %}
+                                        {% for categorie in data.categories %}
+                                        <option value="{{ categorie.categorie_traitement }}">{{ categorie.categorie_traitement }}</option>
+                                        {% endfor %}
+                                    {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <div class="avatar mb-2 p-2 lh-1 mb-sm-0 avatar-md rounded-circle  me-2">
+                                        <img src="{% static 'assets/images/icons/traitement-a-base-de-plantes.png' %}" class="side-menu__icon img" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
+                                    </div>
+                                    <label for="composition">Composition :</label>
+                                    <input class="form-control" id="composition" type="text" name="composition" placeholder="Entrer la composition du traitement" required>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <div class="avatar mb-2 p-2 lh-1 mb-sm-0 avatar-md rounded-circle  me-2">
+                                        <img src="{% static 'assets/images/icons/livre.png' %}" class="side-menu__icon img" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
+                                    </div>
+                                    <label for="mode-utilisation">Mode d'utilisation :</label>
+                                    <div class="input-icon">
+                                        <input class="form-control" id="mode-utilisation" type="text" name="mode-utilisation" placeholder="Entrer la mode d'utilisation du traitement" required onclick="displayIcon(this)"> 
+                                        <span class="icon"><i class="icon-tag text-primary"></i></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <div class="avatar mb-2 p-2 lh-1 mb-sm-0 avatar-md rounded-circle  me-2">
+                                        <img src="{% static 'assets/images/icons/dosage.png' %}" class="side-menu__icon img" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
+                                    </div>
+                                  <label for="dosage">Dosage :</label>
+                                  <div class="input-icon">
+                                        <input class="form-control" id="dosage" type="number" name="dosage" placeholder="10 ml" required onclick="displayIcon(this)">
+                                        <span class="icon"><i class="fe fe-dollar-sign"></i></span>
+                                  </div>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <div class="avatar mb-2 p-2 lh-1 mb-sm-0 avatar-md rounded-circle  me-2">
+                                        <img src="{% static 'assets/images/icons/combien.png' %}" class="side-menu__icon img" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
+                                    </div>
+                                  <label for="quantite">Quantité :</label>
+                                  <div class="input-icon">
+                                        <input class="form-control" id="quantite" type="number" name="quantite" placeholder="10 ml" required onclick="displayIcon(this)">
+                                        <span class="icon"><i class="fe fe-dollar-sign"></i></span>
+                                  </div>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <div class="avatar mb-2 p-2 lh-1 mb-sm-0 avatar-md rounded-circle  me-2">
+                                        <img src="{% static 'assets/images/icons/calendrier.png' %}" class="side-menu__icon img" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
+                                    </div>
+                                    <label for="date-achat">Date d'achat :</label>
+                                    <input class="form-control" id="date-achat" type="date" name="date_achat" placeholder="Entrer la date d'achat">
+                                </div>
+                            
+                                
+                                <div class="col-md-6 mb-3">
+                                        <div class="avatar mb-2 p-2 lh-1 mb-sm-0 avatar-md rounded-circle  me-2">
+                                            <img src="{% static 'assets/images/icons/euro.png' %}" class="side-menu__icon img" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
+                                        </div>
+                                        <label for="cout">Cout :</label>
+                                        <div class="input-icon">
+                                                <input class="form-control" id="cout" type="number" name="cout" placeholder="120 DT" required onclick="displayIcon(this)">
+                                                <span class="icon"><i class="fe fe-dollar-sign"></i></span>
+                                        </div>
+                                </div> 
+                            </div>
+                            <div class="form-row">
+                                <div class="col-md-6 mb-3">
+                                    <div class="avatar mb-2 p-2 lh-1 mb-sm-0 avatar-md rounded-circle  me-2">
+                                        <img src="{% static 'assets/images/icons/image-gallery.png' %}" class="side-menu__icon img" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
+                                    </div>
+                                    <label for="" >Image :</label>
+                                    <input type="file" required name="image" class="form-control">
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <div class="avatar mb-2 p-2 lh-1 mb-sm-0 avatar-md rounded-circle  me-2">
+                                        <img src="{% static 'assets/images/icons/projet.png' %}" class="side-menu__icon img" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
+                                    </div>
+                                    <label for="type">Projets :</label>
+                                    <select class="form-control" id="geozone" name="geozone" required>
+                                    <option value="" selected disabled>Projet 1</option>
+                                    {% for data in data %}
+                                        {% for projet in data.projects %}
+                                        <option value="{{ projet.geozone_id }}">{{ projet.project_name }}</option>
+                                        {% endfor %}
+                                    {% endfor %}
+                                    </select>
+                                </div>
+                            </div> 
+                            <div class="form-group">
+                                <div class="avatar mb-2 p-2 lh-1 mb-sm-0 avatar-md rounded-circle  me-2">
+                                    <img src="{% static 'assets/images/icons/project.png' %}" class="side-menu__icon img" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
+                                </div>
+                              <label for="description">Description :</label>
+                              <textarea class="form-control" id="description" name="description" placeholder="Entrer la description de la machine ou de l'engin" rows="3" required></textarea>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="submit" class="btn btn-primary" >Save</button>
+                                <button class="btn btn-light" data-bs-dismiss="modal" aria-label="Close" >Cancel</button>
+                            </div>
+                        </form>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!--/Modal-->
+
+        {% endblock %}
+    {% block scripts %}
+
+    
+
+        <!-- PROJECT JS-->
+        <script src=" {% static 'assets/js/traitement.js' %} "></script>
+
+        <!-- THEMECOLORS JS -->
+        <script src="{% static 'assets/js/themeColors.js'%}"></script>
+
+    {% endblock %}
+

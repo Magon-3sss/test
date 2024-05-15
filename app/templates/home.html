@@ -1,0 +1,590 @@
+{% extends 'components/custom-base-2.html' %}
+{% load static %}
+
+    {% block styles %}
+    <style>
+		/*.row {
+			margin-right: 0;
+			margin-left: 0;
+		}
+		.col-lg-3 {
+			padding-right: 10px;
+			padding-left: 10px;
+		}
+		.pricing-card {
+			margin: 0 auto; 
+			max-width: 100%; 
+		}*/
+        /*.pricing-tabs{
+        margin-left:10px;
+        margin-right:10px;
+        }
+		.pricing-card {
+			width: calc(170% - 170px); 
+			margin: 0 20px;
+		}*/
+    </style>
+
+    <style>
+        .btn-link{
+        color: #dbe3d1
+        }
+    </style>
+    {% endblock %}  
+        {% block content %}
+							<!-- Pricing -->
+							<div class="section pb-7" id="features">
+								<div class="container px-5 px-md-0 pricing-container">
+									<div class="row text-center">
+										<div class="col-lg-12 ps-3">
+											<div>
+												<a class="active" href="signin"><img src="{% static 'assets/images/brand/magon.png' %}" alt="img" style="max-width:100px"></a>
+											</div>
+											<h1 class="header-family">Nos Offres</h1>
+											<h3 class="header-family">Détails des prix</h3>
+											{% comment %} <p class="text-default sub-text">Select the best plan that suits your business and jump into the
+												market.</p> {% endcomment %}
+										</div>
+									</div>
+									<div class="row">
+										<div class="col-xl-12">
+											<div class="pricing-tabs">
+												<input type="hidden" id="selected-group" name="selected-group" value="">
+												<div class="pri-tabs-heading text-center">
+													<ul class="nav nav-price">
+														<li><a data-bs-toggle="tab" href="#month">Monthly</a></li>
+														<li><a class="active show" data-bs-toggle="tab" href="#year">Annual</a></li>
+													</ul>
+												</div>
+												<div class="tab-content">
+													<div class="tab-pane pb-0 active show" id="year">
+														<div class="row d-flex align-items-center justify-content-center">
+															<div class="col-lg-3 col-sm-8">
+																<div class="card p-3 pricing-card">
+																	<div class="card-header d-block text-justified pt-2">
+																		<p class="text-18 font-weight-semibold mb-1">Free</p>
+																		<p class="text-justify font-weight-semibold mb-1"> <span
+																				class="text-30 me-2">$</span><span
+																				class="text-30 me-1">0</span><span class="text-24"><span
+																					class="op-0-5 text-muted text-20">/</span> month</span></p>
+																		{% comment %} <p class="text-13 mb-1">Lorem ipsum dolor sit amet consectetur
+																			adipisicing elit. Iure quos debitis aliquam .</p> {% endcomment %}
+																		<p class="text-13 mb-1 text-warning font-weight-">Période d’essai 30 jours</p>
+																	</div>
+																	<div class="card-body pt-2">
+																		<ul class="text-justify pricing-body ps-0">
+																			<li class="mb-4"><span
+																				class="text-warning me-2 p-1 bg-warning-transparent rounded-pill text-10-f"><i
+																					class="fa fa-check"></i></span> <strong> 33</strong>
+																			Ha</li>
+																		<li class="mb-4"><span
+																				class="text-warning me-2 p-1 bg-warning-transparent rounded-pill text-10-f"><i
+																					class="fa fa-check"></i></span> <strong>1 </strong>
+																			Projet</li>
+																		<li class="mb-4"><span
+																				class="text-warning me-2 p-1 bg-warning-transparent rounded-pill text-10-f"><i
+																					class="fa fa-check"></i></span> <strong>3 </strong>
+																			Parcelles</li>
+																		<li class="mb-4"><span
+																				class="text-warning me-2 p-1 bg-warning-transparent rounded-pill text-10-f"><i
+																					class="fa fa-check"></i></span> <strong>1/7 </strong>
+																			Images Satellitaires</li>
+																		<li class="mb-4"><span
+																				class="text-warning me-2 p-1 bg-warning-transparent rounded-pill text-10-f"><i
+																					class="fa fa-check"></i></span> <strong>2 </strong>
+																			Indicateurs de végétation</li>
+																		<li class="mb-4"><span
+																				class="text-gray me-2 p-1 bg-light-transparent rounded-pill text-10-f"><i
+																					class="fa fa-times"></i></span> <strong> 3/M </strong>
+																			Détection des maladies</li>
+																		<li class="mb-4"><span
+																			class="text-gray me-2 p-1 bg-light-transparent rounded-pill text-10-f"><i
+																				class="fa fa-times"></i></span> <strong>  </strong>
+																			Solutions des correctifs </li>
+																		<li class="mb-4"><span
+																			class="text-gray me-2 p-1 bg-light-transparent rounded-pill text-10-f"><i
+																				class="fa fa-times"></i></span> <strong>  </strong>
+																			Alerte Météo </li>
+																		<li class="mb-4 text-wrap"><span
+																			class="text-gray me-2 p-1 bg-light-transparent rounded-pill text-10-f"><i
+																				class="fa fa-times"></i></span> <strong>  </strong>
+																			Gestion des opérations agricoles </li>
+																		<li class="mb-6 text-wrap"><span
+																			class="text-gray me-2 p-1 bg-light-transparent rounded-pill text-10-f"><i
+																				class="fa fa-times"></i></span> <strong> </strong>
+																			Suiveur Intelligent des programmes </li>
+																		</ul>
+																	</div>
+																	<div class="card-footer text-center border-top-0 pt-1">
+																		<button class="btn btn-lg btn-outline-warning btn-block" onclick="setSelectedGroup('Basic')">Select</a>>
+																			{% comment %} <span class="ms-4 me-4">Select</span> {% endcomment %}
+																		</button>
+																	</div>
+																</div>
+															</div>
+															<div class="col-lg-3 col-sm-8">
+																<div class="card p-3 pricing-card">
+																	<div class="card-header d-block text-justified pt-2">
+																		<p class="text-18 font-weight-semibold mb-1">Starter</p>
+																		<p class="text-justify font-weight-semibold mb-1"> <span
+																				class="text-30 me-2">$</span><span
+																				class="text-30 me-1">0.99</span><span class="text-24"><span
+																					class="op-0-5 text-muted text-20">/</span> month</span></p>
+																		{% comment %} <p class="text-13 mb-1">Lorem ipsum dolor sit amet consectetur
+																			adipisicing elit. Iure quos debitis aliquam .</p> {% endcomment %}
+																		<p class="text-13 mb-1 text-info font-weight-">Save 10% Abon Annuel</p>
+																	</div>
+																	<div class="card-body pt-2">
+																		<ul class="text-justify pricing-body ps-0">
+																			<li class="mb-4"><span
+																				class="text-warning me-2 p-1 bg-warning-transparent rounded-pill text-10-f"><i
+																					class="fa fa-check"></i></span> <strong> illimité</strong>
+																				Ha</li>
+																			<li class="mb-4"><span
+																					class="text-warning me-2 p-1 bg-warning-transparent rounded-pill text-10-f"><i
+																						class="fa fa-check"></i></span> <strong>5 </strong>
+																				Projet</li>
+																			<li class="mb-4"><span
+																					class="text-warning me-2 p-1 bg-warning-transparent rounded-pill text-10-f"><i
+																						class="fa fa-check"></i></span> <strong>10 </strong>
+																				Parcelles</li>
+																			<li class="mb-4"><span
+																					class="text-warning me-2 p-1 bg-warning-transparent rounded-pill text-10-f"><i
+																						class="fa fa-check"></i></span> <strong>1/7 </strong>
+																				Images Satellitaires</li>
+																			<li class="mb-4"><span
+																					class="text-warning me-2 p-1 bg-warning-transparent rounded-pill text-10-f"><i
+																						class="fa fa-check"></i></span> <strong>4 </strong>
+																				Indicateurs de végétation</li>
+																			<li class="mb-4"><span
+																					class="text-warning me-2 p-1 bg-warning-transparent rounded-pill text-10-f"><i
+																						class="fa fa-check"></i></span> <strong> 10/M </strong>
+																				Détection des maladies</li>
+																			<li class="mb-4"><span
+																				class="text-warning me-2 p-1 bg-warning-transparent rounded-pill text-10-f"><i
+																					class="fa fa-check"></i></span> <strong> 5/M </strong>
+																				Solutions des correctifs </li>
+																			<li class="mb-4"><span
+																				class="text-warning me-2 p-1 bg-warning-transparent rounded-pill text-10-f"><i
+																					class="fa fa-check"></i></span> <strong> 3 </strong>
+																				Alerte Météo </li>
+																			<li class="mb-4 text-wrap"><span
+																				class="text-gray me-2 p-1 bg-light-transparent rounded-pill text-10-f"><i
+																					class="fa fa-times"></i></span> <strong>  </strong>
+																				Gestion des opérations agricoles </li>
+																			<li class="mb-6 text-wrap"><span
+																				class="text-gray me-2 p-1 bg-light-transparent rounded-pill text-10-f"><i
+																					class="fa fa-times"></i></span> <strong> </strong>
+																				Suiveur Intelligent des programmes </li>
+																		</ul>
+																	</div>
+																	<div class="card-footer text-center border-top-0 pt-1">
+																		<button class="btn btn-lg btn-outline-info btn-block" onclick="setSelectedGroup('Regular')">Select</a>>
+																			{% comment %} <span class="ms-4 me-4">Select</span> {% endcomment %}
+																		</button>
+																	</div>
+																</div>
+															</div>
+															<div class="col-lg-3 col-sm-8">
+																<div class="card p-3 pricing-card">
+																	<div class="card-header d-block text-justified pt-2">
+																		<p class="text-18 font-weight-semibold mb-1">Premium</p>
+																		<p class="text-justify font-weight-semibold mb-1"> <span class="text-30 me-2">$</span><span class="text-30 me-1">1.99</span><span class="text-24"><span class="op-0-5 text-muted text-20">/</span> month</span></p>
+																		{% comment %} <p class="text-13 mb-1">Lorem ipsum dolor sit amet consectetur adipisicing elit. Iure quos debitis aliquam .</p> {% endcomment %}
+																		<p class="text-13 mb-1 text-secondary font-weight-">Save 12% Abon Annuel</p>
+																	</div>
+																	<div class="card-body pt-2">
+																		<ul class="text-justify pricing-body ps-0">
+																			<li class="mb-4"><span
+																				class="text-warning me-2 p-1 bg-warning-transparent rounded-pill text-10-f"><i
+																					class="fa fa-check"></i></span> <strong> illimité</strong>
+																				Ha</li>
+																			<li class="mb-4"><span
+																					class="text-warning me-2 p-1 bg-warning-transparent rounded-pill text-10-f"><i
+																						class="fa fa-check"></i></span> <strong>10 </strong>
+																				Projet</li>
+																			<li class="mb-4"><span
+																					class="text-warning me-2 p-1 bg-warning-transparent rounded-pill text-10-f"><i
+																						class="fa fa-check"></i></span> <strong>30 </strong>
+																				Parcelles</li>
+																			<li class="mb-4"><span
+																					class="text-warning me-2 p-1 bg-warning-transparent rounded-pill text-10-f"><i
+																						class="fa fa-check"></i></span> <strong>1 7/7 </strong>
+																				Images Satellitaires</li>
+																			<li class="mb-4"><span
+																					class="text-warning me-2 p-1 bg-warning-transparent rounded-pill text-10-f"><i
+																						class="fa fa-check"></i></span> <strong>+10 </strong>
+																				Indicateurs de végétation</li>
+																			<li class="mb-4"><span
+																					class="text-warning me-2 p-1 bg-warning-transparent rounded-pill text-10-f"><i
+																						class="fa fa-check"></i></span> <strong> 30/M </strong>
+																				Détection des maladies</li>
+																			<li class="mb-4"><span
+																				class="text-warning me-2 p-1 bg-warning-transparent rounded-pill text-10-f"><i
+																					class="fa fa-check"></i></span> <strong> 15/M </strong>
+																				Solutions des correctifs </li>
+																			<li class="mb-4"><span
+																				class="text-warning me-2 p-1 bg-warning-transparent rounded-pill text-10-f"><i
+																					class="fa fa-check"></i></span> <strong> 5 </strong>
+																				Alerte Météo </li>
+																			<li class="mb-4 text-wrap"><span
+																				class="text-warning me-2 p-1 bg-warning-transparent rounded-pill text-10-f"><i
+																					class="fa fa-check"></i></span> <strong> Illimité  </strong>
+																				Gestion des opérations agricoles </li>
+																			<li class="mb-6 text-wrap"><span
+																				class="text-warning me-2 p-1 bg-warning-transparent rounded-pill text-10-f"><i
+																					class="fa fa-check"></i></span> <strong> 1</strong>
+																				Suiveur Intelligent des programmes </li>
+																		</ul>
+																	</div>
+																	<div class="card-footer text-center border-top-0 pt-1">
+																		<button class="btn btn-lg btn-outline-secondary btn-block" onclick="setSelectedGroup('Premium')">Select</a></button>
+																	</div>
+																</div>
+															</div>
+															<div class="col-lg-3 col-sm-8">
+																<div class="card p-3 border-primary pricing-card advanced">
+																	<div class="card-header d-block text-justified pt-2">
+																		<p class="text-18 font-weight-semibold mb-1 pe-0">Advanced<span
+																				class="float-end badge bg-primary text-white text-12-f pt-3">Limited
+																				Deal</span></p>
+																		<p class="text-justify font-weight-semibold mb-1"> <span
+																				class="text-30 me-2">$</span><span
+																				class="text-30 me-1">2.99</span><span class="text-24"><span
+																					class="op-0-5 text-muted text-20">/</span> month</span></p>
+																		{% comment %} <p class="text-13 mb-2">Lorem ipsum dolor sit amet consectetur
+																			adipisicing elit. Iure quos debitis aliquam .</p> {% endcomment %}
+																		<p class="text-13 mb-1 text-primary font-weight-">Save 15% Abon Annuel</p>
+																	</div>
+																	<div class="card-body pt-2">
+																		<ul class="text-justify pricing-body ps-0">
+																			<li class="mb-4"><span
+																				class="text-warning me-2 p-1 bg-warning-transparent rounded-pill text-10-f"><i
+																					class="fa fa-check"></i></span> <strong> illimité</strong>
+																				Ha</li>
+																			<li class="mb-4"><span
+																					class="text-warning me-2 p-1 bg-warning-transparent rounded-pill text-10-f"><i
+																						class="fa fa-check"></i></span> <strong>20 </strong>
+																				Projet</li>
+																			<li class="mb-4"><span
+																					class="text-warning me-2 p-1 bg-warning-transparent rounded-pill text-10-f"><i
+																						class="fa fa-check"></i></span> <strong>40 </strong>
+																				Parcelles</li>
+																			<li class="mb-4"><span
+																					class="text-warning me-2 p-1 bg-warning-transparent rounded-pill text-10-f"><i
+																						class="fa fa-check"></i></span> <strong>1 7/7 </strong>
+																				Images Satellitaires</li>
+																			<li class="mb-4"><span
+																					class="text-warning me-2 p-1 bg-warning-transparent rounded-pill text-10-f"><i
+																						class="fa fa-check"></i></span> <strong>+10 </strong>
+																				Indicateurs de végétation</li>
+																			<li class="mb-4"><span
+																					class="text-warning me-2 p-1 bg-warning-transparent rounded-pill text-10-f"><i
+																						class="fa fa-check"></i></span> <strong> 40/M </strong>
+																				Détection des maladies</li>
+																			<li class="mb-4"><span
+																				class="text-warning me-2 p-1 bg-warning-transparent rounded-pill text-10-f"><i
+																					class="fa fa-check"></i></span> <strong> 30/M </strong>
+																				Solutions des correctifs </li>
+																			<li class="mb-4"><span
+																				class="text-warning me-2 p-1 bg-warning-transparent rounded-pill text-10-f"><i
+																					class="fa fa-check"></i></span> <strong> 11 </strong>
+																				Alerte Météo </li>
+																			<li class="mb-4 text-wrap"><span
+																				class="text-warning me-2 p-1 bg-warning-transparent rounded-pill text-10-f"><i
+																					class="fa fa-check"></i></span> <strong> Illimité  </strong>
+																				Gestion des opérations agricoles </li>
+																			<li class="mb-6 text-wrap"><span
+																				class="text-warning me-2 p-1 bg-warning-transparent rounded-pill text-10-f"><i
+																					class="fa fa-check"></i></span> <strong> 5</strong>
+																				Suiveur Intelligent des programmes </li>
+																		</ul>
+																	</div>
+																	<div class="card-footer text-center border-top-0 pt-1">
+																		<button class="btn btn-lg btn-primary text-white btn-block" onclick="setSelectedGroup('Advanced')">Select</a>>
+																			{% comment %} <span class="ms-4 me-4">Select</span> {% endcomment %}
+																		</button>
+																	</div>
+																</div>
+															</div>
+														</div>
+													</div>
+													<div class="tab-pane" id="month">
+														<div class="row d-flex align-items-center justify-content-center">
+															<div class="col-lg-3 col-sm-8">
+																<div class="card p-3 pricing-card">
+																	<div class="card-header d-block text-justified pt-2">
+																		<p class="text-18 font-weight-semibold mb-1">Free</p>
+																		<p class="text-justify font-weight-semibold mb-1"> <span
+																				class="text-30 me-2">$</span><span
+																				class="text-30 me-1">0</span><span class="text-24"><span
+																					class="op-0-5 text-muted text-20">/</span> month</span></p>
+																		{% comment %} <p class="text-13 mb-1">Lorem ipsum dolor sit amet consectetur
+																			adipisicing elit. Iure quos debitis aliquam .</p> {% endcomment %}
+																		<p class="text-13 mb-1 text-warning font-weight-">Période d’essai 30 jours</p>
+																	</div>
+																	<div class="card-body pt-2">
+																		<ul class="text-justify pricing-body ps-0">
+																			<li class="mb-4"><span
+																				class="text-warning me-2 p-1 bg-warning-transparent rounded-pill text-10-f"><i
+																					class="fa fa-check"></i></span> <strong> 33</strong>
+																			Ha</li>
+																		<li class="mb-4"><span
+																				class="text-warning me-2 p-1 bg-warning-transparent rounded-pill text-10-f"><i
+																					class="fa fa-check"></i></span> <strong>1 </strong>
+																			Projet</li>
+																		<li class="mb-4"><span
+																				class="text-warning me-2 p-1 bg-warning-transparent rounded-pill text-10-f"><i
+																					class="fa fa-check"></i></span> <strong>3 </strong>
+																			Parcelles</li>
+																		<li class="mb-4"><span
+																				class="text-warning me-2 p-1 bg-warning-transparent rounded-pill text-10-f"><i
+																					class="fa fa-check"></i></span> <strong>1/7 </strong>
+																			Images Satellitaires</li>
+																		<li class="mb-4"><span
+																				class="text-warning me-2 p-1 bg-warning-transparent rounded-pill text-10-f"><i
+																					class="fa fa-check"></i></span> <strong>2 </strong>
+																			Indicateurs de végétation</li>
+																		<li class="mb-4"><span
+																				class="text-gray me-2 p-1 bg-light-transparent rounded-pill text-10-f"><i
+																					class="fa fa-times"></i></span> <strong> 3/M </strong>
+																			Détection des maladies</li>
+																		<li class="mb-4"><span
+																			class="text-gray me-2 p-1 bg-light-transparent rounded-pill text-10-f"><i
+																				class="fa fa-times"></i></span> <strong>  </strong>
+																			Solutions des correctifs </li>
+																		<li class="mb-4"><span
+																			class="text-gray me-2 p-1 bg-light-transparent rounded-pill text-10-f"><i
+																				class="fa fa-times"></i></span> <strong>  </strong>
+																			Alerte Météo </li>
+																		<li class="mb-4 text-wrap"><span
+																			class="text-gray me-2 p-1 bg-light-transparent rounded-pill text-10-f"><i
+																				class="fa fa-times"></i></span> <strong> </strong>
+																			Gestion des opérations agricoles </li>
+																		<li class="mb-6 text-wrap"><span
+																			class="text-gray me-2 p-1 bg-light-transparent rounded-pill text-10-f"><i
+																				class="fa fa-times"></i></span> <strong> </strong>
+																			Suiveur Intelligent des programmes </li>
+																		</ul>
+																	</div>
+																	<div class="card-footer text-center border-top-0 pt-1">
+																		<button class="btn btn-lg btn-outline-warning btn-block" onclick="setSelectedGroup('Basic')">Select</a>>
+																			{% comment %} <span class="ms-4 me-4">Select</span> {% endcomment %}
+																		</button>
+																	</div>
+																</div>
+															</div>
+															<div class="col-lg-3 col-sm-8">
+																<div class="card p-3 pricing-card">
+																	<div class="card-header d-block text-justified pt-2">
+																		<p class="text-18 font-weight-semibold mb-1">Starter</p>
+																		<p class="text-justify font-weight-semibold mb-1"> <span
+																				class="text-30 me-2">$</span><span
+																				class="text-30 me-1">0.59</span><span class="text-24"><span
+																					class="op-0-5 text-muted text-20">/</span> month</span></p>
+																		{% comment %} <p class="text-13 mb-1">Lorem ipsum dolor sit amet consectetur
+																			adipisicing elit. Iure quos debitis aliquam .</p> {% endcomment %}
+																		<p class="text-13 mb-1 text-info font-weight-">Save 10% Abon Annuel</p>
+																	</div>
+																	<div class="card-body pt-2">
+																		<ul class="text-justify pricing-body ps-0">
+																			<li class="mb-4"><span
+																				class="text-warning me-2 p-1 bg-warning-transparent rounded-pill text-10-f"><i
+																					class="fa fa-check"></i></span> <strong> illimité</strong>
+																				Ha</li>
+																			<li class="mb-4"><span
+																					class="text-warning me-2 p-1 bg-warning-transparent rounded-pill text-10-f"><i
+																						class="fa fa-check"></i></span> <strong>5 </strong>
+																				Projet</li>
+																			<li class="mb-4"><span
+																					class="text-warning me-2 p-1 bg-warning-transparent rounded-pill text-10-f"><i
+																						class="fa fa-check"></i></span> <strong>10 </strong>
+																				Parcelles</li>
+																			<li class="mb-4"><span
+																					class="text-warning me-2 p-1 bg-warning-transparent rounded-pill text-10-f"><i
+																						class="fa fa-check"></i></span> <strong>1/7 </strong>
+																				Images Satellitaires</li>
+																			<li class="mb-4"><span
+																					class="text-warning me-2 p-1 bg-warning-transparent rounded-pill text-10-f"><i
+																						class="fa fa-check"></i></span> <strong>4 </strong>
+																				Indicateurs de végétation</li>
+																			<li class="mb-4"><span
+																					class="text-warning me-2 p-1 bg-warning-transparent rounded-pill text-10-f"><i
+																						class="fa fa-check"></i></span> <strong> 10/M </strong>
+																				Détection des maladies</li>
+																			<li class="mb-4"><span
+																				class="text-warning me-2 p-1 bg-warning-transparent rounded-pill text-10-f"><i
+																					class="fa fa-check"></i></span> <strong> 5/M </strong>
+																				Solutions des correctifs </li>
+																			<li class="mb-4"><span
+																				class="text-warning me-2 p-1 bg-warning-transparent rounded-pill text-10-f"><i
+																					class="fa fa-check"></i></span> <strong> 3 </strong>
+																				Alerte Météo </li>
+																			<li class="mb-4 text-wrap"><span
+																				class="text-gray me-2 p-1 bg-light-transparent rounded-pill text-10-f"><i
+																					class="fa fa-times"></i></span> <strong>  </strong>
+																				Gestion des opérations agricoles </li>
+																			<li class="mb-6 text-wrap"><span
+																				class="text-gray me-2 p-1 bg-light-transparent rounded-pill text-10-f"><i
+																					class="fa fa-times"></i></span> <strong> </strong>
+																				Suiveur Intelligent des programmes </li>
+																		</ul>
+																	</div>
+																	<div class="card-footer text-center border-top-0 pt-1">
+																		<button class="btn btn-lg btn-outline-info btn-block" onclick="setSelectedGroup('Regular')">Select</a>>
+																			{% comment %} <span class="ms-4 me-4">Select</span> {% endcomment %}
+																		</button>
+																	</div>
+																</div>
+															</div>
+															<div class="col-lg-3 col-sm-8">
+																<div class="card p-3 pricing-card">
+																	<div class="card-header d-block text-justified pt-2">
+																		<p class="text-18 font-weight-semibold mb-1">Premium</p>
+																		<p class="text-justify font-weight-semibold mb-1"> <span class="text-30 me-2">$</span><span class="text-30 me-1">0.79</span><span class="text-24"><span class="op-0-5 text-muted text-20">/</span> month</span></p>
+																		{% comment %} <p class="text-13 mb-1">Lorem ipsum dolor sit amet consectetur adipisicing elit. Iure quos debitis aliquam .</p> {% endcomment %}
+																		<p class="text-13 mb-1 text-secondary font-weight-">Save 12% Abon Annuel</p>
+																	</div>
+																	<div class="card-body pt-2">
+																		<ul class="text-justify pricing-body ps-0">
+																			<li class="mb-4"><span
+																				class="text-warning me-2 p-1 bg-warning-transparent rounded-pill text-10-f"><i
+																					class="fa fa-check"></i></span> <strong> illimité</strong>
+																				Ha</li>
+																			<li class="mb-4"><span
+																					class="text-warning me-2 p-1 bg-warning-transparent rounded-pill text-10-f"><i
+																						class="fa fa-check"></i></span> <strong>10 </strong>
+																				Projet</li>
+																			<li class="mb-4"><span
+																					class="text-warning me-2 p-1 bg-warning-transparent rounded-pill text-10-f"><i
+																						class="fa fa-check"></i></span> <strong>30 </strong>
+																				Parcelles</li>
+																			<li class="mb-4"><span
+																					class="text-warning me-2 p-1 bg-warning-transparent rounded-pill text-10-f"><i
+																						class="fa fa-check"></i></span> <strong>1 7/7 </strong>
+																				Images Satellitaires</li>
+																			<li class="mb-4"><span
+																					class="text-warning me-2 p-1 bg-warning-transparent rounded-pill text-10-f"><i
+																						class="fa fa-check"></i></span> <strong>+10 </strong>
+																				Indicateurs de végétation</li>
+																			<li class="mb-4"><span
+																					class="text-warning me-2 p-1 bg-warning-transparent rounded-pill text-10-f"><i
+																						class="fa fa-check"></i></span> <strong> 30/M </strong>
+																				Détection des maladies</li>
+																			<li class="mb-4"><span
+																				class="text-warning me-2 p-1 bg-warning-transparent rounded-pill text-10-f"><i
+																					class="fa fa-check"></i></span> <strong> 15/M </strong>
+																				Solutions des correctifs </li>
+																			<li class="mb-4"><span
+																				class="text-warning me-2 p-1 bg-warning-transparent rounded-pill text-10-f"><i
+																					class="fa fa-check"></i></span> <strong> 5 </strong>
+																				Alerte Météo </li>
+																			<li class="mb-4 text-wrap"><span
+																				class="text-warning me-2 p-1 bg-warning-transparent rounded-pill text-10-f"><i
+																					class="fa fa-check"></i></span> <strong> Illimité  </strong>
+																				Gestion des opérations agricoles </li>
+																			<li class="mb-6 text-wrap"><span
+																				class="text-warning me-2 p-1 bg-warning-transparent rounded-pill text-10-f"><i
+																					class="fa fa-check"></i></span> <strong> 1</strong>
+																				Suiveur Intelligent des programmes </li>
+																		</ul>
+																	</div>
+																	<div class="card-footer text-center border-top-0 pt-1">
+																		<button class="btn btn-lg btn-outline-warning btn-block" onclick="setSelectedGroup('Premium')">Select</button>
+																	</div>
+																</div>
+															</div>
+															<div class="col-lg-3 col-sm-8">
+																<div class="card p-3 border-primary pricing-card advanced">
+																	<div class="card-header d-block text-justified pt-2">
+																		<p class="text-18 font-weight-semibold mb-1 pe-0">Advanced<span
+																				class="float-end badge bg-primary text-white text-12-f pt-3">Limited
+																				Deal</span></p>
+																		<p class="text-justify font-weight-semibold mb-1"> <span
+																				class="text-30 me-2">$</span><span
+																				class="text-30 me-1">1.29</span><span class="text-24"><span
+																					class="op-0-5 text-muted text-20">/</span> month</span></p>
+																		{% comment %} <p class="text-13 mb-2">Lorem ipsum dolor sit amet consectetur
+																			adipisicing elit. Iure quos debitis aliquam .</p> {% endcomment %}
+																		<p class="text-13 mb-1 text-primary font-weight-">Save 15% Abon Annuel</p>
+																	</div>
+																	<div class="card-body pt-2">
+																		<ul class="text-justify pricing-body ps-0">
+																			<li class="mb-4"><span
+																				class="text-warning me-2 p-1 bg-warning-transparent rounded-pill text-10-f"><i
+																					class="fa fa-check"></i></span> <strong> illimité</strong>
+																				Ha</li>
+																			<li class="mb-4"><span
+																					class="text-warning me-2 p-1 bg-warning-transparent rounded-pill text-10-f"><i
+																						class="fa fa-check"></i></span> <strong>20 </strong>
+																				Projet</li>
+																			<li class="mb-4"><span
+																					class="text-warning me-2 p-1 bg-warning-transparent rounded-pill text-10-f"><i
+																						class="fa fa-check"></i></span> <strong>40 </strong>
+																				Parcelles</li>
+																			<li class="mb-4"><span
+																					class="text-warning me-2 p-1 bg-warning-transparent rounded-pill text-10-f"><i
+																						class="fa fa-check"></i></span> <strong>1 7/7 </strong>
+																				Images Satellitaires</li>
+																			<li class="mb-4"><span
+																					class="text-warning me-2 p-1 bg-warning-transparent rounded-pill text-10-f"><i
+																						class="fa fa-check"></i></span> <strong>+10 </strong>
+																				Indicateurs de végétation</li>
+																			<li class="mb-4"><span
+																					class="text-warning me-2 p-1 bg-warning-transparent rounded-pill text-10-f"><i
+																						class="fa fa-check"></i></span> <strong> 40/M </strong>
+																				Détection des maladies</li>
+																			<li class="mb-4"><span
+																				class="text-warning me-2 p-1 bg-warning-transparent rounded-pill text-10-f"><i
+																					class="fa fa-check"></i></span> <strong> 30/M </strong>
+																				Solutions des correctifs </li>
+																			<li class="mb-4"><span
+																				class="text-warning me-2 p-1 bg-warning-transparent rounded-pill text-10-f"><i
+																					class="fa fa-check"></i></span> <strong> 11 </strong>
+																				Alerte Météo </li>
+																			<li class="mb-4 text-wrap"><span
+																				class="text-warning me-2 p-1 bg-warning-transparent rounded-pill text-10-f"><i
+																					class="fa fa-check"></i></span> <strong> Illimité  </strong>
+																				Gestion des opérations agricoles </li>
+																			<li class="mb-6 text-wrap"><span
+																				class="text-warning me-2 p-1 bg-warning-transparent rounded-pill text-10-f"><i
+																					class="fa fa-check"></i></span> <strong> 5</strong>
+																				Suiveur Intelligent des programmes </li>
+																		</ul>
+																	</div>
+																	<div class="card-footer text-center border-top-0 pt-1">
+																		<button class="btn btn-lg btn-primary text-white btn-block" onclick="setSelectedGroup('Advanced')">Select</a>>
+																			{% comment %} <span class="ms-4 me-4">Select</span> {% endcomment %}
+																		</button>
+																	</div>
+																</div>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<script>
+								function setSelectedGroup(group) {
+									document.getElementById('selected-group').value = group;
+									localStorage.setItem('selected-group', group);
+									console.log(group);
+									window.location.href = 'register' ;
+									alert('Selected group: ' + group);
+								} 
+								
+							</script>
+							<!-- Pricing close -->
+
+        {% endblock %}
+
+    {% block scripts %}
+
+	<!-- THEMECOLORS JS -->
+	<script src="{% static 'assets/js/themeColors.js'%}"></script>
+
+    {% endblock %}
+

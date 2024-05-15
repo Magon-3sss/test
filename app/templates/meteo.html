@@ -1,0 +1,1331 @@
+{% extends 'components/base.html' %}
+{% load static %}
+
+    {% block styles %}
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap");
+
+      :root {
+        --primary-color: #5598fd;
+      }
+      
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Poppins", sans-serif;
+      }
+      body {
+        display: flex;
+        justify-content: center;
+        min-height: 100vh;
+        min-width: 1000px;
+        padding: 50px;
+        background: var(--primary-color);
+        background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+          url("./images/cd.jpg");
+        background-size: cover;
+        background-position: center;
+        transition: background-image 0.3s ease;
+      }
+      img {
+        width: 100%;
+      }
+      .wrapper {
+        display: flex;
+        width: 1200px;
+        min-width: 900px;
+        border-radius: 20px;
+        overflow: hidden;
+      }
+      .sidebar {
+        width: 30%;
+        min-width: 250px;
+        padding: 20px;
+        background: rgba(255, 255, 255, 0.815);
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+      }
+      
+      .search {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 30px;
+        margin-top: 20px;
+        position: relative;
+      }
+      .search input {
+        width: 100%;
+        height: 40px;
+        border: 1px solid #ced4da;
+        border-top-left-radius: 5px;
+        border-bottom-left-radius: 5px;
+        padding: 0 15px;
+        font-size: 14px;
+        color: #495057;
+      }
+      .search input:focus {
+        outline: none;
+        border: 1px solid var(--primary-color);
+      }
+      .search button {
+        min-width: 40px;
+        height: 40px;
+        border: none;
+        border-top-right-radius: 5px;
+        border-bottom-right-radius: 5px;
+        background: var(--primary-color);
+        color: #fff;
+        font-size: 14px;
+        cursor: pointer;
+      }
+      .search ul {
+        max-height: 300px;
+        overflow-y: auto;
+        position: absolute;
+        width: 100%;
+        top: 40px;
+        border-radius: 5px;
+        transition: all 0.3s ease;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        background-color: #fff;
+      }
+      .search ul li {
+        padding: 10px 15px;
+        border-bottom: 1px solid #f1f1f1;
+        cursor: pointer;
+        text-transform: capitalize;
+      }
+      .search ul li:last-child {
+        border-bottom: none;
+      }
+      .search ul li:hover {
+        background-color: #f1f1f1;
+      }
+      .search ul li.active {
+        background-color: #f1f1f1;
+      }
+      .weather-icon {
+        width: 100%;
+        height: 150px;
+        text-align: center;
+        margin-top: 20px;
+        margin-bottom: 100px;
+      }
+      .weather-icon #icon {
+        width: 80%;
+        object-fit: cover;
+      }
+      .temperature {
+        display: flex;
+      }
+      .temperature #temp {
+        font-size: 70px;
+        font-weight: 100;
+        line-height: 1;
+      }
+      .temperature span {
+        font-size: 40px;
+        margin-top: -10px;
+        display: block;
+      }
+      .divider {
+        width: 100%;
+        height: 1px;
+        background: #e9ecef;
+        margin: 20px 0;
+      }
+      .condition-rain {
+        font-size: 12px;
+        text-transform: capitalize;
+      }
+      .condition-rain div {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 10px;
+      }
+      .condition-rain div i {
+        width: 20px;
+      }
+      .location {
+        display: flex;
+        align-items: center;
+        font-size: 14px;
+        gap: 10px;
+        margin-top: 10px;
+      }
+      .main {
+        width: 100%;
+        min-width: 400px;
+        padding: 20px 40px;
+        background-color: #f6f6f8;
+        position: relative;
+        padding-bottom: 90px;
+      }
+      
+      .main nav {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+      .main nav .options {
+        display: flex;
+        gap: 20px;
+        align-items: center;
+      }
+      .main nav .options button {
+        border: none;
+        background: none;
+        font-size: 16px;
+        font-weight: 600;
+        color: #495057;
+        cursor: pointer;
+        text-transform: capitalize;
+      }
+      .main nav .options button.active {
+        color: var(--primary-color);
+      }
+      
+      .main nav .units button {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        color: #1a1a1a;
+        background-color: #fff;
+      }
+      .main nav .units button.active {
+        color: #fff;
+        background-color: #1a1a1a;
+      }
+      .main .cards {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+        margin-top: 50px;
+      }
+      
+      .cards .card {
+        width: 100px;
+        height: 130px;
+        border-radius: 20px;
+        color: #1a1a1a;
+        background-color: #fff;
+        text-align: center;
+        padding: 10px 0;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+      }
+      .card h2 {
+        font-size: 15px;
+        font-weight: 600;
+      }
+      .card .card-icon {
+        width: 50%;
+        margin: 0 auto;
+      }
+      .card .day-temp {
+        font-size: 12px;
+        display: flex;
+        justify-content: center;
+        display: flex;
+      }
+      .highlights {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+        margin-top: 50px;
+      }
+      .highlights .heading {
+        width: 100%;
+        font-size: 20px;
+        font-weight: 600;
+        text-transform: capitalize;
+      }
+      
+      .card2 {
+        width: 250px;
+        height: 150px;
+        border-radius: 20px;
+        color: #1a1a1a;
+        background-color: #fff;
+        padding: 10px 20px;
+        display: flex;
+        flex-direction: column;
+      }
+      .card2 .card-heading {
+        color: #c2c2c2;
+      }
+      
+      .card2 .content {
+        margin-top: 20px;
+      }
+      .card2 .content p:first-child {
+        text-align: center;
+        font-size: 30px;
+      }
+      .card2 .content p:nth-child(2) {
+        font-size: 12px;
+        margin-top: 20px;
+        text-align: left;
+      }
+      .credits {
+        text-align: center;
+        font-size: 12px;
+        color: #c2c2c2;
+        position: absolute;
+        bottom: 30px;
+        left: 50%;
+        transform: translateX(-50%);
+      }       
+  
+    </style>
+
+    {% endblock %}
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/js/bootstrap.min.js"></script>
+        
+        {% block content %}
+        
+                            <!-- PAGE-HEADER --> 
+                            <div class="page-header">
+                                <div>
+                                    <h1 class="page-title">Weather Display</h1>
+                                </div>
+                                <div class="ms-auto pageheader-btn">
+                                    <ol class="breadcrumb">
+                                        <li class="breadcrumb-item">Logistiques</li>
+                                        <li class="breadcrumb-item"><a href="logistiques">Logistiques</a></li>
+                                        <li class="breadcrumb-item active" aria-current="page">Réseaux électrique</li>
+                                    </ol>
+                                </div>
+                            </div>
+                            <!-- PAGE-HEADER END -->
+                                                
+<!--ROW OPENED-->
+<div class="wrapper" style="width: 2000px; height: 1000px;">
+  <div class="sidebar">
+    <div>
+      <form class="search" id="search">
+        <input type="text" id="query" placeholder="Search..." />
+        <button><i class="fas fa-search"></i></button>
+      </form>
+      <div class="weather-icon">
+        <img id="icon" src="icons/sun/4.png" alt="" />
+      </div>
+      <div class="temperature">
+        <h1 id="temp">0</h1>
+        <span class="temp-unit">°C</span>
+      </div>
+      <div class="date-time">
+        <p id="date-time">Monday, 12:00</p>
+      </div>
+      <div class="divider"></div>
+      <div class="condition-rain">
+        <div class="condition">
+          <i class="fas fa-cloud"></i>
+          <p id="condition">condition</p>
+        </div>
+        <div class="rain">
+          <i class="fas fa-tint"></i>
+          <p id="rain">perc - 0%</p>
+        </div>
+      </div>
+    </div>
+    <div class="location">
+      <div class="location-icon">
+        <i class="fas fa-map-marker-alt"></i>
+      </div>
+      <div class="location-text">
+        <p id="location">location</p>
+      </div>
+    </div>
+  </div>
+  <div class="main">
+    <nav>
+      <ul class="options">
+        <button class="hourly">today</button>
+        <button class="week active">week</button>
+      </ul>
+      <ul class="options units">
+        <button class="celcius active">°C</button>
+        <button class="fahrenheit">°F</button>
+      </ul>
+    </nav>
+    <div class="cards" id="weather-cards"></div>
+    <div class="highlights">
+      <h2 class="heading">today's highlights</h2>
+      <div class="cards">
+        <div class="card2">
+          <h4 class="card-heading">UV Index</h4>
+          <div class="content">
+            <p class="uv-index">0</p>
+            <p class="uv-text">Low</p>
+          </div>
+        </div>
+        <div class="card2">
+          <h4 class="card-heading">Wind Status</h4>
+          <div class="content">
+            <p class="wind-speed">0</p>
+            <p>km/h</p>
+          </div>
+        </div>
+        <div class="card2">
+          <h4 class="card-heading">Sunrise & Sunset</h4>
+          <div class="content">
+            <p class="sun-rise">0</p>
+            <p class="sun-set">0</p>
+          </div>
+        </div>
+        <div class="card2">
+          <h4 class="card-heading">Humidity</h4>
+          <div class="content">
+            <p class="humidity">0</p>
+            <p class="humidity-status">Normal</p>
+          </div>
+        </div>
+        <div class="card2">
+          <h4 class="card-heading">Visibility</h4>
+          <div class="content">
+            <p class="visibilty">0</p>
+            <p class="visibilty-status">Normal</p>
+          </div>
+        </div>
+        <div class="card2">
+          <h4 class="card-heading">Air Quality</h4>
+          <div class="content">
+            <p class="air-quality">0</p>
+            <p class="air-quality-status">Normal</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div> 
+
+<!--ROW CLOSED-->
+                            
+{% endblock %} 
+		
+{% block scripts %}
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src=" {% static 'assets/js/meteo.js' %} "></script>
+
+<!-- PROJECT JS-->
+<script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.2/src/js.cookie.min.js"></script>    
+
+    <!-- THEMECOLORS JS -->
+    <script src="{% static 'assets/js/themeColors.js'%}"></script>
+
+{% endblock %} 
+
+
+
+{% comment %} {% extends 'components/base.html' %}
+{% load static %}
+
+    {% block styles %}
+    <style>
+{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Open Sans', sans-serif;
+}
+
+h2 {
+  background: #5372F0;
+  font-size: 1.75rem;
+  text-align: center;
+  padding: 18px 0;
+  color: #fff;
+}
+.container {
+  display: flex;
+  gap: 35px;
+  padding: 30px;
+}
+.weather-input {
+  width: 550px;
+}
+.weather-input input {
+  height: 46px;
+  width: 100%;
+  outline: none;
+  font-size: 1.07rem;
+  padding: 0 17px;
+  margin: 10px 0 20px 0;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+}
+.weather-input input:focus {
+  padding: 0 16px;
+  border: 2px solid #5372F0;
+}
+.weather-input .separator {
+  height: 1px;
+  width: 100%;
+  margin: 25px 0;
+  background: #BBBBBB;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.weather-input .separator::before{
+  content: "or";
+  color: #6C757D;
+  font-size: 1.18rem;
+  padding: 0 15px;
+  margin-top: -4px;
+  background: #E3F2FD;
+}
+.weather-input button {
+  width: 100%;
+  padding: 10px 0;
+  cursor: pointer;
+  outline: none;
+  border: none;
+  border-radius: 4px;
+  font-size: 1rem;
+  color: #fff;
+  background: #5372F0;
+  transition: 0.2s ease;
+}
+.weather-input .search-btn:hover {
+  background: #2c52ed;
+}
+.weather-input .location-btn {
+  background: #6C757D;
+}
+.weather-input .location-btn:hover {
+  background: #5c636a;
+}
+.weather-data {
+  width: 100%;
+}
+.weather-data .current-weather {
+  color: #fff;
+  background: #5372F0;
+  border-radius: 5px;
+  padding: 20px 70px 20px 20px;
+  display: flex;
+  justify-content: space-between;
+}
+.current-weather h2 {
+  font-weight: 700;
+  font-size: 1.7rem;
+}
+.weather-data h6 {
+  margin-top: 12px;
+  font-size: 1rem;
+  font-weight: 500;
+}
+.current-weather .icon {
+  text-align: center;
+}
+.current-weather .icon img {
+  max-width: 120px;
+  margin-top: -15px;
+}
+.current-weather .icon h6 {
+  margin-top: -10px;
+  text-transform: capitalize;
+}
+.days-forecast h2 {
+  margin: 20px 0;
+  font-size: 1.5rem;
+}
+.days-forecast .weather-cards {
+  display: flex;
+  gap: 20px;
+}
+.weather-cards .card {
+  color: #fff;
+  padding: 18px 16px;
+  list-style: none;
+  width: calc(100% / 5);
+  background: #6C757D;
+  border-radius: 5px;
+}
+.weather-cards .card h3 {
+  font-size: 1.3rem;
+  font-weight: 600;
+}
+.weather-cards .card img {
+  max-width: 70px;
+  margin: 5px 0 -12px 0;
+}
+
+@media (max-width: 1400px) {
+  .weather-data .current-weather {
+    padding: 20px;
+  }
+  .weather-cards {
+    flex-wrap: wrap;
+  }
+  .weather-cards .card {
+    width: calc(100% / 4 - 15px);
+  }
+}
+@media (max-width: 1200px) {
+  .weather-cards .card {
+    width: calc(100% / 3 - 15px);
+  }
+}
+@media (max-width: 950px) {
+  .weather-input {
+    width: 450px;
+  }
+  .weather-cards .card {
+    width: calc(100% / 2 - 10px);
+  }
+}
+@media (max-width: 750px) {
+  h2 {
+    font-size: 1.45rem;
+    padding: 16px 0;
+  }
+  .container {
+    flex-wrap: wrap;
+    padding: 15px;
+  }
+  .weather-input {
+    width: 100%;
+  }
+  .weather-data h2 {
+    font-size: 1.35rem;
+  }
+}
+  
+    </style>
+
+    {% endblock %}
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/js/bootstrap.min.js"></script>
+        
+        {% block content %}
+        
+                            <!-- PAGE-HEADER --> 
+                            <div class="page-header">
+                                <div>
+                                    <h1 class="page-title">Weather Display</h1>
+                                </div>
+                                <div class="ms-auto pageheader-btn">
+                                    <ol class="breadcrumb">
+                                        <li class="breadcrumb-item">Logistiques</li>
+                                        <li class="breadcrumb-item"><a href="logistiques">Logistiques</a></li>
+                                        <li class="breadcrumb-item active" aria-current="page">Réseaux électrique</li>
+                                    </ol>
+                                </div>
+                            </div>
+                            <!-- PAGE-HEADER END -->
+                                                
+<!--ROW OPENED-->
+    
+<h2>Weather Dashboard</h2>
+    <div class="container">
+      <div class="weather-input">
+        <h3>Enter a City Name</h3>
+        <input class="city-input" type="text" placeholder="E.g., New York, London, Tokyo">
+        <button class="search-btn">Search</button>
+        <div class="separator"></div>
+        <button class="location-btn">Use Current Location</button>
+      </div>
+      <div class="weather-data">
+        <div class="current-weather">
+          <div class="details">
+            <h2>_______ ( ______ )</h2>
+            <h6>Temperature: __°C</h6>
+            <h6>Wind: __ M/S</h6>
+            <h6>Humidity: __%</h6>
+          </div>
+        </div>
+      </div>
+    </div>
+
+        <div class="days-forecast">
+          <h2>5-Day Forecast</h2>
+          <ul class="weather-cards">
+            <li class="card">
+              <h3>( ______ )</h3>
+              <h6>Temp: __C</h6>
+              <h6>Wind: __ M/S</h6>
+              <h6>Humidity: __%</h6>
+            </li>
+            <li class="card">
+              <h3>( ______ )</h3>
+              <h6>Temp: __C</h6>
+              <h6>Wind: __ M/S</h6>
+              <h6>Humidity: __%</h6>
+            </li>
+            <li class="card">
+              <h3>( ______ )</h3>
+              <h6>Temp: __C</h6>
+              <h6>Wind: __ M/S</h6>
+              <h6>Humidity: __%</h6>
+            </li>
+            <li class="card">
+              <h3>( ______ )</h3>
+              <h6>Temp: __C</h6>
+              <h6>Wind: __ M/S</h6>
+              <h6>Humidity: __%</h6>
+            </li>
+            <li class="card">
+              <h3>( ______ )</h3>
+              <h6>Temp: __C</h6>
+              <h6>Wind: __ M/S</h6>
+              <h6>Humidity: __%</h6>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+<!--ROW CLOSED-->
+                            
+{% endblock %} 
+		
+{% block scripts %}
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src=" {% static 'assets/js/meteo.js' %} "></script>
+
+<!-- PROJECT JS-->
+<script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.2/src/js.cookie.min.js"></script>    
+
+    <!-- THEMECOLORS JS -->
+    <script src="{% static 'assets/js/themeColors.js'%}"></script>
+
+{% endblock %}  {% endcomment %} 
+
+
+
+
+{% comment %} {% extends 'components/base.html' %}
+{% load static %}
+
+    {% block styles %}
+    <style>
+  
+      #weather-container {
+        margin: 50px;
+        padding: 20px;
+        border: 1px solid #ccc;
+        border-radius: 10px;
+      }
+
+      #daily-forecast-container {
+        margin: 50px;
+        padding: 20px;
+        border: 1px solid #ccc;
+        border-radius: 10px;
+      }
+  
+      #temperature {
+        font-size: 2em;
+      }
+    </style>
+
+    {% endblock %}
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/js/bootstrap.min.js"></script>
+        
+        {% block content %}
+        
+                            <!-- PAGE-HEADER -->
+                            <div class="page-header">
+                                <div>
+                                    <h1 class="page-title">Weather Display</h1>
+                                </div>
+                                <div class="ms-auto pageheader-btn">
+                                    <ol class="breadcrumb">
+                                        <li class="breadcrumb-item">Logistiques</li>
+                                        <li class="breadcrumb-item"><a href="logistiques">Logistiques</a></li>
+                                        <li class="breadcrumb-item active" aria-current="page">Réseaux électrique</li>
+                                    </ol>
+                                </div>
+                            </div>
+                            <!-- PAGE-HEADER END -->
+                                                
+<!--ROW OPENED-->
+    
+<div id="weather-container">
+  <h2>Current Weather</h2>
+  <div id="temperature"></div>
+  <div id="description"></div>
+  <div id="humidity"></div>
+  <div id="wind-speed"></div>
+</div>
+
+<div id="daily-forecast-container">
+  <h2>Daily Forecast</h2>
+  <div id="daily-forecast"></div>
+</div>
+
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const apiKey = '3c339d8fce82138b3375ecf9de4ae32d';
+    const city = 'GAFSA';
+    const currentWeatherUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
+    const dailyForecastUrl = `https://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=${apiKey}&units=metric`;
+
+    // Function to format date
+    const formatDate = (timestamp) => {
+      const date = new Date(timestamp * 1000);
+      return date.toLocaleDateString('en-US', { weekday: 'long' });
+    };
+
+    fetch(currentWeatherUrl)
+      .then(response => response.json())
+      .then(data => {
+        const temperatureElement = document.getElementById('temperature');
+        const descriptionElement = document.getElementById('description');
+        const humidityElement = document.getElementById('humidity');
+        const windElement = document.getElementById('wind-speed');
+
+        const temperature = data.main.temp;
+        const description = data.weather[0].description;
+        const humidity = data.main.humidity;
+        const windSpeed = data.wind.speed;
+
+        temperatureElement.innerHTML = `${temperature} &deg;C`;
+        descriptionElement.innerHTML = description;
+        humidityElement.innerHTML = `Humidity: ${humidity}%`;
+        windElement.innerHTML = `Wind Speed: ${windSpeed} m/s`;
+      })
+      .catch(error => console.error('Error fetching current weather data:', error));
+
+    // Fetch and display daily forecast
+    fetch(dailyForecastUrl)
+      .then(response => response.json())
+      .then(data => {
+        const dailyForecastElement = document.getElementById('daily-forecast');
+
+        // Filter data for daily forecasts (assuming data is provided in 3-hour intervals)
+        const dailyForecastList = data.list.filter(item => item.dt_txt.includes('12:00:00'));
+
+        dailyForecastList.forEach(forecast => {
+          const day = formatDate(forecast.dt);
+          const forecastTemperature = forecast.main.temp;
+          const forecastDescription = forecast.weather[0].description;
+
+          const forecastItem = document.createElement('div');
+          forecastItem.innerHTML = `<strong>${day}:</strong> ${forecastTemperature} &deg;C, ${forecastDescription}`;
+          dailyForecastElement.appendChild(forecastItem);
+        });
+      })
+      .catch(error => console.error('Error fetching daily forecast data:', error));
+  });
+</script>
+
+
+<!--ROW CLOSED-->
+                            
+{% endblock %} 
+		
+{% block scripts %}
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<!-- PROJECT JS-->
+<script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.2/src/js.cookie.min.js"></script>    
+
+    <!-- THEMECOLORS JS -->
+    <script src="{% static 'assets/js/themeColors.js'%}"></script>
+
+{% endblock %}   {% endcomment %}
+
+
+
+{% comment %} {% extends 'components/base.html' %}
+{% load static %}
+
+    {% block styles %}
+    <style>
+  
+    </style>
+
+    {% endblock %}
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/js/bootstrap.min.js"></script>
+        
+        {% block content %}
+        
+                            <!-- PAGE-HEADER -->
+                            <div class="page-header">
+                                <div>
+                                    <h1 class="page-title">Weather Display</h1>
+                                </div>
+                                <div class="ms-auto pageheader-btn">
+                                    <ol class="breadcrumb">
+                                        <li class="breadcrumb-item">Logistiques</li>
+                                        <li class="breadcrumb-item"><a href="logistiques">Logistiques</a></li>
+                                        <li class="breadcrumb-item active" aria-current="page">Réseaux électrique</li>
+                                    </ol>
+                                </div>
+                            </div>
+                            <!-- PAGE-HEADER END -->
+                                                
+<!--ROW OPENED-->
+<div class="container">
+  <!-- Search bar and buttons -->
+  <div>
+      <input type="text" id="search-city" placeholder="Enter city">
+      <button id="search-button">Search</button>
+      <button id="clear-history">Clear History</button>
+  </div>
+
+  <!-- Current weather information -->
+  <div>
+      <h2 id="current-city"></h2>
+      <p id="temperature"></p>
+      <p id="humidity"></p>
+      <p id="wind-speed"></p>
+      <p id="uv-index"></p>
+  </div>
+  <div>
+    <ul class="list-group">
+        <!-- List items will be dynamically added here -->
+    </ul>
+</div>
+
+<!-- 5-day forecast -->
+<div>
+    <h3>5-Day Forecast</h3>
+    <!-- Forecast information will be dynamically added here -->
+    <div>
+        <p id="fDate0"></p>
+        <p id="fTemp0"></p>
+        <p id="fHumidity0"></p>
+    </div>
+  </div>
+</div>
+
+<!--ROW CLOSED-->
+                            
+{% endblock %} 
+		
+{% block scripts %}
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+
+<!-- PROJECT JS-->
+<script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.2/src/js.cookie.min.js"></script>    
+<script src=" {% static 'assets/js/meteo.js' %} "></script>
+    <!-- THEMECOLORS JS -->
+    <script src="{% static 'assets/js/themeColors.js'%}"></script>
+
+{% endblock %}   {% endcomment %}
+
+
+
+
+
+
+
+{% comment %} <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Weather layer</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+    }
+    #map {
+      width: 100vw;
+      height: 100vh;
+    }
+  </style>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+</head>
+<body>
+
+<div id="map"></div>
+
+<script>
+  var map;
+  var geoJSON;
+  var gettingData = false;
+  var openWeatherMapKey = "ABC...";
+
+  function initialize() {
+    map = L.map('map').setView([50, -50], 4);
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '© OpenStreetMap contributors'
+    }).addTo(map);
+
+    map.on('moveend', checkIfDataRequested);
+
+    // Sets up and populates the info window with details
+    map.on('click', function (event) {
+      var layer = event.layer;
+      infowindow.setContent(
+        "<img src=" + layer.feature.properties.icon + ">"
+        + "<br /><strong>" + layer.feature.properties.city + "</strong>"
+        + "<br />" + layer.feature.properties.temperature + "&deg;C"
+        + "<br />" + layer.feature.properties.weather
+      );
+      infowindow.setLatLng(event.latlng);
+      infowindow.open(map);
+    });
+  }
+
+  var checkIfDataRequested = function () {
+    if (!gettingData) {
+      getCoords();
+    }
+  };
+
+  // Get the coordinates from the Map bounds
+  var getCoords = function () {
+    var bounds = map.getBounds();
+    var NE = bounds.getNorthEast();
+    var SW = bounds.getSouthWest();
+    getWeather(NE.lat, NE.lng, SW.lat, SW.lng);
+  };
+
+  // Make the weather request
+  var getWeather = function (northLat, eastLng, southLat, westLng) {
+    gettingData = true;
+    var requestString = "http://api.openweathermap.org/data/2.5/box/city?bbox="
+      + westLng + "," + northLat + "," //left top
+      + eastLng + "," + southLat + "," //right bottom
+      + map.getZoom()
+      + "&cluster=yes&format=json"
+      + "&APPID=" + openWeatherMapKey;
+
+    // Use Fetch API instead of XMLHttpRequest
+    fetch(requestString)
+      .then(response => response.json())
+      .then(proccessResults)
+      .catch(error => console.error('Error:', error))
+      .finally(() => gettingData = false);
+  };
+
+  // Take the JSON results and process them
+  var proccessResults = function (results) {
+    if (results.list.length > 0) {
+      resetData();
+      for (var i = 0; i < results.list.length; i++) {
+        geoJSON.features.push(jsonToGeoJson(results.list[i]));
+      }
+      drawIcons();
+    }
+  };
+
+  var infowindow = L.popup();
+
+  // For each result that comes back, convert the data to geoJSON
+  var jsonToGeoJson = function (weatherItem) {
+    var feature = {
+      type: "Feature",
+      properties: {
+        city: weatherItem.name,
+        weather: weatherItem.weather[0].main,
+        temperature: weatherItem.main.temp,
+        min: weatherItem.main.temp_min,
+        max: weatherItem.main.temp_max,
+        humidity: weatherItem.main.humidity,
+        pressure: weatherItem.main.pressure,
+        windSpeed: weatherItem.wind.speed,
+        windDegrees: weatherItem.wind.deg,
+        windGust: weatherItem.wind.gust,
+        icon: "http://openweathermap.org/img/w/"
+          + weatherItem.weather[0].icon + ".png",
+        coordinates: [weatherItem.coord.lon, weatherItem.coord.lat]
+      },
+      geometry: {
+        type: "Point",
+        coordinates: [weatherItem.coord.lon, weatherItem.coord.lat]
+      }
+    };
+
+    // returns object
+    return feature;
+  };
+
+  // Add the markers to the map
+  var drawIcons = function () {
+    L.geoJSON(geoJSON, {
+      pointToLayer: function (feature, latlng) {
+        return L.marker(latlng, {
+          icon: L.icon({
+            iconUrl: feature.properties.icon,
+            iconSize: [50, 50],
+            iconAnchor: [25, 25],
+            popupAnchor: [0, -25]
+          })
+        });
+      }
+    }).addTo(map);
+  };
+
+  // Clear data layer and geoJSON
+  var resetData = function () {
+    geoJSON = {
+      type: "FeatureCollection",
+      features: []
+    };
+    map.eachLayer(function (layer) {
+      if (layer instanceof L.Marker) {
+        map.removeLayer(layer);
+      }
+    });
+  };
+
+  document.addEventListener('DOMContentLoaded', initialize);
+</script>
+
+</body>
+</html> {% endcomment %}
+
+
+
+
+{% comment %} <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Weather layer</title>
+  <style>
+    html, body{
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      padding: 0;
+    }
+    #map-canvas {
+      width: 100%;
+      height: 100%;
+    }
+    .gm-style-iw {
+      text-align: center;
+    }
+  </style>
+  <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js">
+</script>
+<script>
+  var map;
+  var geoJSON;
+  var request;
+  var gettingData = false;
+  var openWeatherMapKey = "ABC..."
+
+  function initialize() {
+    var mapOptions = {
+      zoom: 4,
+      center: new google.maps.LatLng(50,-50)
+    };
+
+    map = new google.maps.Map(document.getElementById('map-canvas'),
+        mapOptions);
+    // Add interaction listeners to make weather requests
+    google.maps.event.addListener(map, 'idle', checkIfDataRequested);
+
+    // Sets up and populates the info window with details
+    map.data.addListener('click', function(event) {
+      infowindow.setContent(
+       "<img src=" + event.feature.getProperty("icon") + ">"
+       + "<br /><strong>" + event.feature.getProperty("city") + "</strong>"
+       + "<br />" + event.feature.getProperty("temperature") + "&deg;C"
+       + "<br />" + event.feature.getProperty("weather")
+       );
+      infowindow.setOptions({
+          position:{
+            lat: event.latLng.lat(),
+            lng: event.latLng.lng()
+          },
+          pixelOffset: {
+            width: 0,
+            height: -15
+          }
+        });
+      infowindow.open(map);
+    });
+  }
+
+  var checkIfDataRequested = function() {
+    // Stop extra requests being sent
+    while (gettingData === true) {
+      request.abort();
+      gettingData = false;
+    }
+    getCoords();
+  };
+
+  // Get the coordinates from the Map bounds
+  var getCoords = function() {
+    var bounds = map.getBounds();
+    var NE = bounds.getNorthEast();
+    var SW = bounds.getSouthWest();
+    getWeather(NE.lat(), NE.lng(), SW.lat(), SW.lng());
+  };
+
+  // Make the weather request
+  var getWeather = function(northLat, eastLng, southLat, westLng) {
+    gettingData = true;
+    var requestString = "http://api.openweathermap.org/data/2.5/box/city?bbox="
+                        + westLng + "," + northLat + "," //left top
+                        + eastLng + "," + southLat + "," //right bottom
+                        + map.getZoom()
+                        + "&cluster=yes&format=json"
+                        + "&APPID=" + openWeatherMapKey;
+    request = new XMLHttpRequest();
+    request.onload = proccessResults;
+    request.open("get", requestString, true);
+    request.send();
+  };
+
+  // Take the JSON results and proccess them
+  var proccessResults = function() {
+    console.log(this);
+    var results = JSON.parse(this.responseText);
+    if (results.list.length > 0) {
+        resetData();
+        for (var i = 0; i < results.list.length; i++) {
+          geoJSON.features.push(jsonToGeoJson(results.list[i]));
+        }
+        drawIcons(geoJSON);
+    }
+  };
+
+  var infowindow = new google.maps.InfoWindow();
+
+  // For each result that comes back, convert the data to geoJSON
+  var jsonToGeoJson = function (weatherItem) {
+    var feature = {
+      type: "Feature",
+      properties: {
+        city: weatherItem.name,
+        weather: weatherItem.weather[0].main,
+        temperature: weatherItem.main.temp,
+        min: weatherItem.main.temp_min,
+        max: weatherItem.main.temp_max,
+        humidity: weatherItem.main.humidity,
+        pressure: weatherItem.main.pressure,
+        windSpeed: weatherItem.wind.speed,
+        windDegrees: weatherItem.wind.deg,
+        windGust: weatherItem.wind.gust,
+        icon: "http://openweathermap.org/img/w/"
+              + weatherItem.weather[0].icon  + ".png",
+        coordinates: [weatherItem.coord.Lon, weatherItem.coord.Lat]
+      },
+      geometry: {
+        type: "Point",
+        coordinates: [weatherItem.coord.Lon, weatherItem.coord.Lat]
+      }
+    };
+    // Set the custom marker icon
+    map.data.setStyle(function(feature) {
+      return {
+        icon: {
+          url: feature.getProperty('icon'),
+          anchor: new google.maps.Point(25, 25)
+        }
+      };
+    });
+
+    // returns object
+    return feature;
+  };
+
+  // Add the markers to the map
+  var drawIcons = function (weather) {
+     map.data.addGeoJson(geoJSON);
+     // Set the flag to finished
+     gettingData = false;
+  };
+
+  // Clear data layer and geoJSON
+  var resetData = function () {
+    geoJSON = {
+      type: "FeatureCollection",
+      features: []
+    };
+    map.data.forEach(function(feature) {
+      map.data.remove(feature);
+    });
+  };
+
+  google.maps.event.addDomListener(window, 'load', initialize);
+</script>
+</head>
+<body>
+
+<div id="map-canvas"></div>
+
+</body>
+</html> {% endcomment %}
+
+
+
+
+
+
+
+
+
+
+
+{% comment %} <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Météo</title>
+  <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.1/dist/js.cookie.min.js"></script>
+</head>
+<body>
+
+  <h1>Météo actuelle</h1>
+  <div id="weather-data"></div>
+
+  <script>
+    const apiKey = 'f370c3ea-a007-11ee-84d9-0242ac130002-f370c458-a007-11ee-84d9-0242ac130002';
+    const cityName = 'Tunisie'; 
+
+    function fetchWeather() {
+      const apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${cityName}&appid=${apiKey}`;
+
+      fetch(apiUrl)
+        .then(response => response.json())
+        .then(data => {
+          document.getElementById('weather-data').innerHTML = `
+            <p>Température: ${data.main.temp}°C</p>
+            <p>Humidité: ${data.main.humidity}%</p>
+            <p>Conditions: ${data.weather[0].description}</p>
+          `;
+        })
+        .catch(error => {
+          console.error('Erreur lors de la récupération des données météo', error);
+        });
+    }
+
+    const storedApiKey = Cookies.get('weatherApiKey');
+
+    if (storedApiKey) {
+      apiKey = storedApiKey;
+      fetchWeather();
+    } else {
+      const userApiKey = prompt('Veuillez entrer votre clé API OpenWeatherMap :');
+
+      Cookies.set('weatherApiKey', userApiKey);
+
+      apiKey = userApiKey;
+      fetchWeather();
+    }
+  </script>
+
+</body>
+</html>
+ {% endcomment %}

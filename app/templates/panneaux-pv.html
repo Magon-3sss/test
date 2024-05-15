@@ -1,0 +1,355 @@
+{% extends 'components/base.html' %}
+{% load static %}
+    {% block styles %}
+    <style>
+        .input-icon {
+            position: relative;
+        }
+        
+        .input-icon .icon {
+            position: absolute;
+            top: 50%;
+            right: 50px;
+            transform: translateY(-50%);
+            display: none;
+        }
+        
+        .input-icon .icon i {
+            color: #aaa;
+        }
+        
+        .input-icon .icon i:hover {
+            color: #333;
+            cursor: pointer;
+        }
+
+        #map {
+            width: 100%;
+			height: 50vh;
+			box-shadow: 0 0 10px rgba(0,0,0,0.5);
+          }        
+    </style>
+    {% endblock %}
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/js/bootstrap.min.js"></script> 
+    
+        {% block content %}
+        
+                            <!-- PAGE-HEADER -->
+                            <div class="page-header">
+                                <input id="data-id" style="display: none;" value="{{ data }}" />
+                                <div>
+                                    <h1 class="page-title">Panneaux PV</h1>
+                                </div>
+                                <div class="ms-auto pageheader-btn">
+                                    <ol class="breadcrumb">
+                                        <li class="breadcrumb-item"><a href="logistiques">Logistiques</a></li>
+                                        <li class="breadcrumb-item active" aria-current="page">Panneaux PV</li>
+                                    </ol>
+                                </div>
+                            </div>
+                            <!-- PAGE-HEADER END -->
+                                                
+                            <!--ROW OPENED-->
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="card">
+                                                <div class="card-body project-type-container projects p-4">
+                                                    <h4 class="m-0" id="typeTitle">All Panneaux PV</h4>
+                                                    <div class="d-sm-flex align-items-center">
+                                                        <div class="btn-list mx-4">
+                                                            <a class="btn btn-outline-primary"  data-bs-target="#modalQuill" data-bs-toggle="modal" href="javascript:void(0)">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path d="M0 0h24v24H0z" fill="none"/>
+                                                                    <path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                                                </svg>
+                                                            </a>                                                                                                
+                                                            <a class="btn btn-primary" href="#">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" class="w-inner-icn text-white" enable-background="new 0 0 24 24" viewBox="0 0 24 24"><path d="M21.5,13h-8.0005493C13.2234497,13.0001831,12.9998169,13.223999,13,13.5v8.0005493C13.0001831,21.7765503,13.223999,22.0001831,13.5,22h8.0006104C21.7765503,21.9998169,22.0001831,21.776001,22,21.5v-8.0006104C21.9998169,13.2234497,21.776001,12.9998169,21.5,13z M21,21h-7v-7h7V21z M10.5,2H2.4993896C2.2234497,2.0001831,1.9998169,2.223999,2,2.5v8.0005493C2.0001831,10.7765503,2.223999,11.0001831,2.5,11h8.0006104C10.7765503,10.9998169,11.0001831,10.776001,11,10.5V2.4993896C10.9998169,2.2234497,10.776001,1.9998169,10.5,2z M10,10H3V3h7V10z M10.5,13H2.4993896C2.2234497,13.0001831,1.9998169,13.223999,2,13.5v8.0005493C2.0001831,21.7765503,2.223999,22.0001831,2.5,22h8.0006104C10.7765503,21.9998169,11.0001831,21.776001,11,21.5v-8.0006104C10.9998169,13.2234497,10.776001,12.9998169,10.5,13z M10,21H3v-7h7V21z M21.5,2h-8.0005493C13.2234497,2.0001831,12.9998169,2.223999,13,2.5v8.0005493C13.0001831,10.7765503,13.223999,11.0001831,13.5,11h8.0006104C21.7765503,10.9998169,22.0001831,10.776001,22,10.5V2.4993896C21.9998169,2.2234497,21.776001,1.9998169,21.5,2z M21,10h-7V3h7V10z"/></svg>
+                                                            </a>
+                                                            <a class="btn btn-outline-primary" href="logistiques-list">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" class="w-inner-icn" enable-background="new 0 0 24 24" viewBox="0 0 24 24"><path d="M3.5,12C3.223877,12,3,12.223877,3,12.5S3.223877,13,3.5,13S4,12.776123,4,12.5S3.776123,12,3.5,12z M6.5,8h15C21.776123,8,22,7.776123,22,7.5S21.776123,7,21.5,7h-15C6.223877,7,6,7.223877,6,7.5S6.223877,8,6.5,8z M3.5,17C3.223877,17,3,17.223877,3,17.5S3.223877,18,3.5,18S4,17.776123,4,17.5S3.776123,17,3.5,17z M21.5,12h-15C6.223877,12,6,12.223877,6,12.5S6.223877,13,6.5,13h15c0.276123,0,0.5-0.223877,0.5-0.5S21.776123,12,21.5,12z M3.5,7C3.223877,7,3,7.223877,3,7.5S3.223877,8,3.5,8S4,7.776123,4,7.5S3.776123,7,3.5,7z M21.5,17h-15C6.223877,17,6,17.223877,6,17.5S6.223877,18,6.5,18h15c0.276123,0,0.5-0.223877,0.5-0.5S21.776123,17,21.5,17z"/></svg>
+                                                            </a>
+                                                        </div>
+                                                    </div>
+													<div class="modal">
+														<div class="modal-dialog modal-lg" role="document">
+															<div class="modal-content">
+																<div class="modal-header pd-20">
+																	<h6 class="modal-title">Create New Document</h6><button aria-label="Close" class="btn-close" data-bs-dismiss="modal" ><span aria-hidden="true">&times;</span></button>
+																</div>
+																<div class="modal-body pd-0">
+																	<div class="ql-wrapper ql-wrapper-modal ht-250">
+																		<div class="flex-1" id="quillEditorModal">
+																			<p><strong>Quill</strong> is a free, open source <a href="https://github.com/quilljs/quill/">WYSIWYG editor</a> built for the modern web. With its <a href="https://quilljs.com/docs/modules/">modular architecture</a> and expressive API, it is completely customizable to fit any need.</p><br>
+																			<p>The icons use here as a replacement to default svg icons are from <a href="https://icons8.com/line-awesome">Line Awesome Icons</a>.</p>
+																		</div>
+																	</div>
+																</div>
+																<div class="modal-footer pd-20">
+																	<button class="btn btn-primary" >Save changes</button> <button class="btn btn-light" data-bs-dismiss="modal" aria-label="Close">Cancel</button>
+																</div>
+															</div>
+														</div>
+													</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row ">
+                                        <div class="tab-content">
+                                            <div class="tab-pane active h-100" id="allTransformateurs">
+                                                <div class="row">
+
+                                                    {% for data in data %}
+                                                        {% for transformateur in data.transformateurs %}
+                                                    
+                                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-4">
+                                                        <div class="card">
+                                                            <div class="card-body">
+                                                                <div class="row">
+                                                                    <div class="col-md-12">
+                                                                        <div class="row">
+                                                                            <div class="col">
+                                                                                <div class="d-sm-flex align-items-center">
+                                                                                    <div class="ms-1">
+                                                                                        <h6 class="mb-1"> <a href="#" class="float-start">{{transformateur.type}}</a> </h6>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="col-auto">
+                                                                                <div class="d-flex align-items-center">
+                                                                                    <div class="stars-main me-3">
+                                                                                        <i class="fa fa-star text-light star"></i>
+                                                                                    </div>
+                                                                                    <a href="#" class="option-dots" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fe fe-more-vertical"></i></a>
+                                                                                    <div class="dropdown-menu dropdown-menu-start">
+                                                                                        <a class="dropdown-item" href="#"><i class="fe fe-edit me-2"></i> Edit</a>
+                                                                                        <a class="dropdown-item" href="#"><i class="fe fe-share me-2"></i> Share</a>
+                                                                                        <a class="dropdown-item" href="#"><i class="fe fe-download me-2"></i> Clone</a>
+                                                                                        <a class="dropdown-item" href="#"><i class="fe fe-trash me-2"></i> Delete</a>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    {% endfor %}
+                                                    {% endfor %}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--ROW CLOSED-->                            
+        {% endblock %} 
+		{% block modal %}
+
+		<!--Modal-->
+		<div class="modal fade"  id="modalQuill">
+			<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h6 class="modal-title">Ajouter Panneaux PV </h6><button aria-label="Close" class="btn-close" data-bs-dismiss="modal" ><span aria-hidden="true">&times;</span></button>
+					</div>
+					<div class="modal-body pd-0">
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="card">
+                                    {% comment %} <div class="card-header border-bottom">
+                                        <h3 class="card-title">Ajouter Moteur</h3>
+                                    </div> {% endcomment %}
+                                    <div class="card-body">
+                                        <div id="smartwizard-3">
+                                            <ul>
+                                                <li><a href="#step-10">Position GPS</a></li>
+                                                <li><a href="#step-11">Détails Poste Transformateur</a></li>
+                                            </ul>
+                                            <div>
+                                                <div id="step-10">
+                                                    <form >
+                                                        <div class="form-group">
+                                                            <h4>Emplacement</h4>
+                                                            <div class="form-row">
+                                                                <div class="col-md-6 mb-3">
+                                                                    <div class="avatar mb-2 p-2 lh-1 mb-sm-0 avatar-md rounded-circle  me-2">
+                                                                        <img src="{% static 'assets/images/icons/farm.png' %}" class="side-menu__icon" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
+                                                                    </div>
+                                                                    <label for="type">Projets :</label>
+                                                                    <select class="form-control" id="geozone" name="geozone" required>
+                                                                    <option value="" selected disabled>Projet </option>
+                                                                    {% for data in data %}
+                                                                        {% for project in data.projects %}
+                                                                        <option value="{{ project.geozone_id }}" >{{ project.project_name }}</option>
+                                                                        {% endfor %}
+                                                                    {% endfor %}
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+
+                                                            <div id="map">
+                                                                <!-- Map coordinate  -->
+                                                                {% comment %} <div class="leaflet-control map-coordinate">
+                                                                    <div class="coordinate"></div>
+                                                                </div> {% endcomment %}
+                                                            </div>
+                                                                <!-- leaflet js  -->
+                                                                <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+                                                                <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+                                                                <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+                                                                <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+                                                                <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+                                                                <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.js"></script>
+                                                                <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+                                                                <script src="{% static './lib/leaflet.markercluster.js' %}"></script>
+                                                                <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
+                                                                <script src="{% static './data/test.js' %}"></script>
+                                                                <script src="{% static './dist/main.js' %}"></script>
+                                                                <script src="{% static './dist/web-GIS.js' %}"></script>
+                                    
+                                                                <!-- leaflet draw plugin  -->
+                                                                <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/0.4.2/leaflet.draw.css"/>
+                                                                <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/0.4.2/leaflet.draw.js"></script>
+                                                                <script src="{% static 'assets/js/poste-transformateur-map.js' %}" type="text/javascript"></script>
+                                                                                                                                                            
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                                <div id="step-11">
+                                                    <form >
+                                                        {% csrf_token %}
+                                                        <div class="form-row">
+                                                        <div class="col-md-6 mb-3">
+                                                            <div class="avatar mb-2 p-2 lh-1 mb-sm-0 avatar-md rounded-circle  me-2">
+                                                                <img src="{% static 'assets/images/icons/plaque-didentification.png' %}" class="side-menu__icon" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
+                                                            </div>
+                                                            <label for="nom">Nom :</label>
+                                                            <input class="form-control" id="nom" type="text" name="nom" placeholder="Entrer le nom de poste transformateur" required>
+                                                        </div>
+                                                        <div class="col-md-6 mb-3">
+                                                            <div class="avatar mb-2 p-2 lh-1 mb-sm-0 avatar-md rounded-circle  me-2">
+                                                                <img src="{% static 'assets/images/icons/moteur-electrique.png' %}" class="side-menu__icon" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
+                                                            </div>
+                                                            <label for="matricule">Matricule Transformateur :</label>
+                                                            <input class="form-control" id="matricule" type="text" name="matricule" placeholder="Entrer le matricule de poste transformateur" required>
+                                                        </div>
+                                                        </div>
+                                                        <div class="form-row">
+                                                            <div class="col-md-6 mb-3">
+                                                                <div class="avatar mb-2 p-2 lh-1 mb-sm-0 avatar-md rounded-circle  me-2">
+                                                                    <img src="{% static 'assets/images/icons/moteur-electrique.png' %}" class="side-menu__icon" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
+                                                                </div>
+                                                                <label for="marque">Marque Transformateur :</label>
+                                                                <input class="form-control" id="marque" type="text" name="marque" placeholder="Entrer la marque de poste transformateur" required>
+                                                            </div>
+                                                            <div class="col-md-6 mb-3">
+                                                                <div class="avatar mb-2 p-2 lh-1 mb-sm-0 avatar-md rounded-circle  me-2">
+                                                                    <img src="{% static 'assets/images/icons/moteur-electrique.png' %}" class="side-menu__icon" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
+                                                                </div>
+                                                                <label for="compteur">Numéro Compteur :</label>
+                                                                <input class="form-control" id="compteur" type="number" name="compteur" placeholder="Entrer numéro compteur de transformateur" required>
+                                                            </div>
+                                                            </div>
+                                                        <div class="form-row">
+                                                            <div class="col-md-6 mb-3">
+                                                                <div class="avatar mb-2 p-2 lh-1 mb-sm-0 avatar-md rounded-circle  me-2">
+                                                                    <img src="{% static 'assets/images/icons/tension.png' %}" class="side-menu__icon" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
+                                                                </div>
+                                                                <label for="type">Type Compteur :</label>
+                                                                <select class="form-control" id="type_compteur_poste" name="type_compteur_poste" required>
+                                                                <option value="" selected disabled>test</option>
+                                                                {% for data in data %}
+                                                                    {% for type in data.compteurs %}
+                                                                    <option value="{{ type.type_compteur_poste }}">{{ type.type_compteur_poste }}</option>
+                                                                    {% endfor %}
+                                                                {% endfor %}
+                                                                </select>
+                                                            </div>
+                                                            <div class="col-md-6 mb-3">
+                                                                <div class="avatar mb-2 p-2 lh-1 mb-sm-0 avatar-md rounded-circle  me-2">
+                                                                    <img src="{% static 'assets/images/icons/voltmetre.png' %}" class="side-menu__icon" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
+                                                                </div>
+                                                            <label for="amperage">Ampérage :</label>
+                                                            <div class="input-icon">
+                                                                    <input class="form-control" id="amperage" type="number" name="amperage" placeholder="10 A" required onclick="displayIcon(this)">
+                                                                    <span class="icon"><i class="fe fe-trending-up"></i></span>
+                                                            </div>
+                                                            </div>
+                                                            <div class="col-md-6 mb-3">
+                                                                <div class="avatar mb-2 p-2 lh-1 mb-sm-0 avatar-md rounded-circle  me-2">
+                                                                    <img src="{% static 'assets/images/icons/moteur-electrique.png' %}" class="side-menu__icon" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
+                                                                </div>
+                                                                <label for="puissance">Puissance :</label>
+                                                                <input class="form-control" id="puissance" type="number" name="puissance" placeholder="20 KVA" required>
+                                                            </div>
+                                                            <div class="col-md-6 mb-3">
+                                                                <div class="avatar mb-2 p-2 lh-1 mb-sm-0 avatar-md rounded-circle  me-2">
+                                                                    <img src="{% static 'assets/images/icons/calendrier.png' %}" class="side-menu__icon" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
+                                                                </div>
+                                                            <label for="date">Date d'installation :</label>
+                                                            <div class="input-icon">
+                                                                    <input class="form-control" id="date" type="date" name="date" placeholder="10 $" required onclick="displayIcon(this)">
+                                                                    <span class="icon"><i class="fe fe-trending-up"></i></span>
+                                                            </div>
+                                                            </div>   
+                                                            <div class="col-md-6 mb-3">
+                                                                <div class="avatar mb-2 p-2 lh-1 mb-sm-0 avatar-md rounded-circle  me-2">
+                                                                    <img src="{% static 'assets/images/icons/moteur-electrique.png' %}" class="side-menu__icon" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
+                                                                </div>
+                                                                <label for="fournisseur">Fournisseur Secteur :</label>
+                                                                <input class="form-control" id="fournisseur" type="text" name="fournisseur" placeholder="Entrer le nom du fournisseur secteur" required>
+                                                            </div>
+                                                            <div class="col-md-6 mb-3">
+                                                                <div class="avatar mb-2 p-2 lh-1 mb-sm-0 avatar-md rounded-circle  me-2">
+                                                                    <img src="{% static 'assets/images/icons/amperemetre.png' %}" class="side-menu__icon" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
+                                                                </div>
+                                                            <label for="cout">Cout :</label>
+                                                            <div class="input-icon">
+                                                                    <input class="form-control" id="cout" type="number" name="cout" placeholder="10 $" required onclick="displayIcon(this)">
+                                                                    <span class="icon"><i class="fe fe-trending-up"></i></span>
+                                                            </div>
+                                                            </div>   
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!--/Modal-->
+
+        {% endblock %}
+    {% block scripts %}    
+
+        <!-- PROJECT JS-->
+        <script src=" {% static 'assets/js/panneaux.js' %} "></script>
+        <script src="{% static 'assets/js/panneaux-map.js' %}" type="text/javascript"></script> 
+        <script src=" {% static 'assets/js/main.js' %} "></script>
+        <!-- FORM WIZARD JS-->
+		<script src=" {% static 'assets/plugins/formwizard/jquery.smartWizard.js' %} "></script>
+		<script src=" {% static 'assets/plugins/formwizard/fromwizard.js' %} "></script>
+
+		<!-- INTERNAl JQUERY.STEPS JS -->
+		<script src=" {% static 'assets/plugins/jquery-steps/jquery.steps.min.js' %} "></script>
+		<script src=" {% static 'assets/plugins/parsleyjs/parsley.min.js' %} "></script>
+
+		<!-- INTERNAL ACCORDION-WIZARD-FORM JS-->
+		<script src=" {% static 'assets/plugins/accordion-Wizard-Form/jquery.accordion-wizard.min.js' %} "></script>
+		<script src=" {% static 'assets/js/form-wizard.js' %} "></script>
+
+        <!-- THEMECOLORS JS -->
+        <script src="{% static 'assets/js/themeColors.js'%}"></script>
+
+    {% endblock %}

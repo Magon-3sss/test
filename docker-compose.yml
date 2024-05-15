@@ -1,0 +1,20 @@
+version: "3.9"
+
+services:
+  app:
+    build:
+      context: .
+    ports:
+      - "8000:8000"
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    environment:
+      - PG_USER=new
+      - PG_PASSWORD=new
+      - PG_DB=new
+      - PG_PORT=5432
+      - PG_HOST=localhost
+
+volumes:
+  pgdata: {}

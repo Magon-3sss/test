@@ -1,0 +1,77 @@
+{% extends 'components/base.html' %}
+{% load static %}
+
+    {% block styles %}
+
+    {% endblock %}
+    
+        {% block content %}
+
+        <!-- PAGE-HEADER -->
+						<div class="page-header">
+							<div>
+								<h1 class="page-title">Opérations Agricoles</h1>
+							</div>
+							<div class="ms-auto pageheader-btn">
+								<ol class="breadcrumb">
+									<li class="breadcrumb-item"><a href="javascript:void(0);">Opérations Agricoles</a></li>
+									<li class="breadcrumb-item active" aria-current="page">Ajouter une opération agricole</li>
+								</ol>
+							</div>
+						</div>
+		<!-- PAGE-HEADER END -->
+
+        <form>
+            <label for="nom-operation">Nom de l'opération :</label>
+            <input type="text" id="nom-operation" name="nom-operation" required><br><br>
+            
+            <label for="type-operation">Type d'opération :</label>
+            <select id="type-operation" name="type-operation" required>
+              <option value="">Sélectionnez le type d'opération</option>
+              <option value="semis">Semis</option>
+              <option value="fertilisation">Fertilisation</option>
+              <option value="arrosage">Arrosage</option>
+              <option value="récolte">Récolte</option>
+            </select><br><br>
+            
+            <label for="date-operation">Date de l'opération :</label>
+            <input type="date" id="date-operation" name="date-operation" required><br><br>
+            
+            <label for="description-operation">Description :</label><br>
+            <textarea id="description-operation" name="description-operation" rows="4" cols="50"></textarea><br><br>
+            
+            <input type="submit" value="Ajouter">
+          </form>
+
+          {% endblock %}
+
+		{% block modal %}
+
+		{% endblock %}
+
+    {% block scripts %}
+
+	<!-- APEXCHART JS -->
+	<script src="{% static 'assets/js/apexcharts.js'%}"></script>
+
+	<!-- INTERNAL SELECT2 JS -->
+	<script src="{% static 'assets/plugins/select2/select2.full.min.js'%}"></script>
+
+	<!-- CHART-CIRCLE JS-->
+	<script src="{% static 'assets/js/circle-progress.min.js'%}"></script>
+
+	<!-- INTERNAL Data tables js-->
+	<script src="{% static 'assets/plugins/datatable/js/jquery.dataTables.min.js'%}"></script>
+	<script src="{% static 'assets/plugins/datatable/js/dataTables.bootstrap5.js'%}"></script>
+	<script src="{% static 'assets/plugins/datatable/dataTables.responsive.min.js'%}"></script>
+
+	<!-- INDEX JS -->
+	<script src="{% static 'assets/js/index1.js'%}"></script>
+
+	<!-- REPLY JS-->
+	<script src="{% static 'assets/js/reply.js'%}"></script>
+
+	<!-- THEMECOLORS JS -->
+	<script src="{% static 'assets/js/themeColors.js'%}"></script>
+
+    {% endblock %}

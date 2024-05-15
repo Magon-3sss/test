@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Sentinel Hub Integration</title>
+  </head>
+  <body>
+    <img id="sentinel-hub-image" />
+
+    <script>
+      async function fetchSentinelHubImage() {
+        const response = await fetch("/sentinelhub-api-example/");
+        const imageBlob = await response.blob();
+        const imageUrl = URL.createObjectURL(imageBlob);
+        document.getElementById("sentinel-hub-image").src = imageUrl;
+      }
+
+      fetchSentinelHubImage();
+    </script>
+  </body>
+</html>
+
+{% comment %} <!-- templates/sentinelhub_result.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sentinel Hub on Leaflet</title>
+    <link
+        rel="stylesheet"
+        href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+        integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
+        crossorigin=""
+    />
+</head>
+<body>
+    <div id="map" style="height: 500px; width: 800px;"></div>
+
+    <script>
+        const center = [39.243276, 37.042575];
+        const map = L.map('map', {
+            crs: L.CRS.EPSG3857
+        }).setView(center, 4);
+
+        // Add a base layer to the map (e.g., OpenStreetMap)
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+
+        // Add a custom image layer to the map
+        const imageUrl = 'https://your-sentinel-hub-image-url.png';
+        const imageLayer = L.imageOverlay(imageUrl, [[39.243276-0.05, 37.042575-0.05], [39.243276+0.05, 37.042575+0.05]]);
+        imageLayer.addTo(map);
+    </script>
+
+    <script
+        src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+        integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+        crossorigin=""
+    ></script>
+</body>
+</html> {% endcomment %}
+
+
+{% comment %} <!-- templates/sentinelhub_result.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sentinel Hub API Result</title>
+</head>
+<body>
+    <h1>Sentinel Hub API Result</h1>
+    <pre>{{ result|safe }}</pre> 
+</body>
+</html> {% endcomment %}

@@ -1,0 +1,272 @@
+{% extends 'components/base.html' %}
+{% load static %}
+
+    {% block styles %}
+
+    {% endblock %}
+    
+        {% block content %} 
+		
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="author" content="unsorry">
+        
+
+		<link rel="icon" type="image/x-icon" href="https://unsorry.net/assets-date/images/favicon.png">
+
+        
+
+		
+		<style>
+			html {
+				height: 100vh;
+				width: 100%;
+				margin: 0;
+				padding: 0;
+			}
+		</style> 
+	
+		<style>
+			body {
+				margin: 0;
+				padding: 0;
+			}
+
+			
+			
+			#save {
+				position: absolute;
+				top: 5%;
+				right: 50%;
+				padding: 10px;
+				z-index: 400;
+				background-color: #4ea8cf8a;
+				border-radius: 15px;
+				cursor: pointer;
+			  }
+
+			.info {
+				padding: 6px 8px;
+				font: 12px/14px Arial, Helvetica, sans-serif;
+				color: white;
+				background: rgba(52,58,64,0.8);
+				box-shadow: 0 0 15px rgba(255,255,255,0.2);
+				border-radius: 5px;
+				text-align: left;
+			}
+			  
+			
+		</style>
+
+						<body onload= "execute()">
+							<!-- PAGE-HEADER -->
+							<div class="page-header">
+								<div>
+									<h1 class="page-title">Parcelle New</h1>
+								</div>
+								<div class="ms-auto pageheader-btn">
+									<ol class="breadcrumb">
+										<li class="breadcrumb-item">Apps</li>
+										<li class="breadcrumb-item"><a href="javascript:void(0);">Parcelles</a></li>
+										<li class="breadcrumb-item active" aria-current="page">Parcelle New</li>
+									</ol>
+								</div>
+							</div>
+							<!-- PAGE-HEADER END -->
+							
+							<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+							
+							<!--ROW OPENED-->
+							<div class="row">
+								<div class="col-lg-12 col-md-12">
+									<div  class="card">
+										<div class="card-header border-bottom">
+											<h4 class="mb-0">Parcelle Details</h4>
+										</div>
+											<div class="card-body p-0 create-parcelle-main">
+											<div class="row p-5 border-bottom">
+												<div class="col-sm-12 col-md-12 col-xl-3">
+													<div class="form-group">
+														<label for="parcelle-name" class="form-label text-muted">Parcelle Name:</label>
+														<div class="input-group">
+															<input id="parcelle-name-id" type="text" class="form-control text-dark" placeholder="Enter parcelle Name" name="parcelle_name">
+														</div>
+													</div>
+												</div>
+												<div class="col-sm-12 col-md-12 col-xl-3">
+													<div class="form-group">
+														<label for="parcelle-start-date" class="form-label text-muted">parcelle Date:</label>
+														<div id="ps-datepicker" class="input-group date" data-date-format="dd-mm-yyyy">
+															<span class="input-group-addon input-group-text bg-primary-transparent"><i class="fe fe-calendar text-primary-dark"></i></span>
+															<input id="parcelle-date-id" class="form-control" type="text" placeholder="Select Start Date" name="parcelle_date"/>
+														</div>
+													</div>
+												</div>
+												
+												<div class="col-sm-12 col-md-12 col-xl-4">
+													<div class="form-group">
+														<label for="parcelle-category" class="form-label text-muted">Culture :</label>
+														<select class="form-control select2-show-search" id="parcelle-category-id" data-placeholder="Choose Type..." name="parcelle_category">
+															<option label="Choose one"></option>
+															<option value="sample">Grand Culture</option>
+															<option value="sample">Arbo-culture</option>
+															<option value="sample">Palmier</option>
+															<option value="sample">Mixte</option>
+														</select>
+													</div>
+												</div>
+												<div class="col-sm-12 col-md-12 col-xl-4">
+													<div class="form-group">
+														<label for="parcelle-department" class="form-label text-muted">Type de culture </label>
+														<select class="form-control select2-show-search" id="parcelle-department-id" data-placeholder="Choose Type..." name="department">
+															<option label="Choose one"></option>
+															<option value="sample">Blé</option>
+															<option value="sample">Alpha</option>
+															<option value="sample">Alpha-Alpha</option>
+															<option value="sample">Oliver</option>
+															<option value="sample">Amandier</option>
+															<option value="sample">Pistachier</option>
+															<option value="sample">Degla</option>
+															<option value="sample">Beser</option>
+															<option value="sample">Aligue</option>
+														</select>
+													</div>
+												</div>
+												<div class="col-sm-12 col-md-12 col-xl-4">
+													<div class="form-group">
+														<label class="form-label text-muted">Client: </label>
+														<div class="input-group">
+															<input id="client-id" type="text" class="form-control text-dark" placeholder="Enter Client Name" name="client">
+														</div>
+													</div>
+												</div>
+												<div class="form-group note-form-group note-group-select-from-files">
+													<label for="note-dialog-image-file-16838859089971" class="note-form-label">Select from files</label>
+													<input id="note-dialog-image-file-16838859089971" class="note-image-input form-control-file note-form-control note-input" type="file" name="files" accept="image/*" >
+												</div>
+												<input id="zone-id" type="number" style="display: none;" name="zone_id"/>
+											</div>
+											
+											<div class="row p-5">
+												<div class="btn-list text-end">
+													<button class="btn btn-outline-danger">
+														<i class="fe fe-x-circle"></i>
+														Cancel
+													</button>
+													<button onclick="saveFormParclle()" class="btn btn-primary">
+														<i  class="fe fe-check-circle"></i>
+														Save
+													</button>
+												</div>
+											</div>
+
+										</div>
+									</div>
+								</div>
+							</div>
+						</body>
+							
+							<script>
+								function saveFormParclle(){
+									let parcelle_name = document.getElementById('parcelle-name-id').value;
+									if(parcelle_name === ''){
+									alert('parcelle name required !')
+									return;
+									}
+									let parcelle_date = document.getElementById('parcelle-date-id').value;
+									if(parcelle_date === ''){
+									alert('parcelle date required !')
+									return;
+									}
+									let parcelle_category = document.getElementById('parcelle-category-id').value;
+									if(parcelle_category === ''){
+									alert('parcelle category required !')
+									return;
+									}
+									let parcelle_department = document.getElementById('parcelle-department-id').value;
+									if(parcelle_department === ''){
+									alert('parcelle department required !')
+									return;
+									}
+									let client = document.getElementById('client-id').value;
+									if(client === ''){
+									alert('Client name required !')
+									return;
+									}
+
+									let zone_id = document.getElementById('zone-id').value;
+									console.log(zone_id);
+
+									console.log("retrieve zone");
+									var zone_parcelle = JSON.parse(localStorage.getItem('data'));
+		
+									id_projet = zone_parcelle.id_projet;
+									console.log(id_projet);
+
+									let data = {
+										parcelle_name: parcelle_name,
+										parcelle_date: parcelle_date,
+										parcelle_category: parcelle_category,
+										department: parcelle_department,
+										client: client,
+										id_projet: id_projet,
+										geozone: Number(zone_id)
+									}
+									console.log(data);
+									fetch('http://localhost:8000/api/saveFormParcelle/', {
+										method: 'POST',
+										headers: {
+											'Accept': 'application/json',
+											'Content-Type': 'application/json'
+										},
+										body: JSON.stringify(data)
+									})
+									   .then(response => response.json())
+									   .then(response => {
+										console.log(JSON.stringify(response))
+										document.location.href="parcelles";
+									})
+									
+								}
+
+								function execute(){
+									console.log("retrieve zone");
+									var zone = JSON.parse(localStorage.getItem('data'));
+		
+									zone_id = zone.id;
+									console.log(zone_id);
+									document.getElementById('zone-id').value= zone_id;
+								}
+							</script>
+							<!--ROW CLOSED-->
+
+        {% endblock %}
+
+    {% block scripts %}
+
+	    {% comment %} <script src="./lib/leaflet.browser.print.min.js"></script>
+		<script src="./lib/leaflet-measure.js"></script> {% endcomment %}
+
+		<!-- SELECT2 JS -->
+		<script src=" {% static 'assets/plugins/select2/select2.full.min.js' %} "></script>
+
+		<!-- bootstrap-datepicker js -->
+		<script src=" {% static 'assets/plugins/bootstrap-datepicker/js/datepicker.js' %} "></script>
+
+		<!-- INTERNAL Summernote Editor js -->
+		<script src=" {% static 'assets/plugins/summernote-editor/summernote1.js' %} "></script>
+
+		<!-- FILE UPLOAD JS -->
+        <script src=" {% static 'assets/plugins/fileuploads/js/fileupload.js' %} "></script>
+        <script src=" {% static 'assets/plugins/fileuploads/js/file-upload.js' %} "></script>
+
+		<!-- INVOICE CREATE JS-->
+		<script src=" {% static 'assets/js/parcelles-new.js' %} "></script>
+
+        <!-- THEMECOLORS JS -->
+        <script src="{% static 'assets/js/themeColors.js'%}"></script>
+
+    {% endblock %}
+
+

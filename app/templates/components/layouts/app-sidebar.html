@@ -1,0 +1,522 @@
+{% load static %}                
+<!--APP-SIDEBAR-->
+<div class="sticky">
+	<div class="app-sidebar__overlay" data-bs-toggle="sidebar"></div>
+	<div class="app-sidebar">
+		<div class="side-header">
+			<a class="header-brand1" href="index">
+				<img src="{% static 'assets/images/brand/magon.png' %}" class="header-brand-img desktop-logo" alt="logo">
+				<img src="{% static 'assets/images/brand/magon.png' %}" class="header-brand-img toggle-logo" alt="logo">
+				<img src="{% static 'assets/images/brand/magon.png' %}" class="header-brand-img light-logo" alt="logo">
+				<img src="{% static 'assets/images/brand/magon.png' %}" class="header-brand-img light-logo1" alt="logo">
+
+			</a><!-- LOGO -->
+		</div>
+		<div class="main-sidemenu">
+			<div class="slide-left disabled" id="slide-left"><svg xmlns="http://www.w3.org/2000/svg"
+					fill="#7b8191" width="24" height="24" viewBox="0 0 24 24">
+					<path d="M13.293 6.293 7.586 12l5.707 5.707 1.414-1.414L10.414 12l4.293-4.293z" />
+				</svg>
+			</div>
+			<ul class="side-menu">
+				<!-- Dashboard -->
+				<li>
+					<h3>Menu</h3>
+				</li>
+				<li class="slide">
+					<a class="side-menu__item has-link" data-bs-toggle="slide" href="{% url 'index' %}">
+						<img src="{% static 'assets/images/icons/farm.png' %}" class="side-menu__icon" enable-background="new 0 0 24 24" viewBox="0 0 24 24" {% comment %} style="margin-right: 10px; width: 10%;filter: contrast(20%);" {% endcomment %}/>
+						<span class="side-menu__label">Dashboard</span>
+					</a>
+				</li>
+				{% if userGroup == 'Basic' %}
+				<!-- Détection & Analyse -->
+				<li>
+					<h3>Détection & Analyse</h3>
+				</li>
+				<li class="slide">
+					<a class="side-menu__item" data-bs-toggle="slide" href="{% url 'projects' %}">
+						<img src="{% static 'assets/images/icons/plant.png' %}" class="side-menu__icon" enable-background="new 0 0 24 24" viewBox="0 0 24 24" {% comment %} style="margin-right: 10px; width: 10%;filter: contrast(20%);" {% endcomment %}/>
+						<span class="side-menu__label"> Projets</span><i class="angle fa fa-angle-right"></i>
+					</a>
+				</li>
+				<li class="slide">
+					<a class="side-menu__item" data-bs-toggle="slide" href="{% url 'parcelles' %}">
+						<img src="{% static 'assets/images/icons/polygon.png' %}" class="side-menu__icon" enable-background="new 0 0 24 24" viewBox="0 0 24 24" {% comment %} style="margin-right: 10px; width: 10%;filter: contrast(20%);" {% endcomment %}/>
+						<span class="side-menu__label">Parcelles</span><i class="angle fa fa-angle-right"></i>
+					</a>
+				</li>
+				{% comment %} <li class="slide">
+					<a class="side-menu__item" data-bs-toggle="slide" href="#">
+						<img src="{% static 'assets/images/icons/weather.png' %}" class="side-menu__icon" enable-background="new 0 0 24 24" viewBox="0 0 24 24" />
+						<span class="side-menu__label">Données Météologiques</span><i class="angle fa fa-angle-right"></i></a>
+					<ul class="slide-menu">
+						<li class="side-menu-label1"><a href="javascript:void(0)">Météo</a></li>
+						<li><a href="chart-echart" class="slide-item">Météo Satellite</a></li>
+						<li><a href="chart-echart" class="slide-item">Station Météo</a></li>
+					</ul>
+				</li> {% endcomment %}
+				<li class="slide">
+					<a class="side-menu__item" data-bs-toggle="slide" href="#">
+						<img src="{% static 'assets/images/icons/metering.png' %}" class="side-menu__icon" enable-background="new 0 0 24 24" viewBox="0 0 24 24" {% comment %} style="margin-right: 10px; width: 10%;filter: contrast(20%);" {% endcomment %}/>
+						<span class="side-menu__label">Iot & Sensors</span><i class="angle fa fa-angle-right"></i></a>
+					<ul class="slide-menu">
+						<li class="side-menu-label1"><a href="javascript:void(0)">Sensor</a></li>
+						<li><a href="chart-flot" class="slide-item">IoT Sensors</a></li>
+					</ul>
+				</li>
+				<li class="slide">
+					<a class="side-menu__item" data-bs-toggle="slide" href="#">
+						<img src="{% static 'assets/images/icons/leaf.png' %}" class="side-menu__icon" enable-background="new 0 0 24 24" viewBox="0 0 24 24" {% comment %} style="margin-right: 10px; width: 10%;filter: contrast(20%);" {% endcomment %}/>
+						<span class="side-menu__label">Santé</span><i class="angle fa fa-angle-right"></i></a>
+					<ul class="slide-menu">
+						<li class="sub-side-menu-label1"><a href="javascript:void(0)">Détection par Satellites</a></li>
+						<li class="sub-side-menu-label1"><a href="javascript:void(0)">Détection par Drones</a></li>
+						<ul class="slide-menu">
+							<li><a href="form-wizard" class="slide-item">Analyse </a></li>
+							<li><a class="slide-item" href="product-details">Résultats</a></li>
+						</ul>
+						<li class="sub-side-menu-label1"><a href="javascript:void(0)">Détection Manuelle</a></li>
+						<ul class="slide-menu">
+							<li><a href="form-wizard" class="slide-item">Analyse </a></li>
+							<li><a class="slide-item" href="product-details">Résultats</a></li>
+						</ul>
+						<li class="sub-side-menu-label1"><a href="javascript:void(0)">Mapping des Anomalies</a></li>
+					</ul>
+				</li>				
+				{% endif %}
+
+				{% if userGroup == 'Regular' %}
+				<!-- Détection & Analyse -->
+				<li>
+					<h3>Détection & Analyse</h3>
+				</li>
+				<li class="slide">
+					<a class="side-menu__item" data-bs-toggle="slide" href="{% url 'projects' %}">
+						<img src="{% static 'assets/images/icons/plant.png' %}" class="side-menu__icon" enable-background="new 0 0 24 24" viewBox="0 0 24 24" {% comment %} style="margin-right: 10px; width: 10%;filter: contrast(20%);" {% endcomment %}/>
+						<span class="side-menu__label"> Projets</span><i class="angle fa fa-angle-right"></i>
+					</a>
+				</li>
+				<li class="slide">
+					<a class="side-menu__item" data-bs-toggle="slide" href="{% url 'parcelles' %}">
+						<img src="{% static 'assets/images/icons/polygon.png' %}" class="side-menu__icon" enable-background="new 0 0 24 24" viewBox="0 0 24 24" {% comment %} style="margin-right: 10px; width: 10%;filter: contrast(20%);" {% endcomment %}/>
+						<span class="side-menu__label">Parcelles</span><i class="angle fa fa-angle-right"></i>
+					</a>
+				</li>
+				<li class="slide">
+					<a class="side-menu__item" data-bs-toggle="slide" href="#">
+						<img src="{% static 'assets/images/icons/weather.png' %}" class="side-menu__icon" enable-background="new 0 0 24 24" viewBox="0 0 24 24" {% comment %} style="margin-right: 10px; width: 10%;filter: contrast(20%);" {% endcomment %}/>
+						<span class="side-menu__label">Météo</span><i class="angle fa fa-angle-right"></i></a>
+					<ul class="slide-menu">
+						<li class="side-menu-label1"><a href="javascript:void(0)">Météo</a></li>
+						<li><a href="chart-echart" class="slide-item">Météo Satellite</a></li>
+						<li><a href="chart-echart" class="slide-item">Station Météo</a></li>
+					</ul>
+				</li>
+				<li class="slide">
+					<a class="side-menu__item" data-bs-toggle="slide" href="#">
+						<img src="{% static 'assets/images/icons/metering.png' %}" class="side-menu__icon" enable-background="new 0 0 24 24" viewBox="0 0 24 24" {% comment %} style="margin-right: 10px; width: 10%;filter: contrast(20%);" {% endcomment %}/>
+						<span class="side-menu__label">Iot & Sensors</span><i class="angle fa fa-angle-right"></i></a>
+					<ul class="slide-menu">
+						<li class="side-menu-label1"><a href="javascript:void(0)">Sensor</a></li>
+						<li><a href="chart-flot" class="slide-item">IoT Sensors</a></li>
+					</ul>
+				</li>
+				<li class="slide">
+					<a class="side-menu__item" data-bs-toggle="slide" href="#">
+						<img src="{% static 'assets/images/icons/leaf.png' %}" class="side-menu__icon" enable-background="new 0 0 24 24" viewBox="0 0 24 24" {% comment %} style="margin-right: 10px; width: 10%;filter: contrast(20%);" {% endcomment %}/>
+						<span class="side-menu__label">Santé</span><i class="angle fa fa-angle-right"></i></a>
+					<ul class="slide-menu">
+						<li class="sub-side-menu-label1"><a href="javascript:void(0)">Détection par Satellites</a></li>
+						<li class="sub-side-menu-label1"><a href="javascript:void(0)">Détection par Drones</a></li>
+						<ul class="slide-menu">
+							<li><a href="form-wizard" class="slide-item">Analyse </a></li>
+							<li><a class="slide-item" href="product-details">Résultats</a></li>
+						</ul>
+						<li class="sub-side-menu-label1"><a href="javascript:void(0)">Détection Manuelle</a></li>
+						<ul class="slide-menu">
+							<li><a href="form-wizard" class="slide-item">Analyse </a></li>
+							<li><a class="slide-item" href="product-details">Résultats</a></li>
+						</ul>
+						<li class="sub-side-menu-label1"><a href="javascript:void(0)">Mapping des Anomalies</a></li>
+					</ul>
+				</li>
+				<!-- Aide à la décision -->
+				<li>
+					<h3>Aide à la décision</h3>
+					<li class="slide">
+						<a class="side-menu__item" data-bs-toggle="slide" href="#">
+							<img src="{% static 'assets/images/icons/machine-learning.png' %}" class="side-menu__icon" enable-background="new 0 0 24 24" viewBox="0 0 24 24" {% comment %} style="margin-right: 10px; width: 10%;filter: contrast(20%);" {% endcomment %}/>
+							<span class="side-menu__label">Calcul des correctifs</span><i class="angle fa fa-angle-right"></i></a>
+					</li>
+				</li>
+				<!-- Réaction -->
+				<li>
+					<h3>Réaction</h3>
+					<li class="slide">
+						<a class="side-menu__item" data-bs-toggle="slide" href="#">
+							<img src="{% static 'assets/images/icons/farme.png' %}" class="side-menu__icon" enable-background="new 0 0 24 24" viewBox="0 0 24 24" {% comment %} style="margin-right: 10px; width: 10%;filter: contrast(20%);" {% endcomment %}/>
+							<span class="side-menu__label">Opérations Agricoles</span><i class="angle fa fa-angle-right"></i></a>
+							<ul class="slide-menu">
+								<li class="sub-side-menu-label1"><a href="recommendations-ia">Recommandations IA</a></li>
+								<li class="sub-side-menu-label1"><a href="operations-utilisateur">Opérations utilisateur</a></li>
+							</ul>
+					</li>		
+				</li>				
+				{% endif %}
+
+				{% if userGroup == 'Premium' %}
+				<!-- Détection & Analyse -->
+				<li>
+					<h3>Détection & Analyse</h3>
+				</li>
+				<li class="slide">
+					<a class="side-menu__item" data-bs-toggle="slide" href="{% url 'projects' %}">
+						<img src="{% static 'assets/images/icons/plant.png' %}" class="side-menu__icon" enable-background="new 0 0 24 24" viewBox="0 0 24 24" {% comment %} style="margin-right: 10px; width: 10%;filter: contrast(20%);" {% endcomment %}/>
+						<span class="side-menu__label"> Projets</span><i class="angle fa fa-angle-right"></i>
+					</a>
+				</li>
+				<li class="slide">
+					<a class="side-menu__item" data-bs-toggle="slide" href="{% url 'parcelles' %}">
+						<img src="{% static 'assets/images/icons/polygon.png' %}" class="side-menu__icon" enable-background="new 0 0 24 24" viewBox="0 0 24 24" {% comment %} style="margin-right: 10px; width: 10%;filter: contrast(20%);" {% endcomment %}/>
+						<span class="side-menu__label">Parcelles</span><i class="angle fa fa-angle-right"></i>
+					</a>
+				</li>
+				<li class="slide">
+					<a class="side-menu__item" data-bs-toggle="slide" href="#">
+						<img src="{% static 'assets/images/icons/weather.png' %}" class="side-menu__icon" enable-background="new 0 0 24 24" viewBox="0 0 24 24" {% comment %} style="margin-right: 10px; width: 10%;filter: contrast(20%);" {% endcomment %}/>
+						<span class="side-menu__label">Météo</span><i class="angle fa fa-angle-right"></i></a>
+					<ul class="slide-menu">
+						<li class="side-menu-label1"><a href="javascript:void(0)">Météo</a></li>
+						<li><a href="chart-echart" class="slide-item">Météo Satellite</a></li>
+						<li><a href="chart-echart" class="slide-item">Station Météo</a></li>
+					</ul>
+				</li>
+				<li class="slide">
+					<a class="side-menu__item" data-bs-toggle="slide" href="#">
+						<img src="{% static 'assets/images/icons/metering.png' %}" class="side-menu__icon" enable-background="new 0 0 24 24" viewBox="0 0 24 24" {% comment %} style="margin-right: 10px; width: 10%;filter: contrast(20%);" {% endcomment %}/>
+						<span class="side-menu__label">Iot & Sensors</span><i class="angle fa fa-angle-right"></i></a>
+					<ul class="slide-menu">
+						<li class="side-menu-label1"><a href="javascript:void(0)">Sensor</a></li>
+						<li><a href="chart-flot" class="slide-item">IoT Sensors</a></li>
+					</ul>
+				</li>
+				<li class="slide">
+					<a class="side-menu__item" data-bs-toggle="slide" href="#">
+						<img src="{% static 'assets/images/icons/leaf.png' %}" class="side-menu__icon" enable-background="new 0 0 24 24" viewBox="0 0 24 24" {% comment %} style="margin-right: 10px; width: 10%;filter: contrast(20%);" {% endcomment %}/>
+						<span class="side-menu__label">Santé</span><i class="angle fa fa-angle-right"></i></a>
+					<ul class="slide-menu">
+						<li class="sub-side-menu-label1"><a href="javascript:void(0)">Détection par Satellites</a></li>
+						<li class="sub-side-menu-label1"><a href="javascript:void(0)">Détection par Drones</a></li>
+						<ul class="slide-menu">
+							<li><a href="form-wizard" class="slide-item">Analyse </a></li>
+							<li><a class="slide-item" href="product-details">Résultats</a></li>
+						</ul>
+						<li class="sub-side-menu-label1"><a href="javascript:void(0)">Détection Manuelle</a></li>
+						<ul class="slide-menu">
+							<li><a href="form-wizard" class="slide-item">Analyse </a></li>
+							<li><a class="slide-item" href="product-details">Résultats</a></li>
+						</ul>
+						<li class="sub-side-menu-label1"><a href="javascript:void(0)">Mapping des Anomalies</a></li>
+					</ul>
+				</li>
+				<!-- Aide à la décision -->
+				<li>
+					<h3>Aide à la décision</h3>
+					<li class="slide">
+						<a class="side-menu__item" data-bs-toggle="slide" href="#">
+							<img src="{% static 'assets/images/icons/machine-learning.png' %}" class="side-menu__icon" enable-background="new 0 0 24 24" viewBox="0 0 24 24" {% comment %} style="margin-right: 10px; width: 10%;filter: contrast(20%);" {% endcomment %}/>
+							<span class="side-menu__label">Calcul des correctifs</span><i class="angle fa fa-angle-right"></i></a>
+					</li>
+				</li>
+				<!-- Réaction -->
+				<li>
+					<h3>Réaction</h3>
+					<li class="slide">
+						<a class="side-menu__item" data-bs-toggle="slide" href="#">
+							<img src="{% static 'assets/images/icons/farme.png' %}" class="side-menu__icon" enable-background="new 0 0 24 24" viewBox="0 0 24 24" {% comment %} style="margin-right: 10px; width: 10%;filter: contrast(20%);" {% endcomment %}/>
+							<span class="side-menu__label">Opérations Agricoles</span><i class="angle fa fa-angle-right"></i></a>
+							<ul class="slide-menu">
+								<li class="sub-side-menu-label1"><a href="recommendations-ia">Recommandations IA</a></li>
+								<li class="sub-side-menu-label1"><a href="operations-utilisateur">Opérations utilisateur</a></li>
+							</ul>
+					</li>		
+				</li>
+				<!-- Manegement -->
+				<li>
+					<h3>Manegement</h3>
+					<li class="slide">
+						<a class="side-menu__item" data-bs-toggle="slide" href="#">
+							<img src="{% static 'assets/images/icons/mining.png' %}" class="side-menu__icon" enable-background="new 0 0 24 24" viewBox="0 0 24 24" {% comment %} style="margin-right: 10px; width: 10%;filter: contrast(20%);" {% endcomment %}/>
+							<span class="side-menu__label">Programmes</span><i class="angle fa fa-angle-right"></i></a>
+					</li>
+					<li class="slide">
+						<a class="side-menu__item" data-bs-toggle="slide" href="{% url 'logistiques' %}">
+							<img src="{% static 'assets/images/icons/stock.png' %}" class="side-menu__icon" enable-background="new 0 0 24 24" viewBox="0 0 24 24" {% comment %} style="margin-right: 10px; width: 10%;filter: contrast(20%);" {% endcomment %}/>
+							<span class="side-menu__label">Logistiques</span><i class="angle fa fa-angle-right"></i></a>
+					</li>
+					<li class="slide">
+						<a class="side-menu__item" data-bs-toggle="slide" href="#">
+							<img src="{% static 'assets/images/icons/erp.png' %}" class="side-menu__icon" enable-background="new 0 0 24 24" viewBox="0 0 24 24" {% comment %} style="margin-right: 10px; width: 10%;filter: contrast(20%);" {% endcomment %}/>
+							<span class="side-menu__label">ERP</span><i class="angle fa fa-angle-right"></i></a>
+					</li>
+				</li>				
+				{% endif %}
+
+				{% if userGroup == 'Advanced' %}
+				<!-- Détection & Analyse -->
+				<li>
+					<h3>Détection & Analyse</h3>
+				</li>
+				<li class="slide">
+					<a class="side-menu__item" data-bs-toggle="slide" href="{% url 'projects' %}">
+						<img src="{% static 'assets/images/icons/plant.png' %}" class="side-menu__icon" enable-background="new 0 0 24 24" viewBox="0 0 24 24" {% comment %} style="margin-right: 10px; width: 10%;filter: contrast(20%);" {% endcomment %}/>
+						<span class="side-menu__label"> Projets</span><i class="angle fa fa-angle-right"></i>
+					</a>
+				</li>
+				<li class="slide">
+					<a class="side-menu__item" data-bs-toggle="slide" href="{% url 'parcelles' %}">
+						<img src="{% static 'assets/images/icons/polygon.png' %}" class="side-menu__icon" enable-background="new 0 0 24 24" viewBox="0 0 24 24" {% comment %} style="margin-right: 10px; width: 10%;filter: contrast(20%);" {% endcomment %}/>
+						<span class="side-menu__label">Parcelles</span><i class="angle fa fa-angle-right"></i>
+					</a>
+				</li>
+				<li class="slide">
+					<a class="side-menu__item" data-bs-toggle="slide" href="#">
+						<img src="{% static 'assets/images/icons/weather.png' %}" class="side-menu__icon" enable-background="new 0 0 24 24" viewBox="0 0 24 24" {% comment %} style="margin-right: 10px; width: 10%;filter: contrast(20%);" {% endcomment %}/>
+						<span class="side-menu__label">Météo</span><i class="angle fa fa-angle-right"></i></a>
+					<ul class="slide-menu">
+						<li class="side-menu-label1"><a href="javascript:void(0)">Météo</a></li>
+						<li><a href="chart-echart" class="slide-item">Météo Satellite</a></li>
+						<li><a href="chart-echart" class="slide-item">Station Météo</a></li>
+					</ul>
+				</li>
+				<li class="slide">
+					<a class="side-menu__item" data-bs-toggle="slide" href="#">
+						<img src="{% static 'assets/images/icons/metering.png' %}" class="side-menu__icon" enable-background="new 0 0 24 24" viewBox="0 0 24 24" {% comment %} style="margin-right: 10px; width: 10%;filter: contrast(20%);" {% endcomment %}/>
+						<span class="side-menu__label">Iot & Sensors</span><i class="angle fa fa-angle-right"></i></a>
+					<ul class="slide-menu">
+						<li class="side-menu-label1"><a href="javascript:void(0)">Sensor</a></li>
+						<li><a href="chart-flot" class="slide-item">IoT Sensors</a></li>
+					</ul>
+				</li>
+				<li class="slide">
+					<a class="side-menu__item" data-bs-toggle="slide" href="#">
+						<img src="{% static 'assets/images/icons/leaf.png' %}" class="side-menu__icon" enable-background="new 0 0 24 24" viewBox="0 0 24 24" {% comment %} style="margin-right: 10px; width: 10%;filter: contrast(20%);" {% endcomment %}/>
+						<span class="side-menu__label">Santé</span><i class="angle fa fa-angle-right"></i></a>
+					<ul class="slide-menu">
+						<li class="sub-side-menu-label1"><a href="javascript:void(0)">Détection par Satellites</a></li>
+						<li class="sub-side-menu-label1"><a href="javascript:void(0)">Détection par Drones</a></li>
+						<ul class="slide-menu">
+							<li><a href="form-wizard" class="slide-item">Analyse </a></li>
+							<li><a class="slide-item" href="product-details">Résultats</a></li>
+						</ul>
+						<li class="sub-side-menu-label1"><a href="javascript:void(0)">Détection Manuelle</a></li>
+						<ul class="slide-menu">
+							<li><a href="form-wizard" class="slide-item">Analyse </a></li>
+							<li><a class="slide-item" href="product-details">Résultats</a></li>
+						</ul>
+						<li class="sub-side-menu-label1"><a href="javascript:void(0)">Mapping des Anomalies</a></li>
+					</ul>
+				</li>
+				<!-- Aide à la décision -->
+				<li>
+					<h3>Aide à la décision</h3>
+					<li class="slide">
+						<a class="side-menu__item" data-bs-toggle="slide" href="#">
+							<img src="{% static 'assets/images/icons/machine-learning.png' %}" class="side-menu__icon" enable-background="new 0 0 24 24" viewBox="0 0 24 24" {% comment %} style="margin-right: 10px; width: 10%;filter: contrast(20%);" {% endcomment %}/>
+							<span class="side-menu__label">Calcul des correctifs</span><i class="angle fa fa-angle-right"></i></a>
+					</li>
+				</li>
+				<!-- Réaction -->
+				<li>
+					<h3>Réaction</h3>
+					<li class="slide">
+						<a class="side-menu__item" data-bs-toggle="slide" href="#">
+							<img src="{% static 'assets/images/icons/farme.png' %}" class="side-menu__icon" enable-background="new 0 0 24 24" viewBox="0 0 24 24" {% comment %} style="margin-right: 10px; width: 10%;filter: contrast(20%);" {% endcomment %}/>
+							<span class="side-menu__label">Opérations Agricoles</span><i class="angle fa fa-angle-right"></i></a>
+							<ul class="slide-menu">
+								<li class="sub-side-menu-label1"><a href="recommendations-ia">Recommandations IA</a></li>
+								<li class="sub-side-menu-label1"><a href="operations-utilisateur">Opérations utilisateur</a></li>
+							</ul>
+					</li>		
+				</li>
+				<!-- Manegement -->
+				<li>
+					<h3>Manegement</h3>
+					<li class="slide">
+						<a class="side-menu__item" data-bs-toggle="slide" href="#">
+							<img src="{% static 'assets/images/icons/mining.png' %}" class="side-menu__icon" enable-background="new 0 0 24 24" viewBox="0 0 24 24" {% comment %} style="margin-right: 10px; width: 10%;filter: contrast(20%);" {% endcomment %}/>
+							<span class="side-menu__label">Programmes</span><i class="angle fa fa-angle-right"></i></a>
+					</li>
+					<li class="slide">
+						<a class="side-menu__item" data-bs-toggle="slide" href="{% url 'logistiques' %}">
+							<img src="{% static 'assets/images/icons/stock.png' %}" class="side-menu__icon" enable-background="new 0 0 24 24" viewBox="0 0 24 24" {% comment %} style="margin-right: 10px; width: 10%;filter: contrast(20%);" {% endcomment %}/>
+							<span class="side-menu__label">Logistiques</span><i class="angle fa fa-angle-right"></i></a>
+					</li>
+					<li class="slide">
+						<a class="side-menu__item" data-bs-toggle="slide" href="#">
+							<img src="{% static 'assets/images/icons/erp.png' %}" class="side-menu__icon" enable-background="new 0 0 24 24" viewBox="0 0 24 24" {% comment %} style="margin-right: 10px; width: 10%;filter: contrast(20%);" {% endcomment %}/>
+							<span class="side-menu__label">ERP</span><i class="angle fa fa-angle-right"></i></a>
+					</li>
+				</li>
+				<!-- Reporting -->
+				<li>
+					<h3>Reporting</h3>
+					<li class="slide">
+						<a class="side-menu__item" data-bs-toggle="slide" href="#">
+							<img src="{% static 'assets/images/icons/monitor.png' %}" class="side-menu__icon" enable-background="new 0 0 24 24" viewBox="0 0 24 24" {% comment %} style="margin-right: 10px; width: 10%;filter: contrast(20%);" {% endcomment %}/>
+							<span class="side-menu__label">Reporting</span><i class="angle fa fa-angle-right"></i></a>
+					</li>
+				</li>
+				<!-- IoT -->
+				<li>
+					<h3>IoT</h3>
+					<li class="slide">
+						<a class="side-menu__item" data-bs-toggle="slide" href="#">
+							<img src="{% static 'assets/images/icons/iot.png' %}" class="side-menu__icon" enable-background="new 0 0 24 24" viewBox="0 0 24 24" {% comment %} style="margin-right: 10px; width: 10%;filter: contrast(20%);" {% endcomment %}/>
+							<span class="side-menu__label">Objets connectés</span><i class="angle fa fa-angle-right"></i></a>
+					</li>
+				</li>				
+				{% endif %}
+
+				{% if user.is_staff %}
+				<!-- Détection & Analyse -->
+				<li>
+					<h3>Détection & Analyse</h3>
+				</li>
+				{% comment %} <li class="slide">
+					<a class="side-menu__item" data-bs-toggle="slide" href="{% url 'sentinel_hub_view' %}">
+						<img src="{% static 'assets/images/icons/plant.png' %}" class="side-menu__icon" enable-background="new 0 0 24 24" viewBox="0 0 24 24" />
+						<span class="side-menu__label"> sentinelhub_api_example</span>
+					</a>
+				</li> {% endcomment %}
+				<li class="slide">
+					<a class="side-menu__item" data-bs-toggle="slide" href="{% url 'projects' %}">
+						<img src="{% static 'assets/images/icons/plant.png' %}" class="side-menu__icon" enable-background="new 0 0 24 24" viewBox="0 0 24 24" {% comment %} style="margin-right: 10px; width: 10%;filter: contrast(20%);" {% endcomment %}/>
+						<span class="side-menu__label"> Projets</span>{% comment %} <i class="angle fa fa-angle-right"></i> {% endcomment %}
+					</a>
+				</li>
+				<li class="slide">
+					<a class="side-menu__item" data-bs-toggle="slide" href="{% url 'parcelles' %}">
+						<img src="{% static 'assets/images/icons/polygon.png' %}" class="side-menu__icon" enable-background="new 0 0 24 24" viewBox="0 0 24 24" {% comment %} style="margin-right: 10px; width: 10%;filter: contrast(20%);" {% endcomment %}/>
+						<span class="side-menu__label">Parcelles</span>{% comment %} <i class="angle fa fa-angle-right"></i> {% endcomment %}
+					</a>
+				</li>
+				<li class="slide">
+					<a class="side-menu__item" data-bs-toggle="slide" href="meteo">
+						<img src="{% static 'assets/images/icons/weather.png' %}" class="side-menu__icon" enable-background="new 0 0 24 24" viewBox="0 0 24 24" {% comment %} style="margin-right: 10px; width: 10%;filter: contrast(20%);" {% endcomment %}/>
+						<span class="side-menu__label">Météo</span>{% comment %} <i class="angle fa fa-angle-right"></i> {% endcomment %}</a>
+					{% comment %} <ul class="slide-menu">
+						<li class="side-menu-label1"><a href="javascript:void(0)">Météo</a></li>
+						<li><a href="chart-echart" class="slide-item">Météo Satellite</a></li>
+						<li><a href="chart-echart" class="slide-item">Station Météo</a></li>
+					</ul> {% endcomment %}
+				</li>
+				<li class="slide">
+					<a class="side-menu__item" data-bs-toggle="slide" href="{% url 'chart-flot' %}">
+						<img src="{% static 'assets/images/icons/metering.png' %}" class="side-menu__icon" enable-background="new 0 0 24 24" viewBox="0 0 24 24" {% comment %} style="margin-right: 10px; width: 10%;filter: contrast(20%);" {% endcomment %}/>
+						<span class="side-menu__label">Iot & Sensors</span>{% comment %} <i class="angle fa fa-angle-right"></i> {% endcomment %}</a>
+					{% comment %} <ul class="slide-menu">
+						<li class="side-menu-label1"><a href="javascript:void(0)">Sensor</a></li>
+						<li><a href="chart-flot" class="slide-item">IoT Sensors</a></li>
+					</ul> {% endcomment %}
+				</li>
+				<li class="slide">
+					<a class="side-menu__item" data-bs-toggle="slide" href="#">
+						<img src="{% static 'assets/images/icons/leaf.png' %}" class="side-menu__icon" enable-background="new 0 0 24 24" viewBox="0 0 24 24" {% comment %} style="margin-right: 10px; width: 10%;filter: contrast(20%);" {% endcomment %}/>
+						<span class="side-menu__label">Santé</span><i class="angle fa fa-angle-right"></i></a>
+					<ul class="slide-menu">
+						<li class="sub-side-menu-label1"><a href="javascript:void(0)">Détection par Satellites</a></li>
+						<li class="sub-side-menu-label1"><a href="javascript:void(0)">Détection par Drones</a></li>
+						<ul class="slide-menu">
+							<li><a href="form-wizard" class="slide-item">Analyse </a></li>
+							<li><a class="slide-item" href="product-details">Résultats</a></li>
+						</ul>
+						<li class="sub-side-menu-label1"><a href="javascript:void(0)">Détection Manuelle</a></li>
+						<ul class="slide-menu">
+							<li><a href="form-wizard" class="slide-item">Analyse </a></li>
+							<li><a class="slide-item" href="product-details">Résultats</a></li>
+						</ul>
+						<li class="sub-side-menu-label1"><a href="javascript:void(0)">Mapping des Anomalies</a></li>
+					</ul>
+				</li>
+				<!-- Aide à la décision -->
+				<li>
+					<h3>Aide à la décision</h3>
+					<li class="slide">
+						<a class="side-menu__item" data-bs-toggle="slide" href="#">
+							<img src="{% static 'assets/images/icons/machine-learning.png' %}" class="side-menu__icon" enable-background="new 0 0 24 24" viewBox="0 0 24 24" {% comment %} style="margin-right: 10px; width: 10%;filter: contrast(20%);" {% endcomment %}/>
+							<span class="side-menu__label">Calcul des correctifs</span><i class="angle fa fa-angle-right"></i></a>
+					</li>
+				</li>
+				<!-- Réaction -->
+				<li>
+					<h3>Réaction</h3>
+					<li class="slide">
+						<a class="side-menu__item" data-bs-toggle="slide" href="#">
+							<img src="{% static 'assets/images/icons/farme.png' %}" class="side-menu__icon" enable-background="new 0 0 24 24" viewBox="0 0 24 24" {% comment %} style="margin-right: 10px; width: 10%;filter: contrast(20%);" {% endcomment %}/>
+							<span class="side-menu__label">Opérations Agricoles</span><i class="angle fa fa-angle-right"></i></a>
+							<ul class="slide-menu">
+								<li class="sub-side-menu-label1"><a href="recommendations-ia">Recommandations IA</a></li>
+								<li class="sub-side-menu-label1"><a href="operations-utilisateur">Opérations utilisateur</a></li>
+							</ul>
+					</li>		
+				</li>
+				<!-- Manegement -->
+				<li>
+					<h3>Manegement</h3>
+					<li class="slide">
+						<a class="side-menu__item" data-bs-toggle="slide" href="#">
+							<img src="{% static 'assets/images/icons/mining.png' %}" class="side-menu__icon" enable-background="new 0 0 24 24" viewBox="0 0 24 24" {% comment %} style="margin-right: 10px; width: 10%;filter: contrast(20%);" {% endcomment %}/>
+							<span class="side-menu__label">Programmes</span><i class="angle fa fa-angle-right"></i></a>
+					</li>
+					<li class="slide">
+						<a class="side-menu__item" data-bs-toggle="slide" href="{% url 'logistiques' %}">
+							<img src="{% static 'assets/images/icons/stock.png' %}" class="side-menu__icon" enable-background="new 0 0 24 24" viewBox="0 0 24 24" {% comment %} style="margin-right: 10px; width: 10%;filter: contrast(20%);" {% endcomment %}/>
+							<span class="side-menu__label">Logistiques</span><i class="angle fa fa-angle-right"></i></a>
+					</li>
+					<li class="slide">
+						<a class="side-menu__item" data-bs-toggle="slide" href="#">
+							<img src="{% static 'assets/images/icons/erp.png' %}" class="side-menu__icon" enable-background="new 0 0 24 24" viewBox="0 0 24 24" {% comment %} style="margin-right: 10px; width: 10%;filter: contrast(20%);" {% endcomment %}/>
+							<span class="side-menu__label">ERP</span><i class="angle fa fa-angle-right"></i></a>
+					</li>
+				</li>
+				<!-- Reporting -->
+				<li>
+					<h3>Reporting</h3>
+					<li class="slide">
+						<a class="side-menu__item" data-bs-toggle="slide" href="#">
+							<img src="{% static 'assets/images/icons/monitor.png' %}" class="side-menu__icon" enable-background="new 0 0 24 24" viewBox="0 0 24 24" {% comment %} style="margin-right: 10px; width: 10%;filter: contrast(20%);" {% endcomment %}/>
+							<span class="side-menu__label">Reporting</span><i class="angle fa fa-angle-right"></i></a>
+					</li>
+				</li>
+				<!-- IoT -->
+				<li>
+					<h3>IoT</h3>
+					<li class="slide">
+						<a class="side-menu__item" data-bs-toggle="slide" href="#">
+							<img src="{% static 'assets/images/icons/iot.png' %}" class="side-menu__icon" enable-background="new 0 0 24 24" viewBox="0 0 24 24" {% comment %} style="margin-right: 10px; width: 10%;filter: contrast(20%);" {% endcomment %}/>
+							<span class="side-menu__label">Objets connectés</span><i class="angle fa fa-angle-right"></i></a>
+					</li>
+				</li>				
+				{% endif %}
+
+				<!-- Settings -->
+				<li>
+					<h3>Settings</h3>
+					<li class="slide">
+						<a class="side-menu__item" data-bs-toggle="slide" href="#">
+							<img src="{% static 'assets/images/icons/parametre.png' %}" class="side-menu__icon" enable-background="new 0 0 24 24" viewBox="0 0 24 24" {% comment %} style="margin-right: 10px; width: 10%;filter: contrast(20%);" {% endcomment %}/>
+							<span class="side-menu__label">Paramètres</span><i class="angle fa fa-angle-right"></i></a>
+					</li>
+					<li class="slide">
+						<a class="side-menu__item" data-bs-toggle="slide" href="profile-user">
+							<img src="{% static 'assets/images/icons/user-account.png' %}" class="side-menu__icon" enable-background="new 0 0 24 24" viewBox="0 0 24 24" {% comment %} style="margin-right: 10px; width: 10%;filter: contrast(20%);" {% endcomment %}/>
+							<span class="side-menu__label">Compte</span><i class="angle fa fa-angle-right"></i></a>
+					</li>
+				</li>								
+			</div>
+		</div>
+	</div>
+</div>
+<!--/APP-SIDEBAR-->

@@ -1,0 +1,707 @@
+{% extends 'components/base.html' %}
+{% load static %}
+
+    {% block styles %}
+
+    <style>
+        .input-icon {
+            position: relative;
+        }
+        
+        .input-icon .icon {
+            position: absolute;
+            top: 50%;
+            right: 50px;
+            transform: translateY(-50%);
+            display: none;
+        }
+        
+        .input-icon .icon i {
+            color: #aaa;
+        }
+        
+        .input-icon .icon i:hover {
+            color: #333;
+            cursor: pointer;
+        }
+        
+    </style>
+
+    <style>
+        .leaflet-popup-content {
+            width: 500px;
+        }
+    </style>
+
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+        }
+        
+        #map {
+            width: 100%;
+            height: 400px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.5);
+        }
+        
+        .info {
+            padding: 6px 8px;
+            font: 12px/14px Arial, Helvetica, sans-serif;
+            color: white;
+            background: rgba(52,58,64,0.8);
+            box-shadow: 0 0 15px rgba(255,255,255,0.2);
+            border-radius: 5px;
+            text-align: left;
+        }			  			
+
+        .coordinate {
+            position: absolute;
+            bottom: 10px;
+            right: 50%;
+        }
+
+        .leaflet-popup-content-wrapper {
+            background-color: #000000;
+            color: #fff;
+            border: 1px solid red;
+            border-radius: 0px;
+        }
+    </style>
+
+    {% endblock %}
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/js/bootstrap.min.js"></script>
+
+        <meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="author" content="OpenStreetMap">
+        <meta name="description" content="leaflet draw export to geojson file">
+		<title>Leaflet Tutorial</title>
+
+		<link rel="icon" type="image/x-icon" href="https://unsorry.net/assets-date/images/favicon.png">
+
+		<!-- leaflet css  -->
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css">
+		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+		<link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.css"/>
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css">
+        <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
+        
+    
+        
+        
+        {% block content %}       
+                            <!-- PAGE-HEADER -->
+                            <div class="page-header">
+                                <input id="data-id" style="display: none;" value="{{ data }}" />
+                                <div>
+                                    <h1 class="page-title">Local Technique </h1>
+                                </div>
+                                <div class="ms-auto pageheader-btn">
+                                    <ol class="breadcrumb">
+                                        <li class="breadcrumb-item"><a href="logistiques">Logistiques</a></li>
+                                        <li class="breadcrumb-item"><a href="batiments">Bâtiments</a></li>
+                                        <li class="breadcrumb-item active" aria-current="page">Local Technique </li>
+                                    </ol>
+                                </div>
+                            </div>
+                            <!-- PAGE-HEADER END -->
+                                                
+                            <!--ROW OPENED-->
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="card">
+                                                <div class="card-body project-type-container projects p-4">
+                                                    <h4 class="m-0" id="typeTitle">All Local Technique</h4>
+                                                    <div class="d-sm-flex align-items-center">
+                                                        <div class="btn-list mx-4">
+                                                            <a class="btn btn-outline-primary"  data-bs-target="#modalQuill" data-bs-toggle="modal" href="javascript:void(0)" >
+                                                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path d="M0 0h24v24H0z" fill="none"/>
+                                                                    <path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                                                </svg>
+                                                            </a> 
+                                                                                             
+                                                            <a class="btn btn-primary" href="#">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" class="w-inner-icn text-white" enable-background="new 0 0 24 24" viewBox="0 0 24 24"><path d="M21.5,13h-8.0005493C13.2234497,13.0001831,12.9998169,13.223999,13,13.5v8.0005493C13.0001831,21.7765503,13.223999,22.0001831,13.5,22h8.0006104C21.7765503,21.9998169,22.0001831,21.776001,22,21.5v-8.0006104C21.9998169,13.2234497,21.776001,12.9998169,21.5,13z M21,21h-7v-7h7V21z M10.5,2H2.4993896C2.2234497,2.0001831,1.9998169,2.223999,2,2.5v8.0005493C2.0001831,10.7765503,2.223999,11.0001831,2.5,11h8.0006104C10.7765503,10.9998169,11.0001831,10.776001,11,10.5V2.4993896C10.9998169,2.2234497,10.776001,1.9998169,10.5,2z M10,10H3V3h7V10z M10.5,13H2.4993896C2.2234497,13.0001831,1.9998169,13.223999,2,13.5v8.0005493C2.0001831,21.7765503,2.223999,22.0001831,2.5,22h8.0006104C10.7765503,21.9998169,11.0001831,21.776001,11,21.5v-8.0006104C10.9998169,13.2234497,10.776001,12.9998169,10.5,13z M10,21H3v-7h7V21z M21.5,2h-8.0005493C13.2234497,2.0001831,12.9998169,2.223999,13,2.5v8.0005493C13.0001831,10.7765503,13.223999,11.0001831,13.5,11h8.0006104C21.7765503,10.9998169,22.0001831,10.776001,22,10.5V2.4993896C21.9998169,2.2234497,21.776001,1.9998169,21.5,2z M21,10h-7V3h7V10z"/></svg>
+                                                            </a>
+                                                            <a class="btn btn-outline-primary" href="logistiques-list">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" class="w-inner-icn" enable-background="new 0 0 24 24" viewBox="0 0 24 24"><path d="M3.5,12C3.223877,12,3,12.223877,3,12.5S3.223877,13,3.5,13S4,12.776123,4,12.5S3.776123,12,3.5,12z M6.5,8h15C21.776123,8,22,7.776123,22,7.5S21.776123,7,21.5,7h-15C6.223877,7,6,7.223877,6,7.5S6.223877,8,6.5,8z M3.5,17C3.223877,17,3,17.223877,3,17.5S3.223877,18,3.5,18S4,17.776123,4,17.5S3.776123,17,3.5,17z M21.5,12h-15C6.223877,12,6,12.223877,6,12.5S6.223877,13,6.5,13h15c0.276123,0,0.5-0.223877,0.5-0.5S21.776123,12,21.5,12z M3.5,7C3.223877,7,3,7.223877,3,7.5S3.223877,8,3.5,8S4,7.776123,4,7.5S3.776123,7,3.5,7z M21.5,17h-15C6.223877,17,6,17.223877,6,17.5S6.223877,18,6.5,18h15c0.276123,0,0.5-0.223877,0.5-0.5S21.776123,17,21.5,17z"/></svg>
+                                                            </a>
+                                                        </div>
+                                                    </div>
+													<div class="modal">
+														<div class="modal-dialog modal-lg" role="document">
+															<div class="modal-content">
+																<div class="modal-header pd-20">
+																	<h6 class="modal-title">Create New Document</h6><button aria-label="Close" class="btn-close" data-bs-dismiss="modal" ><span aria-hidden="true">&times;</span></button>
+																</div>
+																<div class="modal-body pd-0">
+																	<div class="ql-wrapper ql-wrapper-modal ht-250">
+																		<div class="flex-1" id="quillEditorModal">
+																			<p><strong>Quill</strong> is a free, open source <a href="https://github.com/quilljs/quill/">WYSIWYG editor</a> built for the modern web. With its <a href="https://quilljs.com/docs/modules/">modular architecture</a> and expressive API, it is completely customizable to fit any need.</p><br>
+																			<p>The icons use here as a replacement to default svg icons are from <a href="https://icons8.com/line-awesome">Line Awesome Icons</a>.</p>
+																		</div>
+																	</div>
+																</div>
+																<div class="modal-footer pd-20">
+																	<button class="btn btn-primary" >Save changes</button> <button class="btn btn-light" data-bs-dismiss="modal" aria-label="Close">Cancel</button>
+																</div>
+															</div>
+														</div>
+													</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row ">
+                                        <div class="tab-content">
+                                            <div class="tab-pane active h-100" id="allLocale">
+                                                <div class="row">
+                                                    
+                                                    {% for data in data %}
+                                                        {% for local in data.locals %}                                                            
+                                                        
+                                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-4">
+                                                        <div class="card">
+                                                            <div class="card-body">
+                                                                <div class="row">
+                                                                    <div class="col-md-12">
+                                                                        <div class="row">
+                                                                            <div class="col">
+                                                                                <div class="d-sm-flex align-items-center">
+                                                                                    {% comment %} <div class="avatar mb-2 p-2 lh-1 mb-sm-0 avatar-md rounded-circle bg-primary me-2"> {% endcomment %}
+                                                                                        {% comment %} <div class="image_div">
+                                                                                            <img src="{{ machine.image.url }}" class="machine_image" style="width: 100px;height: 100px;"/>
+                                                                                        </div> {% endcomment %}
+                                                                                    {% comment %} </div> {% endcomment %}
+                                                                                    <div class="ms-1">
+                                                                                        <h6 class="mb-1"> <a href="#" class="float-start">{{ local.type }}</a> </h6>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="col-auto">
+                                                                                <div class="d-flex align-items-center">
+                                                                                    <div class="stars-main me-3">
+                                                                                        <i class="fa fa-star text-light star"></i>
+                                                                                    </div>
+                                                                                    <a href="#" class="option-dots" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fe fe-more-vertical"></i></a>
+                                                                                    <div class="dropdown-menu dropdown-menu-start">
+                                                                                        <a class="dropdown-item" href="#"><i class="fe fe-edit me-2"></i> Edit</a>
+                                                                                        <a class="dropdown-item" href="#"><i class="fe fe-share me-2"></i> Share</a>
+                                                                                        <a class="dropdown-item" href="#"><i class="fe fe-download me-2"></i> Clone</a>
+                                                                                        <a class="dropdown-item" href="#"><i class="fe fe-trash me-2"></i> Delete</a>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    {% endfor %}
+                                                    {% endfor %}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--ROW CLOSED-->
+                            
+        {% endblock %} 
+		{% block modal %}
+
+		<!--Modal-->
+		<div class="modal fade"  id="modalQuill">
+			<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h6 class="modal-title">Ajouter Local Technique   </h6><button aria-label="Close" class="btn-close" data-bs-dismiss="modal" ><span aria-hidden="true">&times;</span></button>
+					</div>
+					<div class="modal-body pd-0">
+						<form id="local-form" method="post" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <div class="form-row">
+                              <div class="col-md-6 mb-3">
+                                <div class="avatar mb-2 p-2 lh-1 mb-sm-0 avatar-md rounded-circle  me-2">
+                                    <img src="{% static 'assets/images/icons/home.png' %}" class="side-menu__icon" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
+                                </div>
+                                <label for="nom">Nom :</label>
+                                <input class="form-control" id="nom" type="text" name="nom" placeholder="Entrer le nom du local technique" required>
+                              </div>
+                              <div class="col-md-6 mb-3">
+                                <div class="avatar mb-2 p-2 lh-1 mb-sm-0 avatar-md rounded-circle  me-2">
+                                    <img src="{% static 'assets/images/icons/home1.png' %}" class="side-menu__icon" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
+                                </div>
+                                <label for="type">Type Local Technique :</label>
+                                <select class="form-control" id="type_local" name="type_local" required>
+                                    <option value="" selected disabled>Projet 1</option>
+                                    {% for data in data %}
+                                        {% for local in data.locals %}
+                                        <option value="{{ local.type_local }}">{{ local.type_local }}</option>
+                                        {% endfor %}
+                                    {% endfor %}
+                                    </select>
+                              
+                            </div>
+                              
+                            </div>
+                            <div class="form-row">
+                                <div class="col-md-6 mb-3">
+                                    <div class="avatar mb-2 p-2 lh-1 mb-sm-0 avatar-md rounded-circle  me-2">
+                                        <img src="{% static 'assets/images/icons/surface.png' %}" class="side-menu__icon" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
+                                    </div>
+                                    <label for="superficie">Superficie :</label>
+                                    <input class="form-control" id="superficie" type="number" name="superficie" placeholder="Entrer la valeur du superficie" required>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <div class="avatar mb-2 p-2 lh-1 mb-sm-0 avatar-md rounded-circle  me-2">
+                                        <img src="{% static 'assets/images/icons/surface2.png' %}" class="side-menu__icon" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
+                                    </div>
+                                    <label for="surface">Surface couvert :</label>
+                                    <input class="form-control" id="surface_couvert" type="number" name="surface_couvert" placeholder="Entrer la valeur du surface couvert" required>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <div class="avatar mb-2 p-2 lh-1 mb-sm-0 avatar-md rounded-circle  me-2">
+                                        <img src="{% static 'assets/images/icons/porte.png' %}" class="side-menu__icon" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
+                                    </div>
+                                    <label for="ports">Nombre des ports :</label>
+                                    <input class="form-control" id="ports" type="number" name="ports" placeholder="Entrer le nombre des ports" required>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <div class="avatar mb-2 p-2 lh-1 mb-sm-0 avatar-md rounded-circle  me-2">
+                                        <img src="{% static 'assets/images/icons/fenetres.png' %}" class="side-menu__icon" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
+                                    </div>
+                                    <label for="fenetres">Nombre des fenêtres :</label>
+                                    <input class="form-control" id="fenetres" type="number" name="fenetres" placeholder="Entrer le nombre des fenêtres" required>
+                                </div>
+                                {% comment %} <div class="col-md-6 mb-3">
+                                    <div class="avatar mb-2 p-2 lh-1 mb-sm-0 avatar-md rounded-circle  me-2">
+                                        <img src="{% static 'assets/images/icons/puzzle.png' %}" class="side-menu__icon" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
+                                    </div>
+                                    <label for="pieces">Nombre des pièces :</label>
+                                    <div class="input-icon">
+                                        <input class="form-control" id="pieces" type="number" name="pieces" placeholder="Entrer le nombre des pièces" required onclick="displayIcon(this)"> 
+                                        <span class="icon"><i class="icon-tag text-primary"></i></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <div class="avatar mb-2 p-2 lh-1 mb-sm-0 avatar-md rounded-circle  me-2">
+                                        <img src="{% static 'assets/images/icons/etages.png' %}" class="side-menu__icon" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
+                                    </div>
+                                  <label for="etages">Nombre des étages :</label>
+                                  <div class="input-icon">
+                                        <input class="form-control" id="etages" type="number" name="etages" placeholder="Entrer le nombre des étages" required onclick="displayIcon(this)">
+                                        <span class="icon"><i class="fe fe-dollar-sign"></i></span>
+                                  </div>
+                                </div> {% endcomment %} 
+                            </div>
+                            {% comment %} <div class="form-row">
+                                
+                            </div>  {% endcomment %}
+                            <div class="form-row">
+                                <div class="col-md-6 mb-3">
+                                    <div class="avatar mb-2 p-2 lh-1 mb-sm-0 avatar-md rounded-circle  me-2">
+                                        <img src="{% static 'assets/images/icons/project.png' %}" class="side-menu__icon" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
+                                    </div>
+                                    <label for="description">Description :</label>
+                                    <textarea class="form-control" id="description" name="description" placeholder="Entrer la description du local technique " rows="3" required></textarea>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <div class="avatar mb-2 p-2 lh-1 mb-sm-0 avatar-md rounded-circle  me-2">
+                                        <img src="{% static 'assets/images/icons/projet.png' %}" class="side-menu__icon" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
+                                    </div>
+                                    <label for="type">Projets :</label>
+                                    <select class="form-control" id="geozone" name="geozone" required>
+                                    <option value="" selected disabled>Projet 1</option>
+                                    {% for data in data %}
+                                        {% for projet in data.projects %}
+                                        <option value="{{ projet.geozone_id }}">{{ projet.project_name }}</option>
+                                        {% endfor %}
+                                    {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+
+                                <div id="map">
+                                    <!-- Map coordinate  -->
+                                    <div class="leaflet-control map-coordinate">
+                                        <div class="coordinate"></div>
+                                    </div>
+                            </div>
+                                    <!-- leaflet js  -->
+                                    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+                                    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+                                    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+                                    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+                                    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.js"></script>
+                                    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+                                    <script src="{% static './lib/leaflet.markercluster.js' %}"></script>
+                                    <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
+                                    <script src="{% static './data/test.js' %}"></script>
+                                    <script src="{% static './dist/main.js' %}"></script>
+                                    <script src="{% static './dist/web-GIS.js' %}"></script>
+        
+                                    <!-- leaflet draw plugin  -->
+                                    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/0.4.2/leaflet.draw.css"/>
+                                    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/0.4.2/leaflet.draw.js"></script>
+        
+        <script>
+            // Map initialization 
+            var mapcenter = [33.8282, 10.9342];
+            var map = L.map('map', {zoomControl: false}).setView(mapcenter, 11);
+            
+        
+            //google satellite
+            googleSat = L.tileLayer('http://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}', {
+                maxZoom: 20,
+                subdomains: ['mt0', 'mt1', 'mt2', 'mt3']
+            });googleSat.addTo(map)
+            //googleSat.addTo(map)
+        
+            {% comment %} //osm layer
+            var osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: 'OpenStreetMap'
+            }); 
+            //osm.addTo(map);
+            // map.addLayer(osm) {% endcomment %}
+        
+            // Zoom Control
+            var zoomControl = L.control.zoom({
+                position: "topleft"
+            });
+            zoomControl.addTo(map);  
+        
+            // leaflet draw 
+            var drawnItems = new L.FeatureGroup();
+            map.addLayer(drawnItems);
+            $('#modalQuill').on('shown.bs.modal', function(){
+                setTimeout(function() {
+                  map.invalidateSize();
+                }, 10);
+               });
+        
+            var drawControl = new L.Control.Draw({
+                // position: "topright",
+                edit: {
+                    featureGroup: drawnItems,
+                    poly : {
+                        allowIntersection : false
+                      }
+                },
+                draw: {
+                    polygon: {
+                     shapeOptions: {
+                      color: 'purple'
+                     },
+                    //  allowIntersection: false,
+                    //  drawError: {
+                    //   color: 'orange',
+                    //   timeout: 1000
+                    //  },
+                    },
+                    polyline: {
+                     shapeOptions: {
+                      color: 'red'
+                     },
+                    },
+                    rect: {
+                     shapeOptions: {
+                      color: 'green'
+                     },
+                    },
+                    circle: {
+                     shapeOptions: {
+                      color: 'steelblue'
+                     },
+                    },
+                   },
+         
+            });
+            map.addControl(drawControl);
+        
+            //new part
+        
+            map.on("draw:created", function(e){
+            
+                var type = e.layerType;
+                console.log('Type: '+type);
+                var layer = e.layer;
+                console.log(layer);
+                let coordinates = layer.toGeoJSON().geometry.coordinates;
+                console.log(coordinates);
+                
+                
+                if(type === 'polyline'){
+                    let data = {
+                        type: type,
+                        coordinates: coordinates
+                    }
+                    console.log(data);
+                localStorage.setItem('data', JSON.stringify(data));
+                console.log(localStorage.getItem('data'));
+                layer.bindPopup(`<p>${JSON.stringify(layer.toGeoJSON())}</p>`)
+                drawnItems.addLayer(layer);
+                }
+                if(type === 'polygon' || type === 'rectangle'){
+                    var latlngs = layer._defaultShape ? layer._defaultShape() : layer.getLatLngs(),
+                    area = L.GeometryUtil.geodesicArea(latlngs);
+                    poly_area = L.GeometryUtil.readableArea(area, true);
+                    console.log(poly_area);
+                    let data = {
+                        type: type,
+                        coordinates: coordinates,
+                        area: poly_area
+                    }
+                    console.log(data);
+                localStorage.setItem('data', JSON.stringify(data));
+                console.log(localStorage.getItem('data'));
+                layer.bindPopup(`<p>${JSON.stringify(layer.toGeoJSON())}</p>`)
+                drawnItems.addLayer(layer);
+                }
+                if(type === 'circle'){
+                    let radius = layer.getRadius();
+                    console.log('L257: '+radius);
+                    let pi = Math.PI;
+                    let area = pi * (radius*radius);
+                    console.log(area);
+                    let new_area = (Math.round(area * 100) / 100).toFixed(2);
+                    console.log(new_area);
+                    
+                    let data = {
+                        type: type,
+                        coordinates: coordinates,
+                        area: new_area,
+                        circle_radius: radius
+                    }
+                    console.log(data);
+                localStorage.setItem('data', JSON.stringify(data));
+                console.log(localStorage.getItem('data'));
+                layer.bindPopup(`<p>${JSON.stringify(layer.toGeoJSON())}</p>`)
+                drawnItems.addLayer(layer);
+                }
+                if(type === 'marker'){
+                    
+                    let data = {
+                        type: type,
+                        coordinates: coordinates
+                    }
+                    console.log(data);
+                localStorage.setItem('data', JSON.stringify(data));
+                console.log(localStorage.getItem('data'));
+                layer.bindPopup(`<p>${JSON.stringify(layer.toGeoJSON())}</p>`)
+                drawnItems.addLayer(layer);
+                }
+            });
+        
+            map.on("draw:edited", function(e){
+                var type = e.layerType;
+                console.log('Type: '+type);
+                var layer = e.layer;
+                console.log(layer);    
+            })
+        
+             // Object(s) deleted - update console log
+        map.on(L.Draw.Event.DELETED, function(event) {
+            console.log(JSON.stringify(drawnItems.toGeoJSON()));
+            //drawControl.addTo(map);
+          });
+        
+          function Save (){
+            let data = JSON.parse(localStorage.getItem('data'));
+            console.log(data);
+        
+            fetch('http://localhost:8000/api/save/', {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            })
+               .then(response => response.json())
+               .then(response => {
+                console.log(JSON.stringify(response));
+                let data = JSON.stringify(response);
+                localStorage.setItem('data', data);
+                document.querySelector('#next').disabled = false;
+                document.querySelector('#save').disabled = true;
+            })   
+        }
+        
+        function navigateToForm(){
+            document.location.href="project-new-form";
+        }
+        
+          // fin new part
+        
+            // Truncate value based on number of decimals
+         var _round = function(num, len) {
+            return Math.round(num*(Math.pow(10, len)))/(Math.pow(10, len));
+          };
+          // Helper method to format LatLng object (x.xxxxxx, y.yyyyyy)
+          var strLatLng = function(latlng) {
+            return "("+_round(latlng.lat, 6)+", "+_round(latlng.lng, 6)+")";
+          };
+          
+          // Generate popup content based on layer type
+          // - Returns HTML string, or null if unknown object
+          var getPopupContent = function(layer) {
+            // Marker - add lat/long
+            if (layer instanceof L.Marker || layer instanceof L.CircleMarker) {
+              return strLatLng(layer.getLatLng());
+            // Circle - lat/long, radius
+            } else if (layer instanceof L.Circle) {
+              var center = layer.getLatLng(),
+                radius = layer.getRadius();
+              return "Center: "+strLatLng(center)+"<br />"
+                +"Radius: "+_round(radius, 2)+" m";
+            // Rectangle/Polygon - area
+            } else if (layer instanceof L.Polygon) {
+              var latlngs = layer._defaultShape ? layer._defaultShape() : layer.getLatLngs(),
+                area = L.GeometryUtil.geodesicArea(latlngs);
+              return "Area: "+L.GeometryUtil.readableArea(area, true);
+            // Polyline - distance
+            } else if (layer instanceof L.Polyline) {
+              var latlngs = layer._defaultShape ? layer._defaultShape() : layer.getLatLngs(),
+                distance = 0;
+              if (latlngs.length < 2) {
+                return "Distance: N/A";
+              } else {
+                for (var i = 0; i < latlngs.length-1; i++) {
+                  distance += latlngs[i].distanceTo(latlngs[i+1]);
+                }
+                if (_round(distance, 2) > 1000) {
+                  return "Distance: "+_round(distance, 2)/1000 + " km"; // kilometers
+                } else {
+                  return "Distance: "+_round(distance, 2) + " m"; // meters
+                }
+              }
+            }
+            return null;
+          };
+          
+          // Object created - bind popup to layer, add to feature group
+          map.on(L.Draw.Event.CREATED, function(event) {
+            var layer = event.layer;
+            var content = getPopupContent(layer);
+            if (content !== null) {
+              layer.bindPopup(content);
+            }
+          
+            // Add info to feature properties
+            feature = layer.feature = layer.feature || {};
+            feature.type = feature.type || "Feature";
+            var props = feature.properties = feature.properties || {}; // Intialize feature.properties
+            props.info = content;
+            drawnItems.addLayer(layer);
+            console.log(JSON.stringify(drawnItems.toGeoJSON()));
+          });
+          
+          // Object(s) edited - update popups
+          map.on(L.Draw.Event.EDITED, function(event) {
+            var layers = event.layers,
+              content = null;
+            layers.eachLayer(function(layer) {
+              content = getPopupContent(layer);
+              if (content !== null) {
+                layer.setPopupContent(content);
+              }
+          
+              // Update info to feature properties
+              var layer = layer;
+              feature = layer.feature = layer.feature || {};
+              var props = feature.properties = feature.properties || {};
+              props.info = content;
+            });
+            console.log(JSON.stringify(drawnItems.toGeoJSON()));
+          });
+          
+          // Object(s) deleted - update console log
+          map.on(L.Draw.Event.DELETED, function(event) {
+            console.log(JSON.stringify(drawnItems.toGeoJSON()));
+            //drawControl.addTo(map);
+          });
+        
+            map.on("draw:created", function(e){
+                //drawControl.removeFrom(map);
+                var type = e.layerType;
+                var layer = e.layer;
+                console.log(layer.toGeoJSON())
+        
+                layer.bindPopup(`<p>${JSON.stringify(layer.toGeoJSON())}</p>`)
+                drawnItems.addLayer(layer);
+            });
+        
+            map.on("draw:edited", function(e){
+                var layers = e.layers;
+                var type = e.layerType;
+                layers.eachLayer(function(layer){
+                    console.log(layer)
+                })    
+            })
+           
+              
+            // google street 
+            googleStreets = L.tileLayer('http://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}', {
+                maxZoom: 20,
+                subdomains: ['mt0', 'mt1', 'mt2', 'mt3']
+            });
+            //googleStreets.addTo(map);
+        
+         var baselayer = {
+            "Satellite": googleSat,
+            "Street": googleStreets,
+            
+            
+            "Street": googleStreets
+         }
+        
+         L.control.layers(baselayer, /*overlayers*/).addTo(map)
+        
+        
+         // sideBySide 
+         L.control.sideBySide(ls, mf).addTo(map);
+        </script>
+        
+        
+        
+                            </div>
+                            
+                            <div class="modal-footer">
+                                <button type="submit" class="btn btn-primary" >Save</button>
+                                <button class="btn btn-light" data-bs-dismiss="modal" aria-label="Close" >Cancel</button>
+                            </div>
+                        </form>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!--/Modal-->
+
+        {% endblock %}
+    {% block scripts %}
+
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+        <!-- PROJECT JS-->
+        <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.2/src/js.cookie.min.js"></script> 
+
+        <script src=" {% static 'assets/js/local-technique.js' %} "></script>
+
+        <!-- THEMECOLORS JS -->
+        <script src="{% static 'assets/js/themeColors.js'%}"></script>
+
+
+
+    {% endblock %}
+

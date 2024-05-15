@@ -1,0 +1,495 @@
+{% extends 'components/base.html' %}
+{% load static %}
+
+    {% block styles %}
+
+    {% endblock %}
+    
+        {% block content %} 
+		
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="author" content="OpenStreetMap">
+        <meta name="description" content="leaflet draw export to geojson file">
+		<title>Leaflet Tutorial</title>
+
+		<link rel="icon" type="image/x-icon" href="https://unsorry.net/assets-date/images/favicon.png">
+
+		<!-- leaflet css  -->
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css">
+		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+		<link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.css"/>
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css">
+        <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
+        
+
+		<style>
+            .leaflet-popup-content {
+                width: 500px;
+            }
+        </style>
+
+		<style>
+			html {
+				height: 100vh;
+				width: 100%;
+				margin: 0;
+				padding: 0;
+			}
+		</style> 
+	
+		<style>
+			body {
+				margin: 0;
+				padding: 0;
+			}
+
+			
+			#map {
+				width: 100%;
+				height: 100vh;
+				box-shadow: 0 0 10px rgba(0,0,0,0.5);
+			}
+
+			
+			.info {
+				padding: 6px 8px;
+				font: 12px/14px Arial, Helvetica, sans-serif;
+				color: white;
+				background: rgba(52,58,64,0.8);
+				box-shadow: 0 0 15px rgba(255,255,255,0.2);
+				border-radius: 5px;
+				text-align: left;
+			}
+			  
+			
+
+			.coordinate {
+				position: absolute;
+				bottom: 10px;
+				right: 50%;
+			}
+	
+			.leaflet-popup-content-wrapper {
+				background-color: #000000;
+				color: #fff;
+				border: 1px solid red;
+				border-radius: 0px;
+			}
+		</style>
+
+
+							<!-- PAGE-HEADER -->
+							<div class="page-header">
+								<div>
+									<h1 class="page-title">parcelle New</h1>
+									<input id="id-projet" style="display: none;" value="{{ id_projet }}" />
+								</div>
+								<div class="ms-auto pageheader-btn">
+									<ol class="breadcrumb">
+										<li class="breadcrumb-item">Apps</li>
+										<li class="breadcrumb-item"><a href="{% url 'parcelles' %}">parcelles</a></li>
+										<li class="breadcrumb-item active" aria-current="page">parcelle New</li>
+									</ol>
+								</div>
+							</div>
+							<!-- PAGE-HEADER END -->
+							
+					<div id="map">
+							<!-- Map coordinate  -->
+							<div class="leaflet-control map-coordinate">
+								<div class="coordinate"></div>
+							</div>
+                    </div>
+                            <!-- leaflet js  -->
+							<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+							<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+							<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+							<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+							<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.js"></script>
+                            <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+                            <script src="{% static './lib/leaflet.markercluster.js' %}"></script>
+                            <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
+                            <script src="{% static './data/test.js' %}"></script>
+                            <script src="{% static './dist/main.js' %}"></script>
+                            <script src="{% static './dist/web-GIS.js' %}"></script>
+
+							<!-- leaflet draw plugin  -->
+                            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/0.4.2/leaflet.draw.css"/>
+                            <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/0.4.2/leaflet.draw.js"></script>
+
+<script>
+    // Map initialization 
+	var mapcenter = [51.505, -0.09];
+    var map = L.map('map', {zoomControl: false}).setView(mapcenter, 11);
+
+	//google satellite
+    googleSat = L.tileLayer('http://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}', {
+        maxZoom: 20,
+        subdomains: ['mt0', 'mt1', 'mt2', 'mt3']
+    });googleSat.addTo(map)
+    //googleSat.addTo(map)
+
+    {% comment %} //osm layer
+    var osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: 'OpenStreetMap'
+    }); 
+    //osm.addTo(map);
+	// map.addLayer(osm) {% endcomment %}
+
+	// Zoom Control
+    var zoomControl = L.control.zoom({
+	    position: "topleft"
+    });
+    zoomControl.addTo(map);  
+
+	// leaflet draw 
+    var drawnItems = new L.FeatureGroup();
+    map.addLayer(drawnItems);
+
+	var drawControl = new L.Control.Draw({
+        // position: "topright",
+        edit: {
+            featureGroup: drawnItems,
+            poly : {
+				allowIntersection : false
+			  }
+        },
+        draw: {
+		    polygon: {
+		     shapeOptions: {
+		      color: 'purple'
+		     },
+		    //  allowIntersection: false,
+		    //  drawError: {
+		    //   color: 'orange',
+		    //   timeout: 1000
+		    //  },
+		    },
+		    polyline: {
+		     shapeOptions: {
+		      color: 'red'
+		     },
+		    },
+		    rect: {
+		     shapeOptions: {
+		      color: 'green'
+		     },
+		    },
+		    circle: {
+		     shapeOptions: {
+		      color: 'steelblue'
+		     },
+		    },
+		   },
+ 
+    });
+    map.addControl(drawControl);
+
+	//new part
+
+	map.on("draw:created", function(e){
+	
+        var type = e.layerType;
+		console.log('Type: '+type);
+        var layer = e.layer;
+		console.log(layer);
+		let coordinates = layer.toGeoJSON().geometry.coordinates;
+		console.log(coordinates);
+		
+		
+		if(type === 'polyline'){
+			let data = {
+				type: type,
+				coordinates: coordinates
+			}
+			console.log(data);
+        localStorage.setItem('data', JSON.stringify(data));
+        console.log(localStorage.getItem('data'));
+        layer.bindPopup(`<p>${JSON.stringify(layer.toGeoJSON())}</p>`)
+        drawnItems.addLayer(layer);
+		}
+		if(type === 'polygon' || type === 'rectangle'){
+			var latlngs = layer._defaultShape ? layer._defaultShape() : layer.getLatLngs(),
+			area = L.GeometryUtil.geodesicArea(latlngs);
+			poly_area = L.GeometryUtil.readableArea(area, true);
+			console.log(poly_area);
+			let data = {
+				type: type,
+				coordinates: coordinates,
+				area: poly_area
+			}
+			console.log(data);
+        localStorage.setItem('data', JSON.stringify(data));
+        console.log(localStorage.getItem('data'));
+        layer.bindPopup(`<p>${JSON.stringify(layer.toGeoJSON())}</p>`)
+        drawnItems.addLayer(layer);
+		}
+		if(type === 'circle'){
+			let radius = layer.getRadius();
+			console.log('L257: '+radius);
+			let pi = Math.PI;
+			let area = pi * (radius*radius);
+			console.log(area);
+			let new_area = (Math.round(area * 100) / 100).toFixed(2);
+			console.log(new_area);
+			
+			let data = {
+				type: type,
+				coordinates: coordinates,
+				area: new_area,
+				circle_radius: radius
+			}
+			console.log(data);
+        localStorage.setItem('data', JSON.stringify(data));
+        console.log(localStorage.getItem('data'));
+        layer.bindPopup(`<p>${JSON.stringify(layer.toGeoJSON())}</p>`)
+        drawnItems.addLayer(layer);
+		}
+		if(type === 'marker'){
+			
+			let data = {
+				type: type,
+				coordinates: coordinates
+			}
+			console.log(data);
+        localStorage.setItem('data', JSON.stringify(data));
+        console.log(localStorage.getItem('data'));
+        layer.bindPopup(`<p>${JSON.stringify(layer.toGeoJSON())}</p>`)
+        drawnItems.addLayer(layer);
+		}
+    });
+
+    map.on("draw:edited", function(e){
+        var type = e.layerType;
+		console.log('Type: '+type);
+        var layer = e.layer;
+		console.log(layer);    
+    })
+
+	 // Object(s) deleted - update console log
+map.on(L.Draw.Event.DELETED, function(event) {
+	console.log(JSON.stringify(drawnItems.toGeoJSON()));
+	//drawControl.addTo(map);
+  });
+
+  function SaveParcelle (){
+	let id_projet = document.getElementById('id-projet').value;
+	console.log(id_projet);
+    let data = JSON.parse(localStorage.getItem('data'));
+    console.log(data);
+	data.id_projet = id_projet;
+	console.log(data);
+    fetch('http://localhost:8000/api/saveparcelle/', {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+    })
+       .then(response => response.json())
+       .then(response => {
+		console.log(JSON.stringify(response));
+		let data = JSON.stringify(response);
+		localStorage.setItem('data', data);
+		document.querySelector('#next').disabled = false;
+		document.querySelector('#saveparcelle').disabled = true;
+	})   
+}
+
+function navigateToForm(){
+	document.location.href="{% url 'parcelle-new-form' %}";
+}
+
+  // fin new part
+
+	// Truncate value based on number of decimals
+ var _round = function(num, len) {
+	return Math.round(num*(Math.pow(10, len)))/(Math.pow(10, len));
+  };
+  // Helper method to format LatLng object (x.xxxxxx, y.yyyyyy)
+  var strLatLng = function(latlng) {
+	return "("+_round(latlng.lat, 6)+", "+_round(latlng.lng, 6)+")";
+  };
+  
+  // Generate popup content based on layer type
+  // - Returns HTML string, or null if unknown object
+  var getPopupContent = function(layer) {
+	// Marker - add lat/long
+	if (layer instanceof L.Marker || layer instanceof L.CircleMarker) {
+	  return strLatLng(layer.getLatLng());
+	// Circle - lat/long, radius
+	} else if (layer instanceof L.Circle) {
+	  var center = layer.getLatLng(),
+		radius = layer.getRadius();
+	  return "Center: "+strLatLng(center)+"<br />"
+		+"Radius: "+_round(radius, 2)+" m";
+	// Rectangle/Polygon - area
+	} else if (layer instanceof L.Polygon) {
+	  var latlngs = layer._defaultShape ? layer._defaultShape() : layer.getLatLngs(),
+		area = L.GeometryUtil.geodesicArea(latlngs);
+	  return "Area: "+L.GeometryUtil.readableArea(area, true);
+	// Polyline - distance
+	} else if (layer instanceof L.Polyline) {
+	  var latlngs = layer._defaultShape ? layer._defaultShape() : layer.getLatLngs(),
+		distance = 0;
+	  if (latlngs.length < 2) {
+		return "Distance: N/A";
+	  } else {
+		for (var i = 0; i < latlngs.length-1; i++) {
+		  distance += latlngs[i].distanceTo(latlngs[i+1]);
+		}
+		if (_round(distance, 2) > 1000) {
+		  return "Distance: "+_round(distance, 2)/1000 + " km"; // kilometers
+		} else {
+		  return "Distance: "+_round(distance, 2) + " m"; // meters
+		}
+	  }
+	}
+	return null;
+  };
+  
+  // Object created - bind popup to layer, add to feature group
+  map.on(L.Draw.Event.CREATED, function(event) {
+	var layer = event.layer;
+	var content = getPopupContent(layer);
+	if (content !== null) {
+	  layer.bindPopup(content);
+	}
+  
+	// Add info to feature properties
+	feature = layer.feature = layer.feature || {};
+	feature.type = feature.type || "Feature";
+	var props = feature.properties = feature.properties || {}; // Intialize feature.properties
+	props.info = content;
+	drawnItems.addLayer(layer);
+	console.log(JSON.stringify(drawnItems.toGeoJSON()));
+  });
+  
+  // Object(s) edited - update popups
+  map.on(L.Draw.Event.EDITED, function(event) {
+	var layers = event.layers,
+	  content = null;
+	layers.eachLayer(function(layer) {
+	  content = getPopupContent(layer);
+	  if (content !== null) {
+		layer.setPopupContent(content);
+	  }
+  
+	  // Update info to feature properties
+	  var layer = layer;
+	  feature = layer.feature = layer.feature || {};
+	  var props = feature.properties = feature.properties || {};
+	  props.info = content;
+	});
+	console.log(JSON.stringify(drawnItems.toGeoJSON()));
+  });
+  
+  // Object(s) deleted - update console log
+  map.on(L.Draw.Event.DELETED, function(event) {
+	console.log(JSON.stringify(drawnItems.toGeoJSON()));
+	//drawControl.addTo(map);
+  });
+
+    map.on("draw:created", function(e){
+		//drawControl.removeFrom(map);
+        var type = e.layerType;
+        var layer = e.layer;
+        console.log(layer.toGeoJSON())
+
+        layer.bindPopup(`<p>${JSON.stringify(layer.toGeoJSON())}</p>`)
+        drawnItems.addLayer(layer);
+    });
+
+    map.on("draw:edited", function(e){
+        var layers = e.layers;
+        var type = e.layerType;
+        layers.eachLayer(function(layer){
+            console.log(layer)
+        })    
+    })
+   
+
+
+	// water color 
+    var watercolor = L.tileLayer('https://stamen-tiles-{s}.a.ssl.fastly.net/watercolor/{z}/{x}/{y}.{ext}', {
+        attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+        subdomains: 'abcd',
+        minZoom: 1,
+        maxZoom: 16,
+        ext: 'jpg'
+    });
+    // watercolor.addTo(map)
+
+	// google street 
+    googleStreets = L.tileLayer('http://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}', {
+        maxZoom: 20,
+        subdomains: ['mt0', 'mt1', 'mt2', 'mt3']
+    });
+    //googleStreets.addTo(map);
+
+ var baselayer = {
+	"Satellite": googleSat,
+    "Street": googleStreets,
+    /*"water color": watercolor,*/ 
+	
+	"Street": googleStreets
+ }
+
+ L.control.layers(baselayer, /*overlayers*/).addTo(map)
+
+
+ // sideBySide 
+ {% comment %} L.control.sideBySide(ls, mf).addTo(map); {% endcomment %}
+</script>
+
+<div class="row p-5">
+	<div class="btn-list text-end">
+		<button class="btn btn-outline-danger">
+			<i class="fe fe-x-circle"></i>
+			Cancel
+		</button>
+		<button id="saveparcelle" onclick="SaveParcelle()" class="btn btn-primary">
+			<i  class="fe fe-check-circle"></i>
+			Save
+		</button>
+		<button id="next" disabled class="btn btn-secondary" onclick="navigateToForm()">
+			<i  class="fe fe-check-circle"></i>
+			Next
+		</button>
+	</div>
+</div>
+
+        {% endblock %}
+
+    {% block scripts %}
+
+	    {% comment %} <script src="./lib/leaflet.browser.print.min.js"></script>
+		<script src="./lib/leaflet-measure.js"></script> {% endcomment %}
+
+		<!-- SELECT2 JS -->
+		<script src=" {% static 'assets/plugins/select2/select2.full.min.js' %} "></script>
+
+		<!-- bootstrap-datepicker js -->
+		<script src=" {% static 'assets/plugins/bootstrap-datepicker/js/datepicker.js' %} "></script>
+
+		<!-- INTERNAL Summernote Editor js -->
+		<script src=" {% static 'assets/plugins/summernote-editor/summernote1.js' %} "></script>
+
+		<!-- FILE UPLOAD JS -->
+        <script src=" {% static 'assets/plugins/fileuploads/js/fileupload.js' %} "></script>
+        <script src=" {% static 'assets/plugins/fileuploads/js/file-upload.js' %} "></script>
+
+		<!-- INVOICE CREATE JS-->
+		<script src=" {% static 'assets/js/parcelles-new.js' %} "></script>
+
+        <!-- THEMECOLORS JS -->
+        <script src="{% static 'assets/js/themeColors.js'%}"></script>
+
+    {% endblock %}
+
+

@@ -1,0 +1,214 @@
+{% load static %}
+<style>
+
+	.carousel-inner {
+		width: 100%;
+		max-width: 100%;
+	}
+	.carousel {
+		width: 100%;
+		max-width: 100%;
+	}
+	.carousel-item {
+		width: 100%;
+	}
+	.carousel-image {
+		width: 100%;
+        height: 900px; 
+        /* object-fit: cover; */
+    }
+	.custom-caption {
+		position: absolute;
+        left: 10%;
+		top: 10%;
+        text-align: left;
+		color: white;
+    }
+	.btn-right {
+		position: absolute;
+		left: 30%;
+		bottom: 200px;
+		font-size: 18px;
+		padding: 8px 18px;  
+	}
+	.carousel-item .grayscale-mask {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 50%; 
+        height: 100%;
+        background: linear-gradient(to right, rgba(0, 0, 0, 0.59), rgba(0, 0, 0, 0)); 
+    }
+	.landing-page .title {
+        font-size: 3.8rem; 
+    }
+	.test {
+        position: relative;
+        padding-left: 15px;
+		font-size: 1.7rem; 
+    }
+
+    .header-main p::before {
+        /*content: "\2713";*/ 
+        position: absolute;
+        left: 0;
+        top: 30%;
+        transform: translateY(-50%);
+        color: #FFFFFF; 
+    }
+	.custom-btn-color {
+		background-color: #ff8533; 
+		border-color: #e38834; 
+		color: #fff; 
+	}
+	
+	.custom-btn-color:hover,
+	.custom-btn-color:focus {
+		background-color: #e6441d;
+		border-color: #f39b4a;
+		color: #fff;
+	}
+	@media (max-width: 768px) {
+		.custom-caption .title {
+			font-size: 2rem;
+		}
+		.custom-caption .test {
+			font-size: 1rem;
+		}
+		.btn-right {
+			left: 10%;  
+			bottom: 70px;
+		}
+		.carousel-image {
+			height: 600px;
+		}
+	}
+	/*@media (max-width: 768px) {
+		.custom-caption {
+			top: 5%; 
+			left: 5%;
+		}
+		
+		.btn-right {
+			left: 20%; 
+			bottom: 100px;
+		}
+		
+		.title {
+			font-size: 2.5rem;
+		}
+		
+		.test {
+			font-size: 1.5rem;
+		}
+	}
+	@media (max-width: 768px) {
+		.carousel-image {
+			height: 900px; 
+		}
+	}*/
+	
+</style>
+					<!-- Header Main-->
+					<div class="container-fluid px-0">
+						<div class="row g-0">
+							<div class="col-12" >
+								<div class="card border-0">
+									<div class="card-body p-0">
+										<div id="carousel-indicators4" class="carousel slide" data-bs-ride="carousel">
+											<ol class="carousel-indicators carousel-indicators4">
+												<li data-bs-target="#carousel-indicators4" data-bs-slide-to="0" class="active"></li>
+												<li data-bs-target="#carousel-indicators4" data-bs-slide-to="1" ></li>
+												<li data-bs-target="#carousel-indicators4" data-bs-slide-to="2" ></li>
+												<li data-bs-target="#carousel-indicators4" data-bs-slide-to="3" ></li>
+												<li data-bs-target="#carousel-indicators4" data-bs-slide-to="4" ></li>
+											</ol>
+											<div class="carousel-inner">
+												<div class="carousel-item active grayscale">
+													<div class="grayscale-mask"></div>
+													<img class="d-block w-100 carousel-image mobile" alt="" src="{% static 'assets/images/media/agricole.jpg' %}" data-bs-holder-rendered="true">
+													{% comment %} <div class="carousel-item-background d-none d-md-block"></div> {% endcomment %}
+													<a href="signin" target="_blank" class="btn btn-primary btn-right">Se Connecter</a>
+													<div class="custom-caption">
+														<p class="title">Suivi et Monitoring <br> en temps réel</p><br>
+														<p class="test">Amélioration de la qualité des produits <br>grâce à la  surveillance  de la qualité des cultures</p>
+													</div>
+												</div>
+												<div class="carousel-item grayscale"> {% comment %} class="carousel-caption d-none d-md-block" {% endcomment %}
+													<div class="grayscale-mask"></div>
+													<img class="d-block w-100 carousel-image mobile" alt="" src="{% static 'assets/images/media/agricole1.jpg' %}" data-bs-holder-rendered="true">
+													
+													<a href="signin" target="_blank" class="btn btn-primary btn-right">Se Connecter</a>
+													<div class="custom-caption">
+														<p class="title">Automatiser <br> les processus <br> de production <br> agricole</p><br>
+														<p class="test">Amélioration de la productivité grâce à la <br> surveillance en temps réel des cultures et des animaux</p>
+													</div>
+												</div>
+												<div class="carousel-item grayscale">
+													<div class="grayscale-mask"></div>
+													<img class="d-block w-100 carousel-image mobile" alt="" src="{% static 'assets/images/media/agricole2.jpg' %}" data-bs-holder-rendered="true">
+													
+													<a href="signin" target="_blank" class="btn btn-primary btn-right">Se Connecter</a>
+													<div class="custom-caption">
+														<p class="title">Solutions pour <br> minimiser les <br> impacts négatifs</p><br>
+														<p class="test">Utiliser des techniques d'irrigation <br> efficaces pour réduire l'utilisation d'eau</p>
+													</div>
+												</div>
+												<div class="carousel-item grayscale">
+													<div class="grayscale-mask"></div>
+													<img class="d-block w-100 carousel-image mobile" alt="" src="{% static 'assets/images/media/agricole3.jpg' %}" data-bs-holder-rendered="true">
+													
+													<a href="signin" target="_blank" class="btn btn-primary btn-right">Se Connecter</a>
+													<div class="custom-caption">
+														<p class="title">Systèmes de <br> contrôle </p><br>
+														<p class="test">Les systèmes de contrôle de qualité sont <br> utilisés pour surveiller les processus de <br> production et assurer la qualité des produits finis</p>
+													</div>
+												</div>
+												<div class="carousel-item grayscale">
+													<div class="grayscale-mask"></div>
+													<img class="d-block w-100 carousel-image mobile" alt="" src="{% static 'assets/images/media/agricole4.avif' %}" data-bs-holder-rendered="true">
+													
+													<a href="signin" target="_blank" class="btn btn-primary btn-right">Se Connecter</a>
+													<div class="custom-caption">
+														<p class="title">Analyse de <br> données en <br> temps réel </p><br>
+														<p class="test">Amélioration de la productivité grâce <br> à la surveillance en temps réel des cultures</p>
+													</div>
+												</div> 
+											</div>
+											{% comment %} <a class="carousel-control-prev" href="#carousel-captions" role="button" data-bs-slide="prev">
+												<span class="carousel-control-prev-icon" aria-hidden="true"></span>
+												<span class="sr-only">Previous</span>
+											</a>
+											<a class="carousel-control-next" href="#carousel-captions" role="button" data-bs-slide="next">
+												<span class="carousel-control-next-icon" aria-hidden="true"></span>
+												<span class="sr-only">Next</span>
+											</a> {% endcomment %}
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="demo-screen-headline main-demo main-demo-1 overflow-hidden pb-0 mb-6" id="home">
+						<div class="container px-5 px-md-0">
+							<div class="overflow-hidden">
+								<div class="row">
+									<div class="col-lg-6 text-left pos-relative overflow-hidden p-3">
+										<h1 class="text-shadow text-dark">Pourquoi <span
+												class="text-primary">Magon?</span></h1>
+										<h6 class="mt-3">Parceque Magon a été développé avec les agriculteurs et les experts en agronomie pour répondre aux besoins des agriculteurs de toutes les tailles.</h6>
+										<h6 class="mb-4">Pendant plusieurs années et à travers plusieurs projets, la plateforme Magon a été développée pour répondre, efficacement, et en toute simplicité, aux attentes des agriculteurs de plusieurs pays à travers le monde.</h6>
+										{% comment %} <a href="#" class="btn btn-pill btn-primary btn-w-md py-2 me-2 mb-1">Buy Now<i
+												class="fe fe-activity ms-2"></i></a> {% endcomment %}
+										<a href="#" class="btn btn-pill custom-btn-color btn-w-md py-2 mb-1">Demo<i
+												class="fe fe-file-text mx-2"></i></a>
+									</div>
+									<div class="col-lg-6 text-left pos-relative overflow-hidden market-image">
+										<img alt="" class="logo-2" src="{% static 'assets/images/landing/tag-agriculture.jpg' %}">
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!-- Header Main Close-->

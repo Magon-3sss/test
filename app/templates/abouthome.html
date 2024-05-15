@@ -1,0 +1,268 @@
+{% extends 'components/custom-base-2.html' %}
+{% load static %}
+
+    {% block styles %}
+    <style>
+        .btn-link{
+        color: #dbe3d1
+        }
+
+        .topnav {
+		overflow: hidden;
+		background-color: #fcfafa;
+		}
+		.topnav2 {
+			overflow: hidden;
+			background-color: #fcfafa;
+			margin-top: 10px;
+			padding-left: 30px;
+			}
+
+		.topnav a {
+		float: left;
+		color: #333;
+		text-align: center;
+		padding: 8px 8px;
+		text-decoration: none;
+		font-size: 20px;
+		}
+
+		.topnav a:hover {
+		background-color: #ddd;
+		color: black;
+		}
+
+		.topnav a.active {
+		background-color: #fcfafa;
+		color: white;
+		}
+    </style>
+
+    
+
+    {% endblock %}
+    
+        {% block content %}
+        <div class="topnav">
+			<div>
+            <a class="active" href="signin"><img src="{% static 'assets/images/brand/magon.png' %}" alt="img" style="max-width:80px"></a>
+		    </div>
+		<div class="topnav2">
+            <a href="#news">News</a>
+            <a href="#contact">Contact</a>
+            <a href="#about">About</a>
+        </div>
+	</div>
+
+            <!-- ROW-1 OPEN-->
+							<div class="row" style= "margin:40px">
+								<div class="col-lg-12">
+									<div class="card" >
+										<div class="card-body p-4 text-dark" >
+											<div class="statistics-info">
+												<div class="row text-center">
+													<div class="col-lg-3 col-sm-6 mt-4 mb-4">
+														<div class="counter-status">
+															<div class="counter-icon bg-primary-gradient box-shadow-primary">
+																<i class="icon icon-people text-white"></i>
+															</div>
+															<h5 class="mb-2">Total Employees</h5>
+															<h2 class="counter mb-0">2569</h2>
+														</div>
+													</div>
+													<div class="col-lg-3 col-sm-6 mt-4 mb-4">
+														<div class="counter-status">
+															<div class="counter-icon bg-secondary-gradient box-shadow-secondary">
+																<i class="icon icon-rocket text-white"></i>
+															</div>
+															<h5 class="mb-2">Total Sales</h5>
+															<h2 class="counter  mb-0">1765</h2>
+														</div>
+													</div>
+													<div class="col-lg-3 col-sm-6  mt-4 mb-4">
+														<div class="counter-statuss">
+															<div class="counter-icon bg-success-gradient box-shadow-success">
+																<i class="icon icon-docs text-white"></i>
+															</div>
+															<h5 class="mb-2">Total Projects</h5>
+															<h2 class="counter mb-0">846</h2>
+														</div>
+													</div>
+													<div class="col-lg-3 col-sm-6 mt-4 mb-4">
+														<div class="counter-status">
+															<div class="counter-icon bg-danger-gradient box-shadow-danger">
+																<i class="fe fe-trending-up text-white"></i>
+															</div>
+															<h5 class="mb-2">Total Growth</h5>
+															<h2 class="counter  mb-0">7253</h2>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div><!-- COL-END -->
+							</div>
+							<!-- ROW-1 CLOSED -->
+
+							<!-- ROW-2 OPEN -->
+							<div class="row" style= "margin:40px">
+								<div class="col-lg-6">
+									<div class="card">
+										<div class="card-body about-con pabout">
+											<h1 class="mb-4 fw-semibold">Why Magon?</h1>
+											<h4 class="leading-normal">Ipsum dolor sit magna tempor magna ipsum eirmod, sit est.</h4>
+											<p class="leading-normal">Sed elitr amet kasd sed tempor elitr invidunt sanctus nonumy, dolor aliquyam justo accusam gubergren et gubergren
+												invidunt amet justo, sadipscing sadipscing erat ipsum consetetur, ipsum sanctus dolor est diam. Lorem voluptua clita et elitr dolor ipsum
+												dolor. Sadipscing sit stet tempor nonumy, justo amet labore sed eos dolor dolor.</p>
+											<a href="#" class="btn btn-primary  mt-2">View More</a>
+										</div>
+									</div>
+								</div>
+								<div class="col-lg-6">
+									<div class="card">
+										<div class="card-body pabout">
+											<h1 class="mb-4 fw-semibold">What is Our Services?</h1>
+											<h4 class="leading-normal">Ea at dolore no diam elitr elitr, stet ut dolor.</h4>
+											<p class="leading-normal">Dolor amet at et et et takimata et, magna dolor et takimata sea diam sed
+												nonumy, accusam sea et amet et, kasd invidunt et lorem labore. Sit takimata amet sea est
+												gubergren accusam. Sed sed diam dolor magna kasd. Sanctus erat eos ea aliquyam amet nonumy, stet
+												magna rebum sit.</p>
+											<a href="#" class="btn btn-primary mt-2">View More</a>
+										</div>
+									</div>
+								</div>
+							</div>
+							<!-- ROW-2 CLOSED -->
+
+							<!-- ROW-3 OPEN -->
+							<div class="row" style= "margin:40px">
+								<div class="col-md-6 col-sm-12 col-lg-6 col-xl-3">
+									<div class="card text-center overflow-hidden">
+										<img src="{% static 'assets/images/media/history.jpg' %}" alt="img">
+										<div class="card-body">
+											<h3 class="mb-3">Company history</h3>
+											<p>Eos justo voluptua ea dolore ipsum. Sea rebum magna dolor duo sit consetetur dolor. Justo ut dolores eirmod sit amet.</p>
+											<a href="#" class="btn btn-primary">Read More</a>
+										</div>
+									</div>
+								</div><!-- COL-END -->
+								<div class="col-md-6 col-sm-12 col-lg-6 col-xl-3">
+									<div class="card text-center overflow-hidden">
+										<img src="{% static 'assets/images/media/team.png' %}" alt="img">
+										<div class="card-body">
+											<h3 class="mb-3">About Team</h3>
+											<p>Clita sed vero duo ea sed, sit dolor eos gubergren et et eirmod elitr amet lorem. Accusam duo justo et. Dolore elitr vero.</p>
+											<a href="#" class="btn btn-secondary">Read More</a>
+										</div>
+									</div>
+								</div><!-- COL-END -->
+								<div class="col-md-6 col-sm-12 col-lg-6 col-xl-3">
+									<div class="card text-center overflow-hidden">
+										<img src="{% static 'assets/images/media/growth.jpg' %}" alt="img">
+										<div class="card-body">
+											<h3 class="mb-3">Company growth</h3>
+											<p>Ipsum no elitr dolore dolor diam, nonumy eos sed dolor elitr sed, sanctus et dolores duo diam elitr dolor. Ea accusam diam.</p>
+											<a href="#" class="btn btn-success">Read More</a>
+										</div>
+									</div>
+								</div><!-- COL-END -->
+								<div class="col-md-6 col-sm-12 col-lg-6 col-xl-3">
+									<div class="card text-center overflow-hidden">
+										<img src="{% static 'assets/images/media/statics.jpg' %}" alt="img">
+										<div class="card-body">
+											<h3 class="mb-3">Our Statistics</h3>
+											<p>Labore sit kasd amet et voluptua ipsum sanctus accusam duo et, dolores dolor dolor est accusam. Invidunt dolor sed duo est aliquyam.</p>
+											<a href="#" class="btn btn-info">Read More</a>
+										</div>
+									</div>
+								</div><!-- COL-END -->
+							</div><!-- COL-END -->
+			
+			<!-- ROW-6 OPEN -->
+			<div class="row" style= "margin:40px">
+				<div class="col-12">
+					<div class="card">
+						{% comment %} <div class="card-header border-bottom">
+							<h3 class="card-title">Footer style05</h3>
+						</div> {% endcomment %}
+						<div class="card-body">
+							<div class="top-footer">
+								<div class="row">
+									<div class="col-lg-4 col-md-12">
+										<h6>About</h6>
+										<p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p>
+										<p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur Excepteur sint occaecat .</p>
+									</div>
+									<div class="col-lg-2 col-md-4">
+										<h6>Pages</h6>
+										<ul class="list-unstyled mb-4">
+											<li><a href="javascript:;">Dashboard</a></li>
+											<li><a href="javascript:;">Elements</a></li>
+											<li><a href="javascript:;">Forms</a></li>
+											<li><a href="javascript:;">Charts</a></li>
+											<li><a href="javascript:;">Tables</a></li>
+											<li><a href="javascript:;">Other Pages</a></li>
+										</ul>
+									</div>
+									<div class="col-lg-2 col-md-4">
+										<h6>Information</h6>
+										<ul class="list-unstyled mb-4">
+											<li><a href="javascript:;">Our Team</a></li>
+											<li><a href="javascript:;">Contact US</a></li>
+											<li><a href="javascript:;">About</a></li>
+											<li><a href="javascript:;">Services</a></li>
+											<li><a href="javascript:;">Blog</a></li>
+											<li><a href="javascript:;">Terms and Services</a></li>
+										</ul>
+									</div>
+									<div class="col-lg-4 col-md-4">
+										<h6>Location</h6>
+										<ul class="list-unstyled mb-4">
+											<li><a href="javascript:;">Address1:7363 Old Livingston Drive Dyersburg</a></li>
+											<li><a href="javascript:;">Address2:4 Harrison St.Fairborn, OH 45324</a></li>
+											<li><a href="javascript:;">Phno1: +123 456 8976</a></li>
+											<li><a href="javascript:;">Phno2: +567 234 7865</a></li>
+											<li><a href="javascript:;">Mail1: yourdomain@gmail.com</a></li>
+											<li><a href="javascript:;">Mail2: infodomain@gmail.com</a></li>
+										</ul>
+									</div>
+								</div>
+							</div>
+							{% comment %} <footer class="main-footer ps-3 pe-3">
+								<div class="row">
+									<div class="col-xl-8 col-lg-12 col-md-12 footer1">
+										Copyright ©Noa 2022. Design By<a href="https://spruko.com/"> Spruko</a>
+									</div>
+									<div class="col-xl-4 col-lg-12 col-md-12 ms-auto text-end">
+										<ul class="footer-social-list">
+											<li><a href="javascript:;" class="social-icon"><i class="fa fa-facebook"></i></a></li>
+											<li><a href="javascript:;" class="social-icon"><i class="fa fa-google"></i></a></li>
+											<li><a href="javascript:;" class="social-icon"><i class="fa fa-twitter"></i></a></li>
+											<li><a href="javascript:;" class="social-icon"><i class="fa fa-linkedin"></i></a></li>
+										</ul>
+									</div>
+								</div>
+							</footer> {% endcomment %}
+						</div>
+					</div>
+				</div><!-- COL-END -->
+			</div>
+			<!-- ROW-6 CLOSED -->
+
+			
+
+        {% endblock %}
+
+    {% block scripts %}
+
+    <!-- COUNTERS JS-->
+		<script src=" {% static 'assets/plugins/counters/counterup.min.js' %} "></script>
+		<script src=" {% static 'assets/plugins/counters/waypoints.min.js' %} "></script>
+		<script src=" {% static 'assets/plugins/counters/counters-1.js' %} "></script>
+
+	<!-- THEMECOLORS JS -->
+	<script src="{% static 'assets/js/themeColors.js'%}"></script>
+
+    {% endblock %}
+				

@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Accès interdit</title>
+  <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.1/dist/js.cookie.min.js"></script>
+</head>
+<body>
+  <script>
+    console.log('Début du script');
+
+    var alertMessage = '{{ alert_message }}';
+    var redirectUrl = '{{ redirect_url }}';
+
+    alert(alertMessage);
+    console.log('Redirecting to', redirectUrl);
+    window.location.href = redirectUrl;
+  </script>
+  <p>Contenu alternatif si JavaScript n'est pas activé ou si la fenêtre modale ne s'affiche pas.</p>
+</body>
+</html>
+
+
+{% comment %} <!DOCTYPE html>
+<html>
+<head>
+  <title>Accès interdit</title>
+  <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.1/dist/js.cookie.min.js"></script>
+</head>
+<body>
+  <script>
+    console.log('Début du script');
+
+    var permissions = Cookies.get("userPermissions");
+    console.log('Permissions:', permissions);
+
+    if (permissions) {
+      var hasPermission = false;
+
+      if (Array.isArray(permissions) && permissions.length > 0) {
+        hasPermission = permissions.some(function(permission) {
+          return permission.indexOf('app.view_logistiques') !== -1;
+        });
+      } else if (typeof permissions === 'string' && permissions.length > 0) {
+        hasPermission = permissions.indexOf('app.view_logistiques') !== -1;
+      } else {
+        console.error('Erreur: Format de données non pris en charge pour les permissions.');
+      }
+
+      console.log('Has Permission:', hasPermission);
+
+      if (hasPermission) {
+        console.log('Redirecting to logistiques...');
+        window.location.href = 'logistiques';
+      } else {
+        console.log('Access denied. Redirecting to index...');
+        alert('Accès refusé. Vous n\'avez pas la permission.');
+        window.location.href = 'index';
+      }
+    } else {
+      console.error('Erreur: La valeur du cookie "userPermissions" est nulle.');
+    }
+  </script>
+  <p>Contenu alternatif si JavaScript n'est pas activé ou si la fenêtre modale ne s'affiche pas.</p>
+</body>
+</html> {% endcomment %}
+
+
+
+{% comment %} <!DOCTYPE html>
+<html>
+<head>
+  <title>Accès interdit</title>
+  <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.1/dist/js.cookie.min.js"></script>
+</head>
+<body>
+  <script>
+    console.log('Début du script');
+
+    var permissions = Cookies.get("userPermissions");
+    console.log('Permissions:', permissions);
+
+    if (permissions) {
+      var hasPermission = false;
+
+      if (Array.isArray(permissions)) {
+        hasPermission = permissions.some(function(permission) {
+          return permission.indexOf('app.view_logistiques') !== -1;
+        });
+      } else if (typeof permissions === 'string') {
+        hasPermission = permissions.indexOf('app.view_logistiques') !== -1;
+      } else {
+        console.error('Erreur: Format de données non pris en charge pour les permissions.');
+      }
+
+      console.log('Has Permission:', hasPermission);
+
+      if (hasPermission) {
+        console.log('Redirecting to logistiques...');
+        window.location.href = 'logistiques';
+      } else {
+        console.log('Access denied. Redirecting to index...');
+        alert('Accès refusé. Vous n\'avez pas la permission.');
+        window.location.href = 'index';
+      }
+    } else {
+      console.error('Erreur: La valeur du cookie "userPermissions" est nulle.');
+    }
+  </script>
+  <p>Contenu alternatif si JavaScript n'est pas activé ou si la fenêtre modale ne s'affiche pas.</p>
+</body>
+</html> {% endcomment %}
+
+
+
+
+
+
+
+
+
+
+
+{% comment %} <!-- logistiques_denied.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Accès interdit</title>
+</head>
+<body>
+    <script>
+        console.log('Début du script');
+        var permissionsList = {{ permissions_list_json|safe }}
+        console.log('Permissions:', permissionsList);
+
+        var hasPermission = false;
+
+        if (permissionsList && Array.isArray(permissionsList)) {
+            for (var i = 0; i < permissionsList.length; i++) {
+                if (permissionsList[i].indexOf('app.view_logistiques') !== -1) {
+                    hasPermission = true;
+                    break;
+                }
+            }
+        }
+
+        if (hasPermission) {
+            window.location.href = 'logistiques'; 
+        } else {
+            alert('Accès refusé. Vous n\'avez pas la permission.');
+            window.location.href = 'index';  
+        }
+    </script>
+    <p>Contenu alternatif si JavaScript n'est pas activé ou si la fenêtre modale ne s'affiche pas.</p>
+</body>
+</html> {% endcomment %}
+
+
+
+
+{% comment %} <html>
+<head>
+    <title>Accès interdit</title>
+</head>
+<body>
+    <script>
+        // Utilisez une syntaxe JSON directe pour éviter des problèmes d'échappement
+        console.log('Début du script');
+        var permissionsList = {{ permissions_list_json|safe }}
+        console.log('Permissions:', permissionsList);
+
+        // Vérifiez si l'utilisateur a la permission 'app.view_logistiques'
+        var hasPermission = permissionsList && permissionsList.includes('app.view_logistiques');
+
+        if (hasPermission) {
+            // Rediriger vers logistiques si l'utilisateur a la permission
+            window.location.href = 'logistiques';  // Remplacez '/logistiques' par l'URL appropriée
+        } else {
+            alert('Accès refusé. Vous n\'avez pas la permission.');
+            // Rediriger vers index.html si l'utilisateur n'a pas la permission
+            window.location.href = 'index';  // Remplacez '/index.html' par l'URL appropriée
+        }
+    </script>
+    <p>Contenu alternatif si JavaScript n'est pas activé ou si la fenêtre modale ne s'affiche pas.</p>    
+</body>
+</html> {% endcomment %}
+
+{% comment %} <div class="alert alert-danger">
+        <strong>Accès interdit</strong>
+        <button type="button" class="close" data-dismiss="alert">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div> {% endcomment %}
+
+{% comment %} <script>
+        alert("Accès refusé. Vous n'avez pas la permission.");
+        // Vous pouvez également utiliser une bibliothèque de modales comme Bootstrap, jQuery UI, etc.
+        // pour afficher une fenêtre modale plus esthétique.
+        window.location.href = 'index'; 
+    </script> {% endcomment %}
