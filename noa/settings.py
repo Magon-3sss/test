@@ -179,6 +179,17 @@ WSGI_APPLICATION = 'noa.wsgi.application'
 """ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
+        'NAME': os.environ.get('POSTGRES_DB', 'new'),
+        'USER': os.environ.get('POSTGRES_USER', 'new'),
+        'PASSWORD': os.environ.get('POSTGRES_PASSWORD', 'new'),
+        'HOST': 'db',
+        'PORT': 5432,
+    }
+} """
+
+""" DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
         'NAME': os.getenv('PG_DB', 'new'),
         'USER': os.getenv('PG_USER', 'new'),
         'PASSWORD': os.getenv('PG_PASSWORD', 'new'),
@@ -208,7 +219,7 @@ DATABASES = {
         'PORT': 5432,
         'HOST': 'localhost',            
     }
-}  
+} 
 
 #AUTH_USER_MODEL="app.User"
 #AUTHENTICATION_BACKENDS = ('django.contrib.auth.backends.ModelBackend', 'guardian.backends.ObjectPermissionBackend')

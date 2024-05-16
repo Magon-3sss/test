@@ -1,7 +1,4 @@
 #!/bin/bash
-echo "Starting PostgreSQL..."
-service postgresql start
-
 echo "Creating Migrations..."
 python manage.py makemigrations app
 echo ====================================
