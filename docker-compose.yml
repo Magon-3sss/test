@@ -7,22 +7,24 @@ services:
       context: .
     ports:
       - "8000:8000"
-    environment:
+    environment:    
       - PG_USER=new
       - PG_PASSWORD=new
       - PG_DB=new
       - PG_PORT=5432
       - PG_HOST=db
+    depends_on:
+      - db
 
   db:
     container_name: db
     image: postgres:15
+    ports:
+      - "5432:5432"
     environment:
       - POSTGRES_DB=new
       - POSTGRES_USER=new
       - POSTGRES_PASSWORD=new
-    ports:
-      - "5432:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
 

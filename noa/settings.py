@@ -56,8 +56,9 @@ SECRET_KEY = 'django-insecure-(5d_*k*!6*rk=g=+06jl+=u%d76p&2jps!!1zhf#lck(=lg*nx
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
+ALLOWED_HOSTS = ['*']
 
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
+""" ALLOWED_HOSTS = ['127.0.0.1', 'localhost'] """
 # Application definition
 
 INSTALLED_APPS = [
@@ -179,11 +180,11 @@ WSGI_APPLICATION = 'noa.wsgi.application'
 """ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.environ.get('POSTGRES_DB', 'new'),
-        'USER': os.environ.get('POSTGRES_USER', 'new'),
-        'PASSWORD': os.environ.get('POSTGRES_PASSWORD', 'new'),
+        'NAME': os.environ.get('PG_DB', 'new'),
+        'USER': os.environ.get('PG_USER', 'new'),
+        'PASSWORD': os.environ.get('PG_PASSWORD', 'new'),
         'HOST': 'db',
-        'PORT': 5432,
+        'PORT': '5432',
     }
 } """
 
@@ -198,18 +199,6 @@ WSGI_APPLICATION = 'noa.wsgi.application'
     }
 } """
 
-
-""" DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.getenv('PG_DB', 'new'),
-        'USER': os.getenv('PG_USER', 'new'),
-        'PASSWORD': os.getenv('PG_PASSWORD', 'new'),
-        'HOST': os.getenv('PG_HOST', 'db'),
-        'PORT': os.getenv('PG_PORT', '5432'),
-    }
-} """ 
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
@@ -217,7 +206,7 @@ DATABASES = {
         'USER': 'new',
         'PASSWORD': 'new',
         'PORT': 5432,
-        'HOST': 'localhost',            
+        'HOST': 'db',            
     }
 } 
 
