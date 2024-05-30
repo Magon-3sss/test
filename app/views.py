@@ -1411,12 +1411,23 @@ import datetime
 import os
 import traceback
 
+import numpy as np
+from sentinelhub import MimeType
+def detect_anomalies(image_data):
+    """
+    Détecte les anomalies sur l'image en utilisant les valeurs d'indices de végétation.
+    """
+    # Exemple simple de détection d'anomalies basé sur un seuil de NDVI
+    threshold = 0.2  # Définir un seuil pour les anomalies
+    anomalies = image_data < threshold
+    return anomalies
+
 # Configuration de Sentinel Hub
 config = SHConfig()
-config.instance_id = "601a83a3-7973-4f64-85b6-cb844dbcc677"
+config.instance_id = "211dc98f-d4d3-4229-b540-703e8f0b8d9b"
 if not config.sh_client_id or not config.sh_client_secret:
-  config.sh_client_id = 'e757b4ae-cbc4-4244-9d97-4fc7dbe774d1'
-  config.sh_client_secret = 'deNrlcXwZnVFfPqwbUQFvRmBGJiu6eNi'
+  config.sh_client_id = 'b75db3ae-30a5-4be2-a920-c5ea4973df49'
+  config.sh_client_secret = 'jORm8qGiwWy1VZgidGyyGapYsap19A0b'
 from shapely.geometry import Polygon
 
 def create_mask_geometry(points):
@@ -1433,7 +1444,7 @@ def generate_raster_image(request):
     date = data["date"]
     points = data["points"]
     filtre_value = data.get("filtre")
-    data_folder="C:/Users/samir/Desktop/MAGON_3SSS/MAGON_3SSS-main/MAGON_3S/static/assets/sentinel"
+    data_folder="C:/Users/HP/Desktop/MAGON_3SSS/MAGON_3SSS/MAGON_3SSS-main/MAGON_3S/static/assets/sentinel"
     folder_name = str(uuid.uuid4())
     folder_path = os.path.join(data_folder, folder_name)
     if not os.path.exists(folder_path):
@@ -1601,6 +1612,33 @@ def get_evalscript(filtre_value):
             bands: 2
             }
         }
+        }
+    """
+  elif filtre_value == "NDMI":
+    return """
+      //VERSION=3
+        const moistureRamps = [
+        [-0.8, 0x800000],
+        [-0.24, 0xff0000],
+        [-0.032, 0xffff00],
+        [0.032, 0x00ffff],
+        [0.24, 0x0000ff],
+        [0.8, 0x000080]
+        ];
+
+        const viz = new ColorRampVisualizer(moistureRamps);
+
+        function setup() {
+        return {
+            input: ["B8A", "B11", "dataMask"],
+            output: { bands: 4 }
+        };
+        }
+
+        function evaluatePixel(samples) {
+        let val = index(samples.B8A, samples.B11);
+        let imgVals = viz.process(val);
+        return imgVals.concat(samples.dataMask);
         }
     """
   else:

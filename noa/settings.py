@@ -32,8 +32,6 @@ django.utils.encoding.force_text = force_str
 #from rest_framework_jwt.authentication import JSONWebTokenAuthentication
 import jwt
 
-from decouple import config
-import dj_database_url  
 
 EMAIL_USE_TLS = EMAIL_USE_TLS
 EMAIL_HOST = EMAIL_HOST
@@ -53,14 +51,14 @@ MEDIA_URL = '/media/'
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = config('SECRET_KEY')
-""" SECRET_KEY = 'django-insecure-(5d_*k*!6*rk=g=+06jl+=u%d76p&2jps!!1zhf#lck(=lg*nx' """
+""" SECRET_KEY = config('SECRET_KEY') """
+SECRET_KEY = 'django-insecure-(5d_*k*!6*rk=g=+06jl+=u%d76p&2jps!!1zhf#lck(=lg*nx' 
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-ALLOWED_HOSTS = ['*']
+""" ALLOWED_HOSTS = ['*'] """
 
-""" ALLOWED_HOSTS = ['127.0.0.1', 'localhost'] """
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
 # Application definition
 
 INSTALLED_APPS = [
@@ -152,7 +150,7 @@ SESSION_COOKIE_SECURE = True
 SESSION_COOKIE_SAMESITE = 'Lax' """
 
 CORS_ALLOW_ALL_ORIGINS = False
-CORS_ALLOWED_ORIGINS = [ 'http://localhost:5000', 'http://127.0.0.1:5000']
+CORS_ALLOWED_ORIGINS = [ 'http://localhost:8000', 'http://127.0.0.1:8000']
 
 
 ROOT_URLCONF = 'noa.urls'
@@ -201,7 +199,7 @@ WSGI_APPLICATION = 'noa.wsgi.application'
     }
 } """
 
-""" DATABASES = {
+DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'new',
@@ -210,11 +208,11 @@ WSGI_APPLICATION = 'noa.wsgi.application'
         'PORT': 5432,
         'HOST': 'localhost',            
     }
-}  """
+}  
 
-DATABASES = {
+""" DATABASES = {
     'default': dj_database_url.parse(config('DATABASE_URL'))
-}
+} """
 
 #AUTH_USER_MODEL="app.User"
 #AUTHENTICATION_BACKENDS = ('django.contrib.auth.backends.ModelBackend', 'guardian.backends.ObjectPermissionBackend')

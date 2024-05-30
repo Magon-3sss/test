@@ -1,0 +1,94 @@
+{
+    "headers": {
+        "accept": "image/png",
+        "content-type": "application/json"
+    },
+    "payload": {
+        "evalscript": "\n      //VERSION=3 (auto-converted from 1)\n/*\nAuthor: Jean-Baptiste Pleynet\n*/\n\nconst config2 = {\n  default: {\n    nbPastYears: 3,\n    defaultOutputValue: -2,\n    ndviMinValue: -1,\n    currentIndexesMinValuesNumber: 1,\n    pastIndexesMinValuesNumber: 3\n  },\n  ndviAnomaly: {\n    pixelEvalMaxValue: 0.7\n  },\n  loss: {\n    lowerTriggerPremium: 0,\n    higherTriggerPremium: 1,\n    minimumAverageValuePremium: 0.1,\n    minimumPayoutPremium: 0\n  }\n};\n\nfunction setup() {\n  return {\n    input: [{\n      bands: [\n          \"B04\",\n          \"B08\"\n      ]\n    }],\n    output: { bands: 3 },\n    mosaicking: \"ORBIT\"\n  }\n};\n\nfunction preProcessScenes(collections) {\n  const nbPastYears = config2.default.nbPastYears;\n  collections.scenes.orbits = collections.scenes.orbits.filter(function (orbit) {\n    var orbitDateFrom = new Date(orbit.dateFrom);\n    return orbitDateFrom.getMonth() === collections.to.getMonth() && orbitDateFrom.getFullYear() >= collections.to.getFullYear() - nbPastYears;\n  })\n    return collections\n};\n        \nfunction calculateLoss(currentIndexAverage, pastIndexAverage, minimumAverageValuePremium, lowerTriggerPremium, higherTriggerPremium, minimumPayoutPremium, defaultValue) {\n  if (currentIndexAverage === null || pastIndexAverage === null) return defaultValue;\n  if (pastIndexAverage < minimumAverageValuePremium || pastIndexAverage <= currentIndexAverage) return 0;\n  var percentage = (pastIndexAverage - currentIndexAverage) / pastIndexAverage;\n  if (percentage < lowerTriggerPremium) return 0;\n  if (percentage > higherTriggerPremium) return 1;\n  return Math.max(minimumPayoutPremium, (percentage - (lowerTriggerPremium - minimumPayoutPremium)) / higherTriggerPremium);\n};\n\nvar calculateNdviAnomaly = function calculateNdviAnomaly(indexesAverages, pixelEvalMaxValue, defaultValue) {\n  if (indexesAverages.current === null || indexesAverages.past === null) return defaultValue;\n  return Math.max(Math.min(indexesAverages.current - indexesAverages.past, pixelEvalMaxValue), 0 - pixelEvalMaxValue);\n};\n\nvar calculateNDVI = function calculateNDVI(sample, config) {\n  var denom = sample.B04 + sample.B08;\n  if (denom === 0) return null;\n  var result = (sample.B08 - sample.B04) / denom;\n  return result > config.ndviMinValue ? result : null;\n};\n\nconst evaluatePixel = function (samples, scenes) {\n  var indexesAverages = calculateIndexAverages(samples, scenes, config2[\"default\"], calculateNDVI);\n  return valueInterpolate(calculateNdviAnomaly(indexesAverages, config2.ndviAnomaly.pixelEvalMaxValue, config2[\"default\"].defaultOutputValue), [config2[\"default\"].defaultOutputValue, 0 - config2.ndviAnomaly.pixelEvalMaxValue, 0, config2.ndviAnomaly.pixelEvalMaxValue], [[0, 0, 0], [1, 0, 0], [1, 1, 1], [0, 1, 0]]);\n};\n\nvar isClouds = function isClouds(sample) {\n  var ngdr = (sample.B03 - sample.B04) / (sample.B03 + sample.B04);\n  var ratio = (sample.B03 - 0.175) / (0.39 - 0.175);\n  return sample.B11 > 0.1 && (ratio > 1 || ratio > 0 && ngdr > 0);\n};\n\nvar calculateIndexesForSamples = function calculateIndexesForSamples(samples, scenes, config, processSampleMethod) {\n  if (samples.length !== scenes.length) throw new Error('samples and scenes arrays do not have same length');\n  return samples.reduce(function (acc, sample, index) {\n    if (isClouds(sample)) return acc;\n    var indexValue = processSampleMethod(sample, config);\n    if (!indexValue) return acc;\n    var sceneYear = scenes[index].date.getFullYear();\n\n    if (!acc[sceneYear]) {\n      acc[sceneYear] = {\n        count: 0,\n        sum: 0\n      };\n    }\n\n    acc[sceneYear].count++;\n    acc[sceneYear].sum += indexValue;\n    return acc;\n  }, {});\n};\n\nvar calculatePastIndexesAverage = function calculatePastIndexesAverage(indexes, currentYear, config) {\n  var pastIndexes = {\n    count: 0,\n    sum: 0\n  };\n\n  for (var i = 1; i <= config.nbPastYears; i++) {\n    var indexValue = indexes[currentYear - i];\n\n    if (indexValue && indexValue.count) {\n      pastIndexes.count++;\n      pastIndexes.sum += indexValue.sum / indexValue.count;\n    }\n  }\n\n  return pastIndexes.count >= config.pastIndexesMinValuesNumber ? pastIndexes.sum / pastIndexes.count : null;\n};\n\nfunction calculateIndexAverages(samples, scenes, config, processSampleMethod) {\n  if (!scenes.length) throw new Error('scenes array is empty');\n  var indexes = calculateIndexesForSamples(samples, scenes, config, processSampleMethod);\n  var currentYear = scenes[0].date.getFullYear();\n  var currentYearIndex = indexes[currentYear];\n  return {\n    current: currentYearIndex && currentYearIndex.count >= config.currentIndexesMinValuesNumber && currentYearIndex.sum / currentYearIndex.count || null,\n    past: calculatePastIndexesAverage(indexes, currentYear, config)\n  };\n};\n    ",
+        "input": {
+            "bounds": {
+                "bbox": [
+                    8.837471,
+                    34.658967,
+                    8.850217,
+                    34.669591
+                ],
+                "geometry": {
+                    "coordinates": [
+                        [
+                            [
+                                8.843522,
+                                34.669309
+                            ],
+                            [
+                                8.843522,
+                                34.669309
+                            ],
+                            [
+                                8.850217,
+                                34.66352
+                            ],
+                            [
+                                8.850217,
+                                34.66352
+                            ],
+                            [
+                                8.846183,
+                                34.658967
+                            ],
+                            [
+                                8.846183,
+                                34.658967
+                            ],
+                            [
+                                8.837471,
+                                34.666415
+                            ],
+                            [
+                                8.837471,
+                                34.666415
+                            ],
+                            [
+                                8.843608,
+                                34.669591
+                            ],
+                            [
+                                8.843522,
+                                34.669309
+                            ]
+                        ]
+                    ],
+                    "type": "Polygon"
+                },
+                "properties": {
+                    "crs": "http://www.opengis.net/def/crs/EPSG/0/4326"
+                }
+            },
+            "data": [
+                {
+                    "dataFilter": {
+                        "timeRange": {
+                            "from": "2024-03-18T00:00:00Z",
+                            "to": "2024-03-18T23:59:59Z"
+                        }
+                    },
+                    "type": "sentinel-2-l2a"
+                }
+            ]
+        },
+        "output": {
+            "height": 512,
+            "responses": [
+                {
+                    "format": {
+                        "type": "image/png"
+                    },
+                    "identifier": "default"
+                }
+            ],
+            "width": 512
+        }
+    },
+    "timestamp": "2024-05-30T10:14:59.854210",
+    "url": "https://services.sentinel-hub.com/api/v1/process"
+}
