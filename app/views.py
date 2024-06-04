@@ -1413,14 +1413,6 @@ import traceback
 
 import numpy as np
 from sentinelhub import MimeType
-def detect_anomalies(image_data):
-    """
-    Détecte les anomalies sur l'image en utilisant les valeurs d'indices de végétation.
-    """
-    # Exemple simple de détection d'anomalies basé sur un seuil de NDVI
-    threshold = 0.2  # Définir un seuil pour les anomalies
-    anomalies = image_data < threshold
-    return anomalies
 
 # Configuration de Sentinel Hub
 config = SHConfig()
@@ -1429,6 +1421,7 @@ if not config.sh_client_id or not config.sh_client_secret:
   config.sh_client_id = 'b75db3ae-30a5-4be2-a920-c5ea4973df49'
   config.sh_client_secret = 'jORm8qGiwWy1VZgidGyyGapYsap19A0b'
 from shapely.geometry import Polygon
+
 
 def create_mask_geometry(points):
   polygon = Polygon(points)
@@ -1515,30 +1508,44 @@ def get_evalscript(filtre_value):
   if filtre_value == "NDVI":
     return """
       //VERSION=3
+function setup() {
+   return {
+      input: ["B04", "B08", "dataMask"],
+      output: { bands: 4 }
+   };
+}
 
-        let viz = ColorGradientVisualizer.createBlueRed();
+const ramp = [
+   [-1, 0xcc0000],
+   [0.05, 0xd63232],
+   [0.1, 0xf44336],
+   [0.15, 0xdd531e],
+   [0.2, 0xe06434],
+   [0.25, 0xe89c4b],
+   [0.3, 0xeba75f],
+   [0.35, 0xddb460],
+   [0.4, 0xdfd056],
+   [0.45, 0xefe7aa],
+   [0.5, 0xfbf9e9],
+   [0.55, 0xc3d5bb],
+   [0.6, 0x9bba8e],
+   [0.65, 0x739f60],
+   [0.7, 0x5f914a],
+   [0.75, 0x4b8333],
+   [0.8, 0x38761d],
+   [0.85, 0x326a1a],
+   [0.9, 0x2c5e17],
+   [0.95, 0x275214],
+   [1, 0x214611],
+];
 
-        function evaluatePixel(samples) {
-          let val = index(samples.B08, samples.B04);
-          val = viz.process(val);
-          val.push(samples.dataMask);
-          return val;
-        }
+const visualizer = new ColorRampVisualizer(ramp);
 
-        function setup() {
-        return {
-          input: [{
-          bands: [
-            "B04",
-            "B08",
-            "dataMask"
-          ]
-          }],
-          output: {
-          bands: 4
-          }
-        }
-        }
+function evaluatePixel(samples) {
+   let ndvi = index(samples.B08, samples.B04);
+   let imgVals = visualizer.process(ndvi);
+   return imgVals.concat(samples.dataMask)
+}
     """
   elif filtre_value == "NDRE":
     return """
@@ -1593,26 +1600,31 @@ def get_evalscript(filtre_value):
   elif filtre_value == "MSAVI 2":
     return """
       //VERSION=3
-        function evaluatePixel(samples) {
-            let a = 2.0 * samples.B08 - 1.0;
-            let val = (samples.B08 + 1.0) - 0.5 * Math.sqrt(a * a + 8.0 * samples.B04);
-            return [val, samples.dataMask];
-        }
 
-        function setup() {
-        return {
-            input: [{
-            bands: [
-                "B04",
-                "B08",
-                "dataMask"
-            ]
-            }],
-            output: {
-            bands: 2
-            }
-        }
-        }
+let viz = ColorGradientVisualizer.createWhiteGreen();
+
+function evaluatePixel(samples) {
+    let a = 2.0 * samples.B08 - 1.0;
+    let val = (samples.B08 + 1.0) - 0.5 * Math.sqrt(a * a + 8.0 * samples.B04);
+    val = viz.process(val);
+    val.push(samples.dataMask);
+    return val;
+}
+
+function setup() {
+  return {
+    input: [{
+      bands: [
+        "B04",
+        "B08",
+        "dataMask"
+      ]
+    }],
+    output: {
+      bands: 4
+    }
+  }
+}
     """
   elif filtre_value == "NDMI":
     return """

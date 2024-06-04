@@ -37,7 +37,7 @@
 				border-radius: 10px;
 				text-align: center;
 				opacity: 0.8;
-				display: none;
+				display: block;
 				overflow-y: scroll;
 			}
 			.irrigation {
@@ -142,6 +142,11 @@
 											<!-- Map coordinate  -->
 											<div class="leaflet-control map-coordinate">
 												<div class="coordinate"></div>
+											</div>
+											<div id="color-reference-table" class="reference">
+												<table id="reference-table" style="width:100%">
+													<!-- Les lignes du tableau seront ajoutées par JavaScript -->
+												</table>
 											</div>
 										</div>
 										<div class="menu">

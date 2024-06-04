@@ -1,0 +1,94 @@
+{
+    "headers": {
+        "accept": "image/png",
+        "content-type": "application/json"
+    },
+    "payload": {
+        "evalscript": "\n      // inspired by Custom script repository\n\n// ndviColorMap taken from NDVI script description\n\n// findColor function taken from ...\n\n// B8A is used for NDVI computation as B8A spectral response is narrower than band B08\n\n// works on L2A data with SCL layer vegetation class\n\n// naturalColour combination B04, B03, B02 with gain adapted to L2A surface reflectance\n\n\n\nvar naturalColour = [3*B04, 3*B03, 3*B02];\n\nlet ndviColorMap = [\n\t[-1.0, 0x000000],\n\t[-0.2, 0xA50026],\n\t[0.0,  0xD73027],\n\t[0.1,  0xF46D43],\n\t[0.2,  0xFDAE61],\n\t[0.3,  0xFEE08B],\n\t[0.4,  0xFFFFBF],\n\t[0.5,  0xD9EF8B],\n\t[0.6,  0xA6D96A],\n\t[0.7,  0x66BD63],\n\t[0.8,  0x1A9850],\n    [0.9,  0x006837]\n];\n\nfunction index(x, y) {\n\treturn (x - y) / (x + y);\n}\n\nfunction toRGB(val) {\n\treturn [val >>> 16, val >>> 8, val].map(x => (x & 0xFF) / 0xFF);\n}\n\nfunction findColor(colValPairs, val) {\n\tlet n = colValPairs.length;\n\tfor (let i = 1; i < n; i++) {\n\t\tif (val <= colValPairs[i][0]) {\n\t\t\treturn toRGB(colValPairs[i-1][1]);\n\t\t}\n\t}\n\treturn toRGB(colValPairs[n-1][1]);\n}\n\nreturn (SCL == 4)? \n  findColor(ndviColorMap, index(B8A, B04)): naturalColour;\n\n\n    ",
+        "input": {
+            "bounds": {
+                "bbox": [
+                    8.837471,
+                    34.658967,
+                    8.850217,
+                    34.669591
+                ],
+                "geometry": {
+                    "coordinates": [
+                        [
+                            [
+                                8.843522,
+                                34.669309
+                            ],
+                            [
+                                8.843522,
+                                34.669309
+                            ],
+                            [
+                                8.850217,
+                                34.66352
+                            ],
+                            [
+                                8.850217,
+                                34.66352
+                            ],
+                            [
+                                8.846183,
+                                34.658967
+                            ],
+                            [
+                                8.846183,
+                                34.658967
+                            ],
+                            [
+                                8.837471,
+                                34.666415
+                            ],
+                            [
+                                8.837471,
+                                34.666415
+                            ],
+                            [
+                                8.843608,
+                                34.669591
+                            ],
+                            [
+                                8.843522,
+                                34.669309
+                            ]
+                        ]
+                    ],
+                    "type": "Polygon"
+                },
+                "properties": {
+                    "crs": "http://www.opengis.net/def/crs/EPSG/0/4326"
+                }
+            },
+            "data": [
+                {
+                    "dataFilter": {
+                        "timeRange": {
+                            "from": "2023-06-02T00:00:00Z",
+                            "to": "2023-06-02T23:59:59Z"
+                        }
+                    },
+                    "type": "sentinel-2-l2a"
+                }
+            ]
+        },
+        "output": {
+            "height": 512,
+            "responses": [
+                {
+                    "format": {
+                        "type": "image/png"
+                    },
+                    "identifier": "default"
+                }
+            ],
+            "width": 512
+        }
+    },
+    "timestamp": "2024-06-04T16:23:29.075325",
+    "url": "https://services.sentinel-hub.com/api/v1/process"
+}

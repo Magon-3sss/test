@@ -1,0 +1,94 @@
+{
+    "headers": {
+        "accept": "image/png",
+        "content-type": "application/json"
+    },
+    "payload": {
+        "evalscript": "\n      // VERSION=3\nfunction setup() {\n  return {\n    input: [\"B04\", \"B08\", \"dataMask\"],\n    output: { bands: 4 }\n  };\n}\n\nfunction evaluatePixel(samples) {\n  let ndvi = index(samples.B08, samples.B04);\n\n  // Set your anomaly threshold here. This is a simplistic example.\n  // You might want to calculate this based on historical data.\n  let threshold = 0.3; // Example threshold for anomaly detection\n\n  let anomaly = (ndvi < -threshold || ndvi > threshold) ? 1 : 0;\n\n  // Output NDVI, anomaly flag, and dataMask\n  return [ndvi, anomaly, samples.dataMask];\n}\n\nfunction updateOutputMetadata(scenes, inputMetadata, outputMetadata) {\n  // Set output metadata for better visualization and understanding\n  outputMetadata.userData = {\n    \"ndvi_threshold\": \"0.3\",\n    \"anomaly_description\": \"NDVI value greater than 0.3 or less than -0.3 is considered an anomaly.\"\n  };\n}\n\n    ",
+        "input": {
+            "bounds": {
+                "bbox": [
+                    28.46077,
+                    22.752656,
+                    28.574409,
+                    22.859281
+                ],
+                "geometry": {
+                    "coordinates": [
+                        [
+                            [
+                                28.4618,
+                                22.8577
+                            ],
+                            [
+                                28.4618,
+                                22.8577
+                            ],
+                            [
+                                28.573723,
+                                22.859281
+                            ],
+                            [
+                                28.573723,
+                                22.859281
+                            ],
+                            [
+                                28.574409,
+                                22.753922
+                            ],
+                            [
+                                28.574409,
+                                22.753922
+                            ],
+                            [
+                                28.462486,
+                                22.752656
+                            ],
+                            [
+                                28.462486,
+                                22.752656
+                            ],
+                            [
+                                28.46077,
+                                22.8577
+                            ],
+                            [
+                                28.4618,
+                                22.8577
+                            ]
+                        ]
+                    ],
+                    "type": "Polygon"
+                },
+                "properties": {
+                    "crs": "http://www.opengis.net/def/crs/EPSG/0/4326"
+                }
+            },
+            "data": [
+                {
+                    "dataFilter": {
+                        "timeRange": {
+                            "from": "2024-03-18T00:00:00Z",
+                            "to": "2024-03-18T23:59:59Z"
+                        }
+                    },
+                    "type": "sentinel-2-l2a"
+                }
+            ]
+        },
+        "output": {
+            "height": 512,
+            "responses": [
+                {
+                    "format": {
+                        "type": "image/png"
+                    },
+                    "identifier": "default"
+                }
+            ],
+            "width": 512
+        }
+    },
+    "timestamp": "2024-05-31T16:47:53.667900",
+    "url": "https://services.sentinel-hub.com/api/v1/process"
+}

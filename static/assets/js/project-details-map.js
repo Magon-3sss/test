@@ -280,3 +280,53 @@ container.addEventListener('wheel', function(event) {
       return; 
     }
 });
+
+
+
+
+
+//...
+function updateColorReferenceTable() {
+  const filtreSelect = document.getElementById('filtre-select');
+  const colorReferenceTable = document.getElementById('reference-table');
+  const hasFilterSelected = filtreSelect.value !== '';
+
+  if (hasFilterSelected) {
+      colorReferenceTable.style.display = 'block'; // Affiche la table
+  } else {
+      colorReferenceTable.style.display = 'none'; // Masque la table
+  }
+}
+
+// Appelez cette fonction lorsque le filtre est sélectionné
+document.getElementById('filtre-select').addEventListener('change', updateColorReferenceTable);
+
+document.addEventListener("DOMContentLoaded", function() {
+  // Récupérer les données de colorReference depuis le contexte Django
+  const data = JSON.parse(document.getElementById('data-id').value);
+  const colorReferences = JSON.parse(data.filters_colors).colors;
+
+  // Sélectionnez le tableau de références de couleurs
+  const referenceTable = document.getElementById("reference-table");
+
+  // Ajoutez l'en-tête du tableau
+  const headerRow = document.createElement("tr");
+  headerRow.innerHTML = `
+      <th>Value</th>
+      <th>Color</th>
+      <th>Description</th>
+  `;
+  referenceTable.appendChild(headerRow);
+
+  // Ajoutez les lignes du tableau
+  colorReferences.forEach(ref => {
+      const row = document.createElement("tr");
+      row.innerHTML = `
+          <td>${ref.value}</td>
+          <td style="background-color: ${ref.color_css}; width: 30px;"></td>
+          <td>${ref.description}</td>
+      `;
+      referenceTable.appendChild(row);
+  });
+});
+//...

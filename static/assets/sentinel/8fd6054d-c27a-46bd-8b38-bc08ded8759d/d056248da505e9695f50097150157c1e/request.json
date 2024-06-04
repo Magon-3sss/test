@@ -1,0 +1,94 @@
+{
+    "headers": {
+        "accept": "image/png",
+        "content-type": "application/json"
+    },
+    "payload": {
+        "evalscript": "\n      //VERSION=3 (auto-converted from 1)\n\nfunction setup() {\n    return {\n        input: [\n            {\n                bands: [\"B04\", \"B08\"],\n            },\n        ],\n        output: { bands: 3 },\n        mosaicking: \"ORBIT\",\n    };\n}\n\nfunction calcNDVI(sample) {\n    var denom = sample.B04 + sample.B08;\n    return denom != 0 ? (sample.B08 - sample.B04) / denom : 0.0;\n}\nfunction stretch(val, min, max) {\n    return (val - min) / (max - min);\n}\n\nfunction evaluatePixel(samples, scenes) {\n    var avg1 = 0;\n    var count1 = 0;\n    var avg2 = 0;\n    var count2 = 0;\n    var avg3 = 0;\n    var count3 = 0;\n    var endMonth = scenes[0].date.getMonth();\n\n    for (var i = 0; i < samples.length; i++) {\n        var ndvi = calcNDVI(samples[i]);\n        if (scenes[i].date.getMonth() == endMonth) {\n            avg3 = avg3 + ndvi;\n            count3++;\n        } else if (scenes[i].date.getMonth() == endMonth - 1) {\n            avg2 = avg2 + ndvi;\n            count2++;\n        } else {\n            avg1 = avg1 + ndvi;\n            count1++;\n        }\n    }\n    avg1 = avg1 / count1;\n    avg2 = avg2 / count2;\n    avg3 = avg3 / count3;\n    avg1 = stretch(avg1, 0.1, 0.7);\n    avg2 = stretch(avg2, 0.1, 0.7);\n    avg3 = stretch(avg3, 0.1, 0.7);\n\n    return [avg1, avg2, avg3];\n}\n\nfunction preProcessScenes(collections) {\n    collections.scenes.orbits = collections.scenes.orbits.filter(function (\n        orbit\n    ) {\n        var orbitDateFrom = new Date(orbit.dateFrom);\n        return (\n            orbitDateFrom.getTime() >=\n            collections.to.getTime() - 3 * 31 * 24 * 3600 * 1000\n        );\n    });\n    return collections;\n}\n    ",
+        "input": {
+            "bounds": {
+                "bbox": [
+                    28.46077,
+                    22.752656,
+                    28.574409,
+                    22.859281
+                ],
+                "geometry": {
+                    "coordinates": [
+                        [
+                            [
+                                28.4618,
+                                22.8577
+                            ],
+                            [
+                                28.4618,
+                                22.8577
+                            ],
+                            [
+                                28.573723,
+                                22.859281
+                            ],
+                            [
+                                28.573723,
+                                22.859281
+                            ],
+                            [
+                                28.574409,
+                                22.753922
+                            ],
+                            [
+                                28.574409,
+                                22.753922
+                            ],
+                            [
+                                28.462486,
+                                22.752656
+                            ],
+                            [
+                                28.462486,
+                                22.752656
+                            ],
+                            [
+                                28.46077,
+                                22.8577
+                            ],
+                            [
+                                28.4618,
+                                22.8577
+                            ]
+                        ]
+                    ],
+                    "type": "Polygon"
+                },
+                "properties": {
+                    "crs": "http://www.opengis.net/def/crs/EPSG/0/4326"
+                }
+            },
+            "data": [
+                {
+                    "dataFilter": {
+                        "timeRange": {
+                            "from": "2024-03-21T00:00:00Z",
+                            "to": "2024-03-21T23:59:59Z"
+                        }
+                    },
+                    "type": "sentinel-2-l2a"
+                }
+            ]
+        },
+        "output": {
+            "height": 512,
+            "responses": [
+                {
+                    "format": {
+                        "type": "image/png"
+                    },
+                    "identifier": "default"
+                }
+            ],
+            "width": 512
+        }
+    },
+    "timestamp": "2024-05-30T15:34:24.384662",
+    "url": "https://services.sentinel-hub.com/api/v1/process"
+}
