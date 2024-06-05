@@ -1648,25 +1648,48 @@ function setup() {
   elif filtre_value == "NDMI":
     return """
       //VERSION=3
-        const moistureRamps = [
-        [1, 0x0F30DE],
-        
-        ];
+function setup() {
+    return {
+        input: ["B08", "B11", "dataMask"],
+        output: { bands: 4 }
+    };
+}
 
-        const viz = new ColorRampVisualizer(moistureRamps);
+// Define the color ramp with proper intervals
+const moistureRamps = [
+    [1, 0x0F30DE],
+    [0.9, 0x213DDD],
+    [0.8, 0x3249DC],
+    [0.7, 0x4356DB],
+    [0.6, 0x5362DA],
+    [0.5, 0x646ED9],
+    [0.4, 0x767BD8],
+    [0.3, 0x8788D7],
+    [0.2, 0x9894D6],
+    [0.1, 0xA8A0D5],
+    [0.0, 0xBAADD3],
+    [-0.1, 0xCBB9D2],
+    [-0.2, 0xD6C1CF],
+    [-0.3, 0xD0BBC5],
+    [-0.4, 0xCBB6BC],
+    [-0.5, 0xC5B0B2],
+    [-0.6, 0xBFAAA8],
+    [-0.7, 0xBAA49E],
+    [-0.8, 0xB49E95],
+    [-0.9, 0xAF998C],
+    [-1, 0x000000]
+];
 
-        function setup() {
-        return {
-            input: ["B08", "B11", "dataMask"],
-            output: { bands: 4 }
-        };
-        }
+const viz = new ColorRampVisualizer(moistureRamps);
 
-        function evaluatePixel(samples) {
-        let val = index(samples.B08, samples.B11);
-        let imgVals = viz.process(val);
-        return imgVals.concat(samples.dataMask);
-        }
+function evaluatePixel(samples) {
+    // Calculate NDMI
+    let ndmi = index(samples.B08, samples.B11);
+    let imgVals = viz.process(ndmi);
+    return imgVals.concat([samples.dataMask]);
+}
+
+
     """
   else:
     return "Invalid filter"  

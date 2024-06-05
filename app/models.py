@@ -130,6 +130,11 @@ class ColorReferenceNdmi(models.Model):
     color_css=models.CharField(max_length=50)
     description=models.TextField(null=True)
     
+class ColorReferenceMsavi(models.Model):
+    value=models.CharField(max_length=50)
+    color_css=models.CharField(max_length=50)
+    description=models.TextField(null=True)
+    
 def filepath(request, filename):
     old_filename = filename
     timeNow = datetime.datetime.now()
