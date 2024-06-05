@@ -172,34 +172,18 @@
 											  </table>
 										</div>
 										<div class="irrigation" id="irrig">
+											<select id="parcelle" name="parcelle" >
+												{% comment %} <option value="">Select a parcelle</option> {% endcomment %}
+												<option value="1">Parcelles</option>
+												<option value="2">Select all parcelle</option>
+											</select>	
 											<input type="date" id="datepicker" placeholder="Select date" onchange="getRasterImage()">
-											{% comment %} <a href="parcelles/{{ parcelle.geozone_id }}/"> {% endcomment %}
-												<select id="parcelle" name="parcelle" >
-													{% comment %} <option value="">Select a parcelle</option> {% endcomment %}
-													<option value="1"></option>
-													<option value="2">Select all parcelle</option>
-												</select>
-										    {% comment %} </a> {% endcomment %}
-											{% comment %} <select id="filtre-select">
-												<optgroup label="Couleur naturelle">
-													<option value="natural_color">Couleur naturelle</option>
-												</optgroup>
-												<optgroup label="Indices de végétation">
-													<option value="ndvi">NDVI</option>
-													<option value="ndre">NDRE</option>
-													<option value="msavi">MSAVI</option>
-													<option value="reci">RECI</option>
-												</optgroup>
-												<optgroup label="Indices d'humidité">
-													<option value="ndmi">NDMI</option>
-												</optgroup>
-												<optgroup label="Indices personnalisés">
-													<option value="add_index">+ Ajouter un nouvel Indice</option>
-												</optgroup>
-											</select> {% endcomment %}											
 											<select id="filtre-select">
-												<option></option>
+												<option>Filtre</option>
 											</select>
+											{% comment %} <a href="parcelles/{{ parcelle.geozone_id }}/"> {% endcomment %}
+																						
+											
 											{% comment %} <button onclick="getRasterImage()">Obtenir l'image raster</button> {% endcomment %}
 										</div>										
 										 <!-- leaflet js  -->

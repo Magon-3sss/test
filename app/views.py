@@ -1516,27 +1516,27 @@ function setup() {
 }
 
 const ramp = [
-   [-1, 0xcc0000],
-   [0.05, 0xd63232],
-   [0.1, 0xf44336],
-   [0.15, 0xdd531e],
-   [0.2, 0xe06434],
-   [0.25, 0xe89c4b],
-   [0.3, 0xeba75f],
-   [0.35, 0xddb460],
-   [0.4, 0xdfd056],
-   [0.45, 0xefe7aa],
-   [0.5, 0xfbf9e9],
-   [0.55, 0xc3d5bb],
-   [0.6, 0x9bba8e],
-   [0.65, 0x739f60],
-   [0.7, 0x5f914a],
-   [0.75, 0x4b8333],
-   [0.8, 0x38761d],
-   [0.85, 0x326a1a],
-   [0.9, 0x2c5e17],
-   [0.95, 0x275214],
-   [1, 0x214611],
+   [-1, 0xC5142A],
+   [0.05, 0xC5142A],
+   [0.1, 0xC5142A],
+   [0.15, 0xE02D2C],
+   [0.2, 0xEF4C3A],
+   [0.25, 0xFE6C4A],
+   [0.3, 0xFF8D5A],
+   [0.35, 0xFFAB69],
+   [0.4, 0xFFC67D],
+   [0.45, 0xFFE093],
+   [0.5, 0xFFEFAB],
+   [0.55, 0xFDFEC2],
+   [0.6, 0xEAF7AC],
+   [0.65, 0xD5EF94],
+   [0.7, 0xB9E383],
+   [0.75, 0x9BD873],
+   [0.8, 0x77CA6F],
+   [0.85, 0x53BD6B],
+   [0.9, 0x14AA60],
+   [0.95, 0x009755],
+   [1, 0x007E47],
 ];
 
 const visualizer = new ColorRampVisualizer(ramp);
@@ -1550,25 +1550,44 @@ function evaluatePixel(samples) {
   elif filtre_value == "NDRE":
     return """
       //VERSION=3
-        function evaluatePixel(samples) {
-            let val = index(samples.B08, samples.B06);
-            return [val, samples.dataMask];
-        }
+function setup() {
+   return {
+      input: ["B05", "B08", "dataMask"],
+      output: { bands: 4 }
+   };
+}
 
-        function setup() {
-        return {
-            input: [{
-            bands: [
-                "B06",
-                "B08",
-                "dataMask"
-            ]
-            }],
-            output: {
-            bands: 2
-            }
-        }
-        }
+const ramp = [
+   [-1, 0xC5142A],
+   [0.05, 0xC5142A],
+   [0.1, 0xC5142A],
+   [0.15, 0xE02D2C],
+   [0.2, 0xEF4C3A],
+   [0.25, 0xFE6C4A],
+   [0.3, 0xFF8D5A],
+   [0.35, 0xFFAB69],
+   [0.4, 0xFFC67D],
+   [0.45, 0xFFE093],
+   [0.5, 0xFFEFAB],
+   [0.55, 0xFDFEC2],
+   [0.6, 0xEAF7AC],
+   [0.65, 0xD5EF94],
+   [0.7, 0xB9E383],
+   [0.75, 0x9BD873],
+   [0.8, 0x77CA6F],
+   [0.85, 0x53BD6B],
+   [0.9, 0x14AA60],
+   [0.95, 0x009755],
+   [1, 0x007E47],
+];
+
+const visualizer = new ColorRampVisualizer(ramp);
+
+function evaluatePixel(samples) {
+   let ndre = index(samples.B08, samples.B05);
+   let imgVals = visualizer.process(ndre);
+   return imgVals.concat(samples.dataMask)
+}
     """
   elif filtre_value == "SAVI":
     return """
@@ -1630,25 +1649,21 @@ function setup() {
     return """
       //VERSION=3
         const moistureRamps = [
-        [-0.8, 0x800000],
-        [-0.24, 0xff0000],
-        [-0.032, 0xffff00],
-        [0.032, 0x00ffff],
-        [0.24, 0x0000ff],
-        [0.8, 0x000080]
+        [1, 0x0F30DE],
+        
         ];
 
         const viz = new ColorRampVisualizer(moistureRamps);
 
         function setup() {
         return {
-            input: ["B8A", "B11", "dataMask"],
+            input: ["B08", "B11", "dataMask"],
             output: { bands: 4 }
         };
         }
 
         function evaluatePixel(samples) {
-        let val = index(samples.B8A, samples.B11);
+        let val = index(samples.B08, samples.B11);
         let imgVals = viz.process(val);
         return imgVals.concat(samples.dataMask);
         }
