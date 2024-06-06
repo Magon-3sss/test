@@ -1620,7 +1620,31 @@ function evaluatePixel(samples) {
     return """
       //VERSION=3
 
-let viz = ColorGradientVisualizer.createWhiteGreen();
+// Créez une instance de ColorRampVisualizer avec les rampes de couleur
+const moistureRamps = [
+    [1, 0x004728],
+    [0.7, 0x005530],
+    [0.6, 0x00673A],
+    [0.5, 0x007E47],
+    [0.4, 0x009755],
+    [0.35, 0x14AA60],
+    [0.3, 0x53BD6B],
+    [0.27, 0x77CA6F],
+    [0.25, 0x9BD873],
+    [0.22, 0xB9E383],
+    [0.17, 0xEAF7AC],
+    [0.15, 0xFDFEC2],
+    [0.12, 0xFFEFAB],
+    [0.10, 0xFFE093],
+    [0.8, 0xFFC67D],
+    [0.6, 0xFFAB69],
+    [0.4, 0xFF8D5A],
+    [0.2, 0xFE6C4A],
+    [0, 0xAD0028],
+    [-1, 0xAD0028]
+];
+
+let viz = new ColorRampVisualizer(moistureRamps);
 
 function evaluatePixel(samples) {
     let a = 2.0 * samples.B08 - 1.0;
@@ -1644,6 +1668,7 @@ function setup() {
     }
   }
 }
+
     """
   elif filtre_value == "NDMI":
     return """
@@ -2233,6 +2258,14 @@ def project_details (request, id):
     map_form_data = serialize("json", MapForm.objects.all().filter(geozone=id))
     points = serialize("json", Point.objects.all().filter(geozone=id))
     zones_parcelles = ZoneParcelle.objects.all().filter(id_projet=id)
+    parcelles = []
+    for zp in zones_parcelles:
+        map_form_parcelle = MapFormParcelle.objects.filter(geozone=zp).first()
+        if map_form_parcelle:
+            parcelles.append({
+                'geozone_id': zp.pk,
+                'parcelle_name': map_form_parcelle.parcelle_name
+            })
     #print(zones_parcelles)
     points_parcelles_map = []
     for zp in zones_parcelles:
@@ -2288,7 +2321,7 @@ def project_details (request, id):
         'filters_colors': filters_colors
     }
     dumped_data = json.dumps(data, indent=4, sort_keys=True, default=str)
-    return render(request, 'project-details.html', {'data': dumped_data})
+    return render(request, 'project-details.html', {'data': dumped_data,'project': {'parcelles': parcelles},})
 
 def project_edit (request): 
     return render(request, 'project-edit.html')

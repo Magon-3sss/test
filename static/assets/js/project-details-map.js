@@ -286,17 +286,6 @@ container.addEventListener('wheel', function(event) {
 
 
 //...
-function updateColorReferenceTable() {
-  const filtreSelect = document.getElementById('filtre-select');
-  const colorReferenceTable = document.getElementById('reference-table');
-  const hasFilterSelected = filtreSelect.value !== '';
-
-  if (hasFilterSelected) {
-      colorReferenceTable.style.display = 'block'; // Affiche la table
-  } else {
-      colorReferenceTable.style.display = 'none'; // Masque la table
-  }
-}
 
 // Appelez cette fonction lorsque le filtre est sélectionné
 document.getElementById('filtre-select').addEventListener('change', updateColorReferenceTable);

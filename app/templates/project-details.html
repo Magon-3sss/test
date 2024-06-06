@@ -172,15 +172,19 @@
 											  </table>
 										</div>
 										<div class="irrigation" id="irrig">
-											<select id="parcelle" name="parcelle" >
-												{% comment %} <option value="">Select a parcelle</option> {% endcomment %}
-												<option value="1">Parcelles</option>
-												<option value="2">Select all parcelle</option>
-											</select>	
-											<input type="date" id="datepicker" placeholder="Select date" onchange="getRasterImage()">
+											<select id="parcelle" name="parcelle">
+												<option value="">Select a parcelle</option>
+												{% for parcelle in project.parcelles %}
+													<option value="{{ parcelle.geozone_id }}">
+														{{ parcelle.parcelle_name }}
+													</option>
+												{% endfor %}
+											</select>
 											<select id="filtre-select">
 												<option>Filtre</option>
-											</select>
+											</select>    	
+											<input type="date" id="datepicker" placeholder="Select date" onchange="getRasterImage()">
+											
 											{% comment %} <a href="parcelles/{{ parcelle.geozone_id }}/"> {% endcomment %}
 																						
 											
