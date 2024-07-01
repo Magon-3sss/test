@@ -237,6 +237,8 @@ urlpatterns = [
     path('goutte', views.goutte, name='goutte'),
     path('pivot', views.pivot, name='pivot'),
     path('pulverisateur', views.pulverisateur, name='pulverisateur'),
+    
+    path('analyse', views.analyse, name='analyse'),
 ]
 
 if settings.DEBUG:

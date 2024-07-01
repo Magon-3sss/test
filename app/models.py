@@ -369,3 +369,7 @@ class Test(models.Model):
     type=models.CharField(max_length=50)
     nom=models.CharField(max_length=50)   
     
+class Anomaly(models.Model):
+    nom=models.CharField(max_length=50)
+    description=models.CharField(max_length=500)
+    traitement=models.CharField(max_length=500)

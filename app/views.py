@@ -346,6 +346,15 @@ def save_engrai(request):
             return JsonResponse({"Erreur": "Some error occured"}, status=status.HTTP_201_CREATED)
 
 """ Traitements """
+def traitements (request):
+    list = []
+    traitements = Traitement_Tables.objects.all()
+    types_traitements = TypeTraitement.objects.all()
+    categories_Traitements = CategorieTraitement.objects.all()
+    projects = MapForm.objects.all()
+    list.append({"types": types_traitements,"categories": categories_Traitements, "traitements":traitements, "projects": projects})
+    return render(request, 'traitements.html', {'data': list})
+
 @api_view(['POST'])
 def save_traitement(request):
     if request.method == "POST":
@@ -1437,7 +1446,7 @@ def generate_raster_image(request):
     date = data["date"]
     points = data["points"]
     filtre_value = data.get("filtre")
-    data_folder="C:/Users/HP/Desktop/MAGON_3SSS/MAGON_3SSS/MAGON_3SSS-main/MAGON_3S/static/assets/sentinel"
+    data_folder="D:/MAGON_3SSS/MAGON_3SSS/MAGON_3SSS-main/MAGON_3S/static/assets/sentinel"
     folder_name = str(uuid.uuid4())
     folder_path = os.path.join(data_folder, folder_name)
     if not os.path.exists(folder_path):
@@ -2795,14 +2804,7 @@ def engrais (request):
     list.append({"types": types_engrais,"categories": categories_Engrais, "engrais":engrais, "projects": projects})
     return render(request, 'engrais.html', {'data': list})
 
-def traitements (request):
-    list = []
-    traitements = Traitement_Tables.objects.all()
-    types_traitements = TypeTraitement.objects.all()
-    categories_Traitements = CategorieTraitement.objects.all()
-    projects = MapForm.objects.all()
-    list.append({"types": types_traitements,"categories": categories_Traitements, "traitements":traitements, "projects": projects})
-    return render(request, 'traitements.html', {'data': list})
+
 
 def autres (request):
     return render(request, 'autres.html')
@@ -2869,3 +2871,6 @@ def pulverisateur (request):
 
 def meteo (request):
     return render(request, 'meteo.html')
+
+def analyse (request): 
+    return render(request, 'analyse.html')
