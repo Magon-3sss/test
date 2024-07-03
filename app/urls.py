@@ -239,6 +239,7 @@ urlpatterns = [
     path('pulverisateur', views.pulverisateur, name='pulverisateur'),
     
     path('analyse', views.analyse, name='analyse'),
+    path('analyse-details', views.analyse_details, name='analyse-details'),
 ]
 
 if settings.DEBUG:

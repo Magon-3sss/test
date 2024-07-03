@@ -2874,3 +2874,16 @@ def meteo (request):
 
 def analyse (request): 
     return render(request, 'analyse.html')
+
+def analyse_details (request):
+    cookie = request.COOKIES.get('jwtToken')
+    if cookie:
+        user_group = request.COOKIES.get('userGroup') or None
+        context = {
+            'jwtToken': cookie,
+            'userGroup': user_group,
+        }
+        print(context)
+        return render(request, 'analyse-details.html', context)
+    else: 
+        return render(request, 'signin.html')
