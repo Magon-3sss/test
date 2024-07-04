@@ -24,6 +24,47 @@
 
 						<!-- ROW-1 OPEN -->
 						<div class="row row-cards">
+							<div class="row">
+								<div class="col-md-12">
+									<div class="card">
+										<div class="card-body project-type-container projects p-4">
+											<h4 class="m-0" id="typeTitle">Analyse des images </h4>
+											<div class="d-sm-flex align-items-center">
+												<div class="btn-list mx-4">
+														<a class="btn btn-outline-primary btn-block py-2" id="btnCompose" data-bs-target="#Vertically" data-bs-toggle="modal" href="#"><i class="fa fa-plus me-2"></i>
+															Upload Files 
+															<svg fill="#000000" height="24px" width="24px" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 212.366 212.366" xml:space="preserve">
+																<g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <g> 
+																<path d="M68.469,54.652h75.878c0.007,0.001,0.015,0.001,0.02,0c4.143,0,7.5-3.357,7.5-7.5c0-0.203-0.008-0.404-0.023-0.604 c-0.325-24.777-20.582-44.834-45.436-44.834c-25.055,0-45.438,20.383-45.438,45.438C60.969,51.294,64.327,54.652,68.469,54.652z M106.407,16.714c14.196,0,26.155,9.769,29.505,22.937H76.904C80.253,26.484,92.211,16.714,106.407,16.714z"></path> 
+																<path d="M204.866,113.019h-35.441V75.398l28.313-28.312c2.93-2.93,2.93-7.678,0.001-10.606c-2.929-2.929-7.677-2.93-10.607-0.001 L158.818,64.79H53.983L25.671,36.479c-2.929-2.93-7.678-2.929-10.607-0.001c-2.929,2.93-2.929,7.678,0,10.607l28.311,28.311v37.623 H7.5c-4.142,0-7.5,3.357-7.5,7.5c0,4.143,3.358,7.5,7.5,7.5h35.881c0.041,12.754,3.894,24.624,10.471,34.539l-35.291,35.29 c-2.929,2.93-2.929,7.678,0,10.607c1.464,1.464,3.384,2.196,5.303,2.196c1.919,0,3.839-0.732,5.303-2.196l34.433-34.433 c11.248,10.428,26.289,16.818,42.801,16.818c16.4,0,31.354-6.302,42.577-16.605l34.217,34.219c1.465,1.465,3.384,2.197,5.304,2.197 c1.919,0,3.839-0.732,5.303-2.196c2.93-2.929,2.93-7.678,0.001-10.607l-35.024-35.025c6.684-9.968,10.601-21.938,10.642-34.805 h35.446c4.143,0,7.5-3.357,7.5-7.5C212.366,116.376,209.009,113.019,204.866,113.019z M58.376,127.816V79.79h40.525v95.461 C75.97,171.64,58.376,151.746,58.376,127.816z M113.901,175.251V79.79h40.523v48.025 C154.425,151.746,136.831,171.64,113.901,175.251z"></path> 
+															</g> </g></svg>
+														</a>
+												</div>
+											</div>
+											<div class="modal">
+												<div class="modal-dialog modal-lg" role="document">
+													<div class="modal-content">
+														<div class="modal-header pd-20">
+															<h6 class="modal-title">Create New Document</h6><button aria-label="Close" class="btn-close" data-bs-dismiss="modal" ><span aria-hidden="true">&times;</span></button>
+														</div>
+														<div class="modal-body pd-0">
+															<div class="ql-wrapper ql-wrapper-modal ht-250">
+																<div class="flex-1" id="quillEditorModal">
+																	<p><strong>Quill</strong> is a free, open source <a href="https://github.com/quilljs/quill/">WYSIWYG editor</a> built for the modern web. With its <a href="https://quilljs.com/docs/modules/">modular architecture</a> and expressive API, it is completely customizable to fit any need.</p><br>
+																	<p>The icons use here as a replacement to default svg icons are from <a href="https://icons8.com/line-awesome">Line Awesome Icons</a>.</p>
+																</div>
+															</div>
+														</div>
+														<div class="modal-footer pd-20">
+															<button class="btn btn-primary" >Save changes</button> <button class="btn btn-light" data-bs-dismiss="modal" aria-label="Close">Cancel</button>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
 							<div class="col-xl-3 col-lg-12">
 								<div class="row">
 									<div class="col-md-12 col-lg-12">
@@ -667,6 +708,31 @@
 
         {% endblock %}
 
+		{% block modal %}
+
+		<!-- modal -->
+		<div class="modal fade" id="Vertically">
+			<div class="modal-dialog modal-dialog-centered" role="document">
+				<div class="modal-content modal-content-demo">
+					<div class="modal-header">
+						<h6 class="modal-title">Add file</h6><button aria-label="Close" class="btn-close" data-bs-dismiss="modal" type="button"><span aria-hidden="true">&times;</span></button>
+					</div>
+					<div class="modal-body">
+						<div class="mb-2">
+							<input type="file" class="dropify" data-height="200" />
+						</div>
+					</div>
+					<div class="modal-footer">
+						<button class="btn ripple btn-primary" type="button">Add</button>
+						<button class="btn ripple btn-secondary" data-bs-dismiss="modal" type="button">Cancel</button>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- End modal -->
+
+        {% endblock %}
+
     {% block scripts %}
 
 	<!-- INTERNAL SELECT2 JS -->
@@ -675,6 +741,10 @@
 
 	<!-- ANALYSE JS -->
 	<script src=" {% static 'assets/js/analyse.js' %} "></script>
+	
+	<!--Internal Fileuploads js-->
+	<script src=" {% static 'assets/plugins/fileuploads/js/fileupload.js' %} "></script>
+	<script src=" {% static 'assets/plugins/fileuploads/js/file-upload.js' %} "></script>
 
 	<!-- THEMECOLORS JS -->
 	<script src="{% static 'assets/js/themeColors.js'%}"></script>
