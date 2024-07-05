@@ -2885,7 +2885,7 @@ def analyse (request):
                 files = {'file': image_file}
 
                 # Remplacez 'NGROK_PUBLIC_URL' par l'URL réelle de votre service Ngrok
-                ngrok_url = 'https://ec8e-35-185-6-124.ngrok-free.app/predict'
+                ngrok_url = 'https://a058-35-237-126-147.ngrok-free.app/predict'
                 response = requests.post(ngrok_url, files=files)
 
                 if response.status_code == 200:
