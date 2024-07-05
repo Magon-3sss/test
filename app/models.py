@@ -373,3 +373,10 @@ class Anomaly(models.Model):
     nom=models.CharField(max_length=50)
     description=models.CharField(max_length=500)
     traitement=models.CharField(max_length=500)
+    
+class UploadedImage(models.Model):
+    image = models.ImageField(upload_to='uploads/')
+    result_image = models.ImageField(upload_to='assets/results/', blank=True, null=True)
+
+    def __str__(self):
+        return f"Image {self.id}" 

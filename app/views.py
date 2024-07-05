@@ -718,9 +718,7 @@ def save_machine(request):
         else:
             print('no')
             return JsonResponse({"Erreur": "Some error occured"}, status=status.HTTP_400_BAD_REQUEST)
-
-        
-              
+             
 
 """ Projects  """
 @api_view(['POST'])    
@@ -2871,9 +2869,46 @@ def pulverisateur (request):
 
 def meteo (request):
     return render(request, 'meteo.html')
+class ImageUploadForm(forms.ModelForm):
+    class Meta:
+        model = UploadedImage
+        fields = ['image']
+        
+def analyse (request):
+    if request.method == 'POST':
+        form = ImageUploadForm(request.POST, request.FILES)
+        if form.is_valid():
+            uploaded_image = form.save()
+            image_path = uploaded_image.image.path
 
-def analyse (request): 
-    return render(request, 'analyse.html')
+            with open(image_path, 'rb') as image_file:
+                files = {'file': image_file}
+
+                # Remplacez 'NGROK_PUBLIC_URL' par l'URL réelle de votre service Ngrok
+                ngrok_url = 'https://ec8e-35-185-6-124.ngrok-free.app/predict'
+                response = requests.post(ngrok_url, files=files)
+
+                if response.status_code == 200:
+                    # Chemin complet pour sauvegarder l'image traitée
+                    result_image_dir = 'D:/MAGON_3SSS/MAGON_3SSS/MAGON_3SSS-main/MAGON_3S/media/results/'
+                    result_image_name = f'result_{uploaded_image.id}.png'
+                    result_image_path = os.path.join(result_image_dir, result_image_name)
+
+                    # Sauvegarde de l'image traitée
+                    with open(result_image_path, 'wb') as f:
+                        f.write(response.content)
+
+                    # Mise à jour de l'objet UploadedImage pour pointer vers l'image traitée
+                    uploaded_image.result_image.name = os.path.join('/results', result_image_name)
+                    uploaded_image.save()
+                    
+
+                    return render(request, 'image_result.html', {'upload_image': uploaded_image})
+                else:
+                    return HttpResponse('Erreur lors du traitement de l\'image', status=500)
+    else:
+        form = ImageUploadForm() 
+    return render(request, 'analyse.html', {'form': form})
 
 def analyse_details (request):
     cookie = request.COOKIES.get('jwtToken')
