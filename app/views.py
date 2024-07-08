@@ -1836,6 +1836,8 @@ def generate_raster_image(request):
         #return JsonResponse(raster_image_url, status=status.HTTP_200_OK, safe=False)
         #return JsonResponse({"msg": "test en cours"}, status=status.HTTP_200_OK, safe=False) """
 
+def test (request): 
+    return render(request, 'test.html')
 
 def about (request): 
     return render(request, 'about.html')

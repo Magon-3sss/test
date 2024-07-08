@@ -62,6 +62,7 @@ urlpatterns = [
     path('update-profile-image/', views.update_profile_image, name='update-profile-image'),
     path('update-company-info/', views.update_company_info, name='update-company-info'),
     
+    path('test', views.test, name='test'),
     path('about', views.about, name='about'),
     path('accordion', views.accordion, name='accordion'),
     path('alerts', views.alerts, name='alerts'),
