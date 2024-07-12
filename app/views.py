@@ -25,7 +25,7 @@ from noa import settings
 from django.contrib.sites.shortcuts import get_current_site
 from django.template.loader import render_to_string
 from app.models import Hangar_Tables, TypeHangerDepot, Zone
-from app.serializers import CustomTokenObtainPairSerializer, ZoneSerializer
+from app.serializers import CustomTokenObtainPairSerializer, OperationsSerializer, ZoneSerializer
 from app.serializers import PointSerializer
 from app.serializers import FormSerializer
 from app.models import MapForm
@@ -108,6 +108,9 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import Token
 from django.core.files.uploadedfile import InMemoryUploadedFile
+from django.views.decorators.http import require_http_methods
+from django.core.paginator import Paginator
+from django.db.models import Q
 
 """ def get_sidebar_content_based_on_group(request, user_group):
     if user_group == 'Basic':
@@ -2812,6 +2815,164 @@ def autres (request):
 def machines_engins_new (request):
     return render(request, 'machines-engins-new.html')
 
+""" Operation Agricole """
+def get_points(request, geozone_id):
+    points = Point.objects.filter(geozone_id=geozone_id)
+    data = [{'latt': p.latt, 'long': p.long} for p in points]
+    return JsonResponse(data, safe=False)
+
+""" def ajouter_operation_agricole(request):
+    cookie = request.COOKIES.get('jwtToken')
+    if cookie:
+        user_group = request.COOKIES.get('userGroup') or None
+
+        # Récupérer toutes les données nécessaires
+        operations_agricoles = New_Oper_Tables.objects.all()
+        type_rh = TypeRh.objects.all()
+        projects = MapForm.objects.all()
+        type_machine_engins = TypeMachineEngins.objects.all()
+        type_carburant = TypeCarburant.objects.all()
+        outil  =TypeOutilsAgricoles.objects.all()
+        type_pieces  = TypePieces.objects.all()
+        type_engrais  = TypeEngrais.objects.all() 
+        type_graines_pousses  =TypeGrainesPousses.objects.all() 
+        type_traitement = TypeTraitement.objects.all()
+
+        # Créer le contexte avec les données des cookies et les objets de la base de données
+        context = {
+            'jwtToken': cookie,
+            'userGroup': user_group,
+            'types': type_rh,
+            'machines': type_machine_engins,
+            'carburants': type_carburant,
+            'outils': outil,
+            'pieces': type_pieces,
+            'graines': type_graines_pousses,
+            'engrais': type_engrais,
+            'traitements': type_traitement,
+            'operations': operations_agricoles,
+            'projects': projects,
+        }
+        return render(request, 'ajouter-operation-agricole.html', context)
+    else:
+        return render(request, 'signin.html') """
+def ajouter_operation_agricole (request):
+    list = []
+    operations_agricoles = New_Oper_Tables.objects.all()
+    type_rh = TypeRh.objects.all()
+    projects = MapForm.objects.all()
+    type_machine_engins = TypeMachineEngins.objects.all()
+    type_carburant = TypeCarburant.objects.all()
+    outil  =TypeOutilsAgricoles.objects.all()
+    type_pieces  = TypePieces.objects.all()
+    type_engrais  = TypeEngrais.objects.all() 
+    type_graines_pousses  =TypeGrainesPousses.objects.all() 
+    type_traitement = TypeTraitement.objects.all()
+    list.append({"types": type_rh,"machines": type_machine_engins, "carburants": type_carburant, "outils": outil,"pieces": type_pieces,"graines" :type_graines_pousses,"engraiss" : type_engrais, "traitements" : type_traitement,   "operations": operations_agricoles, "projects": projects})
+    return render(request, 'ajouter-operation-agricole.html', {'data': list})
+
+@api_view(['POST'])
+def save_operation(request):
+    if request.method == "POST":
+        type_rh = request.POST.get('type_rh')
+        type_machine_engins = request.POST.get('type_machine_engins')
+        carburant = request.POST.get('carburant')
+        typeoperation = request.POST.get('typeoperation')
+        date_debut = request.POST.get('date_debut')
+        date_fin = request.POST.get('date_fin')
+        duree_utilisation_programme = request.POST.get('duree_utilisation_programme')
+        quantite_carburant = request.POST.get('quantite_carburant')
+        outil = request.POST.get('outil')
+        duree_utilisation = request.POST.get('duree_utilisation')
+        type_pieces = request.POST.get('type_pieces')
+        duree_utilisation_piece = request.POST.get('duree_utilisation_piece')
+        type_graines_pousses = request.POST.get('type_graines_pousses')
+        quantite_graine_utilisee = request.POST.get('quantite_graine_utilisee')
+        type_engrais = request.POST.get('type_engrais')
+        quantite_engrais_utilisee = request.POST.get('quantite_engrais_utilisee')
+        type_traitement = request.POST.get('type_traitement')
+        quantite_traitement_utilisee = request.POST.get('quantite_traitement_utilisee')
+        time = request.POST.get('time')
+        print(type_rh)
+        print(type_machine_engins)
+        print(carburant)
+        print(typeoperation)
+        print(date_debut)
+        print(date_fin)
+        print( duree_utilisation_programme)
+        print(quantite_carburant)
+        print(outil)
+        print(duree_utilisation)
+        print(type_pieces)
+        print(duree_utilisation_piece)
+        print(type_graines_pousses)
+        print(quantite_graine_utilisee)
+        print(type_engrais)
+        print(quantite_engrais_utilisee)
+        print(type_traitement)
+        print(quantite_traitement_utilisee)
+        print(time)
+        
+        form = {
+                "type_rh": type_rh,
+                "type_machine_engins": type_machine_engins,
+                "carburant": carburant,
+                "typeoperation": typeoperation,
+                "date_debut": date_debut,
+                "date_fin": date_fin,
+                "duree_utilisation_programme": duree_utilisation_programme,
+                "quantite_carburant": quantite_carburant,
+                "outil": outil,
+                "duree_utilisation": duree_utilisation,
+                "type_pieces": type_pieces,
+                "duree_utilisation_piece": duree_utilisation_piece,
+                "type_graines_pousses": type_graines_pousses,
+                "quantite_graine_utilisee": quantite_graine_utilisee,
+                "type_engrais": type_engrais,
+                "quantite_engrais_utilisee": quantite_engrais_utilisee,
+                "type_traitement": type_traitement,
+                "quantite_traitement_utilisee": quantite_traitement_utilisee,
+                "time": time
+            }
+        
+        operation_serializer = OperationsSerializer(data=form)
+               
+        if operation_serializer.is_valid():
+            print('yes')
+            operation_serializer.save()
+            return JsonResponse(operation_serializer.data, status=status.HTTP_201_CREATED)
+        else:
+            print('no')
+            return JsonResponse({"Erreur": "Some error occured"}, status=status.HTTP_201_CREATED)
+          
+""" def ajouter_operation_agricole (request):
+    list = []
+    operations_agricoles = New_Oper_Tables.objects.all()
+    type_rh = TypeRh.objects.all()
+    projects = MapForm.objects.all()
+    type_machine_engins = TypeMachineEngins.objects.all()
+    type_carburant = TypeCarburant.objects.all()
+    outil  =TypeOutilsAgricoles.objects.all()
+    type_pieces  = TypePieces.objects.all()
+    type_engrais  = TypeEngrais.objects.all() 
+    type_graines_pousses  =TypeGrainesPousses.objects.all() 
+    type_traitement = TypeTraitement.objects.all()
+    list.append({"types": type_rh,"machines": type_machine_engins, "carburants": type_carburant, "outils": outil,"pieces": type_pieces,"graines" :type_graines_pousses,"engraiss" : type_engrais, "traitements" : type_traitement,   "operations": operations_agricoles, "projects": projects})
+    return render(request, 'ajouter-operation-agricole.html', {'data': list})
+
+def ajouter_operation_agricole (request):
+    cookie = request.COOKIES.get('jwtToken')
+    if cookie:
+        user_group = request.COOKIES.get('userGroup') or None
+        context = {
+            'jwtToken': cookie,
+            'userGroup': user_group,
+        }
+        print(context)
+        return render(request, 'ajouter-operation-agricole.html', context)
+    else:
+        return render(request, 'signin.html') """
+    
 def operations_utilisateur (request):
     cookie = request.COOKIES.get('jwtToken')
     if cookie:
@@ -2835,19 +2996,6 @@ def recommendations_ia (request):
         }
         print(context)
         return render(request, 'recommendations-ia.html', context)
-    else:
-        return render(request, 'signin.html')
-
-def ajouter_operation_agricole (request):
-    cookie = request.COOKIES.get('jwtToken')
-    if cookie:
-        user_group = request.COOKIES.get('userGroup') or None
-        context = {
-            'jwtToken': cookie,
-            'userGroup': user_group,
-        }
-        print(context)
-        return render(request, 'ajouter-operation-agricole.html', context)
     else:
         return render(request, 'signin.html')
     
@@ -2875,8 +3023,77 @@ class ImageUploadForm(forms.ModelForm):
     class Meta:
         model = UploadedImage
         fields = ['image']
+
+def analyse(request):
+    images = UploadedImage.objects.all()
+    paginator = Paginator(images, 12)
+    if request.method == 'POST':
+        form = ImageUploadForm(request.POST, request.FILES)
+        if form.is_valid():
+            uploaded_image = form.save()
+            image_path = uploaded_image.image.path
+            with open(image_path, 'rb') as image_file:
+                files = {'file': image_file}
+                ngrok_url = 'https://ae39-34-136-217-139.ngrok-free.app/predict'
+                response = requests.post(ngrok_url, files=files)
+                if response.status_code == 200:
+                    result_image_dir = 'D:/MAGON_3SSS/MAGON_3SSS/MAGON_3SSS-main/MAGON_3S/static/assets/results/'
+                    result_image_name = f'result_{uploaded_image.id}.png'
+                    result_image_path = os.path.join(result_image_dir, result_image_name)
+                    with open(result_image_path, 'wb') as f:
+                        f.write(response.content)
+                    uploaded_image.result_image.name = os.path.join('/results', result_image_name)
+                    uploaded_image.save()
+                    return JsonResponse({'success': True, 'image_url': uploaded_image.result_image.url})
+                else:
+                    return JsonResponse({'success': False, 'error_message': 'Erreur lors du traitement de l\'image'})
+        else:
+            return JsonResponse({'success': False, 'error_message': 'Formulaire invalide'})
+    else:
+        form = ImageUploadForm()
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)   
+    return render(request, 'analyse.html', {'form': form, 'images': images, 'page_obj': page_obj})
+
+def analyse_details(request):
+    cookie = request.COOKIES.get('jwtToken')
+    if cookie:
+        user_group = request.COOKIES.get('userGroup') or None
+        # Récupérer les quatre premières images avec un résultat
+        images = UploadedImage.objects.exclude(result_image__isnull=True).exclude(result_image__exact='').order_by('-id')[:4]
+        context = {
+            'jwtToken': cookie,
+            'userGroup': user_group,
+            'images': images,
+        }
+        print(context)
+        return render(request, 'analyse-details.html', context)
+    else: 
+        return render(request, 'signin.html')
+    
+""" def analyse_details (request):
+    cookie = request.COOKIES.get('jwtToken')
+    if cookie:
+        user_group = request.COOKIES.get('userGroup') or None
+        context = {
+            'jwtToken': cookie,
+            'userGroup': user_group,
+        }
+        print(context)
+        return render(request, 'analyse-details.html', context)
+    else: 
+        return render(request, 'signin.html') """
+    
+@require_http_methods(["DELETE"])
+def delete_item(request, item_id):
+    try:
+        item = UploadedImage.objects.get(id=item_id)
+        item.delete()
+        return JsonResponse({'success': True})
+    except UploadedImage.DoesNotExist:
+        return JsonResponse({'success': False, 'error': 'Item does not exist'}, status=404)
         
-def analyse (request):
+""" def analyse (request):
     if request.method == 'POST':
         form = ImageUploadForm(request.POST, request.FILES)
         if form.is_valid():
@@ -2887,12 +3104,12 @@ def analyse (request):
                 files = {'file': image_file}
 
                 # Remplacez 'NGROK_PUBLIC_URL' par l'URL réelle de votre service Ngrok
-                ngrok_url = 'https://a058-35-237-126-147.ngrok-free.app/predict'
+                ngrok_url = 'https://6cdc-104-155-157-48.ngrok-free.app/predict'
                 response = requests.post(ngrok_url, files=files)
 
                 if response.status_code == 200:
                     # Chemin complet pour sauvegarder l'image traitée
-                    result_image_dir = 'D:/MAGON_3SSS/MAGON_3SSS/MAGON_3SSS-main/MAGON_3S/media/results/'
+                    result_image_dir = 'D:/MAGON_3SSS/MAGON_3SSS/MAGON_3SSS-main/MAGON_3S/static/assets/results/'
                     result_image_name = f'result_{uploaded_image.id}.png'
                     result_image_path = os.path.join(result_image_dir, result_image_name)
 
@@ -2910,17 +3127,4 @@ def analyse (request):
                     return HttpResponse('Erreur lors du traitement de l\'image', status=500)
     else:
         form = ImageUploadForm() 
-    return render(request, 'analyse.html', {'form': form})
-
-def analyse_details (request):
-    cookie = request.COOKIES.get('jwtToken')
-    if cookie:
-        user_group = request.COOKIES.get('userGroup') or None
-        context = {
-            'jwtToken': cookie,
-            'userGroup': user_group,
-        }
-        print(context)
-        return render(request, 'analyse-details.html', context)
-    else: 
-        return render(request, 'signin.html')
+    return render(request, 'analyse.html', {'form': form}) """

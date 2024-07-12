@@ -1,0 +1,102 @@
+{% extends 'components/base.html' %}
+{% load static %}
+
+{% block styles %}
+    <style>
+        /* Vos styles ici */
+    </style>
+{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1 class="page-title">Image Result</h1>
+</div>
+
+<h2>Uploaded Image</h2>
+<img src="{{ upload_image.image.url }}" alt="Uploaded Image" style="width: 300px;">
+
+<h2>Processed Image</h2>
+{% if upload_image.result_image %}
+    <img src="{{ upload_image.result_image.url }}" alt="Processed Image" style="width: 300px;">
+{% else %}
+    <p>Image processing failed or not yet completed.</p>
+{% endif %}
+{% endblock %}
+
+{% block scripts %}
+    <!-- Include any scripts required here -->
+{% endblock %}
+
+
+
+{% comment %} <!-- templates/image_result.html -->
+{% extends 'components/base.html' %}
+{% load static %}
+
+{% block styles %}
+    <style>
+        /* Add your custom styles here */
+    </style>
+{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1 class="page-title">Image Result</h1>
+</div>
+
+<h2>Uploaded Image</h2>
+<img src="{{ upload_image.image.url }}" alt="Uploaded Image" style="width: 300px;">
+
+<h2>Processed Image</h2>
+{% if upload_image.result_image %}
+    <img src="{{ upload_image.result_image.url }}" alt="Processed Image" style="width: 300px;">
+{% else %}
+    <p>Image processing failed or not yet completed.</p>
+{% endif %}
+{% endblock %}
+
+{% block scripts %}
+    <!-- Include any scripts required here -->
+{% endblock %} {% endcomment %}
+
+
+
+{% comment %} {% extends 'components/base.html' %}
+{% load static %}
+
+{% block styles %}
+    <style>
+        
+    </style>
+
+    {% endblock %}
+    {% block content %}
+<!-- PAGE-HEADER -->
+<div class="page-header">
+    <input id="data-id" style="display: none;" value="{{ data }}" />
+    <div>
+        <h1 class="page-title">Resultat Image</h1>
+    </div>
+</div>
+<!-- PAGE-HEADER END -->
+    
+    
+<h1>Image Result</h1>
+<h2>Uploaded Image</h2>
+<img src="{{ upload_image.image.url }}" alt="Upload Image">
+<h2>Processed Image</h2>
+<img src="{{ upload_image.result_image.url }}" alt="Processed Image">
+
+
+    {% endblock %}
+
+{% block scripts %}
+
+    
+        <!-- PROJECT JS-->
+        <script src=" {% static 'assets/js/image_result.js' %} "></script>
+
+        <!-- THEMECOLORS JS -->
+        <script src="{% static 'assets/js/themeColors.js'%}"></script>
+
+    {% endblock %} {% endcomment %}

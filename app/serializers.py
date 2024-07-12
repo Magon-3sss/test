@@ -24,7 +24,7 @@ from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from datetime import datetime, timedelta
 from rest_framework.serializers import ModelSerializer
 from .models import User
-
+from app.models import *
 """ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
 
     def validate(self, attrs):
@@ -152,3 +152,9 @@ class MaisonsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Moteur_Tables
         fields = '__all__' """
+        
+class OperationsSerializer(serializers.ModelSerializer):
+    
+    class Meta:
+        model = New_Oper_Tables
+        fields = '__all__'

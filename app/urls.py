@@ -37,6 +37,9 @@ urlpatterns = [
     path('saveparcelle/',savezoneparcelle),
     path('saveFormParcelle/',views.save_form_parcelle),
     
+    path('api/save_operation/', views.save_operation, name='save_operation'),
+    path('api/get-points/<int:geozone_id>/', views.get_points, name='get_points'),
+    
     path('sentinelhub-raster-image/', views.generate_raster_image, name='sentinelhub-raster-image'),
     path('saveMachine/',views.save_machine, name='save_machine'),
     path('saveOutil/',views.save_outil),
@@ -240,7 +243,10 @@ urlpatterns = [
     path('pulverisateur', views.pulverisateur, name='pulverisateur'),
     
     path('analyse', views.analyse, name='analyse'),
+    path('delete-item/<int:item_id>/', views.delete_item, name='delete_item'),
     path('analyse-details', views.analyse_details, name='analyse-details'),
+    path('image_result/', views.analyse, name='image_result'),
+    path('upload/', views.analyse, name='upload_image'),
 ]
 
 if settings.DEBUG:
