@@ -3023,7 +3023,7 @@ class ImageUploadForm(forms.ModelForm):
     class Meta:
         model = UploadedImage
         fields = ['image']
-
+        
 def analyse(request):
     images = UploadedImage.objects.all()
     paginator = Paginator(images, 12)
@@ -3034,7 +3034,94 @@ def analyse(request):
             image_path = uploaded_image.image.path
             with open(image_path, 'rb') as image_file:
                 files = {'file': image_file}
-                ngrok_url = 'https://ae39-34-136-217-139.ngrok-free.app/predict'
+                ngrok_url = 'https://4b7e-23-236-48-126.ngrok-free.app/predict'
+                response = requests.post(ngrok_url, files=files)
+                if response.status_code == 200:
+                    result_image_dir = 'D:/MAGON_3SSS/MAGON_3SSS/MAGON_3SSS-main/MAGON_3S/static/assets/results/'
+                    result_image_name = f'result_{uploaded_image.id}.png'
+                    result_image_path = os.path.join(result_image_dir, result_image_name)
+                    with open(result_image_path, 'wb') as f:
+                        f.write(response.content)
+                    
+                    # Extraire le nom de la maladie de l'image résultante
+                    disease_name = extract_disease_name(result_image_path)
+                    
+                    # Enregistrer le nom de la maladie et le chemin de l'image résultante
+                    uploaded_image.result_image.name = os.path.join('/results', result_image_name)
+                    uploaded_image.disease_name = disease_name
+                    uploaded_image.save()
+                    
+                    return JsonResponse({'success': True, 'image_url': uploaded_image.result_image.url, 'disease_name': disease_name})
+                else:
+                    return JsonResponse({'success': False, 'error_message': 'Erreur lors du traitement de l\'image'})
+        else:
+            return JsonResponse({'success': False, 'error_message': 'Formulaire invalide'})
+    else:
+        form = ImageUploadForm()
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    return render(request, 'analyse.html', {'form': form, 'images': images, 'page_obj': page_obj})
+
+import pytesseract
+from PIL import Image
+# Set the Tesseract command path
+import logging
+
+logger = logging.getLogger(__name__)
+
+def extract_disease_name(image_path):
+    """
+    Extrait le nom de la maladie à partir de l'image en utilisant Tesseract OCR.
+    
+    :param image_path: Chemin vers l'image à analyser
+    :return: Nom de la maladie détectée
+    """
+    try:
+        # Ouvrir l'image avec PIL
+        img = Image.open(image_path)
+        
+        # Utiliser Tesseract pour extraire le texte de l'image
+        text = pytesseract.image_to_string(img, lang='eng')
+        logger.info(f"Texte extrait par Tesseract: {text}") 
+        
+        # Formater et nettoyer le texte pour obtenir le nom de la maladie
+        disease_name = process_extracted_text(text)
+        
+        return disease_name
+    except Exception as e:
+        logger.error(f"Erreur lors de l'extraction du texte: {e}")
+        return None
+
+import re
+
+def process_extracted_text(text):
+    # Nettoyer le texte extrait
+    text = text.strip()
+    
+    # Utiliser une expression régulière pour capturer le nom de la maladie
+    # Cette expression doit être ajustée en fonction du format réel du texte
+    disease_pattern = r"Disease:\s*(.+?)[\s\n]"
+    match = re.search(disease_pattern, text, re.IGNORECASE)
+    
+    if match:
+        # Extraire et nettoyer le nom de la maladie
+        disease_name = match.group(1).strip()
+        return disease_name
+    else:
+        return "Non identifié"
+
+
+""" def analyse(request):
+    images = UploadedImage.objects.all()
+    paginator = Paginator(images, 12)
+    if request.method == 'POST':
+        form = ImageUploadForm(request.POST, request.FILES)
+        if form.is_valid():
+            uploaded_image = form.save()
+            image_path = uploaded_image.image.path
+            with open(image_path, 'rb') as image_file:
+                files = {'file': image_file}
+                ngrok_url = 'https://0f07-34-73-219-114.ngrok-free.app/predict'
                 response = requests.post(ngrok_url, files=files)
                 if response.status_code == 200:
                     result_image_dir = 'D:/MAGON_3SSS/MAGON_3SSS/MAGON_3SSS-main/MAGON_3S/static/assets/results/'
@@ -3053,7 +3140,7 @@ def analyse(request):
         form = ImageUploadForm()
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)   
-    return render(request, 'analyse.html', {'form': form, 'images': images, 'page_obj': page_obj})
+    return render(request, 'analyse.html', {'form': form, 'images': images, 'page_obj': page_obj}) """
 
 def analyse_details(request):
     cookie = request.COOKIES.get('jwtToken')

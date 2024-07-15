@@ -377,9 +377,11 @@ class Anomaly(models.Model):
 class UploadedImage(models.Model):
     image = models.ImageField(upload_to='uploads/')
     result_image = models.ImageField(upload_to='assets/results/', blank=True, null=True)
+    disease_name = models.CharField(max_length=255, blank=True, null=True)
 
     def __str__(self):
-        return f"Image {self.id}" 
+        return f"Image {self.id}"
+    
 class New_Oper_Tables(models.Model):
     type_rh = models.CharField(max_length=50, null=True, blank=True)
     type_machine_engins = models.CharField(max_length=50, null=True, blank=True)
