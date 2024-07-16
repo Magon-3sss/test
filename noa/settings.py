@@ -150,7 +150,7 @@ SESSION_COOKIE_SECURE = True
 SESSION_COOKIE_SAMESITE = 'Lax' """
 
 CORS_ALLOW_ALL_ORIGINS = False
-CORS_ALLOWED_ORIGINS = [ 'https://afc6-23-236-48-126.ngrok-free.app', 'http://localhost:8000', 'http://127.0.0.1:8000']
+CORS_ALLOWED_ORIGINS = [ 'https://f1f1-34-80-52-183.ngrok-free.app', 'http://localhost:8000', 'http://127.0.0.1:8000']
 
 
 ROOT_URLCONF = 'noa.urls'
