@@ -244,7 +244,7 @@ urlpatterns = [
     
     path('analyse', views.analyse, name='analyse'),
     path('delete-item/<int:item_id>/', views.delete_item, name='delete_item'),
-    path('analyse-details', views.analyse_details, name='analyse-details'),
+    path('analyse-details/<int:image_id>/', views.analyse_details, name='analyse-details'),
     path('image_result/', views.analyse, name='image_result'),
     path('upload/', views.analyse, name='upload_image'),
 ]

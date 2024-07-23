@@ -30,50 +30,13 @@
 									<div class="card-body">
 										<div class="row mb-5">
 											<div class=" col-xl-6 col-lg-12 col-md-12">
-												<div class="row h-100">
-													<div class="col-xl-2">
-														<div class="clearfix carousel-slider h-100">
-															<div class="carousel slide h-100" data-bs-interval="t" id="thumbcarousel">
-																<div class="carousel-inner h-100">
-																	<ul class="carousel-item active d-flex h-100">
-																		<li class="thumb my-2" data-bs-slide-to="0" data-bs-target="#Slider"><img alt="img" src="{% static 'assets/images/pngs/6.png' %}"></li>
-																		<li class="thumb my-2" data-bs-slide-to="1" data-bs-target="#Slider"><img alt="img" src="{% static 'assets/images/pngs/2.png' %}"></li>
-																		<li class="thumb my-2 active" data-bs-slide-to="2" data-bs-target="#Slider"><img alt="img" src="{% static 'assets/images/pngs/3.png' %}"></li>
-																		<li class="thumb my-2" data-bs-slide-to="3" data-bs-target="#Slider"><img alt="img" src="{% static 'assets/images/pngs/4.png' %}"></li>
-																		<li class="thumb my-2" data-bs-slide-to="4" data-bs-target="#Slider"><img alt="img" src="{% static 'assets/images/pngs/9.png' %}"></li>
-																	</ul>
-																</div>
-															</div>
-														</div>
-													</div>
-													<div class="col-xl-10">
-														<div class="product-carousel h-100">
-															<div class="carousel slide h-100" data-bs-ride="false" id="Slider">
-																<div class="carousel-inner h-100">
-																	<div class="carousel-item">
-																		<img alt="img" class="img-fluid w-100 d-block" src="{% static 'assets/images/pngs/6.png' %}">
-																	</div>
-																	<div class="carousel-item">
-																		<img alt="img" class="img-fluid w-100 d-block" src="{% static 'assets/images/pngs/2.png' %}">
-																	</div>
-																	<div class="carousel-item active">
-																		<img alt="img" class="img-fluid w-100 d-block" src="{% static 'assets/images/pngs/3.png' %}">
-																	</div>
-																	<div class="carousel-item">
-																		<img alt="img" class="img-fluid w-100 d-block" src="{% static 'assets/images/pngs/4.png' %}">
-																	</div>
-																	<div class="carousel-item">
-																		<img alt="img" class="img-fluid w-100 d-block" src="{% static 'assets/images/pngs/9.png' %}">
-																	</div>
-																</div>
-															</div>
-														</div> 
-													</div>
+												<div class="card-body h-100">
+													<a href="javascript:void(0)"><img src="{{ result_image.result_image.url }}" alt="img" class="cover-image br-7 w-100 h-100"></a>
 												</div>
 											</div>
 											<div class="col-xl-6 col-lg-12 col-md-12">
 
-													<h3 class="mb-2 mt-xl-0 mt-4">Bluetooth V5.1 Headphones With Mic - Wired Headset(Pale Pink)</h3>
+													<h3 class="mb-2 mt-xl-0 mt-4">Disease Name : {{ result_image.disease_name }}</h3>
 													<div class="text-warning rating-container d-sm-flex">
 														<div class="text-warning">
 															<span class="text-muted">Rating:</span>
@@ -139,10 +102,20 @@
 										<div class="row mt-5">
 											<div class="col-md-12">
 												<div class="mt-4 mb-4">
-													<h3>Bluetooth V5.1 Headphones With Mic - Wired Headset</h3>
-													<h5 class="mb-3 mt-2">Description</h5>
-													<p>Justo labore no duo eirmod voluptua sit lorem duo. Et sanctus ipsum dolores gubergren dolor sed eirmod et at, stet vero et est et sit sed, dolores sed amet et.</p>
-													<p>Dolore et lorem takimata rebum ipsum sanctus aliquyam dolor lorem, et ipsum diam sit eirmod ipsum consetetur eirmod et sed..On the other hand, we denounce with righteous indignation and dislike men who are so beguiled and demoralized .</p>
+													<h3>Disease Name : {{ result_image.disease_name }}</h3>
+													<h4 class="mb-3 mt-2"> <svg class="w-inner-icn" enable-background="new 0 0 24 24" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg" fill="#000000"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path fill="var(--ci-primary-color, #000000)" d="M334.627,16H48V496H472V153.373ZM440,166.627V168H320V48h1.373ZM80,464V48H288V200H440V464Z" class="ci-primary"></path> <rect width="224" height="32" x="136" y="296" fill="var(--ci-primary-color, #000000)" class="ci-primary"></rect> <rect width="224" height="32" x="136" y="376" fill="var(--ci-primary-color, #000000)" class="ci-primary"></rect> </g></svg> Description</h4>
+													{% if anomaly %}
+														<p>{{ anomaly.description }}</p>
+													{% else %}
+														<p>Description not available.</p>
+													{% endif %}
+
+													<h4 class="mb-3 mt-2"> <svg class="w-inner-icn" enable-background="new 0 0 24 24" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" fill="#000000"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <defs> <style>.cls-1{fill:#050505;}.cls-2{fill:#0f0f0f;}</style> </defs> <g data-name="23. Herbal" id="_23._Herbal"> <path class="cls-1" d="M17,7H14a3.93,3.93,0,0,0-2.85,1.21A5,5,0,0,0,7,6H3A1,1,0,0,0,2,7V9a5,5,0,0,0,5,5h7a4,4,0,0,0,4-4V8A1,1,0,0,0,17,7ZM4,9V8H7a3,3,0,0,1,3,3v1H7A3,3,0,0,1,4,9Zm12,1a2,2,0,0,1-2,2H12V11a2,2,0,0,1,2-2h2Z"></path> <path class="cls-2" d="M31,12H28.46L29,9.56A5,5,0,0,0,28.24.15a5,5,0,0,0-4.33.92A5,5,0,0,0,22,5a5.13,5.13,0,0,0,1.24,3.32L22.42,12H1a1,1,0,0,0-1,1v4a1,1,0,0,0,1,1H2v3A11,11,0,0,0,13,32h6A11,11,0,0,0,30,21V18h1a1,1,0,0,0,1-1V13A1,1,0,0,0,31,12ZM24.75,7a3,3,0,0,1,.4-4.33,3,3,0,0,1,2.62-.55,3,3,0,0,1,.43,5.64,1.89,1.89,0,0,0-1.13,1.33L26.42,12h-2l.72-3.24A2,2,0,0,0,24.75,7ZM28,21a9,9,0,0,1-9,9H13a9,9,0,0,1-9-9V18H28Zm2-5H2V14H30Z"></path> <path class="cls-1" d="M18,23H17V22a1,1,0,0,0-2,0v1H14a1,1,0,0,0,0,2h1v1a1,1,0,0,0,2,0V25h1a1,1,0,0,0,0-2Z"></path> <path class="cls-1" d="M7,4A1,1,0,0,1,7,2H7A1,1,0,0,1,7,4Z"></path> <path class="cls-1" d="M15,5a1,1,0,0,1,0-2h0a1,1,0,0,1,0,2Z"></path> <path class="cls-1" d="M11,2a1,1,0,0,1,0-2h0a1,1,0,0,1,0,2Z"></path> </g> </g></svg> Traitement</h4>
+													{% if anomaly %}
+														<p>{{ anomaly.traitement }}</p>
+													{% else %}
+														<p>Traitement not available.</p>
+													{% endif %}
 												</div>
 												<div class="panel panel-primary">
 													<div class="tab-menu-heading border-bottom-0">
@@ -390,13 +363,13 @@
 									</h3>
 								</div>
 								<div class="row">
-									{% for image in images %}
+									{% for result_image in images %}
 									<div class="col-md-6 col-xl-3">
 										<div class="card item-card">
 											<div class="product-grid6 card-body">
 												<div class="product-image6">
 													<a href="analyse-details" class="img-container">
-														<img class="img-fluid" src="{{ image.result_image.url }}" alt="img">
+														<img class="img-fluid" src="{{ result_image.result_image.url }}" alt="img">
 														{% comment %} <img class="img-fluid" src="{% static 'assets/images/pngs/6.png' %}" alt="img"> {% endcomment %}
 													</a>
 													<div class="icon-container">
@@ -426,10 +399,10 @@
 												</div>
 												<div class="product-content w-100 p-3">
 													<div class="mb-2">
-														<h4 class="mb-1 text-normal"> <a href="#">Wood Photo Frame - Size(M)</a> </h4>
-														<p class="mb-0 text-muted text-start">brand name</p>
+														<h4 class="mb-1 text-normal"> <a href="#">Disease Name: {{ result_image.disease_name }}</a> </h4>
+														{% comment %} <p class="mb-0 text-muted text-start">brand name</p> {% endcomment %}
 													</div>
-													<p class="mb-2 text-warning">
+													{% comment %} <p class="mb-2 text-warning">
 														<span>
 															<i class="fa fa-star"></i>
 															<i class="fa fa-star"></i>
@@ -445,7 +418,7 @@
 															<span class="text-decoration-line-through text-muted ms-1">$75</span>
 														</p>
 														<p class="mb-0 text-primary">in stock</p>
-													</div>
+													</div> {% endcomment %}
 												</div>
 											</div>
 										</div>

@@ -3019,7 +3019,76 @@ def pulverisateur (request):
 
 def meteo (request):
     return render(request, 'meteo.html')
+
+import pytesseract
+from PIL import Image, ImageEnhance, ImageFilter
+
 class ImageUploadForm(forms.ModelForm):
+    class Meta:
+        model = UploadedImage
+        fields = ['image']
+
+def preprocess_image_for_red_text(image_path):
+    image = Image.open(image_path).convert("RGB")
+    np_image = np.array(image)
+
+    # Extract red channel
+    red_channel = np_image[:, :, 0]
+    green_channel = np_image[:, :, 1]
+    blue_channel = np_image[:, :, 2]
+
+    # Create a mask for red areas
+    red_mask = (red_channel > 150) & (green_channel < 100) & (blue_channel < 100)
+    
+    # Apply mask to get image with only red text
+    red_text_image = np.zeros_like(np_image)
+    red_text_image[red_mask] = [255, 255, 255]  # Set red text to white
+    red_text_image[~red_mask] = [0, 0, 0]      # Set other areas to black
+    
+    # Convert back to PIL Image
+    processed_image = Image.fromarray(red_text_image)
+    return processed_image
+
+def analyse(request):
+    images = UploadedImage.objects.all()
+    paginator = Paginator(images, 12)
+    if request.method == 'POST':
+        form = ImageUploadForm(request.POST, request.FILES)
+        if form.is_valid():
+            uploaded_image = form.save()
+            image_path = uploaded_image.image.path
+            with open(image_path, 'rb') as image_file:
+                files = {'file': image_file}
+                ngrok_url = 'https://0a92-34-106-208-190.ngrok-free.app/predict'
+                response = requests.post(ngrok_url, files=files)
+                if response.status_code == 200:
+                    result_image_dir = 'D:/MAGON_3SSS/MAGON_3SSS/MAGON_3SSS-main/MAGON_3S/static/assets/results/'
+                    result_image_name = f'result_{uploaded_image.id}.png'
+                    result_image_path = os.path.join(result_image_dir, result_image_name)
+                    with open(result_image_path, 'wb') as f:
+                        f.write(response.content)
+                    uploaded_image.result_image.name = os.path.join('/results', result_image_name)
+                    
+                    # Preprocess and perform OCR on the result image to extract the disease name
+                    processed_image = preprocess_image_for_red_text(result_image_path)
+                    ocr_result = pytesseract.image_to_string(processed_image, config='--psm 6')
+                    disease_name = ocr_result.strip()
+                    
+                    uploaded_image.disease_name = disease_name
+                    uploaded_image.save()
+                    
+                    return JsonResponse({'success': True, 'image_url': uploaded_image.result_image.url, 'disease_name': disease_name})
+                else:
+                    return JsonResponse({'success': False, 'error_message': 'Erreur lors du traitement de l\'image'})
+        else:
+            return JsonResponse({'success': False, 'error_message': 'Formulaire invalide'})
+    else:
+        form = ImageUploadForm()
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    return render(request, 'analyse.html', {'form': form, 'images': images, 'page_obj': page_obj})
+
+""" class ImageUploadForm(forms.ModelForm):
     class Meta:
         model = UploadedImage
         fields = ['image']
@@ -3034,7 +3103,7 @@ def analyse(request):
             image_path = uploaded_image.image.path
             with open(image_path, 'rb') as image_file:
                 files = {'file': image_file}
-                ngrok_url = 'https://f1f1-34-80-52-183.ngrok-free.app/predict'
+                ngrok_url = 'https://b635-34-106-208-190.ngrok-free.app/predict'
                 response = requests.post(ngrok_url, files=files)
                 if response.status_code == 200:
                     result_image_dir = 'D:/MAGON_3SSS/MAGON_3SSS/MAGON_3SSS-main/MAGON_3S/static/assets/results/'
@@ -3053,18 +3122,25 @@ def analyse(request):
         form = ImageUploadForm()
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)   
-    return render(request, 'analyse.html', {'form': form, 'images': images, 'page_obj': page_obj}) 
+    return render(request, 'analyse.html', {'form': form, 'images': images, 'page_obj': page_obj}) """ 
 
-def analyse_details(request):
+def analyse_details(request, image_id):
     cookie = request.COOKIES.get('jwtToken')
     if cookie:
         user_group = request.COOKIES.get('userGroup') or None
         # Récupérer les quatre premières images avec un résultat
         images = UploadedImage.objects.exclude(result_image__isnull=True).exclude(result_image__exact='').order_by('-id')[:4]
+        result_image = get_object_or_404(UploadedImage, id=image_id)
+        # Fetch the Anomaly object based on the disease_name in UploadedImage
+        anomaly = None
+        if result_image.disease_name:
+            anomaly = Anomaly.objects.filter(nom=result_image.disease_name).first()
         context = {
             'jwtToken': cookie,
             'userGroup': user_group,
             'images': images,
+            'result_image': result_image,
+            'anomaly': anomaly,
         }
         print(context)
         return render(request, 'analyse-details.html', context)

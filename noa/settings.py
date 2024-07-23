@@ -32,6 +32,10 @@ django.utils.encoding.force_text = force_str
 #from rest_framework_jwt.authentication import JSONWebTokenAuthentication
 import jwt
 
+import pytesseract
+
+pytesseract.pytesseract.tesseract_cmd = r'C:/Program Files/Tesseract-OCR/tesseract.exe'
+
 
 EMAIL_USE_TLS = EMAIL_USE_TLS
 EMAIL_HOST = EMAIL_HOST
@@ -150,7 +154,7 @@ SESSION_COOKIE_SECURE = True
 SESSION_COOKIE_SAMESITE = 'Lax' """
 
 CORS_ALLOW_ALL_ORIGINS = False
-CORS_ALLOWED_ORIGINS = [ 'https://f1f1-34-80-52-183.ngrok-free.app', 'http://localhost:8000', 'http://127.0.0.1:8000']
+CORS_ALLOWED_ORIGINS = [ 'https://0a92-34-106-208-190.ngrok-free.app', 'http://localhost:8000', 'http://127.0.0.1:8000']
 
 
 ROOT_URLCONF = 'noa.urls'

@@ -146,8 +146,7 @@ class MaisonsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Maison_Tables
         fields = '__all__'
-        
-        
+              
 """ class MoteurSerializer(serializers.ModelSerializer):
     class Meta:
         model = Moteur_Tables
