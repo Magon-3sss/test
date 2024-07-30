@@ -112,6 +112,32 @@
 				border: 1px solid red;
 				border-radius: 0px;
 			}
+			#filtre-select {
+				/* Styles pour personnaliser l'apparence du select */
+				width: 200px; /* Ajustez la largeur selon vos besoins */
+				font-family: Arial, sans-serif;
+				font-size: 14px;
+				border: 1px solid #ccc;
+				border-radius: 5px;
+				padding: 5px;
+				background-color: #fff;
+			}
+			  
+			#filtre-select optgroup {
+				font-weight: bold;
+			}
+
+			#parcelle {
+				/* Styles pour personnaliser l'apparence du select */
+				width: 200px; /* Ajustez la largeur selon vos besoins */
+				font-family: Arial, sans-serif;
+				font-size: 14px;
+				border: 1px solid #ccc;
+				border-radius: 5px;
+				padding: 5px;
+				background-color: #fff;
+			}
+			  
 		</style>
 							<!-- PAGE-HEADER -->
 							<div class="page-header">
@@ -182,14 +208,38 @@
 											</select>
 											<select id="filtre-select">
 												<option>Filtre</option>
-											</select>    	
+												{% for category, filters in filter_categories.items %}
+													<optgroup label="{{ category|title }}">
+														{% for filter in filters %}
+															<option value="{{ filter.abreviation }}">{{ filter.abreviation }}</option>
+														{% endfor %}
+													</optgroup>
+												{% endfor %}
+											</select>
+											
+											{% comment %} <select id="filtre-select"> 
+												<option>Filtre</option> 
+											</select> {% endcomment %}
+											{% comment %} <select id="filtre-select">
+												<option>Filtre</option>
+												<optgroup label="Couleur naturelle">
+												  <option value="naturel">Naturel</option>
+												</optgroup>
+												<optgroup label="Indices de végétation">
+												  <option value="ndvi">NDVI</option>
+												  <option value="ndre">NDRE</option>
+												  <option value="msavi">MSAVI</option>
+												  <option value="reci">RECI</option>
+												</optgroup>
+											</select>  {% endcomment %}   	
 											<input type="date" id="datepicker" placeholder="Select date" onchange="getRasterImage()">
 											
 											{% comment %} <a href="parcelles/{{ parcelle.geozone_id }}/"> {% endcomment %}
 																						
 											
 											{% comment %} <button onclick="getRasterImage()">Obtenir l'image raster</button> {% endcomment %}
-										</div>										
+										</div>	
+																			
 										 <!-- leaflet js  -->
 									<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 									<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>

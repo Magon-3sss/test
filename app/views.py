@@ -71,7 +71,7 @@ from app.serializers import TraitementSerializer
 from app.serializers import EngraisSerializer
 #from app.serializers import MyTokenObtainPairSerializer
 #from app.serializers import MoteurSerializer
-from app.models import Filtre
+#from app.models import Filtre
 from app.models import ColorReference
 from django.views.decorators.csrf import csrf_exempt
 import json
@@ -2263,7 +2263,105 @@ def profile (request):
 def progress (request): 
     return render(request, 'progress.html')
 
-def project_details (request, id):
+def project_details(request, id):
+    zone = Zone.objects.get(pk=id)
+    zone_serializer = ZoneSerializer(zone)
+
+    map_form_data = serialize("json", MapForm.objects.all().filter(geozone=id))
+    points = serialize("json", Point.objects.all().filter(geozone=id))
+    zones_parcelles = ZoneParcelle.objects.all().filter(id_projet=id)
+
+    parcelles = []
+    for zp in zones_parcelles:
+        map_form_parcelle = MapFormParcelle.objects.filter(geozone=zp).first()
+        if map_form_parcelle:
+            parcelles.append({
+                'geozone_id': zp.pk,
+                'parcelle_name': map_form_parcelle.parcelle_name
+            })
+
+    points_parcelles_map = []
+    for zp in zones_parcelles:
+        points_zp = serialize("json", PointParcelle.objects.all().filter(geozone_id=zp.pk))
+        points_parcelles_map.append(points_zp)
+
+    z = zone_serializer.data
+    #print(points)
+    tp =  z["type"]
+    #print(tp)
+    radius = z["circle_radius"]
+    #print(radius)
+    cont = {
+        'form': map_form_data
+    }
+    if tp == "circle":
+            context = {
+        'type': tp,
+        'radius': radius,
+        'points': points,
+        }
+            
+    if tp == "polygon" or tp == "rectangle":
+            context = {
+        'type': tp,
+        'points': points,
+        }
+    if tp == "polyline":
+            context = {
+        'type': tp,
+        'points': points,
+        }
+    if tp == "marker":
+            context = {
+        'type': tp,
+        'points': points,
+        }
+
+    form_data = json.dumps(cont, indent=4, sort_keys=True, default=str)
+    map_points = json.dumps(context, indent=4, sort_keys=True, default=str)
+    filters = serialize("json", Filtre.objects.all())
+    colors = serialize("json", ColorReference.objects.all())
+
+    context = {
+        'filters': filters,
+        'colors': colors,
+    }
+
+    filters_colors = json.dumps(context, indent=4, sort_keys=True, default=str)
+
+    data = {
+        'points': map_points,
+        'form': form_data,
+        'points_parcelles_map': points_parcelles_map,
+        'filters_colors': filters_colors
+    }
+
+    dumped_data = json.dumps(data, indent=4, sort_keys=True, default=str)
+
+    # Fetch filter options from the database
+    filtre_humidite = FiltreHumidite.objects.all()
+    filtre_irrigation = FiltreIrrigation.objects.all()
+    filtre_fertilisation = FiltreFertilisation.objects.all()
+    filtre_evolution = FiltreEvolution.objects.all()
+    filtre_maladie = FiltreMaladie.objects.all()
+    filtre_vegitation = FiltreVegitation.objects.all()
+
+    filter_categories = {
+        'végitation': filtre_vegitation,
+        'humidité': filtre_humidite,
+        'irrigation': filtre_irrigation,
+        'fertilisation': filtre_fertilisation,
+        'evolution': filtre_evolution,
+        'maladie': filtre_maladie,
+    }
+
+    return render(request, 'project-details.html', {
+        'data': dumped_data,
+        'project': {'parcelles': parcelles},
+        'filter_categories': filter_categories,
+    })
+    
+""" def project_details (request, id):
     #print(id)
     zone = Zone.objects.get(pk=id)
     zone_serializer = ZoneSerializer(zone)
@@ -2318,11 +2416,13 @@ def project_details (request, id):
     form_data = json.dumps(cont, indent=4, sort_keys=True, default=str)
     map_points = json.dumps(context, indent=4, sort_keys=True, default=str)
     filters= serialize("json",Filtre.objects.all())
+    filterhs= serialize("json",FiltreHumidite.objects.all())
     print(filters)
     colors=  serialize("json",ColorReference.objects.all())
     print(colors)
     context = {
     'filters': filters,
+    'filterhs': filterhs,
     'colors': colors,
     }
     filters_colors = json.dumps(context, indent=4, sort_keys=True, default=str)
@@ -2333,7 +2433,7 @@ def project_details (request, id):
         'filters_colors': filters_colors
     }
     dumped_data = json.dumps(data, indent=4, sort_keys=True, default=str)
-    return render(request, 'project-details.html', {'data': dumped_data,'project': {'parcelles': parcelles},})
+    return render(request, 'project-details.html', {'data': dumped_data,'project': {'parcelles': parcelles},}) """
 
 def project_edit (request): 
     return render(request, 'project-edit.html')

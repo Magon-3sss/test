@@ -402,4 +402,3 @@ function disPlay(checkElement, mainElement) {
 }
 //to display editing section of project
 disPlay(checkElement, mainElement)
-

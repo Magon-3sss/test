@@ -114,12 +114,43 @@ class MapFormParcelle(models.Model):
     client=models.CharField(max_length=50,)
     geozone = models.ForeignKey(ZoneParcelle,on_delete=models.CASCADE)
     id_projet=models.TextField()
-    
+
 class Filtre(models.Model):
     abreviation=models.CharField(max_length=50)
     descriptionFr=models.TextField()
+    descriptionAr=models.TextField() 
+class FiltreVegitation(models.Model):
+    abreviation=models.CharField(max_length=50)
+    descriptionFr=models.TextField()
     descriptionAr=models.TextField()
-       
+    details=models.CharField(max_length=5000, default='default_value')
+
+class FiltreHumidite(models.Model):
+    abreviation=models.CharField(max_length=50)
+    descriptionFr=models.TextField()
+    descriptionAr=models.TextField()
+    details=models.CharField(max_length=5000, default='default_value')
+    
+class FiltreIrrigation(models.Model):
+    abreviation=models.CharField(max_length=50)
+    descriptionFr=models.TextField()
+    descriptionAr=models.TextField()
+    details=models.CharField(max_length=5000, default='default_value')
+class FiltreFertilisation(models.Model):
+    abreviation=models.CharField(max_length=50)
+    descriptionFr=models.TextField()
+    descriptionAr=models.TextField()
+    details=models.CharField(max_length=5000, default='default_value')
+class FiltreEvolution(models.Model):
+    abreviation=models.CharField(max_length=50)
+    descriptionFr=models.TextField()
+    descriptionAr=models.TextField()
+    details=models.CharField(max_length=5000, default='default_value')
+class FiltreMaladie(models.Model):
+    abreviation=models.CharField(max_length=50)
+    descriptionFr=models.TextField()
+    descriptionAr=models.TextField()
+    details=models.CharField(max_length=5000, default='default_value')       
 class ColorReference(models.Model):
     value=models.CharField(max_length=50)
     color_css=models.CharField(max_length=50)

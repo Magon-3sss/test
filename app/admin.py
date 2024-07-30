@@ -17,7 +17,7 @@ admin.site.register(Point)
 admin.site.register(MapForm)
 admin.site.register(ZoneParcelle)
 admin.site.register(MapFormParcelle)
-admin.site.register(Filtre)
+""" admin.site.register(Filtre) """
 admin.site.register(ColorReference)
 admin.site.register(Carburants_Tables)
 admin.site.register(Pieces_Tables)
