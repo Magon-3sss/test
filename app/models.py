@@ -150,18 +150,26 @@ class FiltreMaladie(models.Model):
     abreviation=models.CharField(max_length=50)
     descriptionFr=models.TextField()
     descriptionAr=models.TextField()
-    details=models.CharField(max_length=5000, default='default_value')       
+    details=models.CharField(max_length=5000, default='default_value')
+
+class Color(models.Model):
+    value=models.CharField(max_length=50)
+    color_css=models.CharField(max_length=50)
+    description=models.TextField(null=True)          
 class ColorReference(models.Model):
+    filter_name = models.CharField(max_length=50, default='NDRE')
     value=models.CharField(max_length=50)
     color_css=models.CharField(max_length=50)
     description=models.TextField(null=True)
     
 class ColorReferenceNdmi(models.Model):
+    filter_name = models.CharField(max_length=50, default='NDMI')
     value=models.CharField(max_length=50)
     color_css=models.CharField(max_length=50)
     description=models.TextField(null=True)
     
 class ColorReferenceMsavi(models.Model):
+    filter_name = models.CharField(max_length=50, default='MSAVI2')
     value=models.CharField(max_length=50)
     color_css=models.CharField(max_length=50)
     description=models.TextField(null=True)

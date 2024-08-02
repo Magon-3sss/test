@@ -27,7 +27,7 @@
 				width: 40px;
   				height: 40px;
 			}
-			.reference{
+			.referencecl{
 				position: absolute;
 				top: 20%;
 				left: 5%;
@@ -38,6 +38,38 @@
 				text-align: center;
 				opacity: 0.8;
 				display: block;
+				overflow-y: scroll;
+			}
+			.hidden {
+				display: none;
+			}	
+			/* Augmenter la taille des cellules du tableau */
+			#reference-table td {
+				padding: 10px; /* Ajustez cette valeur selon vos besoins */
+			}
+
+			/* Augmenter la taille des cellules de couleur */
+			#reference-table .color-cell {
+				width: 5px; /* Ajustez cette valeur selon vos besoins */
+				height: 5px; /* Ajustez cette valeur selon vos besoins */
+			}
+
+			/* Augmenter la taille de la police */
+			#reference-table td {
+				font-size: 12px; /* Ajustez cette valeur selon vos besoins */
+			}
+		
+			.reference{
+				position: absolute;
+				top: 20%;
+				left: 5%;
+				width: 270px;
+				height: 420px;
+				background-color: #c8cfcf;
+				border-radius: 10px;
+				text-align: center;
+				opacity: 0.8;
+				display: none;
 				overflow-y: scroll;
 			}
 			.irrigation {
@@ -137,7 +169,6 @@
 				padding: 5px;
 				background-color: #fff;
 			}
-			  
 		</style>
 							<!-- PAGE-HEADER -->
 							<div class="page-header">
@@ -169,11 +200,11 @@
 											<div class="leaflet-control map-coordinate">
 												<div class="coordinate"></div>
 											</div>
-											<div id="color-reference-table" class="reference">
+											{% comment %} <div id="color-reference-table" class="reference">
 												<table id="reference-table" style="width:100%">
 													<!-- Les lignes du tableau seront ajoutées par JavaScript -->
 												</table>
-											</div>
+											</div> {% endcomment %}
 										</div>
 										<div class="menu">
 											<button id="btn1" class="menu-button" onclick="btn1()">
@@ -193,10 +224,15 @@
 												<img class="image_menu" src="{% static 'assets/images/icons/grain-bag.png' %}" alt="buttonpng" border="0" />
 											</button>
 										</div>
-										<div class="reference" id="reference-card">											
+										<div id="color-reference-table" class="referencecl hidden">
+												<table id="reference-table" style="width:100%">
+													<!-- Les lignes du tableau seront ajoutées par JavaScript -->
+												</table>
+										</div>
+										{% comment %} <div class="reference" id="reference-card">											
 											  <table style="width:100%" id="reference_id">												
 											  </table>
-										</div>
+										</div> {% endcomment %}
 										<div class="irrigation" id="irrig">
 											<select id="parcelle" name="parcelle">
 												<option value="">Select a parcelle</option>
@@ -206,7 +242,18 @@
 													</option>
 												{% endfor %}
 											</select>
-											<select id="filtre-select">
+											
+											{% comment %} <select id="filtre-select">
+												<option>Filtre</option>
+												{% for category, filters in filter_categories.items %}
+													<optgroup label="{{ category|title }}">
+														{% for filter in filters %}
+															<option value="{{ filter.abreviation }}">{{ filter.abreviation }}</option>
+														{% endfor %}
+													</optgroup>
+												{% endfor %}
+											</select>  {% endcomment %}
+											<select id="filtre-select" onchange="updateColorTable()">
 												<option>Filtre</option>
 												{% for category, filters in filter_categories.items %}
 													<optgroup label="{{ category|title }}">
@@ -3044,6 +3091,7 @@
 		<script src="{% static 'assets/plugins/datatable/dataTables.responsive.min.js'%}"></script>
 		<!-- PROJECT-DETAILS JS-->
 		<script src="{% static 'assets/js/project-details.js'%}"></script>
+		<script src="{% static 'assets/js/indicesvegitatiionscolors.js'%}"></script>
         <!-- COLOR THEME JS -->
         <script src="{% static 'assets/js/themeColors.js'%}"></script>
     {% endblock %}

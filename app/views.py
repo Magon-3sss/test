@@ -2320,7 +2320,7 @@ def project_details(request, id):
     form_data = json.dumps(cont, indent=4, sort_keys=True, default=str)
     map_points = json.dumps(context, indent=4, sort_keys=True, default=str)
     filters = serialize("json", Filtre.objects.all())
-    colors = serialize("json", ColorReference.objects.all())
+    colors = serialize("json", Color.objects.all())
 
     context = {
         'filters': filters,
@@ -2361,6 +2361,20 @@ def project_details(request, id):
         'filter_categories': filter_categories,
     })
     
+def get_colors(request):
+    filter_type = request.GET.get('filter')
+    if filter_type == 'NDRE':
+        colors = ColorReference.objects.all()
+    elif filter_type == 'NDMI':
+        colors = ColorReferenceNdmi.objects.all()
+    elif filter_type == 'MSAVI':
+        colors = ColorReferenceMsavi.objects.all()
+    else:
+        colors = []
+
+    color_data = [{'value': color.value, 'color_css': color.color_css, 'description': color.description} for color in colors]
+    return JsonResponse({'colors': color_data})
+       
 """ def project_details (request, id):
     #print(id)
     zone = Zone.objects.get(pk=id)
