@@ -234,7 +234,7 @@
 											  </table>
 										</div> {% endcomment %}
 										<div class="irrigation" id="irrig">
-											<select id="parcelle" name="parcelle">
+											<select id="parcelle-select" name="parcelle">
 												<option value="">Select a parcelle</option>
 												{% for parcelle in project.parcelles %}
 													<option value="{{ parcelle.geozone_id }}">
@@ -242,6 +242,56 @@
 													</option>
 												{% endfor %}
 											</select>
+
+											<script> 
+												document.addEventListener('DOMContentLoaded', function() {
+													var parcelleSelect = document.getElementById('parcelle-select');
+													parcelleSelect.addEventListener('change', function() {
+														var parcelleId = this.value;
+														if (parcelleId) {
+															// Utilisez AJAX pour récupérer les points de la parcelle
+															fetchPointsForParcelle(parcelleId);
+														}
+													});
+												});
+											
+												function fetchPointsForParcelle(parcelleId) {
+													fetch('/points/' + parcelleId)
+														.then(response => response.json())
+														.then(data => {
+															// Mettez à jour la carte avec les nouveaux points
+															updateMapWithPoints(data);
+														})
+														.catch(error => console.error('Error:', error));
+												}
+
+												// Fonction pour effacer toutes les couches de la carte
+												function clearMap() {
+													map.eachLayer(function(layer) {
+														if (layer !== map._layersMinimap) { // Optionnel: exclure certaines couches si nécessaire
+															map.removeLayer(layer);
+														}
+													});
+												}
+											
+												function updateMapWithPoints(points) {
+													clearMap();
+													// Convertir les points en tableau de latitude/longitude
+													var latLngs = points.map(function(point) {
+														return [parseFloat(point.latt), parseFloat(point.long)];
+													});
+											
+													// Tracer le polygone en utilisant les points convertis
+													var polygon = L.polygon(latLngs, {
+														color: 'red', // Couleur du tracé
+														fillColor: 'transparent', // Couleur de remplissage
+														fillOpacity: 0// Opacité du remplissage
+													}).addTo(map);
+											
+													// Optionnel: Ajouter une popup avec le nom de la parcelle
+													polygon.bindPopup(points[0].parcelle_name);
+												}
+											</script>
 											
 											{% comment %} <select id="filtre-select">
 												<option>Filtre</option>

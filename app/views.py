@@ -2374,6 +2374,10 @@ def get_colors(request):
 
     color_data = [{'value': color.value, 'color_css': color.color_css, 'description': color.description} for color in colors]
     return JsonResponse({'colors': color_data})
+
+def get_points_for_parcelle(request, parcelle_id):
+    points = PointParcelle.objects.filter(geozone_id=parcelle_id).values()
+    return JsonResponse(list(points), safe=False)
        
 """ def project_details (request, id):
     #print(id)
@@ -2459,7 +2463,7 @@ def project_new (request):
         user_group = request.COOKIES.get('userGroup') or None
         try:
             profile = request.user.profile
-        except objectDoesNotExist:
+        except ObjectDoesNotExist:
             profile = None
         context = {
             'jwtToken': cookie,
@@ -2480,7 +2484,7 @@ def projects_list (request):
     cookie = request.COOKIES.get('jwtToken')
     try:
         profile = request.user.profile
-    except objectDoesNotExist:
+    except ObjectDoesNotExist:
         profile = None
     if cookie:
         user_group = request.COOKIES.get('userGroup') or None
@@ -2920,8 +2924,6 @@ def engrais (request):
     projects = MapForm.objects.all()
     list.append({"types": types_engrais,"categories": categories_Engrais, "engrais":engrais, "projects": projects})
     return render(request, 'engrais.html', {'data': list})
-
-
 
 def autres (request):
     return render(request, 'autres.html')

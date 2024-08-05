@@ -162,6 +162,7 @@ urlpatterns = [
     path('profile', views.profile, name='profile'),
     path('progress', views.progress, name='progress'),
     path('project-details/<int:id>/', views.project_details, name='project-details'),
+    path('points/<int:parcelle_id>', views.get_points_for_parcelle, name='get_points_for_parcelle'),
     path('get-colors/', views.get_colors, name='get_colors'),
     path('project-edit', views.project_edit, name='project-edit'),
     path('project-new', views.project_new, name='project-new'),
