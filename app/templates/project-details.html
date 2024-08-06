@@ -170,6 +170,37 @@
 				background-color: #fff;
 			}
 		</style>
+		<style>
+			/* Styling for the select with checkboxes */
+			.custom-select {
+				position: relative;
+				display: inline-block;
+			}
+	
+			.custom-select select {
+				display: none; /* Hide the default select element */
+			}
+	
+			.select-items {
+				position: absolute;
+				background-color: #fff;
+				border: 1px solid #ddd;
+				z-index: 99;
+				max-height: 200px;
+				overflow-y: auto;
+				display: none;
+			}
+	
+			.select-items label {
+				display: block;
+				padding: 8px 16px;
+				cursor: pointer;
+			}
+	
+			.select-items label:hover {
+				background-color: #f1f1f1;
+			}
+		</style>
 							<!-- PAGE-HEADER -->
 							<div class="page-header">
 								<div>
@@ -234,64 +265,149 @@
 											  </table>
 										</div> {% endcomment %}
 										<div class="irrigation" id="irrig">
-											<select id="parcelle-select" name="parcelle">
+											{% comment %} <div class="custom-select"> {% endcomment %}
+												<button id="select-toggle">Select parcels</button>
+												<div class="select-items" id="parcelle-select">
+													{% for parcelle in project.parcelles %}
+														<label>
+															<input type="checkbox" name="parcelle" value="{{ parcelle.geozone_id }}">
+															{{ parcelle.parcelle_name }}
+														</label>
+													{% endfor %}
+												</div>
+											{% comment %} </div> {% endcomment %}
+											
+											{% comment %} <select id="parcelle-select" name="parcelle" multiple>
 												<option value="">Select a parcelle</option>
 												{% for parcelle in project.parcelles %}
 													<option value="{{ parcelle.geozone_id }}">
 														{{ parcelle.parcelle_name }}
 													</option>
 												{% endfor %}
-											</select>
+											</select> {% endcomment %}
 
-											<script> 
+											<script>
+												// Toggle the display of the custom select dropdown
+												document.getElementById('select-toggle').addEventListener('click', function() {
+													var selectItems = document.getElementById('parcelle-select');
+													selectItems.style.display = selectItems.style.display === 'block' ? 'none' : 'block';
+												});
+										
+												// Function to update map points based on selected checkboxes
+												function updateMapPoints(parcelleIds) {
+													// Remove all existing polylines
+													map.eachLayer(function(layer) {
+														if (layer instanceof L.Polyline) {
+															map.removeLayer(layer);
+														}
+													});
+										
+													// Function to fetch and add points for a single parcel
+													function fetchAndAddPoints(parcelleId) {
+														fetch('/points/' + parcelleId)
+															.then(response => response.json())
+															.then(data => {
+																// Convert data to an array of LatLng coordinates
+																var latlngs = data.map(function(point) {
+																	return [parseFloat(point.latt), parseFloat(point.long)];
+																});
+										
+																// Draw the polyline on the map
+																var polyline = L.polyline(latlngs, {color: 'red'}).addTo(map);
+										
+																// Extend the map bounds to include the new polyline
+																map.fitBounds(polyline.getBounds(), { animate: false });
+															});
+													}
+										
+													// Loop through all selected parcel IDs and fetch their points
+													parcelleIds.forEach(parcelleId => {
+														if (parcelleId) {
+															fetchAndAddPoints(parcelleId);
+														}
+													});
+												}
+										
+												// Listen for changes in the checkboxes
+												document.getElementById('parcelle-select').addEventListener('change', function() {
+													var checkboxes = document.querySelectorAll('input[name="parcelle"]:checked');
+													var selectedGeozoneIds = Array.from(checkboxes).map(checkbox => checkbox.value);
+										
+													// Update the map with the selected parcels
+													updateMapPoints(selectedGeozoneIds);
+												});
+										
+												// Close the dropdown if the user clicks outside of it
+												window.addEventListener('click', function(event) {
+													if (!event.target.matches('#select-toggle')) {
+														var selectItems = document.getElementById('parcelle-select');
+														if (selectItems.style.display === 'block') {
+															selectItems.style.display = 'none';
+														}
+													}
+												});
+											</script>
+											
+											
+											{% comment %} <script>
 												document.addEventListener('DOMContentLoaded', function() {
 													var parcelleSelect = document.getElementById('parcelle-select');
 													parcelleSelect.addEventListener('change', function() {
 														var parcelleId = this.value;
 														if (parcelleId) {
-															// Utilisez AJAX pour récupérer les points de la parcelle
 															fetchPointsForParcelle(parcelleId);
 														}
 													});
 												});
-											
+												
 												function fetchPointsForParcelle(parcelleId) {
 													fetch('/points/' + parcelleId)
 														.then(response => response.json())
 														.then(data => {
-															// Mettez à jour la carte avec les nouveaux points
 															updateMapWithPoints(data);
 														})
 														.catch(error => console.error('Error:', error));
 												}
-
-												// Fonction pour effacer toutes les couches de la carte
+												
 												function clearMap() {
-													map.eachLayer(function(layer) {
-														if (layer !== map._layersMinimap) { // Optionnel: exclure certaines couches si nécessaire
-															map.removeLayer(layer);
-														}
-													});
+													if (map && map.eachLayer) {
+														map.eachLayer(function(layer) {
+															if (layer.options && !layer.options.preserve) {
+																map.removeLayer(layer);
+															}
+														});
+													}
 												}
-											
+												
 												function updateMapWithPoints(points) {
 													clearMap();
-													// Convertir les points en tableau de latitude/longitude
+												
+													if (points.length === 0) {
+														console.error('No points available for the selected parcel');
+														return;
+													}
+												
 													var latLngs = points.map(function(point) {
 														return [parseFloat(point.latt), parseFloat(point.long)];
 													});
-											
-													// Tracer le polygone en utilisant les points convertis
+												
+													if (latLngs.length < 3) {
+														console.error('Not enough points to form a polygon');
+														return;
+													}
+												
 													var polygon = L.polygon(latLngs, {
 														color: 'red', // Couleur du tracé
 														fillColor: 'transparent', // Couleur de remplissage
-														fillOpacity: 0// Opacité du remplissage
+														fillOpacity: 0 // Opacité du remplissage
 													}).addTo(map);
-											
-													// Optionnel: Ajouter une popup avec le nom de la parcelle
+												
+													map.fitBounds(polygon.getBounds());
+												
 													polygon.bindPopup(points[0].parcelle_name);
 												}
-											</script>
+																								
+											</script> {% endcomment %}
 											
 											{% comment %} <select id="filtre-select">
 												<option>Filtre</option>

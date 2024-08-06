@@ -162,6 +162,12 @@ class ColorReference(models.Model):
     color_css=models.CharField(max_length=50)
     description=models.TextField(null=True)
     
+class ColorReferenceNdvi(models.Model):
+    filter_name = models.CharField(max_length=50, default='NDVI')
+    value=models.CharField(max_length=50)
+    color_css=models.CharField(max_length=50)
+    description=models.TextField(null=True)
+    
 class ColorReferenceNdmi(models.Model):
     filter_name = models.CharField(max_length=50, default='NDMI')
     value=models.CharField(max_length=50)

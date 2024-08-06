@@ -2365,6 +2365,8 @@ def get_colors(request):
     filter_type = request.GET.get('filter')
     if filter_type == 'NDRE':
         colors = ColorReference.objects.all()
+    elif filter_type == 'NDVI':
+        colors = ColorReferenceNdvi.objects.all()
     elif filter_type == 'NDMI':
         colors = ColorReferenceNdmi.objects.all()
     elif filter_type == 'MSAVI':
@@ -3175,7 +3177,7 @@ def analyse(request):
             image_path = uploaded_image.image.path
             with open(image_path, 'rb') as image_file:
                 files = {'file': image_file}
-                ngrok_url = 'https://0a92-34-106-208-190.ngrok-free.app/predict'
+                ngrok_url = 'https://d36c-35-237-143-225.ngrok-free.app/predict'
                 response = requests.post(ngrok_url, files=files)
                 if response.status_code == 200:
                     result_image_dir = 'D:/MAGON_3SSS/MAGON_3SSS/MAGON_3SSS-main/MAGON_3S/static/assets/results/'
