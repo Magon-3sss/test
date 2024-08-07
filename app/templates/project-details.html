@@ -169,38 +169,52 @@
 				padding: 5px;
 				background-color: #fff;
 			}
-		</style>
-		<style>
-			/* Styling for the select with checkboxes */
-			.custom-select {
+			
+			.custom-select-wrapper {
 				position: relative;
 				display: inline-block;
 			}
-	
-			.custom-select select {
-				display: none; /* Hide the default select element */
-			}
-	
-			.select-items {
-				position: absolute;
+			
+			.custom-select {
+				display: flex;
+				align-items: center;
+				justify-content: space-between;
+				width: 200px;
+				height: 30px;
+				border: 1px solid #ccc;
+				border-radius: 4px;
+				padding: 5px;
 				background-color: #fff;
-				border: 1px solid #ddd;
-				z-index: 99;
-				max-height: 200px;
-				overflow-y: auto;
-				display: none;
+				cursor: pointer;
+				font-size: 14px;
 			}
-	
+			
+			.select-items {
+                position: absolute;
+                background-color: #fff;
+                border: 1px solid #ddd;
+                z-index: 99;
+                max-height: 200px;
+                overflow-y: auto;
+                display: none;
+            }
+
+			
 			.select-items label {
 				display: block;
 				padding: 8px 16px;
 				cursor: pointer;
 			}
-	
+			
 			.select-items label:hover {
 				background-color: #f1f1f1;
 			}
-		</style>
+			
+			.select-items input[type="checkbox"] {
+				margin-right: 10px;
+			}
+			</style>
+		
 							<!-- PAGE-HEADER -->
 							<div class="page-header">
 								<div>
@@ -266,7 +280,7 @@
 										</div> {% endcomment %}
 										<div class="irrigation" id="irrig">
 											{% comment %} <div class="custom-select"> {% endcomment %}
-												<button id="select-toggle">Select parcels</button>
+												{% comment %} <button id="select-toggle">Select parcels</button>
 												<div class="select-items" id="parcelle-select">
 													{% for parcelle in project.parcelles %}
 														<label>
@@ -274,7 +288,7 @@
 															{{ parcelle.parcelle_name }}
 														</label>
 													{% endfor %}
-												</div>
+												</div> {% endcomment %}
 											{% comment %} </div> {% endcomment %}
 											
 											{% comment %} <select id="parcelle-select" name="parcelle" multiple>
@@ -286,7 +300,84 @@
 												{% endfor %}
 											</select> {% endcomment %}
 
+											<div class="custom-select-wrapper">
+												<div id="select-toggle" class="custom-select">
+													<span>Select parcels</span>
+													<div class="select-items" id="parcelle-select">
+														{% for parcelle in project.parcelles %}
+															<label>
+																<input type="checkbox" name="parcelle" value="{{ parcelle.geozone_id }}">
+																{{ parcelle.parcelle_name }}
+															</label>
+														{% endfor %}
+													</div>
+												</div>
+											</div>
 											<script>
+												// Toggle the display of the custom select dropdown
+												document.getElementById('select-toggle').addEventListener('click', function() {
+													var selectItems = document.getElementById('parcelle-select');
+													selectItems.style.display = selectItems.style.display === 'block' ? 'none' : 'block';
+												});
+											
+												// Function to update map points based on selected checkboxes
+												function updateMapPoints(parcelleIds) {
+													// Remove all existing polylines
+													map.eachLayer(function(layer) {
+														if (layer instanceof L.Polyline) {
+															map.removeLayer(layer);
+														}
+													});
+											
+													// Function to fetch and add points for a single parcel
+													function fetchAndAddPoints(parcelleId) {
+														fetch('/points/' + parcelleId)
+															.then(response => response.json())
+															.then(data => {
+																// Convert data to an array of LatLng coordinates
+																var latlngs = data.map(function(point) {
+																	return [parseFloat(point.latt), parseFloat(point.long)];
+																});
+											
+																// Draw the polyline on the map
+																var polyline = L.polyline(latlngs, { color: 'red' }).addTo(map);
+											
+																// Extend the map bounds to include the new polyline
+																map.fitBounds(polyline.getBounds(), { animate: false });
+															});
+													}
+											
+													// Loop through all selected parcel IDs and fetch their points
+													parcelleIds.forEach(parcelleId => {
+														if (parcelleId) {
+															fetchAndAddPoints(parcelleId);
+														}
+													});
+												}
+											
+												// Listen for changes in the checkboxes
+												document.getElementById('parcelle-select').addEventListener('change', function() {
+													var checkboxes = document.querySelectorAll('input[name="parcelle"]:checked');
+													var selectedGeozoneIds = Array.from(checkboxes).map(checkbox => checkbox.value);
+											
+													// Update the map with the selected parcels
+													updateMapPoints(selectedGeozoneIds);
+												});
+											
+												// Close the dropdown if the user clicks outside of it
+												window.addEventListener('click', function(event) {
+													if (!event.target.matches('#select-toggle') && !event.target.closest('#parcelle-select')) {
+														var selectItems = document.getElementById('parcelle-select');
+														if (selectItems.style.display === 'block') {
+															selectItems.style.display = 'none';
+														}
+													}
+												});
+											</script>
+											
+											
+
+											{% comment %} <script>
 												// Toggle the display of the custom select dropdown
 												document.getElementById('select-toggle').addEventListener('click', function() {
 													var selectItems = document.getElementById('parcelle-select');
@@ -346,7 +437,7 @@
 														}
 													}
 												});
-											</script>
+											</script> {% endcomment %}
 											
 											
 											{% comment %} <script>

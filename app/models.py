@@ -114,7 +114,10 @@ class MapFormParcelle(models.Model):
     client=models.CharField(max_length=50,)
     geozone = models.ForeignKey(ZoneParcelle,on_delete=models.CASCADE)
     id_projet=models.TextField()
-
+    
+class DescriptionFiltre(models.Model):
+    abreviation=models.CharField(max_length=50)
+    description=models.TextField()
 class Filtre(models.Model):
     abreviation=models.CharField(max_length=50)
     descriptionFr=models.TextField()
