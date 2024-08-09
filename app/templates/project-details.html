@@ -245,11 +245,6 @@
 											<div class="leaflet-control map-coordinate">
 												<div class="coordinate"></div>
 											</div>
-											{% comment %} <div id="color-reference-table" class="reference">
-												<table id="reference-table" style="width:100%">
-													<!-- Les lignes du tableau seront ajoutées par JavaScript -->
-												</table>
-											</div> {% endcomment %}
 										</div>
 										<div class="menu">
 											<button id="btn1" class="menu-button" onclick="btn1()">
@@ -274,32 +269,8 @@
 													<!-- Les lignes du tableau seront ajoutées par JavaScript -->
 												</table>
 										</div>
-										{% comment %} <div class="reference" id="reference-card">											
-											  <table style="width:100%" id="reference_id">												
-											  </table>
-										</div> {% endcomment %}
 										<div class="irrigation" id="irrig">
-											{% comment %} <div class="custom-select"> {% endcomment %}
-												{% comment %} <button id="select-toggle">Select parcels</button>
-												<div class="select-items" id="parcelle-select">
-													{% for parcelle in project.parcelles %}
-														<label>
-															<input type="checkbox" name="parcelle" value="{{ parcelle.geozone_id }}">
-															{{ parcelle.parcelle_name }}
-														</label>
-													{% endfor %}
-												</div> {% endcomment %}
-											{% comment %} </div> {% endcomment %}
 											
-											{% comment %} <select id="parcelle-select" name="parcelle" multiple>
-												<option value="">Select a parcelle</option>
-												{% for parcelle in project.parcelles %}
-													<option value="{{ parcelle.geozone_id }}">
-														{{ parcelle.parcelle_name }}
-													</option>
-												{% endfor %}
-											</select> {% endcomment %}
-
 											<div class="custom-select-wrapper">
 												<div id="select-toggle" class="custom-select">
 													<span>Select parcels</span>
@@ -374,176 +345,29 @@
 													}
 												});
 											</script>
-											
-											
-
-											{% comment %} <script>
-												// Toggle the display of the custom select dropdown
-												document.getElementById('select-toggle').addEventListener('click', function() {
-													var selectItems = document.getElementById('parcelle-select');
-													selectItems.style.display = selectItems.style.display === 'block' ? 'none' : 'block';
-												});
-										
-												// Function to update map points based on selected checkboxes
-												function updateMapPoints(parcelleIds) {
-													// Remove all existing polylines
-													map.eachLayer(function(layer) {
-														if (layer instanceof L.Polyline) {
-															map.removeLayer(layer);
-														}
-													});
-										
-													// Function to fetch and add points for a single parcel
-													function fetchAndAddPoints(parcelleId) {
-														fetch('/points/' + parcelleId)
-															.then(response => response.json())
-															.then(data => {
-																// Convert data to an array of LatLng coordinates
-																var latlngs = data.map(function(point) {
-																	return [parseFloat(point.latt), parseFloat(point.long)];
-																});
-										
-																// Draw the polyline on the map
-																var polyline = L.polyline(latlngs, {color: 'red'}).addTo(map);
-										
-																// Extend the map bounds to include the new polyline
-																map.fitBounds(polyline.getBounds(), { animate: false });
-															});
-													}
-										
-													// Loop through all selected parcel IDs and fetch their points
-													parcelleIds.forEach(parcelleId => {
-														if (parcelleId) {
-															fetchAndAddPoints(parcelleId);
-														}
-													});
-												}
-										
-												// Listen for changes in the checkboxes
-												document.getElementById('parcelle-select').addEventListener('change', function() {
-													var checkboxes = document.querySelectorAll('input[name="parcelle"]:checked');
-													var selectedGeozoneIds = Array.from(checkboxes).map(checkbox => checkbox.value);
-										
-													// Update the map with the selected parcels
-													updateMapPoints(selectedGeozoneIds);
-												});
-										
-												// Close the dropdown if the user clicks outside of it
-												window.addEventListener('click', function(event) {
-													if (!event.target.matches('#select-toggle')) {
-														var selectItems = document.getElementById('parcelle-select');
-														if (selectItems.style.display === 'block') {
-															selectItems.style.display = 'none';
-														}
-													}
-												});
-											</script> {% endcomment %}
-											
-											
-											{% comment %} <script>
-												document.addEventListener('DOMContentLoaded', function() {
-													var parcelleSelect = document.getElementById('parcelle-select');
-													parcelleSelect.addEventListener('change', function() {
-														var parcelleId = this.value;
-														if (parcelleId) {
-															fetchPointsForParcelle(parcelleId);
-														}
-													});
-												});
-												
-												function fetchPointsForParcelle(parcelleId) {
-													fetch('/points/' + parcelleId)
-														.then(response => response.json())
-														.then(data => {
-															updateMapWithPoints(data);
-														})
-														.catch(error => console.error('Error:', error));
-												}
-												
-												function clearMap() {
-													if (map && map.eachLayer) {
-														map.eachLayer(function(layer) {
-															if (layer.options && !layer.options.preserve) {
-																map.removeLayer(layer);
-															}
-														});
-													}
-												}
-												
-												function updateMapWithPoints(points) {
-													clearMap();
-												
-													if (points.length === 0) {
-														console.error('No points available for the selected parcel');
-														return;
-													}
-												
-													var latLngs = points.map(function(point) {
-														return [parseFloat(point.latt), parseFloat(point.long)];
-													});
-												
-													if (latLngs.length < 3) {
-														console.error('Not enough points to form a polygon');
-														return;
-													}
-												
-													var polygon = L.polygon(latLngs, {
-														color: 'red', // Couleur du tracé
-														fillColor: 'transparent', // Couleur de remplissage
-														fillOpacity: 0 // Opacité du remplissage
-													}).addTo(map);
-												
-													map.fitBounds(polygon.getBounds());
-												
-													polygon.bindPopup(points[0].parcelle_name);
-												}
-																								
-											</script> {% endcomment %}
-											
-											{% comment %} <select id="filtre-select">
-												<option>Filtre</option>
-												{% for category, filters in filter_categories.items %}
-													<optgroup label="{{ category|title }}">
-														{% for filter in filters %}
-															<option value="{{ filter.abreviation }}">{{ filter.abreviation }}</option>
-														{% endfor %}
-													</optgroup>
-												{% endfor %}
-											</select>  {% endcomment %}
 											<select id="filtre-select" onchange="updateColorTable()">
 												<option>Filtre</option>
 												{% for category, filters in filter_categories.items %}
 													<optgroup label="{{ category|title }}">
 														{% for filter in filters %}
-															<option value="{{ filter.abreviation }}">{{ filter.abreviation }}</option>
+															<option value="{{ filter.abreviation }}"
+																	data-toggle="tooltip"
+																	data-placement="top"
+																	title="{{ filter.details }}">
+																{{ filter.abreviation }}
+															</option>
 														{% endfor %}
 													</optgroup>
 												{% endfor %}
 											</select>
-											
-											{% comment %} <select id="filtre-select"> 
-												<option>Filtre</option> 
-											</select> {% endcomment %}
-											{% comment %} <select id="filtre-select">
-												<option>Filtre</option>
-												<optgroup label="Couleur naturelle">
-												  <option value="naturel">Naturel</option>
-												</optgroup>
-												<optgroup label="Indices de végétation">
-												  <option value="ndvi">NDVI</option>
-												  <option value="ndre">NDRE</option>
-												  <option value="msavi">MSAVI</option>
-												  <option value="reci">RECI</option>
-												</optgroup>
-											</select>  {% endcomment %}   	
+											<script>
+												$(document).ready(function(){
+													$('[data-toggle="tooltip"]').tooltip();
+												});
+											</script> 	
 											<input type="date" id="datepicker" placeholder="Select date" onchange="getRasterImage()">
 											
-											{% comment %} <a href="parcelles/{{ parcelle.geozone_id }}/"> {% endcomment %}
-																						
-											
-											{% comment %} <button onclick="getRasterImage()">Obtenir l'image raster</button> {% endcomment %}
-										</div>	
-																			
+										</div>								
 										 <!-- leaflet js  -->
 									<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 									<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
@@ -3334,6 +3158,8 @@
 		</body>
 		{% endblock %}
     {% block scripts %}
+		<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+		
 	    <script src="https://assets.sentinel-hub.com/-components/api3/sh-api.js" onload="init()" async defer></script>	    
 		<!-- INTERNAL SELECT2 JS -->
 		<script src="{% static 'assets/plugins/select2/select2.full.min.js'%}"></script>
