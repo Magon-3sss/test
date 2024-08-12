@@ -169,6 +169,7 @@ urlpatterns = [
     path('project-new-form', views.project_new_form, name='project-new-form'),
     path('projects-list', views.projects_list, name='projects-list'),
     path('projects', views.projects, name='projects'),
+    path('delete-project/<int:project_id>/', views.delete_project, name='delete_project'),
     path('parcelles', views.parcelles, name='parcelles'),
     path('parcelle-details/<int:id>/', views.parcelle_details, name='parcelle-details'),
     path('parcelle-edit', views.parcelle_edit, name='parcelle-edit'),

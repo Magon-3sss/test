@@ -2527,6 +2527,15 @@ def projects (request):
     else:
         # Si le jeton n'est pas présent, redirigez vers la page de connexion
         return render(request, 'signin.html')
+    
+@require_http_methods(["POST"])
+def delete_project(request, project_id):
+    try:
+        project = MapForm.objects.get(id=project_id)
+        project.delete()
+        return JsonResponse({"message": "Projet supprimé avec succès"}, status=200)
+    except MapForm.DoesNotExist:
+        return JsonResponse({"error": "Projet introuvable"}, status=404)
 
 def parcelles(request):
     # Récupérer la liste des parcelles

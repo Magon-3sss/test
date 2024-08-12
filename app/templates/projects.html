@@ -119,8 +119,9 @@
 																	<div class="dropdown-menu dropdown-menu-start">
 																		<a class="dropdown-item" href="#"><i class="fe fe-edit me-2"></i> Edit</a>
 																		{% comment %} <a class="dropdown-item" href="#"><i class="fe fe-share me-2"></i> Share</a>
-																		<a class="dropdown-item" href="#"><i class="fe fe-download me-2"></i> Clone</a> {% endcomment %}
-																		<a class="dropdown-item" href="#"><i class="fe fe-trash me-2"></i> Delete</a>
+																		<a class="dropdown-item" href="#"><i class="fe fe-download me-2"></i> Clone</a> {% endcomment %}																													
+																		<a class="dropdown-item" href="#" onclick="return confirmDelete({{ project.project.id }})"><i class="fe fe-trash me-2"></i> Delete</a>
+																		{% comment %} <a class="dropdown-item" href="#"><i class="fe fe-trash me-2"></i> Delete</a> {% endcomment %}
 																	</div>
 																	
 																</div>
@@ -196,6 +197,30 @@
         {% endblock %}
 
     {% block scripts %}
+
+		<script>
+			function confirmDelete(projectId) {
+				if (confirm("Êtes-vous sûr de vouloir supprimer ce projet?")) {
+					fetch("{% url 'delete_project' project_id=0 %}".replace(/0/, projectId), {
+						method: 'POST',
+						headers: {
+							'X-CSRFToken': '{{ csrf_token }}'
+						}
+					}).then(response => {
+						if (response.ok) {
+							// Rediriger vers la page des projets ou mettre à jour la page
+							window.location.href = "/projects";
+						} else {
+							alert("Une erreur s'est produite lors de la suppression du projet.");
+						}
+					}).catch(error => {
+						alert("Une erreur réseau s'est produite: ", error);
+					});
+					return true;
+				}
+				return false;
+			}
+		</script>
 
 		<!-- PROJECT JS-->
 		<script src=" {% static 'assets/js/projects.js' %} "></script>
