@@ -2536,6 +2536,26 @@ def delete_project(request, project_id):
         return JsonResponse({"message": "Projet supprimé avec succès"}, status=200)
     except MapForm.DoesNotExist:
         return JsonResponse({"error": "Projet introuvable"}, status=404)
+    
+def project_modifier(request, project_id):
+    project = get_object_or_404(MapForm, id=project_id)
+
+    if request.method == 'POST':
+        # Récupérer les données soumises par le formulaire
+        project.project_name = request.POST.get('project_name', project.project_name)
+        project.project_date = request.POST.get('project_date', project.project_date)
+        project.project_category = request.POST.get('project_category', project.project_category)
+        project.department = request.POST.get('department', project.department)
+        project.client = request.POST.get('client', project.client)
+
+        # Sauvegarder les modifications dans la base de données
+        project.save()
+
+        # Rediriger vers la page des projets après la mise à jour
+        return redirect('projects')  # Remplacez 'projects' par le nom de votre vue de liste des projets
+
+    # Rendre la page de modification avec les données du projet
+    return render(request, 'project-modifier.html', {'project': project})
 
 def parcelles(request):
     # Récupérer la liste des parcelles

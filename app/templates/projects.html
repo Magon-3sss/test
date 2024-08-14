@@ -117,10 +117,10 @@
 																	</div>
 																	<a href="#" class="option-dots" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fe fe-more-vertical"></i></a>
 																	<div class="dropdown-menu dropdown-menu-start">
-																		<a class="dropdown-item" href="#"><i class="fe fe-edit me-2"></i> Edit</a>
+																		<a class="dropdown-item" href="{% url 'project-modifier' project.project.id %}"><i class="fe fe-edit me-2"></i> Modifier </a>
 																		{% comment %} <a class="dropdown-item" href="#"><i class="fe fe-share me-2"></i> Share</a>
 																		<a class="dropdown-item" href="#"><i class="fe fe-download me-2"></i> Clone</a> {% endcomment %}																													
-																		<a class="dropdown-item" href="#" onclick="return confirmDelete({{ project.project.id }})"><i class="fe fe-trash me-2"></i> Delete</a>
+																		<a class="dropdown-item" href="#" onclick="return confirmDelete({{ project.project.id }})"><i class="fe fe-trash me-2"></i> Supprimer </a>
 																		{% comment %} <a class="dropdown-item" href="#"><i class="fe fe-trash me-2"></i> Delete</a> {% endcomment %}
 																	</div>
 																	

@@ -25,6 +25,8 @@
 							<!--ROW OPENED-->
 							<div class="row">
 								<div class="col-lg-12 col-md-12">
+									<form method="post">
+										{% csrf_token %}
 									<div  class="card">
 										<div class="card-header border-bottom">
 											<h4 class="mb-0">Project Info</h4>
@@ -35,7 +37,7 @@
 													<div class="form-group">
 														<label for="project-name" class="form-label text-muted">Project Name:</label>
 														<div class="input-group">
-															<input type="text" id="project-name" class="form-control text-dark" placeholder="Enter Project Name" value="Noa Dashboard UI">
+															<input type="text" id="project-name" class="form-control text-dark" placeholder="Enter Project Name" name="project_name" value="{{ project.project_name }}">
 														</div>
 													</div>
 												</div>
@@ -48,7 +50,7 @@
 														</div>
 													</div>
 												</div>
-												<div class="col-sm-12 col-md-12 col-xl-3 end-date-container">
+												{% comment %} <div class="col-sm-12 col-md-12 col-xl-3 end-date-container">
 													<div class="form-group">
 														<label for="project-end-date" class="form-label text-muted">End Date:</label>
 														<div id="pe-datepicker" class="input-group date" data-date-format="dd-mm-yyyy">
@@ -56,7 +58,7 @@
 															<input id="project-end-date" class="form-control" type="text" placeholder="Select End Date"/>
 														</div>
 													</div>
-												</div>
+												</div> {% endcomment %}
 												<div class="col-sm-12 col-md-12 col-xl-3 no-date-checkbox">
 													<div class="form-group">
 														<label class="custom-control custom-checkbox end-date-checkbox-container">
