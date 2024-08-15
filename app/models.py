@@ -423,6 +423,18 @@ class Anomaly(models.Model):
     traitement=models.CharField(max_length=500)
     symptomes=models.CharField(max_length=500)
     
+class AnomalyPommeDeTerre(models.Model):
+    nom=models.CharField(max_length=50)
+    description=models.CharField(max_length=500)
+    traitement=models.CharField(max_length=500)
+    symptomes=models.CharField(max_length=500)
+    
+class AnomalyPalmier(models.Model):
+    nom=models.CharField(max_length=50)
+    description=models.CharField(max_length=500)
+    traitement=models.CharField(max_length=500)
+    symptomes=models.CharField(max_length=500)
+    
 class UploadedImage(models.Model):
     image = models.ImageField(upload_to='uploads/')
     result_image = models.ImageField(upload_to='assets/results/', blank=True, null=True)
@@ -451,3 +463,15 @@ class New_Oper_Tables(models.Model):
     type_traitement = models.CharField(max_length=50, null=True, blank=True)
     quantite_traitement_utilisee = models.CharField(max_length=50, null=True, blank=True)
     time = models.CharField(max_length=100, null=True, blank=True)
+    
+class CategoriesPlantes(models.Model):
+    nom_plante=models.CharField(max_length=50)
+    
+class SousCategoriesOlives(models.Model):
+    nom_souscategorie_olive=models.CharField(max_length=50)
+    
+class SousCategoriesPalmier(models.Model):
+    nom_souscategorie_palmier=models.CharField(max_length=50)
+    
+class SousCategoriesPommeDeTerre(models.Model):
+    nom_souscategorie_pomme_terre=models.CharField(max_length=50)
