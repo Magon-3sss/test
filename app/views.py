@@ -3199,6 +3199,10 @@ def preprocess_image_for_red_text(image_path):
 def analyse(request):
     images = UploadedImage.objects.all()
     paginator = Paginator(images, 12)
+    
+    # Retrieve all plant names to populate the dropdown
+    plants = CategoriesPlantes.objects.all()
+    
     if request.method == 'POST':
         form = ImageUploadForm(request.POST, request.FILES)
         if form.is_valid():
@@ -3231,9 +3235,44 @@ def analyse(request):
             return JsonResponse({'success': False, 'error_message': 'Formulaire invalide'})
     else:
         form = ImageUploadForm()
+    
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
-    return render(request, 'analyse.html', {'form': form, 'images': images, 'page_obj': page_obj})
+    
+    
+    return render(request, 'analyse.html', {'form': form, 'images': images, 'page_obj': page_obj, 'plants': plants})
+
+def get_subcategories(request):
+    category_id = request.GET.get('category_id')
+
+    if category_id == '1':  # Assuming Olive has id 1
+        subcategories = SousCategoriesOlives.objects.all()
+    elif category_id == '2':  # Assuming Palmier has id 2
+        subcategories = SousCategoriesPalmier.objects.all()
+    elif category_id == '3':  # Assuming Pomme de Terre has id 3
+        subcategories = SousCategoriesPommeDeTerre.objects.all()
+    else:
+        subcategories = []
+
+    subcategories_data = [{'id': sub.id, 'name': sub.nom_souscategorie_olive if category_id == '1' else sub.nom_souscategorie_palmier if category_id == '2' else sub.nom_souscategorie_pomme_terre} for sub in subcategories]
+
+    return JsonResponse({'subcategories': subcategories_data})
+
+def get_anomalies(request):
+    category_id = request.GET.get('category_id')
+
+    if category_id == '1':  # Assuming Olive has id 1
+        anomalies = Anomaly.objects.all()
+    elif category_id == '2':  # Assuming Palmier has id 2
+        anomalies = AnomalyPalmier.objects.all()
+    elif category_id == '3':  # Assuming Pomme de Terre has id 3
+        anomalies = AnomalyPommeDeTerre.objects.all()
+    else:
+        anomalies = []
+
+    anomalies_data = [{'id': anomaly.id, 'name': anomaly.nom} for anomaly in anomalies]
+
+    return JsonResponse({'anomalies': anomalies_data})
 
 """ class ImageUploadForm(forms.ModelForm):
     class Meta:

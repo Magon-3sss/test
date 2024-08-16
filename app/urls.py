@@ -247,6 +247,8 @@ urlpatterns = [
     path('pulverisateur', views.pulverisateur, name='pulverisateur'),
     
     path('analyse', views.analyse, name='analyse'),
+    path('get-subcategories/', views.get_subcategories, name='get_subcategories'),
+    path('get-anomalies/', views.get_anomalies, name='get_anomalies'),
     path('delete-item/<int:item_id>/', views.delete_item, name='delete_item'),
     path('analyse-details/<int:image_id>/', views.analyse_details, name='analyse-details'),
     path('image_result/', views.analyse, name='image_result'),
