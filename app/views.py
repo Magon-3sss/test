@@ -3197,7 +3197,7 @@ def preprocess_image_for_red_text(image_path):
     return processed_image
 
 def analyse(request):
-    images = UploadedImage.objects.all()
+    images = UploadedImage.objects.all().order_by('-id')
     paginator = Paginator(images, 12)
     
     # Retrieve all plant names to populate the dropdown
@@ -3210,7 +3210,7 @@ def analyse(request):
             image_path = uploaded_image.image.path
             with open(image_path, 'rb') as image_file:
                 files = {'file': image_file}
-                ngrok_url = 'https://d36c-35-237-143-225.ngrok-free.app/predict'
+                ngrok_url = 'https://689e-35-237-65-245.ngrok-free.app/predict'
                 response = requests.post(ngrok_url, files=files)
                 if response.status_code == 200:
                     result_image_dir = 'D:/MAGON_3SSS/MAGON_3SSS/MAGON_3SSS-main/MAGON_3S/static/assets/results/'
