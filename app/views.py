@@ -3210,7 +3210,7 @@ def analyse(request):
             image_path = uploaded_image.image.path
             with open(image_path, 'rb') as image_file:
                 files = {'file': image_file}
-                ngrok_url = 'https://689e-35-237-65-245.ngrok-free.app/predict'
+                ngrok_url = 'https://0850-35-194-94-73.ngrok-free.app/predict'
                 response = requests.post(ngrok_url, files=files)
                 if response.status_code == 200:
                     result_image_dir = 'D:/MAGON_3SSS/MAGON_3SSS/MAGON_3SSS-main/MAGON_3S/static/assets/results/'
