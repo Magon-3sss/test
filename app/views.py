@@ -3006,17 +3006,43 @@ def get_points(request, geozone_id):
 def ajouter_operation_agricole (request):
     list = []
     operations_agricoles = New_Oper_Tables.objects.all()
-    type_rh = TypeRh.objects.all()
+    type_rh = Rh_Tables.objects.all()
     projects = MapForm.objects.all()
-    type_machine_engins = TypeMachineEngins.objects.all()
+    machines_tables = Machines_Tables.objects.all()
     type_carburant = TypeCarburant.objects.all()
     outil  =TypeOutilsAgricoles.objects.all()
     type_pieces  = TypePieces.objects.all()
     type_engrais  = TypeEngrais.objects.all() 
     type_graines_pousses  =TypeGrainesPousses.objects.all() 
     type_traitement = TypeTraitement.objects.all()
-    list.append({"types": type_rh,"machines": type_machine_engins, "carburants": type_carburant, "outils": outil,"pieces": type_pieces,"graines" :type_graines_pousses,"engraiss" : type_engrais, "traitements" : type_traitement,   "operations": operations_agricoles, "projects": projects})
+    list.append({"type_rh": type_rh,"machines_tables": machines_tables, "carburants": type_carburant, "outils": outil,"pieces": type_pieces,"graines" :type_graines_pousses,"engraiss" : type_engrais, "traitements" : type_traitement,   "operations": operations_agricoles, "projects": projects})
     return render(request, 'ajouter-operation-agricole.html', {'data': list})
+
+""" def ajouter_operation_agricole(request):
+    operations_agricoles = New_Oper_Tables.objects.all()
+    type_rh = Rh_Tables.objects.all()  # Change this line to fetch from Rh_Tables
+    projects = MapForm.objects.all()
+    type_machine_engins = TypeMachineEngins.objects.all()
+    type_carburant = TypeCarburant.objects.all()
+    outil = TypeOutilsAgricoles.objects.all()
+    type_pieces = TypePieces.objects.all()
+    type_engrais = TypeEngrais.objects.all()
+    type_graines_pousses = TypeGrainesPousses.objects.all()
+    type_traitement = TypeTraitement.objects.all()
+
+    context = {
+        "type_rh": type_rh,
+        "machines": type_machine_engins,
+        "carburants": type_carburant,
+        "outils": outil,
+        "pieces": type_pieces,
+        "graines": type_graines_pousses,
+        "engrais": type_engrais,
+        "traitements": type_traitement,
+        "operations": operations_agricoles,
+        "projects": projects,
+    }
+    return render(request, 'ajouter-operation-agricole.html', context) """
 
 @api_view(['POST'])
 def save_operation(request):

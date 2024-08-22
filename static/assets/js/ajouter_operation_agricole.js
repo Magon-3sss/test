@@ -301,4 +301,35 @@ function submitStep9() {
             });
         });
     });
+
+    
+    
 })(jQuery);
+
+function saveEmplacement() {
+    const geozoneId = document.getElementById('geozoneId').value;
+    const coordinates = coordinates
+    const layerType = rectangle
+
+    const data = {
+        geozone_id: geozoneId,
+        coordinates: coordinates,
+        type: layerType
+    };
+
+    fetch('/save-emplacement/', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': getCookie('csrftoken')
+        },
+        body: JSON.stringify(data)
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log('Success:', data);
+    })
+    .catch((error) => {
+        console.error('Error:', error);
+    });
+}
