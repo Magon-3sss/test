@@ -644,6 +644,23 @@ def save_outil(request):
 
         
 """ Machines & Engins """
+def machines_engins (request):
+    list = []
+    machines = Machines_Tables.objects.all()
+    types_machines = TypeMachineEngins.objects.all()
+    list.append({"types": types_machines,"machines": machines})
+    """ user = request.user
+    print(user)
+    groups = user.groups.filter(name='regular')
+    print(groups)
+    if groups.exists(): """
+    return render(request, 'machines-engins.html', {'data': list})
+    """ else:
+        return redirect('permission_denied') """
+
+def machines_engins_new (request):
+    return render(request, 'machines-engins-new.html')
+
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 @permission_required('app.add_machines')
@@ -2835,20 +2852,6 @@ def popup_view(request):
 """ def popup (request):
     return render(request, 'popup.html') """
 
-def machines_engins (request):
-    list = []
-    machines = Machines_Tables.objects.all()
-    types_machines = TypeMachineEngins.objects.all()
-    list.append({"types": types_machines,"machines": machines})
-    """ user = request.user
-    print(user)
-    groups = user.groups.filter(name='regular')
-    print(groups)
-    if groups.exists(): """
-    return render(request, 'machines-engins.html', {'data': list})
-    """ else:
-        return redirect('permission_denied') """
-
 def outils_agricoles (request):
     list = []
     outils = Outils_Tables.objects.all()
@@ -2958,9 +2961,6 @@ def engrais (request):
 
 def autres (request):
     return render(request, 'autres.html')
-
-def machines_engins_new (request):
-    return render(request, 'machines-engins-new.html')
 
 """ Operation Agricole """
 def get_points(request, geozone_id):
