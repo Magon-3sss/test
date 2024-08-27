@@ -100,7 +100,7 @@
                         <ul>
                           <li><a href="#step-10">Emplacement</a></li>
                           <li><a href="#step-11">Type d'opération</a></li>
-                          <li><a href="#step-12">Main d'oeuvre</a></li>
+                          <li><a href="#step-12" >Main d'oeuvre</a></li>
                           <li><a href="#step-13">Machines et carburants</a></li>
                           <li><a href="#step-14">Outils agricoles</a></li>
                           <li><a href="#step-15">Pièces de rechange</a></li>
@@ -121,7 +121,7 @@
                                                                    <div class="avatar mb-2 p-2 lh-1 mb-sm-0 avatar-md rounded-circle  me-2">
                                                                     <img src="{% static 'assets/images/icons/project-management.png' %}" class="side-menu__icon img" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
                                                                    </div> 
-                                                                   <label for="geozone">Projets :</label>
+                                                                   <label for="geozone">Projets </label>
                                                                    <select class="form-control" id="geozone" name="geozone" required>
                                                                        <option value="" selected disabled>Projet 1</option>
                                                                        {% for data in data %}
@@ -523,14 +523,14 @@
                                                       <div class="avatar mb-2 p-2 lh-1 mb-sm-0 avatar-md rounded-circle  me-2">
                                                         <img src="{% static 'assets/images/icons/calendrier.png' %}" class="side-menu__icon img" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
                                                       </div>
-                                                      <label for="datetime">Date et Heure de l'opération :</label>
+                                                      <label for="datetime">Date et Heure de l'opération </label>
                                                       <input type="datetime-local" class="form-control" id="date_debut" name="date_debut">
                                                     </div>
                                                     <div class="col-md-4 mb-6">
                                                     <div class="avatar mb-2 p-2 lh-1 mb-sm-0 avatar-md rounded-circle  me-2">
                                                       <img src="{% static 'assets/images/icons/calendrier.png' %}" class="side-menu__icon img" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
                                                     </div>
-                                                    <label for="datetime">Date et Heure de fin d'opération:</label>
+                                                    <label for="datetime">Date et Heure de fin d'opération </label>
                                                     <input type="datetime-local" class="form-control" id="date_fin" name="date_fin">
                                                     </div>
                                       </div> 
@@ -555,7 +555,7 @@
                           <div class="avatar mb-2 p-2 lh-1 mb-sm-0 avatar-md rounded-circle  me-2">
                             <img src="{% static 'assets/images/icons/lhorloge.png' %}" class="side-menu__icon img" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
                           </div>
-                          <label for="datetime">Date et Heure de début:</label>
+                          <label for="datetime">Date et Heure de début</label>
                           <input type="datetime-local" class="form-control" id="time" name="time">
                                 </div>
             
@@ -563,15 +563,15 @@
                                 <div class="avatar mb-2 p-2 lh-1 mb-sm-0 avatar-md rounded-circle  me-2">
                                   <img src="{% static 'assets/images/icons/lhorloge.png' %}" class="side-menu__icon img" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
                                 </div>
-                                <label for="datetime">Date et Heure de fin :</label>
+                                <label for="datetime">Date et Heure de fin </label>
                                 <input type="datetime-local" class="form-control" id="timefin" name="timefin">
                                 </div>
                               </div>
-                              <div class="form-row">
-                                <div class="col-md-6 mb-3">
+                              {% comment %} <div class="form-row"> {% endcomment %}
+                                <div >
                               <div id="additional-fields-container"></div>
-                              <button type="button" onclick="addFields()">+ Ajouter des champs</button>
-                            </div>
+                              <button type="button" class="btn btn-info" onclick="addFields()"><i class="fe fe-plus me-2"></i>Ajouter des champs</button>
+                            {% comment %} </div> {% endcomment %}
                           </div>
                             </form>
                           </div>
@@ -597,7 +597,7 @@
                               <div class="avatar mb-2 p-2 lh-1 mb-sm-0 avatar-md rounded-circle  me-2">
                                 <img src="{% static 'assets/images/icons/carburant.png' %}" class="side-menu__icon img" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
                               </div>
-                              <label for="carburant">Carburant :</label>
+                              <label for="carburant">Carburant </label>
                               <select class="form-control" id="carburant" name="carburant" >
                               <option value="" selected disabled>Gaz</option>
                               {% for data in data %}
@@ -612,7 +612,7 @@
                               <div class="avatar mb-2 p-2 lh-1 mb-sm-0 avatar-md rounded-circle  me-2">
                                 <img src="{% static 'assets/images/icons/duree.png' %}" class="side-menu__icon img" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
                               </div>
-                              <label for="duree du programme">Date et Heure de début:</label>
+                              <label for="duree du programme">Date et Heure de début</label>
                                 <input type="datetime-local" class="form-control" id="duree_utilisation_programme" name="duree_utilisation_programme">
                               
                             </div>
@@ -620,7 +620,7 @@
                               <div class="avatar mb-2 p-2 lh-1 mb-sm-0 avatar-md rounded-circle  me-2">
                                 <img src="{% static 'assets/images/icons/duree.png' %}" class="side-menu__icon img" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
                               </div>
-                              <label for="Heure_de_fin">Date et Heure de fin :</label>
+                              <label for="Heure_de_fin">Date et Heure de fin </label>
                                 <input type="datetime-local" class="form-control" id="Heure_de_fin" name="Heure_de_fin">
                             </div>
                             <div class="col-md-4 mb-6">
@@ -631,11 +631,11 @@
                               <input type="number" class="form-control" id="quantite_carburant"  name= "quantite_carburant" placeholder="quantite_du_carburant">
                             </div>
                           </div>
-                          <div class="form-row">
-                            <div class="col-md-4 mb-6">
+                          {% comment %} <div class="form-row"> {% endcomment %}
+                            <div >
                           <div id="additional-fields"></div>
-                          <button type="button" onclick="add()">+ Ajouter des champs</button>
-                        </div>
+                          <button type="button" class="btn btn-info" onclick="add()"><i class="fe fe-plus me-2"></i>Ajouter des champs</button>
+                        {% comment %} </div> {% endcomment %}
                       </div>
                         </div>
                           <div id="step-14">
@@ -644,7 +644,7 @@
                               <div class="avatar mb-2 p-2 lh-1 mb-sm-0 avatar-md rounded-circle  me-2">
                                 <img src="{% static 'assets/images/icons/outils-de-jardinage.png' %}" class="side-menu__icon img" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
                               </div>
-                              <label for="outil">Outil :</label>
+                              <label for="outil">Outil </label>
                                 <select class="form-control" id="outil" name="outil"   >
                                 <option value="" selected disabled>Pelle</option>
                                 {% for data in data %}
@@ -655,11 +655,11 @@
                                 </select>
                               </div>
                             </div>
-                            <div class="form-row">
-                              <div class="col-md-4 mb-6">
+                            {% comment %} <div class="form-row"> {% endcomment %}
+                              <div >
                             <div id="ajouter"></div>
-                            <button type="button" onclick="ajouter()">+ Ajouter des champs</button>
-                          </div>
+                            <button type="button" class="btn btn-info" onclick="ajouter()"><i class="fe fe-plus me-2"></i>Ajouter des champs</button>
+                          {% comment %} </div> {% endcomment %}
                         </div>
                           </div>
                           <div id="step-15">
@@ -668,7 +668,7 @@
                               <div class="avatar mb-2 p-2 lh-1 mb-sm-0 avatar-md rounded-circle  me-2">
                                 <img src="{% static 'assets/images/icons/achat.png' %}" class="side-menu__icon img" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
                               </div>
-                              <label for="piece">Pièce de rechange :</label>
+                              <label for="piece">Pièce de rechange </label>
                                 <select class="form-control" id="type_pieces" name="type_pieces" >
                                 <option value="" selected disabled>A</option>
                                 {% for data in data %}
@@ -686,11 +686,11 @@
                               <input type="number" class="form-control" id="nombre_de_pieces"  name="nombre_de_pieces"placeholder="nombre_de_pieces">
                              </div> 
                             </div>
-                            <div class="form-row">
-                              <div class="col-md-4 mb-6">
+                            {% comment %} <div class="form-row"> {% endcomment %}
+                              <div >
                             <div id="ajouterfield"></div>
-                            <button type="button" onclick="ajouterfield()">+ Ajouter des champs</button>
-                          </div>
+                            <button type="button" class="btn btn-info" onclick="ajouterfield()"><i class="fe fe-plus me-2"></i>Ajouter des champs</button>
+                          {% comment %} </div> {% endcomment %}
                         </div>
                           </div>
                           <div id="step-16">
@@ -699,7 +699,7 @@
                               <div class="avatar mb-2 p-2 lh-1 mb-sm-0 avatar-md rounded-circle  me-2">
                                 <img src="{% static 'assets/images/icons/sac-de-graines.png' %}" class="side-menu__icon img" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
                               </div>
-                              <label for="graine">Graines :</label>
+                              <label for="graine">Graines </label>
                               <select class="form-control" id="type_graines_pousses" name="type_graines_pousses" >
                               <option value="" selected disabled>graine</option>
                               {% for data in data %}
@@ -724,7 +724,7 @@
                             <div class="avatar mb-2 p-2 lh-1 mb-sm-0 avatar-md rounded-circle  me-2">
                               <img src="{% static 'assets/images/icons/engrais.png' %}" class="side-menu__icon img" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
                             </div>
-                            <label for="engrais">Engrais :</label>
+                            <label for="engrais">Engrais </label>
                             <select class="form-control" id="type_engrais" name="type_engrais" >
                             <option value="" selected disabled>engrais</option>
                             {% for data in data %}
@@ -776,7 +776,7 @@
                               <div class="avatar mb-2 p-2 lh-1 mb-sm-0 avatar-md rounded-circle  me-2">
                                   <img src="{% static 'assets/images/icons/projet.png' %}" class="side-menu__icon img" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
                               </div>
-                            <label for="description" >Description :</label>
+                            <label for="description" >Description </label>
                             <textarea class="form-control" id="description" name="description" placeholder=" description " rows="3" ></textarea>
                               </div>
                             </div>
@@ -833,7 +833,7 @@
                 <div class="avatar mb-2 p-2 lh-1 mb-sm-0 avatar-md rounded-circle me-2">
                     <img src="{% static 'assets/images/icons/externalisation-rh.png' %}" class="side-menu__icon img" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
                 </div>
-                <label for="type_${fieldCount}">Main d'oeuvre ${fieldCount}:</label>
+                <label for="type_${fieldCount}">Main d'oeuvre ${fieldCount}</label>
                 <select class="form-control" id="type_rh_${fieldCount}" name="type_rh_${fieldCount}">
                     <option value="" selected disabled>Ouvrier</option>
                     {% for rh in data.0.type_rh %}
@@ -845,14 +845,14 @@
                 <div class="avatar mb-2 p-2 lh-1 mb-sm-0 avatar-md rounded-circle me-2">
                     <img src="{% static 'assets/images/icons/lhorloge.png' %}" class="side-menu__icon img" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
                 </div>
-                <label for="datetime_${fieldCount}">Date et Heure de début ${fieldCount}:</label>
+                <label for="datetime_${fieldCount}">Date et Heure de début ${fieldCount}</label>
                 <input type="datetime-local" class="form-control" id="time_${fieldCount}" name="time_${fieldCount}">
             </div>
             <div class="col-md-4 mb-6">
                 <div class="avatar mb-2 p-2 lh-1 mb-sm-0 avatar-md rounded-circle me-2">
                     <img src="{% static 'assets/images/icons/lhorloge.png' %}" class="side-menu__icon img" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
                 </div>
-                <label for="datetime_${fieldCount}">Date et Heure de fin ${fieldCount}:</label>
+                <label for="datetime_${fieldCount}">Date et Heure de fin ${fieldCount}</label>
                 <input type="datetime-local" class="form-control" id="timefin_${fieldCount}" name="timefin_${fieldCount}">
             </div>
         `;
@@ -870,8 +870,11 @@
         newFields.className = 'additional-fields';
         newFields.innerHTML = `
           <div class="form-row">
-            <div class="col-md-6 mb-3">
-              <label for="type_${fieldCount}">Machine ${fieldCount}:</label>
+            <div class="col-md-4 mb-6">
+              <div class="avatar mb-2 p-2 lh-1 mb-sm-0 avatar-md rounded-circle  me-2">
+                <img src="{% static 'assets/images/icons/pelouse.png' %}" class="side-menu__icon img" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
+              </div>
+              <label for="type_${fieldCount}">Type Machine ${fieldCount}</label>
               <select class="form-control" id="type_machine_engins_${fieldCount}" name="type_machine_engins_${fieldCount}">
               <option value="" selected disabled>Camion</option>
 
@@ -882,8 +885,11 @@
                               
                               </select>
             </div>
-             <div class="col-md-6 mb-3">
-              <label for="type_${fieldCount}">Carburant ${fieldCount}:</label>
+             <div class="col-md-4 mb-6">
+              <div class="avatar mb-2 p-2 lh-1 mb-sm-0 avatar-md rounded-circle  me-2">
+                <img src="{% static 'assets/images/icons/carburant.png' %}" class="side-menu__icon img" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
+              </div>
+              <label for="type_${fieldCount}">Carburant ${fieldCount}</label>
               <select class="form-control" id="carburant_${fieldCount}" name="carburant_${fieldCount}">
              <option value="" selected disabled>Gaz</option>
                               {% for data in data %}
@@ -893,16 +899,25 @@
                               {% endfor %}
                               </select>
             </div>
-            <div class="col-md-6 mb-3">
-              <label for="additional_description_${fieldCount}">date et heure de début ${fieldCount}:</label>
+            <div class="col-md-4 mb-6">
+                <div class="avatar mb-2 p-2 lh-1 mb-sm-0 avatar-md rounded-circle  me-2">
+                  <img src="{% static 'assets/images/icons/duree.png' %}" class="side-menu__icon img" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
+                </div>
+              <label for="additional_description_${fieldCount}">date et heure de début ${fieldCount}</label>
               <input type="datetime-local" class="form-control" id="date et heure de début_${fieldCount}" name="date et heure de début_${fieldCount}">
             </div>
-            <div class="col-md-6 mb-3">
-              <label for="additional_description_${fieldCount}">date et heure de fin ${fieldCount}:</label>
+            <div class="col-md-4 mb-6">
+              <div class="avatar mb-2 p-2 lh-1 mb-sm-0 avatar-md rounded-circle  me-2">
+                <img src="{% static 'assets/images/icons/duree.png' %}" class="side-menu__icon img" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
+              </div>
+              <label for="additional_description_${fieldCount}">date et heure de fin ${fieldCount}</label>
               <input type="datetime-local" class="form-control" id="date et heure de fin_${fieldCount}" name="date et heure de fin_${fieldCount}">
             </div>
-             <div class="col-md-6 mb-3">
-              <label for="additional_description_${fieldCount}">Quantité carburant ${fieldCount}:</label>
+             <div class="col-md-4 mb-6">
+                  <div class="avatar mb-2 p-2 lh-1 mb-sm-0 avatar-md rounded-circle  me-2">
+                    <img src="{% static 'assets/images/icons/jauge.png' %}" class="side-menu__icon img" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
+                  </div>
+              <label for="additional_description_${fieldCount}">Quantité carburant ${fieldCount}</label>
               <input type="number" class="form-control" id="quantite_carburant_${fieldCount}" name="quantite_carburant_${fieldCount}">
             </div>
           </div>
@@ -920,16 +935,20 @@
         newFields.innerHTML = `
           <div class="form-row">
             <div class="col-md-4 mb-6">
-              <label for="type_${fieldCount}"Outil ${fieldCount}:</label>
+                <div class="avatar mb-2 p-2 lh-1 mb-sm-0 avatar-md rounded-circle  me-2">
+                  <img src="{% static 'assets/images/icons/outils-de-jardinage.png' %}" class="side-menu__icon img" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
+                </div>
+              <label for="type_${fieldCount}">Outil ${fieldCount}</label>
               <select class="form-control" id="outil_${fieldCount}" name="outil_${fieldCount}">
-              <option value="" selected disabled>Pelle</option>
-                                {% for data in data %}
-                                    {% for outil in data.outils %}
-                                    <option value="{{ outil.type_outils_agricoles }}">{{ outil.type_outils_agricoles }}</option>
-                                    {% endfor %}
-                                {% endfor %}
-                                </select>
-            </div>   
+                <option value="" selected disabled>Pelle</option>
+                {% for data in data %}
+                    {% for outil in data.outils %}
+                    <option value="{{ outil.type_outils_agricoles }}">{{ outil.type_outils_agricoles }}</option>
+                    {% endfor %}
+                {% endfor %}
+              </select>
+            </div> 
+            </div>  
         `;
     
         container.appendChild(newFields);
@@ -943,8 +962,11 @@
         newFields.className = 'additional-fields';
         newFields.innerHTML = `
           <div class="form-row">
-            <div class="col-md-6">
-              <label for="type_${fieldCount}"Pièce de rechange ${fieldCount}:</label>
+            <div class="col-md-4 mb-6">
+                <div class="avatar mb-2 p-2 lh-1 mb-sm-0 avatar-md rounded-circle  me-2">
+                  <img src="{% static 'assets/images/icons/achat.png' %}" class="side-menu__icon img" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
+                </div>
+              <label for="type_${fieldCount}">Pièce de rechange ${fieldCount}</label>
               <select class="form-control" id="type_pieces_${fieldCount}" name="type_pieces_${fieldCount}">
               <option value="" selected disabled>A</option>
                                 {% for data in data %}
@@ -954,11 +976,14 @@
                                 {% endfor %}
                                 </select>
             </div>
-             <div class="col-md-6 mb-3">
-              <label for="additional_description_${fieldCount}">Nombre de pièces ${fieldCount}:</label>
+             <div class="col-md-4 mb-6">
+                <div class="avatar mb-2 p-2 lh-1 mb-sm-0 avatar-md rounded-circle  me-2">
+                  <img src="{% static 'assets/images/icons/duree.png' %}" class="side-menu__icon img" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
+                </div>
+              <label for="additional_description_${fieldCount}">Nombre de pièces ${fieldCount}</label>
               <input type="number" class="form-control" id="nombre_de_pieces_${fieldCount}" name="nombre_de_pieces_${fieldCount}">
             </div>
-             
+             </div>
         `;
     
         container.appendChild(newFields);
@@ -993,4 +1018,3 @@
     
 
     {% endblock %}
-
