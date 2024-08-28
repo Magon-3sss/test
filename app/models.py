@@ -444,25 +444,28 @@ class UploadedImage(models.Model):
         return f"Image {self.id}"
     
 class New_Oper_Tables(models.Model):
-    type_rh = models.CharField(max_length=50, null=True, blank=True)
-    type_machine_engins = models.CharField(max_length=50, null=True, blank=True)
-    carburant = models.CharField(max_length=100, null=True, blank=True)
     typeoperation = models.CharField(max_length=100, null=True, blank=True)
     date_debut= models.CharField(max_length=100, null=True, blank=True)
     date_fin= models.CharField(max_length=100, null=True, blank=True)
-    duree_utilisation_programme  = models.CharField(max_length=50, null=True, blank=True)
+    type_rh = models.CharField(max_length=50, null=True, blank=True)
+    time = models.CharField(max_length=100, null=True, blank=True)
+    timefin = models.CharField(max_length=100, null=True, blank=True)
+    type_machine_engins = models.CharField(max_length=50, null=True, blank=True)
+    carburant = models.CharField(max_length=100, null=True, blank=True)
+    duree_utilisation_programme = models.CharField(max_length=50, null=True, blank=True)
+    heure_de_fin = models.CharField(max_length=50, null=True, blank=True)
     quantite_carburant  = models.CharField(max_length=50, null=True, blank=True)
-    outil = models.CharField(max_length=50, null=True, blank=True)
-    duree_utilisation  = models.CharField(max_length=50, null=True, blank=True) 
-    type_pieces  = models.CharField(max_length=50, null=True, blank=True)
-    duree_utilisation_piece  = models.CharField(max_length=50, null=True, blank=True)
+    outil = models.CharField(max_length=50, null=True, blank=True) 
+    type_pieces = models.CharField(max_length=50, null=True, blank=True)
+    nombre_de_pieces = models.CharField(max_length=50, null=True, blank=True)
     type_graines_pousses = models.CharField(max_length=50, null=True, blank=True)  
     quantite_graine_utilisee  = models.CharField(max_length=50, null=True, blank=True) 
     type_engrais  = models.CharField(max_length=50, null=True, blank=True)  
     quantite_engrais_utilisee = models.CharField(max_length=50, null=True, blank=True)
     type_traitement = models.CharField(max_length=50, null=True, blank=True)
     quantite_traitement_utilisee = models.CharField(max_length=50, null=True, blank=True)
-    time = models.CharField(max_length=100, null=True, blank=True)
+    description = models.CharField(max_length=500, null=True, blank=True)
+    
     
 class CategoriesPlantes(models.Model):
     nom_plante=models.CharField(max_length=50)

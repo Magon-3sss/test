@@ -620,8 +620,8 @@
                               <div class="avatar mb-2 p-2 lh-1 mb-sm-0 avatar-md rounded-circle  me-2">
                                 <img src="{% static 'assets/images/icons/duree.png' %}" class="side-menu__icon img" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
                               </div>
-                              <label for="Heure_de_fin">Date et Heure de fin </label>
-                                <input type="datetime-local" class="form-control" id="Heure_de_fin" name="Heure_de_fin">
+                              <label for="heure_de_fin">Date et Heure de fin </label>
+                                <input type="datetime-local" class="form-control" id="heure_de_fin" name="heure_de_fin">
                             </div>
                             <div class="col-md-4 mb-6">
                               <div class="avatar mb-2 p-2 lh-1 mb-sm-0 avatar-md rounded-circle  me-2">
@@ -645,7 +645,7 @@
                                 <img src="{% static 'assets/images/icons/outils-de-jardinage.png' %}" class="side-menu__icon img" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
                               </div>
                               <label for="outil">Outil </label>
-                                <select class="form-control" id="outil" name="outil"   >
+                                <select class="form-control"  id="outil" name="outil">
                                 <option value="" selected disabled>Pelle</option>
                                 {% for data in data %}
                                     {% for outil in data.outils %}
@@ -928,7 +928,7 @@
       function ajouter() {
         fieldCount++;
         const container = document.getElementById('ajouter');
-    
+        
         // Crée une nouvelle section de champs
         const newFields = document.createElement('div');
         newFields.className = 'additional-fields';
@@ -939,7 +939,7 @@
                   <img src="{% static 'assets/images/icons/outils-de-jardinage.png' %}" class="side-menu__icon img" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
                 </div>
               <label for="type_${fieldCount}">Outil ${fieldCount}</label>
-              <select class="form-control" id="outil_${fieldCount}" name="outil_${fieldCount}">
+              <select class="form-control" id="outil_${fieldCount}" name="outil">
                 <option value="" selected disabled>Pelle</option>
                 {% for data in data %}
                     {% for outil in data.outils %}
@@ -948,11 +948,11 @@
                 {% endfor %}
               </select>
             </div> 
-            </div>  
+          </div>
         `;
-    
+        
         container.appendChild(newFields);
-      }
+    }
       function ajouterfield() {
         fieldCount++;
         const container = document.getElementById('ajouterfield');

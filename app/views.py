@@ -3047,65 +3047,73 @@ def ajouter_operation_agricole (request):
 @api_view(['POST'])
 def save_operation(request):
     if request.method == "POST":
-        type_rh = request.POST.get('type_rh')
-        type_machine_engins = request.POST.get('type_machine_engins')
-        carburant = request.POST.get('carburant')
         typeoperation = request.POST.get('typeoperation')
         date_debut = request.POST.get('date_debut')
         date_fin = request.POST.get('date_fin')
+        type_rh = request.POST.get('type_rh')
+        time = request.POST.get('time')
+        timefin = request.POST.get('timefin')
+        type_machine_engins = request.POST.get('type_machine_engins')
+        carburant = request.POST.get('carburant')
         duree_utilisation_programme = request.POST.get('duree_utilisation_programme')
+        heure_de_fin = request.POST.get('heure_de_fin')
         quantite_carburant = request.POST.get('quantite_carburant')
         outil = request.POST.get('outil')
-        duree_utilisation = request.POST.get('duree_utilisation')
         type_pieces = request.POST.get('type_pieces')
-        duree_utilisation_piece = request.POST.get('duree_utilisation_piece')
+        nombre_de_pieces = request.POST.get('nombre_de_pieces')
         type_graines_pousses = request.POST.get('type_graines_pousses')
         quantite_graine_utilisee = request.POST.get('quantite_graine_utilisee')
         type_engrais = request.POST.get('type_engrais')
         quantite_engrais_utilisee = request.POST.get('quantite_engrais_utilisee')
         type_traitement = request.POST.get('type_traitement')
         quantite_traitement_utilisee = request.POST.get('quantite_traitement_utilisee')
-        time = request.POST.get('time')
-        print(type_rh)
-        print(type_machine_engins)
-        print(carburant)
+        description = request.POST.get('description')
+        
         print(typeoperation)
         print(date_debut)
         print(date_fin)
-        print( duree_utilisation_programme)
+        print(type_rh)
+        print(time)
+        print(timefin)
+        print(type_machine_engins)
+        print(carburant)
+        print(duree_utilisation_programme)
+        print(heure_de_fin)
         print(quantite_carburant)
         print(outil)
-        print(duree_utilisation)
         print(type_pieces)
-        print(duree_utilisation_piece)
+        print(nombre_de_pieces)
         print(type_graines_pousses)
         print(quantite_graine_utilisee)
         print(type_engrais)
         print(quantite_engrais_utilisee)
         print(type_traitement)
         print(quantite_traitement_utilisee)
-        print(time)
+        print(description)
         
         form = {
-                "type_rh": type_rh,
-                "type_machine_engins": type_machine_engins,
-                "carburant": carburant,
                 "typeoperation": typeoperation,
                 "date_debut": date_debut,
                 "date_fin": date_fin,
+                "type_rh": type_rh,
+                "time": time,
+                "timefin": timefin,
+                "type_machine_engins": type_machine_engins,
+                "carburant": carburant,
                 "duree_utilisation_programme": duree_utilisation_programme,
+                "heure_de_fin": heure_de_fin,
                 "quantite_carburant": quantite_carburant,
                 "outil": outil,
-                "duree_utilisation": duree_utilisation,
                 "type_pieces": type_pieces,
-                "duree_utilisation_piece": duree_utilisation_piece,
+                "nombre_de_pieces": nombre_de_pieces,
                 "type_graines_pousses": type_graines_pousses,
                 "quantite_graine_utilisee": quantite_graine_utilisee,
                 "type_engrais": type_engrais,
                 "quantite_engrais_utilisee": quantite_engrais_utilisee,
                 "type_traitement": type_traitement,
                 "quantite_traitement_utilisee": quantite_traitement_utilisee,
-                "time": time
+                "description": description
+                
             }
         
         operation_serializer = OperationsSerializer(data=form)

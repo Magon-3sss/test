@@ -153,7 +153,6 @@ class MaisonsSerializer(serializers.ModelSerializer):
         fields = '__all__' """
         
 class OperationsSerializer(serializers.ModelSerializer):
-    
     class Meta:
         model = New_Oper_Tables
         fields = '__all__'
