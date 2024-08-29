@@ -1,3 +1,4 @@
+import difflib
 from django.conf import settings as conf_settings
 from django.conf import settings
 import base64
@@ -3208,7 +3209,7 @@ class ImageUploadForm(forms.ModelForm):
     class Meta:
         model = UploadedImage
         fields = ['image']
-
+       
 def preprocess_image_for_red_text(image_path):
     image = Image.open(image_path).convert("RGB")
     np_image = np.array(image)
@@ -3228,9 +3229,73 @@ def preprocess_image_for_red_text(image_path):
     
     # Convert back to PIL Image
     processed_image = Image.fromarray(red_text_image)
-    return processed_image
+    return processed_image 
+
+from django.db.models import Q
 
 def analyse(request):
+    query = request.GET.get('q')
+    sort_by = request.GET.get('sort_by')
+    images = UploadedImage.objects.all().order_by('-id')
+
+    if query:
+        # Filtrer les images en fonction du nom de la maladie
+        images = images.filter(disease_name__icontains=query)
+        
+    if sort_by:
+        if sort_by == 'date_desc':
+            images = images.order_by('-id')
+        elif sort_by == 'date_asc':
+            images = images.order_by('id')
+        elif sort_by == 'disease_name_asc':
+            images = images.order_by('disease_name')
+        elif sort_by == 'disease_name_desc':
+            images = images.order_by('-disease_name')
+
+    paginator = Paginator(images, 12)
+
+    # Retrieve all plant names to populate the dropdown
+    plants = CategoriesPlantes.objects.all()
+
+    if request.method == 'POST':
+        form = ImageUploadForm(request.POST, request.FILES)
+        if form.is_valid():
+            uploaded_image = form.save()
+            image_path = uploaded_image.image.path
+            with open(image_path, 'rb') as image_file:
+                files = {'file': image_file}
+                ngrok_url = 'https://8d84-34-106-139-26.ngrok-free.app/predict'
+                response = requests.post(ngrok_url, files=files)
+                if response.status_code == 200:
+                    result_image_dir = 'D:/MAGON_3SSS/MAGON_3SSS/MAGON_3SSS-main/MAGON_3S/static/assets/results/'
+                    result_image_name = f'result_{uploaded_image.id}.png'
+                    result_image_path = os.path.join(result_image_dir, result_image_name)
+                    with open(result_image_path, 'wb') as f:
+                        f.write(response.content)
+                    uploaded_image.result_image.name = os.path.join('/results', result_image_name)
+
+                    # Prétraitement et OCR pour extraire le nom de la maladie
+                    processed_image = preprocess_image_for_red_text(result_image_path)
+                    ocr_result = pytesseract.image_to_string(processed_image, config='--psm 6')
+                    disease_name = ocr_result.strip()
+
+                    uploaded_image.disease_name = disease_name
+                    uploaded_image.save()
+
+                    return JsonResponse({'success': True, 'image_url': uploaded_image.result_image.url, 'disease_name': disease_name})
+                else:
+                    return JsonResponse({'success': False, 'error_message': 'Erreur lors du traitement de l\'image'})
+        else:
+            return JsonResponse({'success': False, 'error_message': 'Formulaire invalide'})
+    else:
+        form = ImageUploadForm()
+
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    return render(request, 'analyse.html', {'form': form, 'images': images, 'page_obj': page_obj, 'plants': plants})
+
+""" def analyse(request):
     images = UploadedImage.objects.all().order_by('-id')
     paginator = Paginator(images, 12)
     
@@ -3274,7 +3339,7 @@ def analyse(request):
     page_obj = paginator.get_page(page_number)
     
     
-    return render(request, 'analyse.html', {'form': form, 'images': images, 'page_obj': page_obj, 'plants': plants})
+    return render(request, 'analyse.html', {'form': form, 'images': images, 'page_obj': page_obj, 'plants': plants}) """
 
 def get_subcategories(request):
     category_id = request.GET.get('category_id')
