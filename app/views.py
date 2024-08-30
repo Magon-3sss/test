@@ -3209,7 +3209,7 @@ class ImageUploadForm(forms.ModelForm):
     class Meta:
         model = UploadedImage
         fields = ['image']
-       
+     
 def preprocess_image_for_red_text(image_path):
     image = Image.open(image_path).convert("RGB")
     np_image = np.array(image)
@@ -3264,7 +3264,7 @@ def analyse(request):
             image_path = uploaded_image.image.path
             with open(image_path, 'rb') as image_file:
                 files = {'file': image_file}
-                ngrok_url = 'https://8d84-34-106-139-26.ngrok-free.app/predict'
+                ngrok_url = 'https://646f-34-28-181-196.ngrok-free.app/predict'
                 response = requests.post(ngrok_url, files=files)
                 if response.status_code == 200:
                     result_image_dir = 'D:/MAGON_3SSS/MAGON_3SSS/MAGON_3SSS-main/MAGON_3S/static/assets/results/'
