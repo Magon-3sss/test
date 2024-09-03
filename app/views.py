@@ -3051,6 +3051,89 @@ def save_operation(request):
         typeoperation = request.POST.get('typeoperation')
         date_debut = request.POST.get('date_debut')
         date_fin = request.POST.get('date_fin')
+        type_rh_list = request.POST.getlist('type_rh[]')
+        time_list = request.POST.getlist('time[]')
+        timefin_list = request.POST.getlist('timefin[]')
+        #type_rh = request.POST.get('type_rh')
+        #time = request.POST.get('time')
+        #timefin = request.POST.get('timefin')
+        type_machine_engins_list = request.POST.getlist('type_machine_engins[]')
+        carburant_list = request.POST.getlist('carburant[]')
+        duree_utilisation_programme_list = request.POST.getlist('duree_utilisation_programme[]')
+        heure_de_fin_list = request.POST.getlist('heure_de_fin[]')
+        quantite_carburant_list = request.POST.getlist('quantite_carburant[]')
+        #type_machine_engins = request.POST.get('type_machine_engins')
+        #carburant = request.POST.get('carburant')
+        #duree_utilisation_programme = request.POST.get('duree_utilisation_programme')
+        #heure_de_fin = request.POST.get('heure_de_fin')
+        #quantite_carburant = request.POST.get('quantite_carburant')
+        outils = request.POST.getlist('outil[]')                    
+        #outil = request.POST.get('outil')
+        pieces = request.POST.getlist('type_pieces[]')
+        quantities = request.POST.getlist('nombre_de_pieces[]')
+        #type_pieces = request.POST.get('type_pieces')
+        #nombre_de_pieces = request.POST.get('nombre_de_pieces')
+        type_graines_pousses = request.POST.get('type_graines_pousses')
+        quantite_graine_utilisee = request.POST.get('quantite_graine_utilisee')
+        type_engrais = request.POST.get('type_engrais')
+        quantite_engrais_utilisee = request.POST.get('quantite_engrais_utilisee')
+        type_traitement = request.POST.get('type_traitement')
+        quantite_traitement_utilisee = request.POST.get('quantite_traitement_utilisee')
+        description = request.POST.get('description')
+        
+        # Créez l'opération agricole
+        operation = New_Oper_Tables.objects.create(
+            typeoperation=typeoperation,
+            date_debut=date_debut,
+            date_fin=date_fin,
+            type_graines_pousses=type_graines_pousses,
+            quantite_graine_utilisee=quantite_graine_utilisee,
+            type_engrais=type_engrais,
+            quantite_engrais_utilisee=quantite_engrais_utilisee,
+            type_traitement=type_traitement,
+            quantite_traitement_utilisee=quantite_traitement_utilisee,
+            description=description
+        )
+        
+        # Ajoutez les outils à l'opération
+        for outil in outils:
+            # Créez une instance de modèle pour chaque outil
+            tool_instance, _ = Tool.objects.get_or_create(name=outil)
+            operation.outils.add(tool_instance)
+        
+        # Ajoutez les pièces de rechange à l'opération
+        for piece, quantity in zip(pieces, quantities):
+            # Créez une instance de modèle pour chaque pièce de rechange
+            piece_instance, _ = RechangePiece.objects.get_or_create(type_pieces=piece, nombre_de_pieces=quantity)
+            operation.pieces.add(piece_instance)
+        
+        for type_rh, time, timefin in zip(type_rh_list, time_list, timefin_list):
+            # Créez une instance de modèle pour chaque main d'oeuvre
+            maindoeuvre_instance, _ = MainDoeuvre.objects.get_or_create(type_rh=type_rh, time=time, timefin=timefin)
+            operation.main_doeuvres.add(maindoeuvre_instance)
+            
+        # Ajoutez les machines et carburants à l'opération
+        for type_machine_engins, carburant, duree_utilisation_programme, heure_de_fin, quantite_carburant in zip(type_machine_engins_list, carburant_list, duree_utilisation_programme_list, heure_de_fin_list, quantite_carburant_list):
+            machine_carburant_instance, _ = MachineCarburant.objects.get_or_create(
+                type_machine_engins=type_machine_engins,
+                carburant=carburant,
+                duree_utilisation_programme=duree_utilisation_programme,
+                heure_de_fin=heure_de_fin,
+                quantite_carburant=quantite_carburant
+            )
+            operation.machine_carburants.add(machine_carburant_instance)
+                              
+        # Vérifiez si l'opération a été créée avec succès
+        if operation and operation.pk:
+            return JsonResponse({'message': 'Opération enregistrée avec succès'}, status=status.HTTP_201_CREATED)
+        else:
+            return JsonResponse({"Erreur": "Une erreur s'est produite lors de l'enregistrement de l'opération"}, status=status.HTTP_400_BAD_REQUEST)
+""" @api_view(['POST'])
+def save_operation(request):
+    if request.method == "POST":
+        typeoperation = request.POST.get('typeoperation')
+        date_debut = request.POST.get('date_debut')
+        date_fin = request.POST.get('date_fin')
         type_rh = request.POST.get('type_rh')
         time = request.POST.get('time')
         timefin = request.POST.get('timefin')
@@ -3059,7 +3142,8 @@ def save_operation(request):
         duree_utilisation_programme = request.POST.get('duree_utilisation_programme')
         heure_de_fin = request.POST.get('heure_de_fin')
         quantite_carburant = request.POST.get('quantite_carburant')
-        outil = request.POST.get('outil')
+        outils = request.POST.getlist('outils[]')
+        #outil = request.POST.get('outil')
         type_pieces = request.POST.get('type_pieces')
         nombre_de_pieces = request.POST.get('nombre_de_pieces')
         type_graines_pousses = request.POST.get('type_graines_pousses')
@@ -3069,6 +3153,8 @@ def save_operation(request):
         type_traitement = request.POST.get('type_traitement')
         quantite_traitement_utilisee = request.POST.get('quantite_traitement_utilisee')
         description = request.POST.get('description')
+        
+        
         
         print(typeoperation)
         print(date_debut)
@@ -3081,7 +3167,7 @@ def save_operation(request):
         print(duree_utilisation_programme)
         print(heure_de_fin)
         print(quantite_carburant)
-        print(outil)
+        print(outils)
         print(type_pieces)
         print(nombre_de_pieces)
         print(type_graines_pousses)
@@ -3104,7 +3190,7 @@ def save_operation(request):
                 "duree_utilisation_programme": duree_utilisation_programme,
                 "heure_de_fin": heure_de_fin,
                 "quantite_carburant": quantite_carburant,
-                "outil": outil,
+                "outil": outils,
                 "type_pieces": type_pieces,
                 "nombre_de_pieces": nombre_de_pieces,
                 "type_graines_pousses": type_graines_pousses,
@@ -3117,7 +3203,12 @@ def save_operation(request):
                 
             }
         
+        
+        
         operation_serializer = OperationsSerializer(data=form)
+        for outil in outils:
+            # Créez une instance de modèle pour chaque outil
+            Tool.objects.create(operation=form, name=outil)
                
         if operation_serializer.is_valid():
             print('yes')
@@ -3125,7 +3216,7 @@ def save_operation(request):
             return JsonResponse(operation_serializer.data, status=status.HTTP_201_CREATED)
         else:
             print('no')
-            return JsonResponse({"Erreur": "Some error occured"}, status=status.HTTP_201_CREATED)
+            return JsonResponse({"Erreur": "Some error occured"}, status=status.HTTP_201_CREATED) """
           
 """ def ajouter_operation_agricole (request):
     list = []
@@ -3264,7 +3355,7 @@ def analyse(request):
             image_path = uploaded_image.image.path
             with open(image_path, 'rb') as image_file:
                 files = {'file': image_file}
-                ngrok_url = 'https://646f-34-28-181-196.ngrok-free.app/predict'
+                ngrok_url = 'https://bcd4-34-147-114-245.ngrok-free.app/predict'
                 response = requests.post(ngrok_url, files=files)
                 if response.status_code == 200:
                     result_image_dir = 'D:/MAGON_3SSS/MAGON_3SSS/MAGON_3SSS-main/MAGON_3S/static/assets/results/'

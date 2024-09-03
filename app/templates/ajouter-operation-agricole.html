@@ -544,7 +544,7 @@
                                     <img src="{% static 'assets/images/icons/externalisation-rh.png' %}" class="side-menu__icon img" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
                                   </div>
                                   <label for="type">Main d'oeuvre</label>
-                                    <select class="form-control" id="type_rh" name="type_rh">
+                                    <select class="form-control" id="type_rh" name="type_rh[]">
                                         <option value="" selected disabled>Ouvrier</option>
                                         {% for rh in data.0.type_rh %}
                                             <option value="{{ rh.id }}">{{ rh.nom }} {{ rh.prenom }} ({{ rh.type }})</option>
@@ -556,7 +556,7 @@
                             <img src="{% static 'assets/images/icons/lhorloge.png' %}" class="side-menu__icon img" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
                           </div>
                           <label for="datetime">Date et Heure de début</label>
-                          <input type="datetime-local" class="form-control" id="time" name="time">
+                          <input type="datetime-local" class="form-control" id="time" name="time[]">
                                 </div>
             
                                 <div class="col-md-4 mb-6">
@@ -564,7 +564,7 @@
                                   <img src="{% static 'assets/images/icons/lhorloge.png' %}" class="side-menu__icon img" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
                                 </div>
                                 <label for="datetime">Date et Heure de fin </label>
-                                <input type="datetime-local" class="form-control" id="timefin" name="timefin">
+                                <input type="datetime-local" class="form-control" id="timefin" name="timefin[]">
                                 </div>
                               </div>
                               {% comment %} <div class="form-row"> {% endcomment %}
@@ -582,23 +582,19 @@
                                 <img src="{% static 'assets/images/icons/pelouse.png' %}" class="side-menu__icon img" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
                               </div>
                               <label for="type_machine_engins">Type machine</label>
-                              <select class="form-control" id="type_machine_engins" name="type_machine_engins" >
+                              <select class="form-control" id="type_machine_engins" name="type_machine_engins[]" >
                               <option value="" selected disabled>Camion</option>
-
-                              
                               {% for machine in data.0.machines_tables %}
                               <option value="{{ machine.id }}">{{ machine.type }} ({{ machine.matricule }})</option>
                               {% endfor %}
-                              
                               </select>
                             </div>
                             <div class="col-md-4 mb-6">
-                            
                               <div class="avatar mb-2 p-2 lh-1 mb-sm-0 avatar-md rounded-circle  me-2">
                                 <img src="{% static 'assets/images/icons/carburant.png' %}" class="side-menu__icon img" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
                               </div>
                               <label for="carburant">Carburant </label>
-                              <select class="form-control" id="carburant" name="carburant" >
+                              <select class="form-control" id="carburant" name="carburant[]" >
                               <option value="" selected disabled>Gaz</option>
                               {% for data in data %}
                                   {% for carburant in data.carburants %}
@@ -607,28 +603,26 @@
                               {% endfor %}
                               </select>
                             </div>
-                          
                             <div class="col-md-4 mb-6">
                               <div class="avatar mb-2 p-2 lh-1 mb-sm-0 avatar-md rounded-circle  me-2">
                                 <img src="{% static 'assets/images/icons/duree.png' %}" class="side-menu__icon img" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
                               </div>
                               <label for="duree du programme">Date et Heure de début</label>
-                                <input type="datetime-local" class="form-control" id="duree_utilisation_programme" name="duree_utilisation_programme">
-                              
+                                <input type="datetime-local" class="form-control" id="duree_utilisation_programme" name="duree_utilisation_programme[]">
                             </div>
                             <div class="col-md-4 mb-6">
                               <div class="avatar mb-2 p-2 lh-1 mb-sm-0 avatar-md rounded-circle  me-2">
                                 <img src="{% static 'assets/images/icons/duree.png' %}" class="side-menu__icon img" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
                               </div>
                               <label for="heure_de_fin">Date et Heure de fin </label>
-                                <input type="datetime-local" class="form-control" id="heure_de_fin" name="heure_de_fin">
+                                <input type="datetime-local" class="form-control" id="heure_de_fin" name="heure_de_fin[]">
                             </div>
                             <div class="col-md-4 mb-6">
                               <div class="avatar mb-2 p-2 lh-1 mb-sm-0 avatar-md rounded-circle  me-2">
                                 <img src="{% static 'assets/images/icons/jauge.png' %}" class="side-menu__icon img" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
                               </div>
                               <label for="quantite_carburant">Quantité carburant en litres</label>
-                              <input type="number" class="form-control" id="quantite_carburant"  name= "quantite_carburant" placeholder="quantite_du_carburant">
+                              <input type="number" class="form-control" id="quantite_carburant"  name= "quantite_carburant[]" placeholder="quantite_du_carburant">
                             </div>
                           </div>
                           {% comment %} <div class="form-row"> {% endcomment %}
@@ -645,7 +639,7 @@
                                 <img src="{% static 'assets/images/icons/outils-de-jardinage.png' %}" class="side-menu__icon img" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
                               </div>
                               <label for="outil">Outil </label>
-                                <select class="form-control"  id="outil" name="outil">
+                                <select class="form-control"  id="outil" name="outil[]">
                                 <option value="" selected disabled>Pelle</option>
                                 {% for data in data %}
                                     {% for outil in data.outils %}
@@ -669,7 +663,7 @@
                                 <img src="{% static 'assets/images/icons/achat.png' %}" class="side-menu__icon img" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
                               </div>
                               <label for="piece">Pièce de rechange </label>
-                                <select class="form-control" id="type_pieces" name="type_pieces" >
+                                <select class="form-control" id="type_pieces" name="type_pieces[]" >
                                 <option value="" selected disabled>A</option>
                                 {% for data in data %}
                                     {% for piece in data.pieces %}
@@ -683,7 +677,7 @@
                                 <img src="{% static 'assets/images/icons/duree.png' %}" class="side-menu__icon img" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
                               </div>
                               <label for="duree_utilisation">Nombre de pièces</label>
-                              <input type="number" class="form-control" id="nombre_de_pieces"  name="nombre_de_pieces"placeholder="nombre_de_pieces">
+                              <input type="number" class="form-control" id="nombre_de_pieces_${fieldCount}"  name="nombre_de_pieces[]" placeholder="nombre_de_pieces">
                              </div> 
                             </div>
                             {% comment %} <div class="form-row"> {% endcomment %}
@@ -834,7 +828,7 @@
                     <img src="{% static 'assets/images/icons/externalisation-rh.png' %}" class="side-menu__icon img" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
                 </div>
                 <label for="type_${fieldCount}">Main d'oeuvre ${fieldCount}</label>
-                <select class="form-control" id="type_rh_${fieldCount}" name="type_rh_${fieldCount}">
+                <select class="form-control" id="type_rh_${fieldCount}" name="type_rh[]">
                     <option value="" selected disabled>Ouvrier</option>
                     {% for rh in data.0.type_rh %}
                         <option value="{{ rh.id }}">{{ rh.nom }} {{ rh.prenom }} ({{ rh.type }})</option>
@@ -846,21 +840,20 @@
                     <img src="{% static 'assets/images/icons/lhorloge.png' %}" class="side-menu__icon img" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
                 </div>
                 <label for="datetime_${fieldCount}">Date et Heure de début ${fieldCount}</label>
-                <input type="datetime-local" class="form-control" id="time_${fieldCount}" name="time_${fieldCount}">
+                <input type="datetime-local" class="form-control" id="time_${fieldCount}" name="time[]">
             </div>
             <div class="col-md-4 mb-6">
                 <div class="avatar mb-2 p-2 lh-1 mb-sm-0 avatar-md rounded-circle me-2">
                     <img src="{% static 'assets/images/icons/lhorloge.png' %}" class="side-menu__icon img" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
                 </div>
                 <label for="datetime_${fieldCount}">Date et Heure de fin ${fieldCount}</label>
-                <input type="datetime-local" class="form-control" id="timefin_${fieldCount}" name="timefin_${fieldCount}">
+                <input type="datetime-local" class="form-control" id="timefin_${fieldCount}" name="timefin[]">
             </div>
         `;
     
         container.appendChild(newFields);
     }
-    
-
+      
       function add() {
         fieldCount++;
         const container = document.getElementById('additional-fields');
@@ -875,14 +868,11 @@
                 <img src="{% static 'assets/images/icons/pelouse.png' %}" class="side-menu__icon img" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
               </div>
               <label for="type_${fieldCount}">Type Machine ${fieldCount}</label>
-              <select class="form-control" id="type_machine_engins_${fieldCount}" name="type_machine_engins_${fieldCount}">
+              <select class="form-control" id="type_machine_engins_${fieldCount}" name="type_machine_engins[]">
               <option value="" selected disabled>Camion</option>
-
-                              
                               {% for machine in data.0.machines_tables %}
                               <option value="{{ machine.id }}">{{ machine.type }} ({{ machine.matricule }})</option>
                               {% endfor %}
-                              
                               </select>
             </div>
              <div class="col-md-4 mb-6">
@@ -890,7 +880,7 @@
                 <img src="{% static 'assets/images/icons/carburant.png' %}" class="side-menu__icon img" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
               </div>
               <label for="type_${fieldCount}">Carburant ${fieldCount}</label>
-              <select class="form-control" id="carburant_${fieldCount}" name="carburant_${fieldCount}">
+              <select class="form-control" id="carburant_${fieldCount}" name="carburant[]">
              <option value="" selected disabled>Gaz</option>
                               {% for data in data %}
                                   {% for carburant in data.carburants %}
@@ -904,21 +894,21 @@
                   <img src="{% static 'assets/images/icons/duree.png' %}" class="side-menu__icon img" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
                 </div>
               <label for="additional_description_${fieldCount}">date et heure de début ${fieldCount}</label>
-              <input type="datetime-local" class="form-control" id="date et heure de début_${fieldCount}" name="date et heure de début_${fieldCount}">
+              <input type="datetime-local" class="form-control" id="date et heure de début_${fieldCount}" name="duree_utilisation_programme[]">
             </div>
             <div class="col-md-4 mb-6">
               <div class="avatar mb-2 p-2 lh-1 mb-sm-0 avatar-md rounded-circle  me-2">
                 <img src="{% static 'assets/images/icons/duree.png' %}" class="side-menu__icon img" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
               </div>
               <label for="additional_description_${fieldCount}">date et heure de fin ${fieldCount}</label>
-              <input type="datetime-local" class="form-control" id="date et heure de fin_${fieldCount}" name="date et heure de fin_${fieldCount}">
+              <input type="datetime-local" class="form-control" id="date et heure de fin_${fieldCount}" name="heure_de_fin[]">
             </div>
              <div class="col-md-4 mb-6">
                   <div class="avatar mb-2 p-2 lh-1 mb-sm-0 avatar-md rounded-circle  me-2">
                     <img src="{% static 'assets/images/icons/jauge.png' %}" class="side-menu__icon img" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
                   </div>
               <label for="additional_description_${fieldCount}">Quantité carburant ${fieldCount}</label>
-              <input type="number" class="form-control" id="quantite_carburant_${fieldCount}" name="quantite_carburant_${fieldCount}">
+              <input type="number" class="form-control" id="quantite_carburant_${fieldCount}" name="quantite_carburant[]">
             </div>
           </div>
         `;
@@ -938,8 +928,8 @@
                 <div class="avatar mb-2 p-2 lh-1 mb-sm-0 avatar-md rounded-circle  me-2">
                   <img src="{% static 'assets/images/icons/outils-de-jardinage.png' %}" class="side-menu__icon img" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
                 </div>
-              <label for="type_${fieldCount}">Outil ${fieldCount}</label>
-              <select class="form-control" id="outil_${fieldCount}" name="outil">
+              <label for="outil_${fieldCount}">Outil ${fieldCount}</label>
+              <select class="form-control" id="outil_${fieldCount}" name="outil[]">
                 <option value="" selected disabled>Pelle</option>
                 {% for data in data %}
                     {% for outil in data.outils %}
@@ -952,7 +942,7 @@
         `;
         
         container.appendChild(newFields);
-    }
+    } 
       function ajouterfield() {
         fieldCount++;
         const container = document.getElementById('ajouterfield');
@@ -967,7 +957,7 @@
                   <img src="{% static 'assets/images/icons/achat.png' %}" class="side-menu__icon img" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
                 </div>
               <label for="type_${fieldCount}">Pièce de rechange ${fieldCount}</label>
-              <select class="form-control" id="type_pieces_${fieldCount}" name="type_pieces_${fieldCount}">
+              <select class="form-control" id="type_pieces_${fieldCount}" name="type_pieces[]">
               <option value="" selected disabled>A</option>
                                 {% for data in data %}
                                     {% for piece in data.pieces %}
@@ -981,7 +971,7 @@
                   <img src="{% static 'assets/images/icons/duree.png' %}" class="side-menu__icon img" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
                 </div>
               <label for="additional_description_${fieldCount}">Nombre de pièces ${fieldCount}</label>
-              <input type="number" class="form-control" id="nombre_de_pieces_${fieldCount}" name="nombre_de_pieces_${fieldCount}">
+              <input type="number" class="form-control" id="nombre_de_pieces_${fieldCount}" name="nombre_de_pieces[]">
             </div>
              </div>
         `;

@@ -442,22 +442,41 @@ class UploadedImage(models.Model):
 
     def __str__(self):
         return f"Image {self.id}"
-    
+
+class Tool(models.Model):
+    name = models.CharField(max_length=100)
+class RechangePiece(models.Model):
+    type_pieces = models.CharField(max_length=100)
+    nombre_de_pieces = models.CharField(max_length=100)
+class MainDoeuvre(models.Model):
+    type_rh = models.CharField(max_length=100)
+    time = models.DateTimeField()
+    timefin = models.DateTimeField()
+class MachineCarburant(models.Model):
+    type_machine_engins = models.CharField(max_length=100)
+    carburant = models.CharField(max_length=100)
+    duree_utilisation_programme = models.DateTimeField()
+    heure_de_fin = models.DateTimeField()
+    quantite_carburant = models.IntegerField() 
 class New_Oper_Tables(models.Model):
     typeoperation = models.CharField(max_length=100, null=True, blank=True)
     date_debut= models.CharField(max_length=100, null=True, blank=True)
     date_fin= models.CharField(max_length=100, null=True, blank=True)
-    type_rh = models.CharField(max_length=50, null=True, blank=True)
-    time = models.CharField(max_length=100, null=True, blank=True)
-    timefin = models.CharField(max_length=100, null=True, blank=True)
-    type_machine_engins = models.CharField(max_length=50, null=True, blank=True)
-    carburant = models.CharField(max_length=100, null=True, blank=True)
-    duree_utilisation_programme = models.CharField(max_length=50, null=True, blank=True)
-    heure_de_fin = models.CharField(max_length=50, null=True, blank=True)
-    quantite_carburant  = models.CharField(max_length=50, null=True, blank=True)
-    outil = models.CharField(max_length=50, null=True, blank=True) 
-    type_pieces = models.CharField(max_length=50, null=True, blank=True)
-    nombre_de_pieces = models.CharField(max_length=50, null=True, blank=True)
+    #type_rh = models.CharField(max_length=50, null=True, blank=True)
+    #time = models.CharField(max_length=100, null=True, blank=True)
+    #timefin = models.CharField(max_length=100, null=True, blank=True)
+    main_doeuvres = models.ManyToManyField(MainDoeuvre, related_name='operations')
+    #type_machine_engins = models.CharField(max_length=50, null=True, blank=True)
+    #carburant = models.CharField(max_length=100, null=True, blank=True)
+    #duree_utilisation_programme = models.CharField(max_length=50, null=True, blank=True)
+    #heure_de_fin = models.CharField(max_length=50, null=True, blank=True)
+    #quantite_carburant  = models.CharField(max_length=50, null=True, blank=True)
+    machine_carburants = models.ManyToManyField(MachineCarburant, related_name='operations')
+    #outil = models.CharField(max_length=50, null=True, blank=True)
+    outils = models.ManyToManyField(Tool, related_name='form') 
+    #type_pieces = models.CharField(max_length=50, null=True, blank=True)
+    #nombre_de_pieces = models.CharField(max_length=50, null=True, blank=True)
+    pieces = models.ManyToManyField(RechangePiece, related_name='operations')
     type_graines_pousses = models.CharField(max_length=50, null=True, blank=True)  
     quantite_graine_utilisee  = models.CharField(max_length=50, null=True, blank=True) 
     type_engrais  = models.CharField(max_length=50, null=True, blank=True)  
