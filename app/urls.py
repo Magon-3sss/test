@@ -37,8 +37,15 @@ urlpatterns = [
     path('saveparcelle/',savezoneparcelle),
     path('saveFormParcelle/',views.save_form_parcelle),
     
+    path('recommendations-ia', views.recommendations_ia, name='recommendations-ia'),
+    path('operations-utilisateur', views.operations_utilisateur, name='operations-utilisateur'),
+    path('ajouter-operation-agricole', views.ajouter_operation_agricole, name='ajouter-operation-agricole'),
     path('api/save_operation/', views.save_operation, name='save_operation'),
     path('api/get-points/<int:geozone_id>/', views.get_points, name='get_points'),
+    path('api/save-marker/', views.save_marker, name='save_marker'),
+    path('operation/<int:id>/', views.operation_view, name='operation-view'),
+    path('operation/<int:id>/edit/', views.operation_edit, name='operation-edit'),
+    path('operation/<int:id>/delete/', views.operation_delete, name='operation-delete'),
     
     path('sentinelhub-raster-image/', views.generate_raster_image, name='sentinelhub-raster-image'),
     path('saveMachine/',views.save_machine, name='save_machine'),
@@ -235,9 +242,6 @@ urlpatterns = [
     path('autres', views.autres, name='autres'),
     path('meteo', views.meteo, name='meteo'),
     
-    path('operations-utilisateur', views.operations_utilisateur, name='operations-utilisateur'),
-    path('recommendations-ia', views.recommendations_ia, name='recommendations-ia'),
-    path('ajouter-operation-agricole', views.ajouter_operation_agricole, name='ajouter-operation-agricole'),
     
     path('puit', views.puit, name='puit'),
     path('reservoir', views.reservoir, name='reservoir'),

@@ -2964,46 +2964,26 @@ def autres (request):
     return render(request, 'autres.html')
 
 """ Operation Agricole """
+def operations_utilisateur (request):
+    operations = New_Oper_Tables.objects.all()
+    cookie = request.COOKIES.get('jwtToken')
+    if cookie:
+        user_group = request.COOKIES.get('userGroup') or None
+        context = {
+            'jwtToken': cookie,
+            'userGroup': user_group,
+            'operations': operations,
+        }
+        print(context)
+        return render(request, 'operations-utilisateur.html', context)
+    else:
+        return render(request, 'signin.html')
+
 def get_points(request, geozone_id):
     points = Point.objects.filter(geozone_id=geozone_id)
     data = [{'latt': p.latt, 'long': p.long} for p in points]
     return JsonResponse(data, safe=False)
 
-""" def ajouter_operation_agricole(request):
-    cookie = request.COOKIES.get('jwtToken')
-    if cookie:
-        user_group = request.COOKIES.get('userGroup') or None
-
-        # Récupérer toutes les données nécessaires
-        operations_agricoles = New_Oper_Tables.objects.all()
-        type_rh = TypeRh.objects.all()
-        projects = MapForm.objects.all()
-        type_machine_engins = TypeMachineEngins.objects.all()
-        type_carburant = TypeCarburant.objects.all()
-        outil  =TypeOutilsAgricoles.objects.all()
-        type_pieces  = TypePieces.objects.all()
-        type_engrais  = TypeEngrais.objects.all() 
-        type_graines_pousses  =TypeGrainesPousses.objects.all() 
-        type_traitement = TypeTraitement.objects.all()
-
-        # Créer le contexte avec les données des cookies et les objets de la base de données
-        context = {
-            'jwtToken': cookie,
-            'userGroup': user_group,
-            'types': type_rh,
-            'machines': type_machine_engins,
-            'carburants': type_carburant,
-            'outils': outil,
-            'pieces': type_pieces,
-            'graines': type_graines_pousses,
-            'engrais': type_engrais,
-            'traitements': type_traitement,
-            'operations': operations_agricoles,
-            'projects': projects,
-        }
-        return render(request, 'ajouter-operation-agricole.html', context)
-    else:
-        return render(request, 'signin.html') """
 def ajouter_operation_agricole (request):
     list = []
     operations_agricoles = New_Oper_Tables.objects.all()
@@ -3018,36 +2998,28 @@ def ajouter_operation_agricole (request):
     type_traitement = TypeTraitement.objects.all()
     list.append({"type_rh": type_rh,"machines_tables": machines_tables, "carburants": type_carburant, "outils": outil,"pieces": type_pieces,"graines" :type_graines_pousses,"engraiss" : type_engrais, "traitements" : type_traitement,   "operations": operations_agricoles, "projects": projects})
     return render(request, 'ajouter-operation-agricole.html', {'data': list})
+   
 
-""" def ajouter_operation_agricole(request):
-    operations_agricoles = New_Oper_Tables.objects.all()
-    type_rh = Rh_Tables.objects.all()  # Change this line to fetch from Rh_Tables
-    projects = MapForm.objects.all()
-    type_machine_engins = TypeMachineEngins.objects.all()
-    type_carburant = TypeCarburant.objects.all()
-    outil = TypeOutilsAgricoles.objects.all()
-    type_pieces = TypePieces.objects.all()
-    type_engrais = TypeEngrais.objects.all()
-    type_graines_pousses = TypeGrainesPousses.objects.all()
-    type_traitement = TypeTraitement.objects.all()
+def operation_view(request, id):
+    operation = get_object_or_404(New_Oper_Tables, pk=id)
+    return render(request, 'operation-view.html', {'operation': operation})
 
-    context = {
-        "type_rh": type_rh,
-        "machines": type_machine_engins,
-        "carburants": type_carburant,
-        "outils": outil,
-        "pieces": type_pieces,
-        "graines": type_graines_pousses,
-        "engrais": type_engrais,
-        "traitements": type_traitement,
-        "operations": operations_agricoles,
-        "projects": projects,
-    }
-    return render(request, 'ajouter-operation-agricole.html', context) """
+def operation_edit(request, id):
+    operation = get_object_or_404(New_Oper_Tables, pk=id)
+    if request.method == 'POST':
+        # gérer la soumission du formulaire pour éditer l'opération
+        pass
+    return render(request, 'operation-edit.html', {'operation': operation})
+
+def operation_delete(request, id):
+    operation = get_object_or_404(New_Oper_Tables, id=id)
+    operation.delete()
+    return redirect(reverse('operations-utilisateur'))
 
 @api_view(['POST'])
 def save_operation(request):
     if request.method == "POST":
+        project_id = request.POST.get('project_id')
         typeoperation = request.POST.get('typeoperation')
         date_debut = request.POST.get('date_debut')
         date_fin = request.POST.get('date_fin')
@@ -3080,9 +3052,11 @@ def save_operation(request):
         type_traitement = request.POST.get('type_traitement')
         quantite_traitement_utilisee = request.POST.get('quantite_traitement_utilisee')
         description = request.POST.get('description')
-        
+        # Récupère l'objet projet
+        project = MapForm.objects.get(id=project_id)
         # Créez l'opération agricole
         operation = New_Oper_Tables.objects.create(
+            project=project,
             typeoperation=typeoperation,
             date_debut=date_debut,
             date_fin=date_fin,
@@ -3128,6 +3102,28 @@ def save_operation(request):
             return JsonResponse({'message': 'Opération enregistrée avec succès'}, status=status.HTTP_201_CREATED)
         else:
             return JsonResponse({"Erreur": "Une erreur s'est produite lors de l'enregistrement de l'opération"}, status=status.HTTP_400_BAD_REQUEST)
+
+@csrf_exempt
+@api_view(['POST'])
+def save_marker(request):
+    if request.method == 'POST':
+        data = request.data
+        project_id = data.get('project_id')
+        latitude = data.get('latitude')
+        longitude = data.get('longitude')
+
+        try:
+            project = MapForm.objects.get(pk=project_id)
+            marker = Marker.objects.create(
+                project=project,
+                latitude=latitude,
+                longitude=longitude
+            )
+            return JsonResponse({'id': marker.id, 'message': 'Marker saved successfully!'}, status=201)
+        except MapForm.DoesNotExist:
+            return JsonResponse({'error': 'Project not found'}, status=400)
+    return JsonResponse({'error': 'Invalid request'}, status=400)
+
 """ @api_view(['POST'])
 def save_operation(request):
     if request.method == "POST":
@@ -3245,19 +3241,6 @@ def ajouter_operation_agricole (request):
         return render(request, 'ajouter-operation-agricole.html', context)
     else:
         return render(request, 'signin.html') """
-    
-def operations_utilisateur (request):
-    cookie = request.COOKIES.get('jwtToken')
-    if cookie:
-        user_group = request.COOKIES.get('userGroup') or None
-        context = {
-            'jwtToken': cookie,
-            'userGroup': user_group,
-        }
-        print(context)
-        return render(request, 'operations-utilisateur.html', context)
-    else:
-        return render(request, 'signin.html')
 
 def recommendations_ia (request):
     cookie = request.COOKIES.get('jwtToken')

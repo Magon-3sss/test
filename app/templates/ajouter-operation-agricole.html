@@ -122,14 +122,22 @@
                                                                     <img src="{% static 'assets/images/icons/project-management.png' %}" class="side-menu__icon img" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
                                                                    </div> 
                                                                    <label for="geozone">Projets </label>
-                                                                   <select class="form-control" id="geozone" name="geozone" required>
+                                                                   <select class="form-control" id="geozone" name="project_id" required>
+                                                                        <option value="" selected disabled>Projet 1</option>
+                                                                        {% for data in data %}
+                                                                            {% for projet in data.projects %}
+                                                                                <option value="{{ projet.id }}">{{ projet.project_name }}</option>
+                                                                            {% endfor %}
+                                                                        {% endfor %}
+                                                                    </select>                                                                
+                                                                   {% comment %} <select class="form-control" id="geozone" name="geozone" required>
                                                                        <option value="" selected disabled>Projet 1</option>
                                                                        {% for data in data %}
                                                                            {% for projet in data.projects %}
                                                                            <option value="{{ projet.geozone_id }}">{{ projet.project_name }}</option>
                                                                            {% endfor %}
                                                                        {% endfor %}
-                                                                   </select>
+                                                                   </select> {% endcomment %}
                                                                 
                                                                   </div>
 
@@ -333,30 +341,43 @@
                                           map.on(L.Draw.Event.CREATED, function(event) {
                                             var layer = event.layer;
                                             var type = event.layerType;
-                                            var coordinates = layer.toGeoJSON().geometry.coordinates;
-                                
+                                        
+                                            // Obtenez les coordonnées sous forme de latitude et longitude
+                                            var latlng = layer.getLatLng(); // Fonction spécifique pour les points (marker)
+                                            var latitude = latlng.lat;
+                                            var longitude = latlng.lng;
+                                        
+                                            // Obtenez l'ID du projet sélectionné
+                                            var selectedGeozoneId = document.getElementById('geozone').value;
+                                        
+                                            // Créez l'objet de données à envoyer
                                             var data = {
+                                                project_id: selectedGeozoneId,
                                                 type: type,
-                                                coordinates: coordinates
+                                                latitude: latitude,
+                                                longitude: longitude
                                             };
-                                            
-                                            fetch('/save-emplacement/', {
+                                        
+                                            // Faites une requête AJAX pour envoyer les données au serveur
+                                            fetch('/api/save-marker/', {
                                                 method: 'POST',
                                                 headers: {
                                                     'Content-Type': 'application/json',
                                                     'X-CSRFToken': '{{ csrf_token }}'
                                                 },
                                                 body: JSON.stringify(data)
-                                            }).then(response => response.json())
-                                              .then(data => {
-                                                  console.log('Success:', data);
-                                                  layer.bindPopup(`ID: ${data.id}`).openPopup();
-                                                  drawnItems.addLayer(layer);
-                                              })
-                                              .catch(error => {
-                                                  console.error('Error:', error);
-                                              });
+                                            })
+                                            .then(response => response.json())
+                                            .then(data => {
+                                                console.log('Success:', data);
+                                                layer.bindPopup(`Marker ID: ${data.id}`).openPopup();
+                                                drawnItems.addLayer(layer);
+                                            })
+                                            .catch(error => {
+                                                console.error('Error:', error);
+                                            });
                                         });
+                                        
                                         
                                           // fin new part
                                         

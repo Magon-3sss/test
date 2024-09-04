@@ -457,7 +457,15 @@ class MachineCarburant(models.Model):
     carburant = models.CharField(max_length=100)
     duree_utilisation_programme = models.DateTimeField()
     heure_de_fin = models.DateTimeField()
-    quantite_carburant = models.IntegerField() 
+    quantite_carburant = models.IntegerField()
+
+class Marker(models.Model):
+    project = models.ForeignKey(MapForm, on_delete=models.CASCADE, related_name='markers')
+    latitude = models.FloatField()
+    longitude = models.FloatField()
+
+    def __str__(self):
+        return f'Marker at ({self.latitude}, {self.longitude})' 
 class New_Oper_Tables(models.Model):
     typeoperation = models.CharField(max_length=100, null=True, blank=True)
     date_debut= models.CharField(max_length=100, null=True, blank=True)
@@ -484,7 +492,7 @@ class New_Oper_Tables(models.Model):
     type_traitement = models.CharField(max_length=50, null=True, blank=True)
     quantite_traitement_utilisee = models.CharField(max_length=50, null=True, blank=True)
     description = models.CharField(max_length=500, null=True, blank=True)
-    
+    project = models.ForeignKey(MapForm, on_delete=models.CASCADE, related_name='operations', null=True, blank=True)
     
 class CategoriesPlantes(models.Model):
     nom_plante=models.CharField(max_length=50)
