@@ -3002,7 +3002,14 @@ def ajouter_operation_agricole (request):
 
 def operation_view(request, id):
     operation = get_object_or_404(New_Oper_Tables, pk=id)
-    return render(request, 'operation-view.html', {'operation': operation})
+    main_doeuvres = operation.main_doeuvres.all()
+    machine_carburants = operation.machine_carburants.all()
+    context = {
+        'operation': operation,
+        'main_doeuvres': main_doeuvres,
+        'machine_carburants': machine_carburants,
+    }
+    return render(request, 'operation-view.html', context)
 
 def operation_edit(request, id):
     operation = get_object_or_404(New_Oper_Tables, pk=id)

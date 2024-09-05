@@ -208,6 +208,9 @@ class Machines_Tables(models.Model):
     image = models.ImageField(upload_to=filepath , null=True, blank=True)
     description = models.TextField(null=True)
     
+    def __str__(self):
+        return f"{self.type}"
+    
 class Outils_Tables(models.Model):
     type = models.CharField(max_length=50)
     numero_de_serie = models.CharField(max_length=255)
@@ -251,6 +254,9 @@ class Rh_Tables(models.Model):
     image = models.ImageField(upload_to=filepath , null=True, blank=True)
     date_contrat = models.CharField(max_length=100, null=True, blank=True)
     geozone = models.ForeignKey(Zone,on_delete=models.CASCADE)
+    
+    def __str__(self):
+        return f"{self.nom} {self.prenom} ({self.type})"
 
 class Graine_Tables(models.Model):
     nom = models.CharField(max_length=100)
@@ -449,15 +455,21 @@ class RechangePiece(models.Model):
     type_pieces = models.CharField(max_length=100)
     nombre_de_pieces = models.CharField(max_length=100)
 class MainDoeuvre(models.Model):
-    type_rh = models.CharField(max_length=100)
+    type_rh = models.ForeignKey(Rh_Tables, blank=True, null=True, on_delete=models.CASCADE)
     time = models.DateTimeField()
     timefin = models.DateTimeField()
+    
+    def __str__(self):
+        return f"Main d'oeuvre for {self.type_rh.nom} {self.type_rh.prenom}"
 class MachineCarburant(models.Model):
-    type_machine_engins = models.CharField(max_length=100)
+    type_machine_engins = models.ForeignKey(Machines_Tables, blank=True, null=True, on_delete=models.CASCADE)
     carburant = models.CharField(max_length=100)
     duree_utilisation_programme = models.DateTimeField()
     heure_de_fin = models.DateTimeField()
     quantite_carburant = models.IntegerField()
+    
+    def __str__(self):
+        return f"Machines et carburants for {self.type_machine_engins.type} {self.type_machine_engins.matricule}"
 
 class Marker(models.Model):
     project = models.ForeignKey(MapForm, on_delete=models.CASCADE, related_name='markers')
