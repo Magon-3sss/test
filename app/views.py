@@ -3004,13 +3004,17 @@ def operation_view(request, id):
     operation = get_object_or_404(New_Oper_Tables, pk=id)
     main_doeuvres = operation.main_doeuvres.all()
     machine_carburants = operation.machine_carburants.all()
+    outils = operation.outils.all()
+    pieces = operation.pieces.all()
     context = {
         'operation': operation,
         'main_doeuvres': main_doeuvres,
         'machine_carburants': machine_carburants,
+        'outils': outils,
+        'pieces': pieces,
     }
     return render(request, 'operation-view.html', context)
-
+    
 def operation_edit(request, id):
     operation = get_object_or_404(New_Oper_Tables, pk=id)
     if request.method == 'POST':
@@ -3090,13 +3094,22 @@ def save_operation(request):
         
         for type_rh, time, timefin in zip(type_rh_list, time_list, timefin_list):
             # Créez une instance de modèle pour chaque main d'oeuvre
-            maindoeuvre_instance, _ = MainDoeuvre.objects.get_or_create(type_rh=type_rh, time=time, timefin=timefin)
+            # Fetch the Rh_Tables instance before using it in get_or_create
+            rh_instance = Rh_Tables.objects.get(pk=type_rh)
+            maindoeuvre_instance, _ = MainDoeuvre.objects.get_or_create(type_rh=rh_instance, time=time, timefin=timefin)
             operation.main_doeuvres.add(maindoeuvre_instance)
+            try:
+                rh_instance = Rh_Tables.objects.get(pk=type_rh)
+            except Rh_Tables.DoesNotExist:
+                return JsonResponse({"error": f"RH with id {type_rh} not found"}, status=400)
+
             
         # Ajoutez les machines et carburants à l'opération
         for type_machine_engins, carburant, duree_utilisation_programme, heure_de_fin, quantite_carburant in zip(type_machine_engins_list, carburant_list, duree_utilisation_programme_list, heure_de_fin_list, quantite_carburant_list):
+            # Fetch the Machines_Tables instance before using it in get_or_create
+            machine_instance = Machines_Tables.objects.get(pk=type_machine_engins)
             machine_carburant_instance, _ = MachineCarburant.objects.get_or_create(
-                type_machine_engins=type_machine_engins,
+                type_machine_engins=machine_instance,
                 carburant=carburant,
                 duree_utilisation_programme=duree_utilisation_programme,
                 heure_de_fin=heure_de_fin,
@@ -3129,7 +3142,7 @@ def save_marker(request):
             return JsonResponse({'id': marker.id, 'message': 'Marker saved successfully!'}, status=201)
         except MapForm.DoesNotExist:
             return JsonResponse({'error': 'Project not found'}, status=400)
-    return JsonResponse({'error': 'Invalid request'}, status=400)
+    return JsonResponse({'error': 'Invalid request'}, status=400) 
 
 """ @api_view(['POST'])
 def save_operation(request):

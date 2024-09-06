@@ -44,7 +44,7 @@ urlpatterns = [
     path('api/get-points/<int:geozone_id>/', views.get_points, name='get_points'),
     path('api/save-marker/', views.save_marker, name='save_marker'),
     path('operation/<int:id>/', views.operation_view, name='operation-view'),
-    path('operation/<int:id>/edit/', views.operation_edit, name='operation-edit'),
+    path('operation/edit/<int:id>/', views.operation_edit, name='operation-edit'),
     path('operation/<int:id>/delete/', views.operation_delete, name='operation-delete'),
     
     path('sentinelhub-raster-image/', views.generate_raster_image, name='sentinelhub-raster-image'),

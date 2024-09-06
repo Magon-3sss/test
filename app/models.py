@@ -451,9 +451,15 @@ class UploadedImage(models.Model):
 
 class Tool(models.Model):
     name = models.CharField(max_length=100)
+    
+    def __str__(self):
+        return self.name
 class RechangePiece(models.Model):
     type_pieces = models.CharField(max_length=100)
     nombre_de_pieces = models.CharField(max_length=100)
+    
+    def __str__(self):
+        return f"Piece de rechange for {self.type_pieces} {self.nombre_de_pieces}"
 class MainDoeuvre(models.Model):
     type_rh = models.ForeignKey(Rh_Tables, blank=True, null=True, on_delete=models.CASCADE)
     time = models.DateTimeField()

@@ -122,22 +122,22 @@
                                                                     <img src="{% static 'assets/images/icons/project-management.png' %}" class="side-menu__icon img" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
                                                                    </div> 
                                                                    <label for="geozone">Projets </label>
-                                                                   <select class="form-control" id="geozone" name="project_id" required>
+                                                                    {% comment %} <select class="form-control" id="geozone" name="project_id" required>
+                                                                      <option value="" selected disabled>Projet 1</option>
+                                                                      {% for data in data %}
+                                                                          {% for projet in data.projects %}
+                                                                              <option value="{{ projet.id }}">{{ projet.project_name }}</option>
+                                                                          {% endfor %}
+                                                                      {% endfor %}
+                                                                    </select> {% endcomment %}                                                                
+                                                                    <select class="form-control" id="geozone" name="geozone" required>
                                                                         <option value="" selected disabled>Projet 1</option>
                                                                         {% for data in data %}
                                                                             {% for projet in data.projects %}
-                                                                                <option value="{{ projet.id }}">{{ projet.project_name }}</option>
+                                                                            <option value="{{ projet.geozone_id }}">{{ projet.project_name }}</option>
                                                                             {% endfor %}
                                                                         {% endfor %}
-                                                                    </select>                                                                
-                                                                   {% comment %} <select class="form-control" id="geozone" name="geozone" required>
-                                                                       <option value="" selected disabled>Projet 1</option>
-                                                                       {% for data in data %}
-                                                                           {% for projet in data.projects %}
-                                                                           <option value="{{ projet.geozone_id }}">{{ projet.project_name }}</option>
-                                                                           {% endfor %}
-                                                                       {% endfor %}
-                                                                   </select> {% endcomment %}
+                                                                    </select>
                                                                 
                                                                   </div>
 
