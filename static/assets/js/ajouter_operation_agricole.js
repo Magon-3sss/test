@@ -278,7 +278,41 @@ function submitStep9() {
             toolbarButtonPosition: 'end',
             toolbarExtraButtons: [btnFinish, btnCancel]
         }
-    }); 
+    });
+    
+    /* $(document).ready(function() {
+        $('#operation').submit(function(event) {
+            event.preventDefault();
+            
+            var formData = new FormData(this);
+    
+            // Ensure required fields are included
+            var project_id = $('#geozone').val();  // Assuming `geozone` dropdown contains project_id
+            var typeoperation = $('#typeoperation').val();
+    
+            if (!project_id || !typeoperation) {
+                alert("Project and operation type are required!");
+                return;
+            }
+    
+            $.ajax({
+                url: 'http://localhost:8000/api/save_operation/',
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function(data) {
+                    console.log(data);
+                    alert('Operation saved successfully!');
+                },
+                error: function(xhr, textStatus, errorThrown) {
+                    console.log(xhr.responseText);
+                    alert("Error: " + xhr.responseText);
+                }
+            });
+        });
+    }); */
+    
     $(document).ready(function() {
         $('#operation').submit(function(event) {
             event.preventDefault();
@@ -300,36 +334,8 @@ function submitStep9() {
                 }
             });
         });
-    });
+    }); 
 
     
     
 })(jQuery);
-
-function saveEmplacement() {
-    const geozoneId = document.getElementById('geozoneId').value;
-    const coordinates = coordinates
-    const layerType = rectangle
-
-    const data = {
-        geozone_id: geozoneId,
-        coordinates: coordinates,
-        type: layerType
-    };
-
-    fetch('/save-emplacement/', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'X-CSRFToken': getCookie('csrftoken')
-        },
-        body: JSON.stringify(data)
-    })
-    .then(response => response.json())
-    .then(data => {
-        console.log('Success:', data);
-    })
-    .catch((error) => {
-        console.error('Error:', error);
-    });
-}

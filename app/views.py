@@ -3006,12 +3006,48 @@ def operation_view(request, id):
     machine_carburants = operation.machine_carburants.all()
     outils = operation.outils.all()
     pieces = operation.pieces.all()
+    # Retrieve markers associated with this operation
+    markers = operation.markers.all()
+    marker_data = [{'latitude': marker.latitude, 'longitude': marker.longitude} for marker in markers]
+
+   # Retrieve points for the project zone
+    project_points_data = []
+    points = Point.objects.filter(geozone=operation.project.geozone)
+    
+    # Use the 'type' field from the 'Zone' model to determine shape
+    shape_type = operation.project.geozone.type 
+
+    if shape_type == 'circle':
+        # Handle circle case
+        center_point = points.first()  # Assuming a single point defines the circle center
+        project_points_data.append({
+            'type': 'circle',
+            'center': {'latitude': center_point.latt, 'longitude': center_point.long},
+            'radius': operation.project.geozone.circle_radius  # Use the radius from the zone
+        })
+    elif shape_type == 'polygon' or shape_type == 'rectangle':
+        # Handle polygon or rectangle case
+        project_points_data.append({
+            'type': shape_type,
+            'coordinates': [{'latitude': point.latt, 'longitude': point.long} for point in points]
+        })
+    else:
+        # Handle individual points if no specific shape type is defined
+        for point in points:
+            project_points_data.append({
+                'type': 'point',
+                'latitude': point.latt,
+                'longitude': point.long
+            })
+
     context = {
         'operation': operation,
         'main_doeuvres': main_doeuvres,
         'machine_carburants': machine_carburants,
         'outils': outils,
         'pieces': pieces,
+        'markers': marker_data,  
+        'project_points': project_points_data,
     }
     return render(request, 'operation-view.html', context)
     
@@ -3028,6 +3064,114 @@ def operation_delete(request, id):
     return redirect(reverse('operations-utilisateur'))
 
 @api_view(['POST'])
+def save_operation(request):
+    if request.method == "POST":
+        project_id = request.POST.get('project_id')
+        typeoperation = request.POST.get('typeoperation')
+        date_debut = request.POST.get('date_debut')
+        date_fin = request.POST.get('date_fin')
+        
+        type_rh_list = request.POST.getlist('type_rh[]')
+        time_list = request.POST.getlist('time[]')
+        timefin_list = request.POST.getlist('timefin[]')
+
+        type_machine_engins_list = request.POST.getlist('type_machine_engins[]')
+        carburant_list = request.POST.getlist('carburant[]')
+        duree_utilisation_programme_list = request.POST.getlist('duree_utilisation_programme[]')
+        heure_de_fin_list = request.POST.getlist('heure_de_fin[]')
+        quantite_carburant_list = request.POST.getlist('quantite_carburant[]')
+
+        outils = request.POST.getlist('outil[]')
+        pieces = request.POST.getlist('type_pieces[]')
+        quantities = request.POST.getlist('nombre_de_pieces[]')
+
+        type_graines_pousses = request.POST.get('type_graines_pousses')
+        quantite_graine_utilisee = request.POST.get('quantite_graine_utilisee')
+        type_engrais = request.POST.get('type_engrais')
+        quantite_engrais_utilisee = request.POST.get('quantite_engrais_utilisee')
+        type_traitement = request.POST.get('type_traitement')
+        quantite_traitement_utilisee = request.POST.get('quantite_traitement_utilisee')
+        description = request.POST.get('description')
+        
+        # Retrieve marker data
+        marker_latitudes = request.POST.getlist('marker_latitude[]')
+        marker_longitudes = request.POST.getlist('marker_longitude[]')
+
+        # Validate required fields
+        if not project_id or not typeoperation:
+            return JsonResponse({'error': 'Missing required fields'}, status=400)
+
+        try:
+            # Retrieve the project object
+            project = MapForm.objects.get(geozone_id=project_id)
+        except MapForm.DoesNotExist:
+            return JsonResponse({'error': 'Project not found'}, status=400)
+
+        # Create the agricultural operation
+        operation = New_Oper_Tables.objects.create(
+            project=project,
+            typeoperation=typeoperation,
+            date_debut=date_debut,
+            date_fin=date_fin,
+            type_graines_pousses=type_graines_pousses,
+            quantite_graine_utilisee=quantite_graine_utilisee,
+            type_engrais=type_engrais,
+            quantite_engrais_utilisee=quantite_engrais_utilisee,
+            type_traitement=type_traitement,
+            quantite_traitement_utilisee=quantite_traitement_utilisee,
+            description=description
+        )
+
+        # Add tools (outils) to the operation
+        for outil in outils:
+            tool_instance, _ = Tool.objects.get_or_create(name=outil)
+            operation.outils.add(tool_instance)
+
+        # Add spare parts (pieces) to the operation
+        for piece, quantity in zip(pieces, quantities):
+            piece_instance, _ = RechangePiece.objects.get_or_create(type_pieces=piece, nombre_de_pieces=quantity)
+            operation.pieces.add(piece_instance)
+
+        # Add labor (main d'oeuvre) to the operation
+        for type_rh, time, timefin in zip(type_rh_list, time_list, timefin_list):
+            try:
+                rh_instance = Rh_Tables.objects.get(pk=type_rh)
+                maindoeuvre_instance, _ = MainDoeuvre.objects.get_or_create(type_rh=rh_instance, time=time, timefin=timefin)
+                operation.main_doeuvres.add(maindoeuvre_instance)
+            except Rh_Tables.DoesNotExist:
+                return JsonResponse({"error": f"RH with id {type_rh} not found"}, status=400)
+
+        # Add machines and fuel (machine_carburants) to the operation
+        for type_machine_engins, carburant, duree_utilisation_programme, heure_de_fin, quantite_carburant in zip(
+                type_machine_engins_list, carburant_list, duree_utilisation_programme_list, heure_de_fin_list, quantite_carburant_list):
+            try:
+                machine_instance = Machines_Tables.objects.get(pk=type_machine_engins)
+                machine_carburant_instance, _ = MachineCarburant.objects.get_or_create(
+                    type_machine_engins=machine_instance,
+                    carburant=carburant,
+                    duree_utilisation_programme=duree_utilisation_programme,
+                    heure_de_fin=heure_de_fin,
+                    quantite_carburant=quantite_carburant
+                )
+                operation.machine_carburants.add(machine_carburant_instance)
+            except Machines_Tables.DoesNotExist:
+                return JsonResponse({"error": f"Machine with id {type_machine_engins} not found"}, status=400)
+            
+        # Save markers
+        for lat, lng in zip(marker_latitudes, marker_longitudes):
+            marker = Marker.objects.create(
+                project=project,
+                latitude=lat,
+                longitude=lng
+            )
+            operation.markers.add(marker)
+
+        # Check if the operation was created successfully
+        if operation and operation.pk:
+            return JsonResponse({'message': 'Operation saved successfully!'}, status=201)
+        else:
+            return JsonResponse({"error": "Failed to save the operation"}, status=400)
+""" @api_view(['POST'])
 def save_operation(request):
     if request.method == "POST":
         project_id = request.POST.get('project_id')
@@ -3101,7 +3245,7 @@ def save_operation(request):
             try:
                 rh_instance = Rh_Tables.objects.get(pk=type_rh)
             except Rh_Tables.DoesNotExist:
-                return JsonResponse({"error": f"RH with id {type_rh} not found"}, status=400)
+                return JsonResponse({"error": f"RH with id {type_rh} not found"}, status=400) 
 
             
         # Ajoutez les machines et carburants à l'opération
@@ -3121,8 +3265,29 @@ def save_operation(request):
         if operation and operation.pk:
             return JsonResponse({'message': 'Opération enregistrée avec succès'}, status=status.HTTP_201_CREATED)
         else:
-            return JsonResponse({"Erreur": "Une erreur s'est produite lors de l'enregistrement de l'opération"}, status=status.HTTP_400_BAD_REQUEST)
+            return JsonResponse({"Erreur": "Une erreur s'est produite lors de l'enregistrement de l'opération"}, status=status.HTTP_400_BAD_REQUEST)"""
 
+""" @csrf_exempt
+@api_view(['POST'])
+def save_marker(request):
+    if request.method == 'POST':
+        data = request.data
+        project_id = data.get('project_id')
+        latitude = data.get('latitude')
+        longitude = data.get('longitude')
+        print(f"Received data: {data}")  # Log the received data
+        try:
+            project = MapForm.objects.get(geozone_id=project_id)
+            marker = Marker.objects.create(
+                project=project,
+                latitude=latitude,
+                longitude=longitude
+            )
+            return JsonResponse({'id': marker.id, 'message': 'Marker saved successfully!'}, status=201)
+        except MapForm.DoesNotExist:
+            print(f"Project with ID {project_id} not found")  
+            return JsonResponse({'error': 'Project not found'}, status=400)
+    return JsonResponse({'error': 'Invalid request'}, status=400) """
 @csrf_exempt
 @api_view(['POST'])
 def save_marker(request):
@@ -3131,9 +3296,9 @@ def save_marker(request):
         project_id = data.get('project_id')
         latitude = data.get('latitude')
         longitude = data.get('longitude')
-
         try:
-            project = MapForm.objects.get(pk=project_id)
+            project = MapForm.objects.get(geozone_id=project_id)
+            print(project)
             marker = Marker.objects.create(
                 project=project,
                 latitude=latitude,
@@ -3142,7 +3307,7 @@ def save_marker(request):
             return JsonResponse({'id': marker.id, 'message': 'Marker saved successfully!'}, status=201)
         except MapForm.DoesNotExist:
             return JsonResponse({'error': 'Project not found'}, status=400)
-    return JsonResponse({'error': 'Invalid request'}, status=400) 
+    return JsonResponse({'error': 'Invalid request'}, status=400)
 
 """ @api_view(['POST'])
 def save_operation(request):

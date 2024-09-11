@@ -130,7 +130,7 @@
                                                                           {% endfor %}
                                                                       {% endfor %}
                                                                     </select> {% endcomment %}                                                                
-                                                                    <select class="form-control" id="geozone" name="geozone" required>
+                                                                    <select class="form-control" id="geozone" name="project_id" required>
                                                                         <option value="" selected disabled>Projet 1</option>
                                                                         {% for data in data %}
                                                                             {% for projet in data.projects %}
@@ -346,6 +346,20 @@
                                             var latlng = layer.getLatLng(); // Fonction spécifique pour les points (marker)
                                             var latitude = latlng.lat;
                                             var longitude = latlng.lng;
+
+                                            // Dynamically add the latitude and longitude to the form
+                                            var form = document.getElementById('operation');
+                                            var latInput = document.createElement('input');
+                                            latInput.type = 'hidden';
+                                            latInput.name = 'marker_latitude[]';
+                                            latInput.value = latitude;
+                                            form.appendChild(latInput);
+
+                                            var lngInput = document.createElement('input');
+                                            lngInput.type = 'hidden';
+                                            lngInput.name = 'marker_longitude[]';
+                                            lngInput.value = longitude;
+                                            form.appendChild(lngInput);
                                         
                                             // Obtenez l'ID du projet sélectionné
                                             var selectedGeozoneId = document.getElementById('geozone').value;
@@ -531,7 +545,7 @@
                                               <img src="{% static 'assets/images/icons/agriculteur.png' %}" class="side-menu__icon img" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
                                             </div>
                                             <label for="type">Type d'opération </label>
-                                                      <select class="form-control" name="typeoperation" id="typeoperation" data-placeholder="choisir votre opération">
+                                                      <select class="form-control" name="typeoperation" id="typeoperation" data-placeholder="choisir votre opération" required>
                                                           <option value="irrigation">Irrigation</option>
                                                           <option value="fertilisation">Fertilisation</option>
                                                           <option value="récolte">Récolte</option>

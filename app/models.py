@@ -510,6 +510,7 @@ class New_Oper_Tables(models.Model):
     type_traitement = models.CharField(max_length=50, null=True, blank=True)
     quantite_traitement_utilisee = models.CharField(max_length=50, null=True, blank=True)
     description = models.CharField(max_length=500, null=True, blank=True)
+    markers = models.ManyToManyField(Marker, related_name='operations')
     project = models.ForeignKey(MapForm, on_delete=models.CASCADE, related_name='operations', null=True, blank=True)
     
 class CategoriesPlantes(models.Model):

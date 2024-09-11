@@ -315,7 +315,7 @@
 																<div class="leaflet-control map-coordinate">
 																	<div class="coordinate"></div>
 																</div>
-														</div>
+															</div>
 																<!-- leaflet js  -->
 																<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 																<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
@@ -332,8 +332,79 @@
 																<!-- leaflet draw plugin  -->
 																<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/0.4.2/leaflet.draw.css"/>
 																<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/0.4.2/leaflet.draw.js"></script>
-													 
-															<script>
+																
+																<script>
+																	// Initialize the map
+																	var mapcenter = [51.505, -0.09];  // Default map center if no points are provided
+																	var map = L.map('map', {zoomControl: false}).setView(mapcenter, 11);
+																
+																	// Base layers
+																	var googleSat = L.tileLayer('http://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}', {
+																		maxZoom: 20,
+																		subdomains: ['mt0', 'mt1', 'mt2', 'mt3']
+																	}).addTo(map);
+																
+																	var googleStreets = L.tileLayer('http://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}', {
+																		maxZoom: 20,
+																		subdomains: ['mt0', 'mt1', 'mt2', 'mt3']
+																	});
+																
+																	L.control.layers({
+																		"Satellite": googleSat,
+																		"Street": googleStreets
+																	}).addTo(map);
+																
+																	// Group layers for markers and project points
+																	var projectLayer = L.layerGroup().addTo(map);
+																	var markerLayer = L.layerGroup().addTo(map);
+																
+																	// Add project points to the map
+																	var projectPoints = {{ project_points|safe }};
+																	var allPoints = [];
+																	
+																	projectPoints.forEach(function(shape) {
+																		if (shape.type === 'circle') {
+																			var circle = L.circle([shape.center.latitude, shape.center.longitude], {radius: shape.radius}).addTo(projectLayer)
+																				.bindPopup("Circle with radius: " + shape.radius);
+																			allPoints.push([shape.center.latitude, shape.center.longitude]);
+																		} else if (shape.type === 'polygon') {
+																			var latlngs = shape.coordinates.map(function(coord) {
+																				return [coord.latitude, coord.longitude];
+																			});
+																			L.polygon(latlngs).addTo(projectLayer).bindPopup("Polygon");
+																			allPoints = allPoints.concat(latlngs);  // Add all polygon points to the array
+																		} else if (shape.type === 'rectangle') {
+																			var latlngs = shape.coordinates.map(function(coord) {
+																				return [coord.latitude, coord.longitude];
+																			});
+																			L.rectangle(latlngs).addTo(projectLayer).bindPopup("Rectangle");
+																			allPoints = allPoints.concat(latlngs);  // Add all rectangle points to the array
+																		} else if (shape.type === 'point') {
+																			var pointMarker = L.marker([shape.latitude, shape.longitude]).addTo(projectLayer)
+																				.bindPopup("Point: (" + shape.latitude + ", " + shape.longitude + ")");
+																			allPoints.push([shape.latitude, shape.longitude]);
+																		}
+																	});
+																
+																	// Add operation markers to the map
+																	var markers = {{ markers|safe }};
+																	markers.forEach(function(marker) {
+																		var markerPoint = L.marker([marker.latitude, marker.longitude]).addTo(markerLayer)
+																			.bindPopup("Marker: (" + marker.latitude + ", " + marker.longitude + ")");
+																		allPoints.push([marker.latitude, marker.longitude]);  // Add each marker to the array
+																	});
+																
+																	// If there are points, adjust the map to fit all points
+																	if (allPoints.length > 0) {
+																		var bounds = L.latLngBounds(allPoints);
+																		map.fitBounds(bounds);
+																	} else {
+																		// If no points, set default center and zoom level
+																		map.setView(mapcenter, 11);
+																	}
+																</script>
+																
+															{% comment %} <script>
 																// Map initialization 
 																var mapcenter = [51.505, -0.09];
 																var map = L.map('map', {zoomControl: false}).setView(mapcenter, 11);
@@ -369,8 +440,10 @@
 															
 															// sideBySide 
 															L.control.sideBySide(ls, mf).addTo(map);
-															</script>
-														</div>
+
+															
+															</script> {% endcomment %}
+														</div> 
 													</div>
 												</div>
 											</div><!--ROW CLOSED-->
