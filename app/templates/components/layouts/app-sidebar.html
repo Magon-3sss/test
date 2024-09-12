@@ -4,7 +4,7 @@
 	<div class="app-sidebar__overlay" data-bs-toggle="sidebar"></div>
 	<div class="app-sidebar">
 		<div class="side-header">
-			<a class="header-brand1" href="index">
+			<a class="header-brand1" href="{% url 'index' %}">
 				<img src="{% static 'assets/images/brand/magon.png' %}" class="header-brand-img desktop-logo" alt="logo">
 				<img src="{% static 'assets/images/brand/magon.png' %}" class="header-brand-img toggle-logo" alt="logo">
 				<img src="{% static 'assets/images/brand/magon.png' %}" class="header-brand-img light-logo" alt="logo">
@@ -62,7 +62,7 @@
 						<span class="side-menu__label">Iot & Sensors</span><i class="angle fa fa-angle-right"></i></a>
 					<ul class="slide-menu">
 						<li class="side-menu-label1"><a href="javascript:void(0)">Sensor</a></li>
-						<li><a href="chart-flot" class="slide-item">IoT Sensors</a></li>
+						<li><a href="{% url 'chart-flot' %}" class="slide-item">IoT Sensors</a></li>
 					</ul>
 				</li>
 				<li class="slide">
@@ -73,10 +73,10 @@
 						<li class="sub-side-menu-label1"><a href="javascript:void(0)">Détection par Satellites</a></li>
 						<li class="sub-side-menu-label1"><a href="javascript:void(0)">Détection par Drones</a></li>
 						<ul class="slide-menu">
-							<li><a href="form-wizard" class="slide-item">Analyse </a></li>
-							<li><a class="slide-item" href="product-details">Résultats</a></li>
+							<li><a href="{% url 'form-wizard' %}" class="slide-item">Analyse </a></li>
+							<li><a class="slide-item" href="{% url 'product-details' %}">Résultats</a></li>
 						</ul>
-						<li class="sub-side-menu-label1"><a href="analyse">Détection Manuelle</a></li>
+						<li class="sub-side-menu-label1"><a href="{% url 'analyse' %}">Détection Manuelle</a></li>
 						{% comment %} <ul class="slide-menu">
 							<li><a href="analyse" class="slide-item">Analyse </a></li>
 							<li><a class="slide-item" href="product-details">Résultats</a></li>
@@ -109,8 +109,8 @@
 						<span class="side-menu__label">Météo</span><i class="angle fa fa-angle-right"></i></a>
 					<ul class="slide-menu">
 						<li class="side-menu-label1"><a href="javascript:void(0)">Météo</a></li>
-						<li><a href="chart-echart" class="slide-item">Météo Satellite</a></li>
-						<li><a href="chart-echart" class="slide-item">Station Météo</a></li>
+						<li><a href="{% url 'chart-echart' %}" class="slide-item">Météo Satellite</a></li>
+						<li><a href="{% url 'chart-echart' %}" class="slide-item">Station Météo</a></li>
 					</ul>
 				</li>
 				<li class="slide">
@@ -119,7 +119,7 @@
 						<span class="side-menu__label">Iot & Sensors</span><i class="angle fa fa-angle-right"></i></a>
 					<ul class="slide-menu">
 						<li class="side-menu-label1"><a href="javascript:void(0)">Sensor</a></li>
-						<li><a href="chart-flot" class="slide-item">IoT Sensors</a></li>
+						<li><a href="{% url 'chart-flot' %}" class="slide-item">IoT Sensors</a></li>
 					</ul>
 				</li>
 				<li class="slide">
@@ -130,10 +130,10 @@
 						<li class="sub-side-menu-label1"><a href="javascript:void(0)">Détection par Satellites</a></li>
 						<li class="sub-side-menu-label1"><a href="javascript:void(0)">Détection par Drones</a></li>
 						<ul class="slide-menu">
-							<li><a href="form-wizard" class="slide-item">Analyse </a></li>
-							<li><a class="slide-item" href="product-details">Résultats</a></li>
+							<li><a href="{% url 'form-wizard' %}" class="slide-item">Analyse </a></li>
+							<li><a class="slide-item" href="{% url 'product-details' %}">Résultats</a></li>
 						</ul>
-						<li class="sub-side-menu-label1"><a href="analyse">Détection Manuelle</a></li>
+						<li class="sub-side-menu-label1"><a href="{% url 'analyse' %}">Détection Manuelle</a></li>
 						{% comment %} <ul class="slide-menu">
 							<li><a href="analyse" class="slide-item">Analyse </a></li>
 							<li><a class="slide-item" href="product-details">Résultats</a></li>
@@ -158,8 +158,8 @@
 							<img src="{% static 'assets/images/icons/farme.png' %}" class="side-menu__icon" enable-background="new 0 0 24 24" viewBox="0 0 24 24" {% comment %} style="margin-right: 10px; width: 10%;filter: contrast(20%);" {% endcomment %}/>
 							<span class="side-menu__label">Opérations Agricoles</span><i class="angle fa fa-angle-right"></i></a>
 							<ul class="slide-menu">
-								<li class="sub-side-menu-label1"><a href="recommendations-ia">Recommandations IA</a></li>
-								<li class="sub-side-menu-label1"><a href="operations-utilisateur">Opérations utilisateur</a></li>
+								<li class="sub-side-menu-label1"><a href="{% url 'recommendations-ia' %}">Recommandations IA</a></li>
+								<li class="sub-side-menu-label1"><a href="{% url 'operations-utilisateur' %}">Opérations utilisateur</a></li>
 							</ul>
 					</li>		
 				</li>				
@@ -188,8 +188,8 @@
 						<span class="side-menu__label">Météo</span><i class="angle fa fa-angle-right"></i></a>
 					<ul class="slide-menu">
 						<li class="side-menu-label1"><a href="javascript:void(0)">Météo</a></li>
-						<li><a href="chart-echart" class="slide-item">Météo Satellite</a></li>
-						<li><a href="chart-echart" class="slide-item">Station Météo</a></li>
+						<li><a href="{% url 'chart-echart' %}" class="slide-item">Météo Satellite</a></li>
+						<li><a href="{% url 'chart-echart' %}" class="slide-item">Station Météo</a></li>
 					</ul>
 				</li>
 				<li class="slide">
@@ -198,7 +198,7 @@
 						<span class="side-menu__label">Iot & Sensors</span><i class="angle fa fa-angle-right"></i></a>
 					<ul class="slide-menu">
 						<li class="side-menu-label1"><a href="javascript:void(0)">Sensor</a></li>
-						<li><a href="chart-flot" class="slide-item">IoT Sensors</a></li>
+						<li><a href="{% url 'chart-flot' %}" class="slide-item">IoT Sensors</a></li>
 					</ul>
 				</li>
 				<li class="slide">
@@ -209,10 +209,10 @@
 						<li class="sub-side-menu-label1"><a href="javascript:void(0)">Détection par Satellites</a></li>
 						<li class="sub-side-menu-label1"><a href="javascript:void(0)">Détection par Drones</a></li>
 						<ul class="slide-menu">
-							<li><a href="form-wizard" class="slide-item">Analyse </a></li>
-							<li><a class="slide-item" href="product-details">Résultats</a></li>
+							<li><a href="{% url 'form-wizard' %}" class="slide-item">Analyse </a></li>
+							<li><a class="slide-item" href="{% url 'product-details' %}">Résultats</a></li>
 						</ul>
-						<li class="sub-side-menu-label1"><a href="analyse">Détection Manuelle</a></li>
+						<li class="sub-side-menu-label1"><a href="{% url 'analyse' %}">Détection Manuelle</a></li>
 						{% comment %} <ul class="slide-menu">
 							<li><a href="analyse" class="slide-item">Analyse </a></li>
 							<li><a class="slide-item" href="product-details">Résultats</a></li>
@@ -237,8 +237,8 @@
 							<img src="{% static 'assets/images/icons/farme.png' %}" class="side-menu__icon" enable-background="new 0 0 24 24" viewBox="0 0 24 24" {% comment %} style="margin-right: 10px; width: 10%;filter: contrast(20%);" {% endcomment %}/>
 							<span class="side-menu__label">Opérations Agricoles</span><i class="angle fa fa-angle-right"></i></a>
 							<ul class="slide-menu">
-								<li class="sub-side-menu-label1"><a href="recommendations-ia">Recommandations IA</a></li>
-								<li class="sub-side-menu-label1"><a href="operations-utilisateur">Opérations utilisateur</a></li>
+								<li class="sub-side-menu-label1"><a href="{% url 'recommendations-ia' %}">Recommandations IA</a></li>
+								<li class="sub-side-menu-label1"><a href="{% url 'operations-utilisateur' %}">Opérations utilisateur</a></li>
 							</ul>
 					</li>		
 				</li>
@@ -286,8 +286,8 @@
 						<span class="side-menu__label">Météo</span><i class="angle fa fa-angle-right"></i></a>
 					<ul class="slide-menu">
 						<li class="side-menu-label1"><a href="javascript:void(0)">Météo</a></li>
-						<li><a href="chart-echart" class="slide-item">Météo Satellite</a></li>
-						<li><a href="chart-echart" class="slide-item">Station Météo</a></li>
+						<li><a href="{% url 'chart-echart' %}" class="slide-item">Météo Satellite</a></li>
+						<li><a href="{% url 'chart-echart' %}" class="slide-item">Station Météo</a></li>
 					</ul>
 				</li>
 				<li class="slide">
@@ -296,7 +296,7 @@
 						<span class="side-menu__label">Iot & Sensors</span><i class="angle fa fa-angle-right"></i></a>
 					<ul class="slide-menu">
 						<li class="side-menu-label1"><a href="javascript:void(0)">Sensor</a></li>
-						<li><a href="chart-flot" class="slide-item">IoT Sensors</a></li>
+						<li><a href="{% url 'chart-flot' %}" class="slide-item">IoT Sensors</a></li>
 					</ul>
 				</li>
 				<li class="slide">
@@ -307,10 +307,10 @@
 						<li class="sub-side-menu-label1"><a href="javascript:void(0)">Détection par Satellites</a></li>
 						<li class="sub-side-menu-label1"><a href="javascript:void(0)">Détection par Drones</a></li>
 						<ul class="slide-menu">
-							<li><a href="form-wizard" class="slide-item">Analyse </a></li>
-							<li><a class="slide-item" href="product-details">Résultats</a></li>
+							<li><a href="{% url 'form-wizard' %}" class="slide-item">Analyse </a></li>
+							<li><a class="slide-item" href="{% url 'product-details' %}">Résultats</a></li>
 						</ul>
-						<li class="sub-side-menu-label1"><a href="analyse">Détection Manuelle</a></li>
+						<li class="sub-side-menu-label1"><a href="{% url 'analyse' %}">Détection Manuelle</a></li>
 						{% comment %} <ul class="slide-menu">
 							<li><a href="analyse" class="slide-item">Analyse </a></li>
 							<li><a class="slide-item" href="product-details">Résultats</a></li>
@@ -335,8 +335,8 @@
 							<img src="{% static 'assets/images/icons/farme.png' %}" class="side-menu__icon" enable-background="new 0 0 24 24" viewBox="0 0 24 24" {% comment %} style="margin-right: 10px; width: 10%;filter: contrast(20%);" {% endcomment %}/>
 							<span class="side-menu__label">Opérations Agricoles</span><i class="angle fa fa-angle-right"></i></a>
 							<ul class="slide-menu">
-								<li class="sub-side-menu-label1"><a href="recommendations-ia">Recommandations IA</a></li>
-								<li class="sub-side-menu-label1"><a href="operations-utilisateur">Opérations utilisateur</a></li>
+								<li class="sub-side-menu-label1"><a href="{% url 'recommendations-ia' %}">Recommandations IA</a></li>
+								<li class="sub-side-menu-label1"><a href="{% url 'operations-utilisateur' %}">Opérations utilisateur</a></li>
 							</ul>
 					</li>		
 				</li>
@@ -403,7 +403,7 @@
 					</a>
 				</li>
 				<li class="slide">
-					<a class="side-menu__item" data-bs-toggle="slide" href="meteo">
+					<a class="side-menu__item" data-bs-toggle="slide" href="{% url 'meteo' %}">
 						<img src="{% static 'assets/images/icons/weather.png' %}" class="side-menu__icon" enable-background="new 0 0 24 24" viewBox="0 0 24 24" {% comment %} style="margin-right: 10px; width: 10%;filter: contrast(20%);" {% endcomment %}/>
 						<span class="side-menu__label">Météo</span>{% comment %} <i class="angle fa fa-angle-right"></i> {% endcomment %}</a>
 					{% comment %} <ul class="slide-menu">
@@ -429,10 +429,10 @@
 						<li class="sub-side-menu-label1"><a href="javascript:void(0)">Détection par Satellites</a></li>
 						<li class="sub-side-menu-label1"><a href="javascript:void(0)">Détection par Drones</a></li>
 						<ul class="slide-menu">
-							<li><a href="form-wizard" class="slide-item">Analyse </a></li>
-							<li><a class="slide-item" href="product-details">Résultats</a></li>
+							<li><a href="{% url 'form-wizard' %}" class="slide-item">Analyse </a></li>
+							<li><a class="slide-item" href="{% url 'product-details' %}">Résultats</a></li>
 						</ul>
-						<li class="sub-side-menu-label1"><a href="analyse">Détection Manuelle</a></li>
+						<li class="sub-side-menu-label1"><a href="{% url 'analyse' %}">Détection Manuelle</a></li>
 						{% comment %} <ul class="slide-menu">
 							<li><a href="analyse" class="slide-item">Analyse </a></li>
 							<li><a class="slide-item" href="product-details">Résultats</a></li>
@@ -457,8 +457,8 @@
 							<img src="{% static 'assets/images/icons/farme.png' %}" class="side-menu__icon" enable-background="new 0 0 24 24" viewBox="0 0 24 24" {% comment %} style="margin-right: 10px; width: 10%;filter: contrast(20%);" {% endcomment %}/>
 							<span class="side-menu__label">Opérations Agricoles</span><i class="angle fa fa-angle-right"></i></a>
 							<ul class="slide-menu">
-								<li ><a href="recommendations-ia">Recommandations IA</a></li>
-								<li class="sub-side-menu-label1"><a href="operations-utilisateur">Opérations utilisateur</a></li>
+								<li ><a href="{% url 'recommendations-ia' %}">Recommandations IA</a></li>
+								<li class="sub-side-menu-label1"><a  href="{% url 'operations-utilisateur' %}">Opérations utilisateur</a></li>
 							</ul>
 					</li>		
 				</li>
@@ -510,7 +510,7 @@
 							<span class="side-menu__label">Paramètres</span><i class="angle fa fa-angle-right"></i></a>
 					</li>
 					<li class="slide">
-						<a class="side-menu__item" data-bs-toggle="slide" href="profile-user">
+						<a class="side-menu__item" data-bs-toggle="slide" href="{% url 'profile-user' %}">
 							<img src="{% static 'assets/images/icons/user-account.png' %}" class="side-menu__icon" enable-background="new 0 0 24 24" viewBox="0 0 24 24" {% comment %} style="margin-right: 10px; width: 10%;filter: contrast(20%);" {% endcomment %}/>
 							<span class="side-menu__label">Compte</span><i class="angle fa fa-angle-right"></i></a>
 					</li>

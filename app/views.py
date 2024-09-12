@@ -3051,12 +3051,92 @@ def operation_view(request, id):
     }
     return render(request, 'operation-view.html', context)
     
-def operation_edit(request, id):
+""" def operation_edit(request, id):
     operation = get_object_or_404(New_Oper_Tables, pk=id)
     if request.method == 'POST':
         # gérer la soumission du formulaire pour éditer l'opération
         pass
-    return render(request, 'operation-edit.html', {'operation': operation})
+    return render(request, 'operation-edit.html', {'operation': operation}) """
+    
+def operation_edit(request, id):
+    # Fetch the specific operation using the id
+    operation = get_object_or_404(New_Oper_Tables, pk=id)
+    main_doeuvres = operation.main_doeuvres.all()
+    all_rh = Rh_Tables.objects.all()
+    machine_carburants = operation.machine_carburants.all()
+    machines_tables = Machines_Tables.objects.all()
+    carburants = TypeCarburant.objects.all()
+
+    if request.method == 'POST':
+        # Updating Type d'opération
+        operation.typeoperation = request.POST.get('typeoperation')
+        operation.date_debut = request.POST.get('date_debut')
+        operation.date_fin = request.POST.get('date_fin')
+        operation.save()
+
+        # Handling Main d'œuvre updates
+        type_rh_list = request.POST.getlist('type_rh[]')
+        time_list = request.POST.getlist('time[]')
+        timefin_list = request.POST.getlist('timefin[]')
+
+        # Clear old Main d'œuvre entries
+        operation.main_doeuvres.clear()
+
+        # Save updated Main d'œuvre entries
+        for type_rh, time, timefin in zip(type_rh_list, time_list, timefin_list):
+            if type_rh and time and timefin:
+                try:
+                    rh_instance = Rh_Tables.objects.get(pk=type_rh)
+                    maindoeuvre_instance, _ = MainDoeuvre.objects.get_or_create(
+                        type_rh=rh_instance, 
+                        time=time, 
+                        timefin=timefin
+                    )
+                    operation.main_doeuvres.add(maindoeuvre_instance)
+                except Rh_Tables.DoesNotExist:
+                    continue  # Handle the case where RH entry is not found
+                
+        # Machines et carburants handling
+        type_machine_engins_list = request.POST.getlist('type_machine_engins[]')
+        carburant_list = request.POST.getlist('carburant[]')
+        quantite_carburant_list = request.POST.getlist('quantite_carburant[]')
+        duree_utilisation_programme_list = request.POST.getlist('duree_utilisation_programme[]')
+        heure_de_fin_list = request.POST.getlist('heure_de_fin[]')
+
+        # Clear old machine_carburants
+        operation.machine_carburants.clear()
+
+        # Save new machine_carburants
+        for type_machine_engins, carburant, quantite_carburant, duree_utilisation_programme, heure_de_fin in zip(
+                type_machine_engins_list, carburant_list, quantite_carburant_list, duree_utilisation_programme_list, heure_de_fin_list):
+            if type_machine_engins and carburant and quantite_carburant and duree_utilisation_programme and heure_de_fin:
+                try:
+                    machine_instance = Machines_Tables.objects.get(pk=type_machine_engins)
+                    machine_carburant_instance, _ = MachineCarburant.objects.get_or_create(
+                        type_machine_engins=machine_instance,
+                        carburant=carburant,
+                        duree_utilisation_programme=duree_utilisation_programme,
+                        heure_de_fin=heure_de_fin,
+                        quantite_carburant=quantite_carburant
+                    )
+                    operation.machine_carburants.add(machine_carburant_instance)
+                except Machines_Tables.DoesNotExist:
+                    continue
+
+        return redirect('operation-view', id=operation.id)
+
+    context = {
+        'operation': operation,
+        'main_doeuvres': main_doeuvres,
+        'all_rh': all_rh,
+        'machines_tables': machines_tables,
+        'machine_carburants': machine_carburants,
+        'carburants': carburants,
+    }
+    return render(request, 'operation-edit.html', context)
+
+
+
 
 def operation_delete(request, id):
     operation = get_object_or_404(New_Oper_Tables, id=id)

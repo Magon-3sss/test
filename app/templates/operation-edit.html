@@ -1,146 +1,230 @@
 {% extends 'components/base.html' %}
 {% load static %}
 
-    {% block styles %}
+{% block styles %}
+    <style>
+        .img {
+            width: 30px;
+        }
+    </style>
+{% endblock %}
 
-    {% endblock %}
-    
-        {% block content %}
-        
-							<!-- PAGE-HEADER -->
-							<div class="page-header">
-								<div>
-									<h1 class="page-title">Modifier Opération Agricole</h1>
+{% block content %}
+<!-- PAGE-HEADER -->
+<div class="page-header">
+    <div>
+        <h1 class="page-title">Modifier Opération Agricole</h1>
+    </div>
+    <div class="ms-auto pageheader-btn">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">Opérations Agricoles</li>
+            <li class="breadcrumb-item"><a href="{% url 'operations-utilisateur' %}">Opérations Utilisateur</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Modifier Opération Agricole</li>
+        </ol>
+    </div>
+</div>
+<!-- PAGE-HEADER END -->
+
+<!-- ROW OPENED -->
+<div class="row">
+    <div class="col-lg-12 col-md-12">
+        <div class="card">
+            <div class="card-header border-bottom">
+                <h4 class="mb-0">Modifier Opération Agricole</h4>
+            </div>
+            <div class="card-body border-0">
+                <form method="POST">
+                    {% csrf_token %}
+                    <div class="row mb-4">
+                        <p class="mb-4 text-17"><strong>Type d'opération</strong></p>
+
+                        <!-- Type d'opération -->
+                        <div class="col-md-4 mb-6">
+                            <div class="form-group">
+                                <div class="avatar mb-2 p-2 lh-1 mb-sm-0 avatar-md rounded-circle me-2">
+                                    <img src="{% static 'assets/images/icons/agriculteur.png' %}" class="side-menu__icon img"/>
+                                </div>
+                                <label for="type">Type d'opération</label>
+                                <select class="form-control" name="typeoperation" id="typeoperation" required>
+                                    <option value="irrigation" {% if operation.typeoperation == 'irrigation' %}selected{% endif %}>Irrigation</option>
+                                    <option value="fertilisation" {% if operation.typeoperation == 'fertilisation' %}selected{% endif %}>Fertilisation</option>
+                                    <option value="récolte" {% if operation.typeoperation == 'récolte' %}selected{% endif %}>Récolte</option>
+                                    <option value="traitement" {% if operation.typeoperation == 'traitement' %}selected{% endif %}>Traitement</option>
+                                    <option value="autre" {% if operation.typeoperation == 'autre' %}selected{% endif %}>Autre</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Date et Heure de début d'opération -->
+                        <div class="col-md-4 mb-6">
+                            <div class="form-group">
+                                <div class="avatar mb-2 p-2 lh-1 mb-sm-0 avatar-md rounded-circle me-2">
+                                    <img src="{% static 'assets/images/icons/calendrier.png' %}" class="side-menu__icon img"/>
+                                </div>
+                                <label for="datetime">Date et Heure de l'opération</label>
+                                <input type="datetime-local" class="form-control" id="date_debut" name="date_debut" value="{{ operation.date_debut}}">
+                            </div>
+                        </div>
+
+                        <!-- Date et Heure de fin d'opération -->
+                        <div class="col-md-4 mb-6">
+                            <div class="form-group">
+                                <div class="avatar mb-2 p-2 lh-1 mb-sm-0 avatar-md rounded-circle me-2">
+                                    <img src="{% static 'assets/images/icons/calendrier.png' %}" class="side-menu__icon img"/>
+                                </div>
+                                <label for="datetime">Date et Heure de fin d'opération</label>
+                                <input type="datetime-local" class="form-control" id="date_fin" name="date_fin" value="{{ operation.date_fin}}">
+                            </div>
+                        </div>
+                    </div>
+
+					<div class="row mb-4">
+						<p class="mb-4 text-17"><strong>Main d'œuvre</strong></p>
+					
+						{% for main_doeuvre in main_doeuvres %}
+						<div class="col-md-12">
+							<p><strong>Main d'œuvre {{ forloop.counter }}:</strong></p>  
+						</div>
+						<div class="col-md-4 mb-6">
+							<div class="form-group">
+								<div class="avatar mb-2 p-2 lh-1 mb-sm-0 avatar-md rounded-circle me-2">
+									<img src="{% static 'assets/images/icons/externalisation-rh.png' %}" class="side-menu__icon img" />
 								</div>
-								<div class="ms-auto pageheader-btn">
-									<ol class="breadcrumb">
-										<li class="breadcrumb-item"><a href="operations-utilisateur">Opérations Agricoles</a></li>
-										<li class="breadcrumb-item active" aria-current="page">Modifier Opération Agricole</li>
-									</ol>
-								</div>
+								<label for="type">Main d'œuvre</label>
+								<select class="form-control" id="type_rh" name="type_rh[]">
+									<option value="" disabled>Ouvrier</option>
+									{% for rh in all_rh %}
+										<option value="{{ rh.id }}" {% if rh.id == main_doeuvre.type_rh.id %}selected{% endif %}>
+											{{ rh.nom }} {{ rh.prenom }} ({{ rh.type }})
+										</option>
+									{% endfor %}
+								</select>
 							</div>
-							<!-- PAGE-HEADER END -->
-
-							<!-- Row -->
-							<div class="row row-sm">
-								<div class="col-lg-12">
-									<div class="card custom-card">
-										<div class="card-header border-bottom">
-											<h3 class="card-title">Modifier Opération Agricole</h3>
-										</div>
-										<div class="card-body">
-											<div class="table-responsive">
-												<table class="table text-nowrap text-md-nowrap table-bordered">
-													<tbody>
-														<tr>
-															<td class="wp-30">Username</td>
-															<td class="wp-70">
-																<a href="#" id="username" data-type="text" data-pk="1" data-title="Enter username">superuser</a>
-															</td>
-														</tr>
-														<tr>
-															<td class="wp-30">Email</td>
-															<td class="wp-70">
-																<a href="#" id="email" data-type="email" data-pk="1">admin@example.com</a>
-															</td>
-														</tr>
-														<tr>
-															<td class="wp-30">Password</td>
-															<td class="wp-70">
-																<a href="#" id="password" data-type="password" data-pk="1"></a>
-															</td>
-														</tr>
-														<tr>
-															<td class="wp-30">URL</td>
-															<td class="wp-70">
-																<a href="#" id="url" data-type="url" data-pk="1"></a>
-															</td>
-														</tr>
-														<tr>
-															<td class="wp-30">Telephone Number, Maxlength</td>
-															<td class="wp-70">
-																<a href="#" id="tel" data-type="number" data-pk="1"></a>
-															</td>
-														</tr>
-														<tr>
-															<td class="wp-30">Range</td>
-															<td class="wp-70">
-																<a href="#" id="range" data-type="range" data-pk="1"></a>
-															</td>
-														</tr>
-														<tr>
-															<td class="wp-30">Time</td>
-															<td class="wp-70">
-																<a href="#" id="time" data-type="time" data-pk="1"></a>
-															</td>
-														</tr>
-														<tr>
-															<td class="wp-30">Combodate (date)</td>
-															<td class="wp-70">
-																<a href="#" id="dob" data-type="combodate" data-pk="1" data-value="31-12-2021" data-title="Select date"></a>
-															</td>
-														</tr>
-														<tr>
-															<td class="wp-30">Empty text field, required</td>
-															<td class="wp-70">
-																<a href="#" id="emptyField" data-type="text" data-pk="1" data-title="Enter username"></a>
-															</td>
-														</tr>
-														<tr>
-															<td class="wp-30">Select, local array, custom display</td>
-															<td class="wp-70">
-																<a href="#" id="gender" data-type="select" data-pk="1" data-title="Select Gender"></a>
-															</td>
-														</tr>
-														<tr>
-															<td class="wp-30">Select2 (dropdown mode)</td>
-															<td class="wp-70">
-																<a href="#" id="country" data-type="select2" data-pk="1" data-title="Select Country"></a>
-															</td>
-														</tr>
-														<tr>
-															<td class="wp-30">Custom input, several fields</td>
-															<td class="wp-70">
-																<a href="#" id="address" data-type="address" data-pk="1" data-title="Please, fill address"></a>
-															</td>
-														</tr>
-														<tr>
-															<td class="wp-30">Checklist</td>
-															<td class="wp-70">
-																<a href="#" id="checklist" data-type="checklist" data-pk="1" data-title="Select options"></a>
-															</td>
-														</tr>
-														<tr>
-															<td class="wp-30">Textarea, buttons below. Submit by <span class="tag">ctrl+enter</span> </td>
-															<td class="wp-70">
-																<a href="#" id="textarea" data-type="textarea" data-pk="1">awesome comment!</a>
-															</td>
-														</tr>
-													</tbody>
-												</table>
-											</div>
-										</div>
-									</div>
+						</div>
+					
+						<div class="col-md-4 mb-6">
+							<div class="form-group">
+								<div class="avatar mb-2 p-2 lh-1 mb-sm-0 avatar-md rounded-circle  me-2">
+									<img src="{% static 'assets/images/icons/lhorloge.png' %}" class="side-menu__icon img" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
 								</div>
+								<label for="time">Date et Heure de début</label>
+								<input type="datetime-local" class="form-control" name="time[]" value="{{ main_doeuvre.time|date:'Y-m-d\TH:i' }}">
 							</div>
-							<!-- End Row -->
+						</div>
+					
+						<div class="col-md-4 mb-6">
+							<div class="form-group">
+								<div class="avatar mb-2 p-2 lh-1 mb-sm-0 avatar-md rounded-circle  me-2">
+									<img src="{% static 'assets/images/icons/lhorloge.png' %}" class="side-menu__icon img" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
+								</div>
+								<label for="timefin">Date et Heure de fin</label>
+								<input type="datetime-local" class="form-control" name="timefin[]" value="{{ main_doeuvre.timefin|date:'Y-m-d\TH:i' }}">
+							</div>
+						</div>
+						{% endfor %}
+					</div>
+					
+					<div class="row mb-4">
+						<p class="mb-4 text-17"><strong>Machines et carburants</strong></p>
+						{% for machine_carburant in machine_carburants %}
+						<div class="col-md-12">
+							<p><strong>Machines et carburants {{ forloop.counter }}:</strong></p>  
+						</div>
+						<div class="col-md-4 mb-6">
+							<div class="form-group">
+								<div class="avatar mb-2 p-2 lh-1 mb-sm-0 avatar-md rounded-circle  me-2">
+									<img src="{% static 'assets/images/icons/pelouse.png' %}" class="side-menu__icon img" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
+								</div>
+								<label for="type_machine_engins">Type machine</label>
+									<select class="form-control" id="type_machine_engins" name="type_machine_engins[]" >
+									<option value="" selected disabled>Camion</option>
+									{% for machine in machines_tables %}
+									<option value="{{ machine.id }}" {% if machine.id == machine_carburant.type_machine_engins.id %}selected{% endif %}>{{ machine.type }} ({{ machine.matricule }})</option>
+									{% endfor %}
+								</select>
 
-        {% endblock %}
+								<div class="avatar mb-2 p-2 lh-1 mb-sm-0 avatar-md rounded-circle  me-2">
+									<img src="{% static 'assets/images/icons/duree.png' %}" class="side-menu__icon img" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
+								</div>
+								<label for="heure_de_fin">Date et Heure de fin </label>
+								<input type="datetime-local" class="form-control" id="heure_de_fin" name="heure_de_fin[]" value="{{ machine_carburant.heure_de_fin|date:'Y-m-d\TH:i' }}">
+							</div>
+						</div>
+					
+						<div class="col-md-4 mb-6">
+							<div class="form-group">
+								<div class="avatar mb-2 p-2 lh-1 mb-sm-0 avatar-md rounded-circle  me-2">
+									<img src="{% static 'assets/images/icons/carburant.png' %}" class="side-menu__icon img" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
+								</div>
+								<label for="carburant">Carburant</label>
+								<select class="form-control" id="carburant" name="carburant[]">
+									<option value="" selected disabled>Select Carburant</option>
+									{% for carburant in carburants %}
+										<option value="{{ carburant.type_carburant }}" 
+											{% if carburant.type_carburant == machine_carburant.carburant %}selected{% endif %}>
+											{{ carburant.type_carburant }}
+										</option>
+									{% endfor %}
+								</select>
 
-    {% block scripts %}
+								<div class="avatar mb-2 p-2 lh-1 mb-sm-0 avatar-md rounded-circle  me-2">
+									<img src="{% static 'assets/images/icons/jauge.png' %}" class="side-menu__icon img" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
+								</div>
+								<label for="quantite_carburant">Quantité carburant en litres</label>
+								<input type="number" class="form-control" id="quantite_carburant"  name= "quantite_carburant[]" placeholder="quantite_du_carburant" value="{{ machine_carburant.quantite_carburant}}">
+							</div>
+						</div>
+					
+						<div class="col-md-4 mb-6">
+							<div class="form-group">
+								<div class="avatar mb-2 p-2 lh-1 mb-sm-0 avatar-md rounded-circle  me-2">
+									<img src="{% static 'assets/images/icons/duree.png' %}" class="side-menu__icon img" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
+								</div>
+								<label for="duree du programme">Date et Heure de début</label>
+								<input type="datetime-local" class="form-control" id="duree_utilisation_programme" name="duree_utilisation_programme[]" value="{{ machine_carburant.duree_utilisation_programme|date:'Y-m-d\TH:i' }}">
+							</div>
+						</div>
+						
+						{% endfor %}
+					</div>
+					
+					
+					
 
-		<!-- MOMENT JS -->
-		<script src=" {% static 'assets/plugins/moment/moment.js' %} "></script>
 
-		<!-- BOOTSTRAP EDITABLE JS -->
-		<script src=" {% static 'assets/plugins/bootstrap-editable/bootstrap-editable/js/bootstrap-editable.min.js' %} "></script>
-		<script src=" {% static 'assets/js/bootstrap-editable.js' %} "></script>
-		<script src=" {% static 'assets/js/address-editable.js' %} "></script>
 
-		<!-- SELECT2 JS -->
-		<script src=" {% static 'assets/plugins/select2/select2.full.min.js' %} "></script>
 
-		<!-- THEMECOLORS JS -->
-		<script src="{% static 'assets/js/themeColors.js'%}"></script>
+					<div class="row p-5">
+						<div class="btn-list text-end">
+							<a href="{% url 'operations-utilisateur' %}" class="btn btn-outline-danger"> <i class="fe fe-x-circle"></i> Cancel</a>
+							<button type="submit" class="btn btn-primary"> <i class="fe fe-check-circle"></i> Save</button>
+						</div>
+					</div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- ROW CLOSED -->
+{% endblock %}
 
-    {% endblock %}
+{% block scripts %}
+    <!-- SELECT2 JS -->
+    <script src=" {% static 'assets/plugins/select2/select2.full.min.js' %} "></script>
+
+    <!-- bootstrap-datepicker js -->
+    <script src=" {% static 'assets/plugins/bootstrap-datepicker/js/datepicker.js' %} "></script>
+
+    <!-- INTERNAL Summernote Editor js -->
+    <script src=" {% static 'assets/plugins/summernote-editor/summernote1.js' %} "></script>
+
+    <!-- FILE UPLOAD JS -->
+    <script src=" {% static 'assets/plugins/fileuploads/js/fileupload.js' %} "></script>
+    <script src=" {% static 'assets/plugins/fileuploads/js/file-upload.js' %} "></script>
+
+    <!--PROJECT EDIT JS-->
+    <script src=" {% static 'assets/js/operation-edit.js' %} "></script>
+
+    <!-- THEMECOLORS JS -->
+    <script src="{% static 'assets/js/themeColors.js'%}"></script>
+{% endblock %}
