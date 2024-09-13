@@ -467,6 +467,12 @@ class MainDoeuvre(models.Model):
     
     def __str__(self):
         return f"Main d'oeuvre for {self.type_rh.nom} {self.type_rh.prenom}"
+    
+    def total_heures_travaillees(self):
+        if self.time and self.timefin:
+            diff = self.timefin - self.time
+            return round(diff.total_seconds() / 3600, 2)  # Conversion en heures
+        return 0
 class MachineCarburant(models.Model):
     type_machine_engins = models.ForeignKey(Machines_Tables, blank=True, null=True, on_delete=models.CASCADE)
     carburant = models.CharField(max_length=100)
@@ -476,6 +482,12 @@ class MachineCarburant(models.Model):
     
     def __str__(self):
         return f"Machines et carburants for {self.type_machine_engins.type} {self.type_machine_engins.matricule}"
+    
+    def total_heures_utilisation(self):
+        if self.duree_utilisation_programme and self.heure_de_fin:
+            diff = self.heure_de_fin - self.duree_utilisation_programme
+            return round(diff.total_seconds() / 3600, 2)  # Conversion en heures
+        return 0
 
 class Marker(models.Model):
     project = models.ForeignKey(MapForm, on_delete=models.CASCADE, related_name='markers')
@@ -486,8 +498,8 @@ class Marker(models.Model):
         return f'Marker at ({self.latitude}, {self.longitude})' 
 class New_Oper_Tables(models.Model):
     typeoperation = models.CharField(max_length=100, null=True, blank=True)
-    date_debut= models.CharField(max_length=100, null=True, blank=True)
-    date_fin= models.CharField(max_length=100, null=True, blank=True)
+    date_debut= models.DateTimeField(null=True, blank=True)
+    date_fin= models.DateTimeField(null=True, blank=True)
     #type_rh = models.CharField(max_length=50, null=True, blank=True)
     #time = models.CharField(max_length=100, null=True, blank=True)
     #timefin = models.CharField(max_length=100, null=True, blank=True)
@@ -499,7 +511,7 @@ class New_Oper_Tables(models.Model):
     #quantite_carburant  = models.CharField(max_length=50, null=True, blank=True)
     machine_carburants = models.ManyToManyField(MachineCarburant, related_name='operations')
     #outil = models.CharField(max_length=50, null=True, blank=True)
-    outils = models.ManyToManyField(Tool, related_name='form') 
+    outils = models.ManyToManyField(Tool, related_name='operations') 
     #type_pieces = models.CharField(max_length=50, null=True, blank=True)
     #nombre_de_pieces = models.CharField(max_length=50, null=True, blank=True)
     pieces = models.ManyToManyField(RechangePiece, related_name='operations')

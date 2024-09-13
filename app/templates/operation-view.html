@@ -145,7 +145,7 @@
 															<ul class="task-list">
 																<li>
 																	<i class="task-icon bg-primary"></i>
-																	<h4>Graines & Pousse :</h4>
+																	<h4>Graines & Pousses :</h4>
 																	<h6>- {{ operation.type_graines_pousses}}</h6>
 																	<p class="text-muted fs-12">{{ operation.quantite_graine_utilisee}}Kg</p>
 																</li>
@@ -204,7 +204,35 @@
 																</div>
 															</div>
 														</div>
+
 														<div class="card-body">
+															<div class="table-responsive">
+																<table class="table border text-nowrap text-md-nowrap table-striped">
+																	<thead>
+																		<tr>
+																			<th>ID</th>
+																			<th>Nom & Type</th>
+																			<th>Date et heure de début</th>
+																			<th>Date et heure de fin</th>
+																			<th>Total des heures travaillées</th>
+																		</tr>
+																	</thead>
+																	<tbody>
+																		{% for main_doeuvre in main_doeuvres %}
+																		<tr>
+																			<td>{{ forloop.counter }}</td>
+																			<td>{{ main_doeuvre.type_rh.nom }} {{ main_doeuvre.type_rh.prenom }} ({{ main_doeuvre.type_rh.type }})</td>
+																			<td>{{ main_doeuvre.time }}</td>
+																			<td>{{ main_doeuvre.timefin }}</td>
+																			<td>{{ main_doeuvre.total_heures_travaillees }} H</td>
+																		</tr>
+																		{% endfor %}
+																	</tbody>
+																</table>
+															</div>
+														</div>
+
+														{% comment %} <div class="card-body">
 															{% for main_doeuvre in main_doeuvres %}
 															<table class="table row table-borderless">
 																<tbody class="col-lg-8 col-xl-4 p-0">
@@ -224,7 +252,7 @@
 																</tbody>
 															</table>
 															{% endfor %}
-														</div>
+														</div> {% endcomment %}
 														
 													</div>
 													<div class="card">
@@ -235,7 +263,39 @@
 																</div>
 															</div>
 														</div>
+
 														<div class="card-body">
+															<div class="table-responsive">
+																<table class="table border text-nowrap text-md-nowrap table-striped">
+																	<thead>
+																		<tr>
+																			<th>ID</th>
+																			<th>Type machine</th>
+																			<th>Carburant</th>
+																			<th>Quantité carburant</th>
+																			<th>Date et Heure de début</th>
+																			<th>Date et Heure de fin</th>
+																			<th>Total des heures</th>
+																		</tr>
+																	</thead>
+																	<tbody>
+																		{% for machine_carburant in machine_carburants %}
+																		<tr>
+																			<td>{{ forloop.counter }}</td>
+																			<td>{{ machine_carburant.type_machine_engins.type }} ({{ machine_carburant.type_machine_engins.matricule }})</td>
+																			<td>{{ machine_carburant.carburant }}</td>
+																			<td>{{ machine_carburant.quantite_carburant }} L</td>
+																			<td>{{ machine_carburant.duree_utilisation_programme }}</td>
+																			<td>{{ machine_carburant.heure_de_fin }}</td>
+																			<td>{{ machine_carburant.total_heures_utilisation }}</td>
+																		</tr>
+																		{% endfor %}
+																	</tbody>
+																</table>
+															</div>
+														</div>
+
+														{% comment %} <div class="card-body">
 															{% for machine_carburant in machine_carburants %}
 															<table class="table row table-borderless">
 																<tbody class="col-lg-8 col-xl-4 p-0">
@@ -261,7 +321,7 @@
 																</tbody>
 															</table>
 															{% endfor %}
-														</div>
+														</div> {% endcomment %}
 													</div>
 												</div>
 

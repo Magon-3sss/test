@@ -3066,6 +3066,8 @@ def operation_edit(request, id):
     machine_carburants = operation.machine_carburants.all()
     machines_tables = Machines_Tables.objects.all()
     carburants = TypeCarburant.objects.all()
+    outils = Tool.objects.all()
+    selected_outils = operation.outils.all()
 
     if request.method == 'POST':
         # Updating Type d'opération
@@ -3122,6 +3124,20 @@ def operation_edit(request, id):
                     operation.machine_carburants.add(machine_carburant_instance)
                 except Machines_Tables.DoesNotExist:
                     continue
+                
+        # Handling Outil (Tools) updates
+        outil_list = request.POST.getlist('outil[]')
+
+        # Clear old outils entries for this operation
+        operation.outils.clear()
+
+        # Save updated outils entries
+        for outil_id in outil_list:
+            try:
+                outil_instance = Tool.objects.get(pk=outil_id)
+                operation.outils.add(outil_instance)
+            except Tool.DoesNotExist:
+                continue
 
         return redirect('operation-view', id=operation.id)
 
@@ -3132,10 +3148,10 @@ def operation_edit(request, id):
         'machines_tables': machines_tables,
         'machine_carburants': machine_carburants,
         'carburants': carburants,
+        'outils': outils,
+        'selected_outils_ids': [outil.id for outil in selected_outils],
     }
     return render(request, 'operation-edit.html', context)
-
-
 
 
 def operation_delete(request, id):

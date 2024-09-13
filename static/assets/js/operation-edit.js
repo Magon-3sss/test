@@ -152,3 +152,6 @@ function removeElementsOnCheck(checkboxContainer, checkboxMain, elementToRemove)
         }
     }
 }
+
+
+//delete-datatable
