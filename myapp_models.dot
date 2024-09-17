@@ -1,6 +1,6 @@
 digraph model_graph {
   // Dotfile by Django-Extensions graph_models
-  // Created: 2024-09-04 17:35
+  // Created: 2024-09-17 16:21
   // Cli Options: -a --dot -o myapp_models.dot
 
   fontname = "Roboto"
@@ -3773,6 +3773,14 @@ digraph model_graph {
   
   
     <TR><TD ALIGN="LEFT" BORDER="0">
+    <FONT COLOR="#7B7B7B" FACE="Roboto"><B>type_rh</B></FONT>
+    </TD><TD ALIGN="LEFT">
+    <FONT COLOR="#7B7B7B" FACE="Roboto"><B>ForeignKey (id)</B></FONT>
+    </TD></TR>
+  
+  
+  
+    <TR><TD ALIGN="LEFT" BORDER="0">
     <FONT FACE="Roboto">time</FONT>
     </TD><TD ALIGN="LEFT">
     <FONT FACE="Roboto">DateTimeField</FONT>
@@ -3784,14 +3792,6 @@ digraph model_graph {
     <FONT FACE="Roboto">timefin</FONT>
     </TD><TD ALIGN="LEFT">
     <FONT FACE="Roboto">DateTimeField</FONT>
-    </TD></TR>
-  
-  
-  
-    <TR><TD ALIGN="LEFT" BORDER="0">
-    <FONT FACE="Roboto">type_rh</FONT>
-    </TD><TD ALIGN="LEFT">
-    <FONT FACE="Roboto">CharField</FONT>
     </TD></TR>
   
   
@@ -3810,6 +3810,14 @@ digraph model_graph {
     <FONT FACE="Roboto"><B>id</B></FONT>
     </TD><TD ALIGN="LEFT">
     <FONT FACE="Roboto"><B>BigAutoField</B></FONT>
+    </TD></TR>
+  
+  
+  
+    <TR><TD ALIGN="LEFT" BORDER="0">
+    <FONT COLOR="#7B7B7B" FACE="Roboto"><B>type_machine_engins</B></FONT>
+    </TD><TD ALIGN="LEFT">
+    <FONT COLOR="#7B7B7B" FACE="Roboto"><B>ForeignKey (id)</B></FONT>
     </TD></TR>
   
   
@@ -3842,14 +3850,6 @@ digraph model_graph {
     <FONT FACE="Roboto">quantite_carburant</FONT>
     </TD><TD ALIGN="LEFT">
     <FONT FACE="Roboto">IntegerField</FONT>
-    </TD></TR>
-  
-  
-  
-    <TR><TD ALIGN="LEFT" BORDER="0">
-    <FONT FACE="Roboto">type_machine_engins</FONT>
-    </TD><TD ALIGN="LEFT">
-    <FONT FACE="Roboto">CharField</FONT>
     </TD></TR>
   
   
@@ -3925,7 +3925,7 @@ digraph model_graph {
     <TR><TD ALIGN="LEFT" BORDER="0">
     <FONT COLOR="#7B7B7B" FACE="Roboto">date_debut</FONT>
     </TD><TD ALIGN="LEFT">
-    <FONT COLOR="#7B7B7B" FACE="Roboto">CharField</FONT>
+    <FONT COLOR="#7B7B7B" FACE="Roboto">DateTimeField</FONT>
     </TD></TR>
   
   
@@ -3933,7 +3933,7 @@ digraph model_graph {
     <TR><TD ALIGN="LEFT" BORDER="0">
     <FONT COLOR="#7B7B7B" FACE="Roboto">date_fin</FONT>
     </TD><TD ALIGN="LEFT">
-    <FONT COLOR="#7B7B7B" FACE="Roboto">CharField</FONT>
+    <FONT COLOR="#7B7B7B" FACE="Roboto">DateTimeField</FONT>
     </TD></TR>
   
   
@@ -4197,6 +4197,12 @@ digraph model_graph {
   app_models_Engrais_Tables -> app_models_Zone
   [label=" geozone (engrais_tables)"] [arrowhead=none, arrowtail=dot, dir=both];
 
+  app_models_MainDoeuvre -> app_models_Rh_Tables
+  [label=" type_rh (maindoeuvre)"] [arrowhead=none, arrowtail=dot, dir=both];
+
+  app_models_MachineCarburant -> app_models_Machines_Tables
+  [label=" type_machine_engins (machinecarburant)"] [arrowhead=none, arrowtail=dot, dir=both];
+
   app_models_Marker -> app_models_MapForm
   [label=" project (markers)"] [arrowhead=none, arrowtail=dot, dir=both];
 
@@ -4210,10 +4216,13 @@ digraph model_graph {
   [label=" machine_carburants (operations)"] [arrowhead=dot arrowtail=dot, dir=both];
 
   app_models_New_Oper_Tables -> app_models_Tool
-  [label=" outils (form)"] [arrowhead=dot arrowtail=dot, dir=both];
+  [label=" outils (operations)"] [arrowhead=dot arrowtail=dot, dir=both];
 
   app_models_New_Oper_Tables -> app_models_RechangePiece
   [label=" pieces (operations)"] [arrowhead=dot arrowtail=dot, dir=both];
+
+  app_models_New_Oper_Tables -> app_models_Marker
+  [label=" markers (operations)"] [arrowhead=dot arrowtail=dot, dir=both];
 
 
 }
