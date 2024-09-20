@@ -3068,12 +3068,31 @@ def operation_edit(request, id):
     carburants = TypeCarburant.objects.all()
     outils = Tool.objects.all()
     selected_outils = operation.outils.all()
+    type_engrais  = TypeEngrais.objects.all() 
+    type_graines_pousses  =TypeGrainesPousses.objects.all() 
+    type_traitement = TypeTraitement.objects.all()
+    pieces = operation.pieces.all()  
+    type_pieces = TypePieces.objects.all()
 
     if request.method == 'POST':
         # Updating Type d'opération
         operation.typeoperation = request.POST.get('typeoperation')
         operation.date_debut = request.POST.get('date_debut')
         operation.date_fin = request.POST.get('date_fin')
+        
+        # Mettre à jour les Graines, Fertilisants et Traitement
+        operation.type_graines_pousses = request.POST.get('type_graines_pousses')
+        operation.quantite_graine_utilisee = request.POST.get('quantite_graine_utilisee')
+        
+        operation.type_engrais = request.POST.get('type_engrais')
+        operation.quantite_engrais_utilisee = request.POST.get('quantite_engrais_utilisee')
+        
+        operation.type_traitement = request.POST.get('type_traitement')
+        operation.quantite_traitement_utilisee = request.POST.get('quantite_traitement_utilisee')
+        
+        # Mettre à jour la description
+        operation.description = request.POST.get('description')
+        
         operation.save()
 
         # Handling Main d'œuvre updates
@@ -3138,7 +3157,29 @@ def operation_edit(request, id):
                 operation.outils.add(outil_instance)
             except Tool.DoesNotExist:
                 continue
+            
+        # Handle Pieces de Rechange updates
+        type_pieces_list = request.POST.getlist('type_pieces[]')
+        nombre_de_pieces_list = request.POST.getlist('nombre_de_pieces[]')
 
+        # Clear old pieces entries
+        operation.pieces.clear()
+
+        # Enregistrer les nouvelles pièces
+        for type_piece_id, nombre_de_pieces in zip(type_pieces_list, nombre_de_pieces_list):
+            if type_piece_id and nombre_de_pieces:
+                try:
+                    # Récupérer la pièce par son identifiant
+                    piece_instance = PieceDeRechange.objects.get(pk=type_piece_id)
+                    # Mettre à jour le nombre de pièces
+                    piece_instance.nombre_de_pieces = nombre_de_pieces
+                    piece_instance.save()
+                    # Ajouter la pièce à l'opération
+                    operation.pieces.add(piece_instance)
+                except PieceDeRechange.DoesNotExist:
+                    continue
+        
+        
         return redirect('operation-view', id=operation.id)
 
     context = {
@@ -3150,6 +3191,11 @@ def operation_edit(request, id):
         'carburants': carburants,
         'outils': outils,
         'selected_outils_ids': [outil.id for outil in selected_outils],
+        'type_engrais': type_engrais,
+        'type_graines_pousses': type_graines_pousses,
+        'type_traitement': type_traitement,
+        'pieces': pieces,
+        'type_pieces': type_pieces,
     }
     return render(request, 'operation-edit.html', context)
 
@@ -3225,7 +3271,7 @@ def save_operation(request):
 
         # Add spare parts (pieces) to the operation
         for piece, quantity in zip(pieces, quantities):
-            piece_instance, _ = RechangePiece.objects.get_or_create(type_pieces=piece, nombre_de_pieces=quantity)
+            piece_instance, _ = PieceDeRechange.objects.get_or_create(type_pieces=piece, nombre_de_pieces=quantity)
             operation.pieces.add(piece_instance)
 
         # Add labor (main d'oeuvre) to the operation

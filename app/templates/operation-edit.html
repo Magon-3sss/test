@@ -290,8 +290,32 @@
 						
 						{% endfor %} {% endcomment %}
 					</div>
+
+					{% comment %} <div class="row mb-4">
+						<p class="mb-4 text-17"><strong>Outils Agricoles</strong></p>
+						
+						<div class="col-md-18 mb-12">
+							<div class="form-row">
+								<div class="col-md-12 mb-10">
+									<div class="avatar mb-2 p-2 lh-1 mb-sm-0 avatar-md rounded-circle me-2">
+										<img src="{% static 'assets/images/icons/outils-de-jardinage.png' %}" class="side-menu__icon img" />
+									</div>
+									<label for="outil">Outil</label>
+									<!-- Outils Selection -->
+									<select class="form-control" id="outil" name="outil[]" multiple>
+										<option value="" selected disabled>Outil</option>
+										{% for outil in outils %}
+											<option value="{{ outil.id }}" {% if outil.id in selected_outils_ids %}selected{% endif %}>
+												{{ outil.name }}
+											</option>
+										{% endfor %}
+									</select>
+								</div>
+							</div>
+						</div>
+					</div> {% endcomment %}					
 					
-					<div class="row mb-4">
+					{% comment %} <div class="row mb-4">
 						<p class="mb-4 text-17"><strong>Outils Agricoles</strong></p>
 						
 						<div class="col-md-8 mb-6">
@@ -312,6 +336,167 @@
 							</div>
 						</div>
 						
+					</div> {% endcomment %}
+
+					<div class="row mb-4"> 
+						<p class="mb-4 text-17"><strong>Fournitures agricoles</strong></p>
+					
+						<div class="card-body">
+							<div class="table-responsive deleted-table">
+								<table id="delete-datatable" class="table editable-table table-nowrap table-bordered table-edit">
+									<thead>
+										<tr>
+											<th>Fournitures agricoles</th>
+											<th>Type fourniture agricoles</th>
+											<th>Quantité utilisée en KG</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr>
+											<td data-field="id">Graines</td>
+											<td data-field="name" for="graine">
+												<select class="form-control" name="type_graines_pousses" id="type_graines_pousses" >
+													<option value="" disabled selected>Sélectionnez une graine</option>
+													{% for graine in type_graines_pousses %}
+													<option value="{{ graine.type_graines_pousses }}" {% if graine.type_graines_pousses == operation.type_graines_pousses %}selected{% endif %}>
+														{{ graine.type_graines_pousses }}
+													</option>
+													{% endfor %}
+												</select>
+												
+											</td>
+											<td data-field="quantite_graine_utilisee">
+												<input type="number" class="form-control" id="quantite_graine_utilisee" name="quantite_graine_utilisee" value="{{ operation.quantite_graine_utilisee }}" placeholder="Quantité de graines utilisée">
+											</td>
+										</tr>
+
+										<tr>
+											<td data-field="id">Fertilisants</td>
+											<td data-field="name" for="engrais">
+												<select class="form-control" name="type_engrais" id="type_engrais" >
+													<option value="" disabled selected>Sélectionnez un engrais</option>
+													{% for engrais in type_engrais %}
+													<option value="{{ engrais.type_engrais }}" {% if engrais.type_engrais == operation.type_engrais %}selected{% endif %}>
+														{{ engrais.type_engrais }}
+													</option>
+													{% endfor %}
+												</select>
+												
+											</td>
+											<td data-field="quantite_engrais_utilisee">
+												<input type="number" class="form-control" id="quantite_engrais_utilisee" name="quantite_engrais_utilisee" value="{{ operation.quantite_engrais_utilisee }}" placeholder="Quantité d'engrais utilisée">
+											</td>
+										</tr>
+
+										<tr>
+											<td data-field="id">Traitement</td>
+											<td data-field="name" for="traitement">
+												<select class="form-control" name="type_traitement" id="type_traitement" >
+													<option value="" disabled selected>Sélectionnez un traitement</option>
+													{% for traitement in type_traitement %}
+													<option value="{{ traitement.type_traitement }}" {% if traitement.type_traitement == operation.type_traitement %}selected{% endif %}>
+														{{ traitement.type_traitement }}
+													</option>
+													{% endfor %}
+												</select>
+												
+											</td>
+											<td data-field="quantite_traitement_utilisee">
+												<input type="number" class="form-control" id="quantite_traitement_utilisee" name="quantite_traitement_utilisee" value="{{ operation.quantite_traitement_utilisee }}" placeholder="Quantité de traitement utilisée">
+											</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+
+					<!-- Section Pièces de rechange -->
+					<div class="row mb-4">
+						<p class="mb-4 text-17"><strong>Pièces de Rechange</strong></p>
+						<div class="card-body">
+							<div class="table-responsive deleted-table">
+								<table id="pieces-rechange-table" class="table editable-table table-nowrap table-bordered table-edit">
+									<thead>
+										<tr>
+											<th>Type de Pièce</th>
+											<th>Nombre de Pièces</th>
+										</tr>
+									</thead>
+									<tbody>
+										{% for piece in pieces %}
+										<tr>
+											<td>
+												<select class="form-control" name="type_pieces[]">
+													<option value="" disabled selected>Sélectionnez une pièce</option>
+													{% for type_piece in type_pieces %}
+													<option value="{{ type_piece.id}}" {% if type_piece.type_pieces == piece.type_pieces %}selected{% endif %}>
+														{{ type_piece.type_pieces }}  
+													</option>
+													{% endfor %}
+												</select>
+											</td>
+											<td>
+												<input type="number" class="form-control" name="nombre_de_pieces[]" value="{{ piece.nombre_de_pieces }}" />
+											</td>
+										</tr>
+										{% endfor %}
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+
+					<!-- Description -->
+					<div class="row mb-4">
+						<div class="form-group">
+							<p class="mb-4 text-17"><strong>Description</strong></p>
+							<div class="card-body">
+								<div class="avatar mb-2 p-2 lh-1 mb-sm-0 avatar-md rounded-circle  me-2">
+									<img src="{% static 'assets/images/icons/projet.png' %}" class="side-menu__icon img" />
+								</div>
+								<label for="description">Description </label>
+								<input type="text" class="form-control" id="description" name="description" value="{{ operation.description }}" />
+							</div>
+						</div>
+					</div>
+
+
+					<div class="row mb-4">
+						<!-- Description -->
+						<div class="col-md-6">
+							<div class="form-group">
+								<p class="mb-4 text-17"><strong>Description</strong></p>
+								<div class="card-body">
+									<div class="avatar mb-2 p-2 lh-1 mb-sm-0 avatar-md rounded-circle me-2">
+										<img src="{% static 'assets/images/icons/projet.png' %}" class="side-menu__icon img" />
+									</div>
+									<label for="description">Description</label>
+									<input type="text" class="form-control" id="description" name="description" value="{{ operation.description }}" />
+								</div>
+							</div>
+						</div>
+						
+						<!-- Outils Agricoles -->
+						<div class="col-md-6">
+							<p class="mb-4 text-17"><strong>Outils Agricoles</strong></p>
+							<div class="form-row">
+								<div class="col-md-12 mb-10">
+									<div class="avatar mb-2 p-2 lh-1 mb-sm-0 avatar-md rounded-circle me-2">
+										<img src="{% static 'assets/images/icons/outils-de-jardinage.png' %}" class="side-menu__icon img" />
+									</div>
+									<label for="outil">Outil</label>
+									<select class="form-control" id="outil" name="outil[]" multiple>
+										<option value="" selected disabled>Outil</option>
+										{% for outil in outils %}
+											<option value="{{ outil.id }}" {% if outil.id in selected_outils_ids %}selected{% endif %}>
+												{{ outil.name }}
+											</option>
+										{% endfor %}
+									</select>
+								</div>
+							</div>
+						</div>
 					</div>
 					
 					
@@ -330,7 +515,18 @@
 <!-- ROW CLOSED -->
 {% endblock %}
 
+
 {% block scripts %}
+
+<script>
+	$(document).ready(function() {
+		// Apply Select2 to the outils dropdown
+		$('#outil').select2({
+			placeholder: "Sélectionnez des outils",
+			allowClear: true
+		});
+	});
+</script>
     <!-- SELECT2 JS -->
     <script src=" {% static 'assets/plugins/select2/select2.full.min.js' %} "></script>
 

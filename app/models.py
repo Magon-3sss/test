@@ -454,12 +454,19 @@ class Tool(models.Model):
     
     def __str__(self):
         return self.name
-class RechangePiece(models.Model):
+
+class PieceDeRechange(models.Model):
     type_pieces = models.CharField(max_length=100)
     nombre_de_pieces = models.CharField(max_length=100)
     
     def __str__(self):
         return f"Piece de rechange for {self.type_pieces} {self.nombre_de_pieces}"
+""" class RechangePiece(models.Model):
+    type_pieces = models.CharField(max_length=100)
+    nombre_de_pieces = models.CharField(max_length=100)
+    
+    def __str__(self):
+        return f"Piece de rechange for {self.type_pieces} {self.nombre_de_pieces}" """
 class MainDoeuvre(models.Model):
     type_rh = models.ForeignKey(Rh_Tables, blank=True, null=True, on_delete=models.CASCADE)
     time = models.DateTimeField()
@@ -514,7 +521,7 @@ class New_Oper_Tables(models.Model):
     outils = models.ManyToManyField(Tool, related_name='operations') 
     #type_pieces = models.CharField(max_length=50, null=True, blank=True)
     #nombre_de_pieces = models.CharField(max_length=50, null=True, blank=True)
-    pieces = models.ManyToManyField(RechangePiece, related_name='operations')
+    pieces = models.ManyToManyField(PieceDeRechange, related_name='operations')
     type_graines_pousses = models.CharField(max_length=50, null=True, blank=True)  
     quantite_graine_utilisee  = models.CharField(max_length=50, null=True, blank=True) 
     type_engrais  = models.CharField(max_length=50, null=True, blank=True)  
