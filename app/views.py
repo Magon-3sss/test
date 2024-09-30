@@ -551,6 +551,29 @@ def save_pieces(request):
             return JsonResponse({"Erreur": "Some error occured"}, status=status.HTTP_201_CREATED)
 
 """ carburant """
+def carburant (request):
+    list = []
+    carburants = Carburants_Tables.objects.all()
+    types_carburants = TypeCarburant.objects.all()
+    list.append({"types": types_carburants,"carburants": carburants})
+    return render(request, 'carburant.html', {'data': list})
+
+def carburant_list (request):
+    list = []
+    carburants = Carburants_Tables.objects.all()
+    types_carburants = TypeCarburant.objects.all()
+    list.append({"types": types_carburants,"carburants": carburants})
+    return render(request, 'carburant-list.html', {'data': list})
+
+@require_http_methods(["DELETE"])
+def delete_carburant(request, carburant_id):
+    try:
+        carburant = Carburants_Tables.objects.get(id=carburant_id)
+        carburant.delete()
+        return JsonResponse({"success": "Carburant supprimé avec succès"}, status=200)
+    except Carburants_Tables.DoesNotExist:
+        return JsonResponse({"error": "Carburant non trouvé"}, status=404)
+
 @api_view(['POST'])
 def save_carburant(request):
     if request.method == "POST":
@@ -581,7 +604,10 @@ def save_carburant(request):
             return JsonResponse(carburant_serializer.data, status=status.HTTP_201_CREATED)
         else:
             print('no')
-            return JsonResponse({"Erreur": "Some error occured"}, status=status.HTTP_201_CREATED) 
+            return JsonResponse({"Erreur": "Some error occured"}, status=status.HTTP_201_CREATED)
+        
+def carburant_modifier (request):
+    return render(request, 'carburant-modifier.html') 
 
 
 """ Outils Agricoles"""
@@ -2874,12 +2900,7 @@ def graines_pousses (request):
     list.append({"types": types_graines,"categories": categories_graines, "graines":graines, "projects": projects})
     return render(request, 'graines-pousses.html', {'data': list})
 
-def carburant (request):
-    list = []
-    carburants = Carburants_Tables.objects.all()
-    types_carburants = TypeCarburant.objects.all()
-    list.append({"types": types_carburants,"carburants": carburants})
-    return render(request, 'carburant.html', {'data': list})
+
 
 def rh (request):
     list = []
@@ -3360,123 +3381,7 @@ def save_operation(request):
             return JsonResponse({'message': 'Operation saved successfully!'}, status=201)
         else:
             return JsonResponse({"error": "Failed to save the operation"}, status=400)
-""" @api_view(['POST'])
-def save_operation(request):
-    if request.method == "POST":
-        project_id = request.POST.get('project_id')
-        typeoperation = request.POST.get('typeoperation')
-        date_debut = request.POST.get('date_debut')
-        date_fin = request.POST.get('date_fin')
-        type_rh_list = request.POST.getlist('type_rh[]')
-        time_list = request.POST.getlist('time[]')
-        timefin_list = request.POST.getlist('timefin[]')
-        #type_rh = request.POST.get('type_rh')
-        #time = request.POST.get('time')
-        #timefin = request.POST.get('timefin')
-        type_machine_engins_list = request.POST.getlist('type_machine_engins[]')
-        carburant_list = request.POST.getlist('carburant[]')
-        duree_utilisation_programme_list = request.POST.getlist('duree_utilisation_programme[]')
-        heure_de_fin_list = request.POST.getlist('heure_de_fin[]')
-        quantite_carburant_list = request.POST.getlist('quantite_carburant[]')
-        #type_machine_engins = request.POST.get('type_machine_engins')
-        #carburant = request.POST.get('carburant')
-        #duree_utilisation_programme = request.POST.get('duree_utilisation_programme')
-        #heure_de_fin = request.POST.get('heure_de_fin')
-        #quantite_carburant = request.POST.get('quantite_carburant')
-        outils = request.POST.getlist('outil[]')                    
-        #outil = request.POST.get('outil')
-        pieces = request.POST.getlist('type_pieces[]')
-        quantities = request.POST.getlist('nombre_de_pieces[]')
-        #type_pieces = request.POST.get('type_pieces')
-        #nombre_de_pieces = request.POST.get('nombre_de_pieces')
-        type_graines_pousses = request.POST.get('type_graines_pousses')
-        quantite_graine_utilisee = request.POST.get('quantite_graine_utilisee')
-        type_engrais = request.POST.get('type_engrais')
-        quantite_engrais_utilisee = request.POST.get('quantite_engrais_utilisee')
-        type_traitement = request.POST.get('type_traitement')
-        quantite_traitement_utilisee = request.POST.get('quantite_traitement_utilisee')
-        description = request.POST.get('description')
-        # Récupère l'objet projet
-        project = MapForm.objects.get(id=project_id)
-        # Créez l'opération agricole
-        operation = New_Oper_Tables.objects.create(
-            project=project,
-            typeoperation=typeoperation,
-            date_debut=date_debut,
-            date_fin=date_fin,
-            type_graines_pousses=type_graines_pousses,
-            quantite_graine_utilisee=quantite_graine_utilisee,
-            type_engrais=type_engrais,
-            quantite_engrais_utilisee=quantite_engrais_utilisee,
-            type_traitement=type_traitement,
-            quantite_traitement_utilisee=quantite_traitement_utilisee,
-            description=description
-        )
-        
-        # Ajoutez les outils à l'opération
-        for outil in outils:
-            # Créez une instance de modèle pour chaque outil
-            tool_instance, _ = Tool.objects.get_or_create(name=outil)
-            operation.outils.add(tool_instance)
-        
-        # Ajoutez les pièces de rechange à l'opération
-        for piece, quantity in zip(pieces, quantities):
-            # Créez une instance de modèle pour chaque pièce de rechange
-            piece_instance, _ = RechangePiece.objects.get_or_create(type_pieces=piece, nombre_de_pieces=quantity)
-            operation.pieces.add(piece_instance)
-        
-        for type_rh, time, timefin in zip(type_rh_list, time_list, timefin_list):
-            # Créez une instance de modèle pour chaque main d'oeuvre
-            # Fetch the Rh_Tables instance before using it in get_or_create
-            rh_instance = Rh_Tables.objects.get(pk=type_rh)
-            maindoeuvre_instance, _ = MainDoeuvre.objects.get_or_create(type_rh=rh_instance, time=time, timefin=timefin)
-            operation.main_doeuvres.add(maindoeuvre_instance)
-            try:
-                rh_instance = Rh_Tables.objects.get(pk=type_rh)
-            except Rh_Tables.DoesNotExist:
-                return JsonResponse({"error": f"RH with id {type_rh} not found"}, status=400) 
 
-            
-        # Ajoutez les machines et carburants à l'opération
-        for type_machine_engins, carburant, duree_utilisation_programme, heure_de_fin, quantite_carburant in zip(type_machine_engins_list, carburant_list, duree_utilisation_programme_list, heure_de_fin_list, quantite_carburant_list):
-            # Fetch the Machines_Tables instance before using it in get_or_create
-            machine_instance = Machines_Tables.objects.get(pk=type_machine_engins)
-            machine_carburant_instance, _ = MachineCarburant.objects.get_or_create(
-                type_machine_engins=machine_instance,
-                carburant=carburant,
-                duree_utilisation_programme=duree_utilisation_programme,
-                heure_de_fin=heure_de_fin,
-                quantite_carburant=quantite_carburant
-            )
-            operation.machine_carburants.add(machine_carburant_instance)
-                              
-        # Vérifiez si l'opération a été créée avec succès
-        if operation and operation.pk:
-            return JsonResponse({'message': 'Opération enregistrée avec succès'}, status=status.HTTP_201_CREATED)
-        else:
-            return JsonResponse({"Erreur": "Une erreur s'est produite lors de l'enregistrement de l'opération"}, status=status.HTTP_400_BAD_REQUEST)"""
-
-""" @csrf_exempt
-@api_view(['POST'])
-def save_marker(request):
-    if request.method == 'POST':
-        data = request.data
-        project_id = data.get('project_id')
-        latitude = data.get('latitude')
-        longitude = data.get('longitude')
-        print(f"Received data: {data}")  # Log the received data
-        try:
-            project = MapForm.objects.get(geozone_id=project_id)
-            marker = Marker.objects.create(
-                project=project,
-                latitude=latitude,
-                longitude=longitude
-            )
-            return JsonResponse({'id': marker.id, 'message': 'Marker saved successfully!'}, status=201)
-        except MapForm.DoesNotExist:
-            print(f"Project with ID {project_id} not found")  
-            return JsonResponse({'error': 'Project not found'}, status=400)
-    return JsonResponse({'error': 'Invalid request'}, status=400) """
 @csrf_exempt
 @api_view(['POST'])
 def save_marker(request):
@@ -3497,124 +3402,6 @@ def save_marker(request):
         except MapForm.DoesNotExist:
             return JsonResponse({'error': 'Project not found'}, status=400)
     return JsonResponse({'error': 'Invalid request'}, status=400)
-
-""" @api_view(['POST'])
-def save_operation(request):
-    if request.method == "POST":
-        typeoperation = request.POST.get('typeoperation')
-        date_debut = request.POST.get('date_debut')
-        date_fin = request.POST.get('date_fin')
-        type_rh = request.POST.get('type_rh')
-        time = request.POST.get('time')
-        timefin = request.POST.get('timefin')
-        type_machine_engins = request.POST.get('type_machine_engins')
-        carburant = request.POST.get('carburant')
-        duree_utilisation_programme = request.POST.get('duree_utilisation_programme')
-        heure_de_fin = request.POST.get('heure_de_fin')
-        quantite_carburant = request.POST.get('quantite_carburant')
-        outils = request.POST.getlist('outils[]')
-        #outil = request.POST.get('outil')
-        type_pieces = request.POST.get('type_pieces')
-        nombre_de_pieces = request.POST.get('nombre_de_pieces')
-        type_graines_pousses = request.POST.get('type_graines_pousses')
-        quantite_graine_utilisee = request.POST.get('quantite_graine_utilisee')
-        type_engrais = request.POST.get('type_engrais')
-        quantite_engrais_utilisee = request.POST.get('quantite_engrais_utilisee')
-        type_traitement = request.POST.get('type_traitement')
-        quantite_traitement_utilisee = request.POST.get('quantite_traitement_utilisee')
-        description = request.POST.get('description')
-        
-        
-        
-        print(typeoperation)
-        print(date_debut)
-        print(date_fin)
-        print(type_rh)
-        print(time)
-        print(timefin)
-        print(type_machine_engins)
-        print(carburant)
-        print(duree_utilisation_programme)
-        print(heure_de_fin)
-        print(quantite_carburant)
-        print(outils)
-        print(type_pieces)
-        print(nombre_de_pieces)
-        print(type_graines_pousses)
-        print(quantite_graine_utilisee)
-        print(type_engrais)
-        print(quantite_engrais_utilisee)
-        print(type_traitement)
-        print(quantite_traitement_utilisee)
-        print(description)
-        
-        form = {
-                "typeoperation": typeoperation,
-                "date_debut": date_debut,
-                "date_fin": date_fin,
-                "type_rh": type_rh,
-                "time": time,
-                "timefin": timefin,
-                "type_machine_engins": type_machine_engins,
-                "carburant": carburant,
-                "duree_utilisation_programme": duree_utilisation_programme,
-                "heure_de_fin": heure_de_fin,
-                "quantite_carburant": quantite_carburant,
-                "outil": outils,
-                "type_pieces": type_pieces,
-                "nombre_de_pieces": nombre_de_pieces,
-                "type_graines_pousses": type_graines_pousses,
-                "quantite_graine_utilisee": quantite_graine_utilisee,
-                "type_engrais": type_engrais,
-                "quantite_engrais_utilisee": quantite_engrais_utilisee,
-                "type_traitement": type_traitement,
-                "quantite_traitement_utilisee": quantite_traitement_utilisee,
-                "description": description
-                
-            }
-        
-        
-        
-        operation_serializer = OperationsSerializer(data=form)
-        for outil in outils:
-            # Créez une instance de modèle pour chaque outil
-            Tool.objects.create(operation=form, name=outil)
-               
-        if operation_serializer.is_valid():
-            print('yes')
-            operation_serializer.save()
-            return JsonResponse(operation_serializer.data, status=status.HTTP_201_CREATED)
-        else:
-            print('no')
-            return JsonResponse({"Erreur": "Some error occured"}, status=status.HTTP_201_CREATED) """
-          
-""" def ajouter_operation_agricole (request):
-    list = []
-    operations_agricoles = New_Oper_Tables.objects.all()
-    type_rh = TypeRh.objects.all()
-    projects = MapForm.objects.all()
-    type_machine_engins = TypeMachineEngins.objects.all()
-    type_carburant = TypeCarburant.objects.all()
-    outil  =TypeOutilsAgricoles.objects.all()
-    type_pieces  = TypePieces.objects.all()
-    type_engrais  = TypeEngrais.objects.all() 
-    type_graines_pousses  =TypeGrainesPousses.objects.all() 
-    type_traitement = TypeTraitement.objects.all()
-    list.append({"types": type_rh,"machines": type_machine_engins, "carburants": type_carburant, "outils": outil,"pieces": type_pieces,"graines" :type_graines_pousses,"engraiss" : type_engrais, "traitements" : type_traitement,   "operations": operations_agricoles, "projects": projects})
-    return render(request, 'ajouter-operation-agricole.html', {'data': list})
-
-def ajouter_operation_agricole (request):
-    cookie = request.COOKIES.get('jwtToken')
-    if cookie:
-        user_group = request.COOKIES.get('userGroup') or None
-        context = {
-            'jwtToken': cookie,
-            'userGroup': user_group,
-        }
-        print(context)
-        return render(request, 'ajouter-operation-agricole.html', context)
-    else:
-        return render(request, 'signin.html') """
 
 def recommendations_ia (request):
     cookie = request.COOKIES.get('jwtToken')

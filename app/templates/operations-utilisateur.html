@@ -59,7 +59,7 @@
                                                     <tbody>
                                                         {% for operation in operations %}
                                                         <tr>
-                                                            <td>{{ operation.id }}</td>
+                                                            <td>{{ forloop.counter }}</td>
                                                             <td>{{ operation.typeoperation }}</td>
                                                             <td>{{ operation.date_debut }}</td>
                                                             <td>{{ operation.date_fin }}</td>

@@ -37,13 +37,13 @@
 				<li class="slide">
 					<a class="side-menu__item" data-bs-toggle="slide" href="{% url 'projects' %}">
 						<img src="{% static 'assets/images/icons/plant.png' %}" class="side-menu__icon" enable-background="new 0 0 24 24" viewBox="0 0 24 24" {% comment %} style="margin-right: 10px; width: 10%;filter: contrast(20%);" {% endcomment %}/>
-						<span class="side-menu__label">Traçage Projets</span><i class="angle fa fa-angle-right"></i>
+						<span class="side-menu__label">Traçage Projets</span>{% comment %} <i class="angle fa fa-angle-right"></i> {% endcomment %}
 					</a>
 				</li>
 				<li class="slide">
 					<a class="side-menu__item" data-bs-toggle="slide" href="{% url 'parcelles' %}">
 						<img src="{% static 'assets/images/icons/polygon.png' %}" class="side-menu__icon" enable-background="new 0 0 24 24" viewBox="0 0 24 24" {% comment %} style="margin-right: 10px; width: 10%;filter: contrast(20%);" {% endcomment %}/>
-						<span class="side-menu__label">Satellite</span><i class="angle fa fa-angle-right"></i>
+						<span class="side-menu__label">Satellite</span>{% comment %} <i class="angle fa fa-angle-right"></i> {% endcomment %}
 					</a>
 				</li>
 				{% comment %} <li class="slide">
@@ -59,7 +59,7 @@
 				<li class="slide">
 					<a class="side-menu__item" data-bs-toggle="slide" href="#">
 						<img src="{% static 'assets/images/icons/metering.png' %}" class="side-menu__icon" enable-background="new 0 0 24 24" viewBox="0 0 24 24" {% comment %} style="margin-right: 10px; width: 10%;filter: contrast(20%);" {% endcomment %}/>
-						<span class="side-menu__label">Iot & Sensors</span><i class="angle fa fa-angle-right"></i></a>
+						<span class="side-menu__label">Iot & Sensors</span>{% comment %} <i class="angle fa fa-angle-right"></i> {% endcomment %}</a>
 					<ul class="slide-menu">
 						<li class="side-menu-label1"><a href="javascript:void(0)">Sensor</a></li>
 						<li><a href="{% url 'chart-flot' %}" class="slide-item">IoT Sensors</a></li>
@@ -94,29 +94,29 @@
 				<li class="slide">
 					<a class="side-menu__item" data-bs-toggle="slide" href="{% url 'projects' %}">
 						<img src="{% static 'assets/images/icons/plant.png' %}" class="side-menu__icon" enable-background="new 0 0 24 24" viewBox="0 0 24 24" {% comment %} style="margin-right: 10px; width: 10%;filter: contrast(20%);" {% endcomment %}/>
-						<span class="side-menu__label">Traçage Projets</span><i class="angle fa fa-angle-right"></i>
+						<span class="side-menu__label">Traçage Projets</span>{% comment %} <i class="angle fa fa-angle-right"></i> {% endcomment %}
 					</a>
 				</li>
 				<li class="slide">
 					<a class="side-menu__item" data-bs-toggle="slide" href="{% url 'parcelles' %}">
 						<img src="{% static 'assets/images/icons/polygon.png' %}" class="side-menu__icon" enable-background="new 0 0 24 24" viewBox="0 0 24 24" {% comment %} style="margin-right: 10px; width: 10%;filter: contrast(20%);" {% endcomment %}/>
-						<span class="side-menu__label">Satellite</span><i class="angle fa fa-angle-right"></i>
+						<span class="side-menu__label">Satellite</span>{% comment %} <i class="angle fa fa-angle-right"></i> {% endcomment %}
 					</a>
 				</li>
 				<li class="slide">
 					<a class="side-menu__item" data-bs-toggle="slide" href="#">
 						<img src="{% static 'assets/images/icons/weather.png' %}" class="side-menu__icon" enable-background="new 0 0 24 24" viewBox="0 0 24 24" {% comment %} style="margin-right: 10px; width: 10%;filter: contrast(20%);" {% endcomment %}/>
-						<span class="side-menu__label">Météo</span><i class="angle fa fa-angle-right"></i></a>
-					<ul class="slide-menu">
+						<span class="side-menu__label">Météo</span>{% comment %} <i class="angle fa fa-angle-right"></i></a> {% endcomment %}
+					{% comment %} <ul class="slide-menu">
 						<li class="side-menu-label1"><a href="javascript:void(0)">Météo</a></li>
 						<li><a href="{% url 'chart-echart' %}" class="slide-item">Météo Satellite</a></li>
 						<li><a href="{% url 'chart-echart' %}" class="slide-item">Station Météo</a></li>
-					</ul>
+					</ul> {% endcomment %}
 				</li>
 				<li class="slide">
 					<a class="side-menu__item" data-bs-toggle="slide" href="#">
 						<img src="{% static 'assets/images/icons/metering.png' %}" class="side-menu__icon" enable-background="new 0 0 24 24" viewBox="0 0 24 24" {% comment %} style="margin-right: 10px; width: 10%;filter: contrast(20%);" {% endcomment %}/>
-						<span class="side-menu__label">Iot & Sensors</span><i class="angle fa fa-angle-right"></i></a>
+						<span class="side-menu__label">Iot & Sensors</span>{% comment %} <i class="angle fa fa-angle-right"></i> {% endcomment %}</a>
 					<ul class="slide-menu">
 						<li class="side-menu-label1"><a href="javascript:void(0)">Sensor</a></li>
 						<li><a href="{% url 'chart-flot' %}" class="slide-item">IoT Sensors</a></li>
@@ -173,24 +173,24 @@
 				<li class="slide">
 					<a class="side-menu__item" data-bs-toggle="slide" href="{% url 'projects' %}">
 						<img src="{% static 'assets/images/icons/plant.png' %}" class="side-menu__icon" enable-background="new 0 0 24 24" viewBox="0 0 24 24" {% comment %} style="margin-right: 10px; width: 10%;filter: contrast(20%);" {% endcomment %}/>
-						<span class="side-menu__label"> Traçage Projets</span><i class="angle fa fa-angle-right"></i>
+						<span class="side-menu__label"> Traçage Projets</span>{% comment %} <i class="angle fa fa-angle-right"></i> {% endcomment %}
 					</a>
 				</li>
 				<li class="slide">
 					<a class="side-menu__item" data-bs-toggle="slide" href="{% url 'parcelles' %}">
 						<img src="{% static 'assets/images/icons/polygon.png' %}" class="side-menu__icon" enable-background="new 0 0 24 24" viewBox="0 0 24 24" {% comment %} style="margin-right: 10px; width: 10%;filter: contrast(20%);" {% endcomment %}/>
-						<span class="side-menu__label">Satellite</span><i class="angle fa fa-angle-right"></i>
+						<span class="side-menu__label">Satellite</span>{% comment %} <i class="angle fa fa-angle-right"></i> {% endcomment %}
 					</a>
 				</li>
 				<li class="slide">
 					<a class="side-menu__item" data-bs-toggle="slide" href="#">
 						<img src="{% static 'assets/images/icons/weather.png' %}" class="side-menu__icon" enable-background="new 0 0 24 24" viewBox="0 0 24 24" {% comment %} style="margin-right: 10px; width: 10%;filter: contrast(20%);" {% endcomment %}/>
 						<span class="side-menu__label">Météo</span><i class="angle fa fa-angle-right"></i></a>
-					<ul class="slide-menu">
+					{% comment %} <ul class="slide-menu">
 						<li class="side-menu-label1"><a href="javascript:void(0)">Météo</a></li>
 						<li><a href="{% url 'chart-echart' %}" class="slide-item">Météo Satellite</a></li>
 						<li><a href="{% url 'chart-echart' %}" class="slide-item">Station Météo</a></li>
-					</ul>
+					</ul> {% endcomment %}
 				</li>
 				<li class="slide">
 					<a class="side-menu__item" data-bs-toggle="slide" href="#">
@@ -253,7 +253,7 @@
 					<li class="slide">
 						<a class="side-menu__item" data-bs-toggle="slide" href="{% url 'logistiques' %}">
 							<img src="{% static 'assets/images/icons/stock.png' %}" class="side-menu__icon" enable-background="new 0 0 24 24" viewBox="0 0 24 24" {% comment %} style="margin-right: 10px; width: 10%;filter: contrast(20%);" {% endcomment %}/>
-							<span class="side-menu__label">Logistiques</span><i class="angle fa fa-angle-right"></i></a>
+							<span class="side-menu__label">Logistiques</span>{% comment %} <i class="angle fa fa-angle-right"></i> {% endcomment %}</a>
 					</li>
 					<li class="slide">
 						<a class="side-menu__item" data-bs-toggle="slide" href="#">
@@ -271,24 +271,24 @@
 				<li class="slide">
 					<a class="side-menu__item" data-bs-toggle="slide" href="{% url 'projects' %}">
 						<img src="{% static 'assets/images/icons/plant.png' %}" class="side-menu__icon" enable-background="new 0 0 24 24" viewBox="0 0 24 24" {% comment %} style="margin-right: 10px; width: 10%;filter: contrast(20%);" {% endcomment %}/>
-						<span class="side-menu__label"> Traçage Projets</span><i class="angle fa fa-angle-right"></i>
+						<span class="side-menu__label"> Traçage Projets</span>{% comment %} <i class="angle fa fa-angle-right"></i> {% endcomment %}
 					</a>
 				</li>
 				<li class="slide">
 					<a class="side-menu__item" data-bs-toggle="slide" href="{% url 'parcelles' %}">
 						<img src="{% static 'assets/images/icons/polygon.png' %}" class="side-menu__icon" enable-background="new 0 0 24 24" viewBox="0 0 24 24" {% comment %} style="margin-right: 10px; width: 10%;filter: contrast(20%);" {% endcomment %}/>
-						<span class="side-menu__label">Satellite</span><i class="angle fa fa-angle-right"></i>
+						<span class="side-menu__label">Satellite</span>{% comment %} <i class="angle fa fa-angle-right"></i> {% endcomment %}
 					</a>
 				</li>
 				<li class="slide">
 					<a class="side-menu__item" data-bs-toggle="slide" href="#">
 						<img src="{% static 'assets/images/icons/weather.png' %}" class="side-menu__icon" enable-background="new 0 0 24 24" viewBox="0 0 24 24" {% comment %} style="margin-right: 10px; width: 10%;filter: contrast(20%);" {% endcomment %}/>
 						<span class="side-menu__label">Météo</span><i class="angle fa fa-angle-right"></i></a>
-					<ul class="slide-menu">
+					{% comment %} <ul class="slide-menu">
 						<li class="side-menu-label1"><a href="javascript:void(0)">Météo</a></li>
 						<li><a href="{% url 'chart-echart' %}" class="slide-item">Météo Satellite</a></li>
 						<li><a href="{% url 'chart-echart' %}" class="slide-item">Station Météo</a></li>
-					</ul>
+					</ul> {% endcomment %}
 				</li>
 				<li class="slide">
 					<a class="side-menu__item" data-bs-toggle="slide" href="#">
@@ -351,7 +351,7 @@
 					<li class="slide">
 						<a class="side-menu__item" data-bs-toggle="slide" href="{% url 'logistiques' %}">
 							<img src="{% static 'assets/images/icons/stock.png' %}" class="side-menu__icon" enable-background="new 0 0 24 24" viewBox="0 0 24 24" {% comment %} style="margin-right: 10px; width: 10%;filter: contrast(20%);" {% endcomment %}/>
-							<span class="side-menu__label">Logistiques</span><i class="angle fa fa-angle-right"></i></a>
+							<span class="side-menu__label">Logistiques</span>{% comment %} <i class="angle fa fa-angle-right"></i> {% endcomment %}</a>
 					</li>
 					<li class="slide">
 						<a class="side-menu__item" data-bs-toggle="slide" href="#">
@@ -473,7 +473,7 @@
 					<li class="slide">
 						<a class="side-menu__item" data-bs-toggle="slide" href="{% url 'logistiques' %}">
 							<img src="{% static 'assets/images/icons/stock.png' %}" class="side-menu__icon" enable-background="new 0 0 24 24" viewBox="0 0 24 24" {% comment %} style="margin-right: 10px; width: 10%;filter: contrast(20%);" {% endcomment %}/>
-							<span class="side-menu__label">Logistiques</span><i class="angle fa fa-angle-right"></i></a>
+							<span class="side-menu__label">Logistiques</span>{% comment %} <i class="angle fa fa-angle-right"></i> {% endcomment %}</a>
 					</li>
 					<li class="slide">
 						<a class="side-menu__item" data-bs-toggle="slide" href="#">
@@ -507,12 +507,12 @@
 					<li class="slide">
 						<a class="side-menu__item" data-bs-toggle="slide" href="#">
 							<img src="{% static 'assets/images/icons/parametre.png' %}" class="side-menu__icon" enable-background="new 0 0 24 24" viewBox="0 0 24 24" {% comment %} style="margin-right: 10px; width: 10%;filter: contrast(20%);" {% endcomment %}/>
-							<span class="side-menu__label">Paramètres</span><i class="angle fa fa-angle-right"></i></a>
+							<span class="side-menu__label">Paramètres</span>{% comment %} <i class="angle fa fa-angle-right"> {% endcomment %}</i></a>
 					</li>
 					<li class="slide">
 						<a class="side-menu__item" data-bs-toggle="slide" href="{% url 'profile-user' %}">
 							<img src="{% static 'assets/images/icons/user-account.png' %}" class="side-menu__icon" enable-background="new 0 0 24 24" viewBox="0 0 24 24" {% comment %} style="margin-right: 10px; width: 10%;filter: contrast(20%);" {% endcomment %}/>
-							<span class="side-menu__label">Compte</span><i class="angle fa fa-angle-right"></i></a>
+							<span class="side-menu__label">Compte</span>{% comment %} <i class="angle fa fa-angle-right"></i> {% endcomment %}</a>
 					</li>
 				</li>								
 			</div>
