@@ -3073,6 +3073,40 @@ def operation_edit(request, id):
     type_traitement = TypeTraitement.objects.all()
     pieces = operation.pieces.all()  
     type_pieces = TypePieces.objects.all()
+    
+     # Retrieve markers associated with this operation
+    markers = operation.markers.all()
+    marker_data = [{'latitude': marker.latitude, 'longitude': marker.longitude} for marker in markers]
+
+   # Retrieve points for the project zone
+    project_points_data = []
+    points = Point.objects.filter(geozone=operation.project.geozone)
+    
+    # Use the 'type' field from the 'Zone' model to determine shape
+    shape_type = operation.project.geozone.type 
+
+    if shape_type == 'circle':
+        # Handle circle case
+        center_point = points.first()  # Assuming a single point defines the circle center
+        project_points_data.append({
+            'type': 'circle',
+            'center': {'latitude': center_point.latt, 'longitude': center_point.long},
+            'radius': operation.project.geozone.circle_radius  # Use the radius from the zone
+        })
+    elif shape_type == 'polygon' or shape_type == 'rectangle':
+        # Handle polygon or rectangle case
+        project_points_data.append({
+            'type': shape_type,
+            'coordinates': [{'latitude': point.latt, 'longitude': point.long} for point in points]
+        })
+    else:
+        # Handle individual points if no specific shape type is defined
+        for point in points:
+            project_points_data.append({
+                'type': 'point',
+                'latitude': point.latt,
+                'longitude': point.long
+            })
 
     if request.method == 'POST':
         # Updating Type d'opération
@@ -3178,6 +3212,16 @@ def operation_edit(request, id):
                     operation.pieces.add(piece_instance)
                 except PieceDeRechange.DoesNotExist:
                     continue
+                
+        # Traitement du marker
+        marker_lat = request.POST.get('marker_lat')
+        marker_lng = request.POST.get('marker_lng')
+        
+        # Mettre à jour les coordonnées du marker
+        for marker in markers:
+            marker.latitude = marker_lat
+            marker.longitude = marker_lng
+            marker.save()
         
         
         return redirect('operation-view', id=operation.id)
@@ -3196,6 +3240,9 @@ def operation_edit(request, id):
         'type_traitement': type_traitement,
         'pieces': pieces,
         'type_pieces': type_pieces,
+        'markers': markers,
+        'markers': marker_data,  
+        'project_points': project_points_data,
     }
     return render(request, 'operation-edit.html', context)
 

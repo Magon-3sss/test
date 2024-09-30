@@ -31,11 +31,11 @@
     <div id="global-loader">
         <img src="{% static 'assets/images/loader.svg'%}" class="loader-img" alt="Loader">
     </div>
-    <!-- GLOBAL-LOADER END -->
+    <!-- GLOBAL-LOADER END class="page" class="page-main"-->
 
     <!-- PAGE -->
-	<div class="page">
-		<div class="page-main">
+	<div style="display: flex; flex-direction: column;  min-height: 100vh;">
+		<div style="flex: 1 1 1;">
 
             <!-- APP-HEADER -->
             {% include 'components/layouts/app-header.html' %}
@@ -49,9 +49,7 @@
 
 					 <!-- CONTAINER -->
 					 <div class="main-container container-fluid">
-
-                        {% block content %}{% endblock %}
-
+                            {% block content %}{% endblock %}
                     </div>
                         <!-- MAIN-CONTAINER END -->
                 </div>

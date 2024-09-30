@@ -1,0 +1,94 @@
+{
+    "headers": {
+        "accept": "image/png",
+        "content-type": "application/json"
+    },
+    "payload": {
+        "evalscript": "\n      //VERSION=3\nfunction setup() {\n  return {\n  // The script can be adapted for S2L1C by removing the \"SCL\" band\n    input: [\"CLM\", \"SCL\", \"dataMask\"],\n    output: { bands: 4 },\n    mosaicking: \"ORBIT\"\n  };\n}\n\nfunction isNotCloudy(smp) {\n  // Check if cloud using s2cloudless and scene classification\n  let clm = smp.CLM;\n  let scl = smp.SCL;\n\n  if (clm == 1){\n    // s2cloudless\n    return false;\n  } else if (scl == 1 || scl == 3 || scl == 8 || scl == 9 || scl == 10){\n    // saturated/defective, cloud shadow, cloud medium probability,\n    // cloud high probability, cirrus\n    return false;\n  } else {\n    return true;\n  }\n}\n\nfunction evaluatePixel(samples) {\n  var noOfClearPx = 0;\n  var noOfSamples = 0;\n\n  // Loop over available samples (images)\n  for (i=0;i<samples.length;i++)\n  {\n\t//If there is no value available, we avoid further count\n    if (!samples[i].dataMask) continue;\n     noOfSamples++;\n\n    //Criteria for cloudless pixel\n    if (\n      isNotCloudy(samples[i])\n     ) noOfClearPx++;\n  }\n\n  //transparent if there is no data\n  if (noOfSamples==0) return [0,0,0,0];\n\n  // Ratio of non-cloudy pixels\n  var avg = noOfClearPx / noOfSamples;\n\n  // Color scheme for visualisation\n  var color= colorBlend(avg,\n   [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0 ],\n   [\n    [0/255,0,0/255],        //  -> 0 = #000000\n    [141/255,0/255,0/255],   //  -> .1 = #8D0000\n    [219/255,36/255,36/255],  //  -> .2 = #DB2424\n    [236/255,125/255,0/255],  //  -> .3 = #EC7D00\n    [236/255,199/255,0/255], //  -> .4 = #ECC700\n    [111/255,161/255,32/255], //  -> .5 = #6FA120\n    [75/255,126/255,39/255], //  -> .6 = #4B7E27\n    [72/255,168/255,146/255], //  -> .7 = #48A892\n    [63/255,142/255,185/255],  //  -> .8 = #3F8EB9\n    [133/255,78/255,144/255],   //  -> .9 = #854EA4\n    [85/255,34/255,115/255]         //  -> 1.0 = #552273\n   ]);\n\n  return[color[0],color[1],color[2],1];\n}\n    ",
+        "input": {
+            "bounds": {
+                "bbox": [
+                    28.46077,
+                    22.752656,
+                    28.574409,
+                    22.859281
+                ],
+                "geometry": {
+                    "coordinates": [
+                        [
+                            [
+                                28.4618,
+                                22.8577
+                            ],
+                            [
+                                28.4618,
+                                22.8577
+                            ],
+                            [
+                                28.573723,
+                                22.859281
+                            ],
+                            [
+                                28.573723,
+                                22.859281
+                            ],
+                            [
+                                28.574409,
+                                22.753922
+                            ],
+                            [
+                                28.574409,
+                                22.753922
+                            ],
+                            [
+                                28.462486,
+                                22.752656
+                            ],
+                            [
+                                28.462486,
+                                22.752656
+                            ],
+                            [
+                                28.46077,
+                                22.8577
+                            ],
+                            [
+                                28.4618,
+                                22.8577
+                            ]
+                        ]
+                    ],
+                    "type": "Polygon"
+                },
+                "properties": {
+                    "crs": "http://www.opengis.net/def/crs/EPSG/0/4326"
+                }
+            },
+            "data": [
+                {
+                    "dataFilter": {
+                        "timeRange": {
+                            "from": "2024-03-18T00:00:00Z",
+                            "to": "2024-03-18T23:59:59Z"
+                        }
+                    },
+                    "type": "sentinel-2-l2a"
+                }
+            ]
+        },
+        "output": {
+            "height": 512,
+            "responses": [
+                {
+                    "format": {
+                        "type": "image/png"
+                    },
+                    "identifier": "default"
+                }
+            ],
+            "width": 512
+        }
+    },
+    "timestamp": "2024-05-30T11:44:02.627298",
+    "url": "https://services.sentinel-hub.com/api/v1/process"
+}

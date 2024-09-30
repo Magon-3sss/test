@@ -6,6 +6,14 @@
         .img {
             width: 30px;
         }
+		.leaflet-popup-content {
+			width: 500px;
+		}
+		#map {
+			width: 100%;
+			height: 50vh;
+			box-shadow: 0 0 10px rgba(0,0,0,0.5);
+		}
     </style>
 {% endblock %}
 
@@ -46,11 +54,11 @@
                                 </div>
                                 <label for="type">Type d'opération</label>
                                 <select class="form-control" name="typeoperation" id="typeoperation" required>
-                                    <option value="irrigation" {% if operation.typeoperation == 'irrigation' %}selected{% endif %}>Irrigation</option>
-                                    <option value="fertilisation" {% if operation.typeoperation == 'fertilisation' %}selected{% endif %}>Fertilisation</option>
-                                    <option value="récolte" {% if operation.typeoperation == 'récolte' %}selected{% endif %}>Récolte</option>
-                                    <option value="traitement" {% if operation.typeoperation == 'traitement' %}selected{% endif %}>Traitement</option>
-                                    <option value="autre" {% if operation.typeoperation == 'autre' %}selected{% endif %}>Autre</option>
+                                    <option value="Irrigation" {% if operation.typeoperation == 'Irrigation' %}selected{% endif %}>Irrigation</option>
+                                    <option value="Fertilisation" {% if operation.typeoperation == 'Fertilisation' %}selected{% endif %}>Fertilisation</option>
+                                    <option value="Récolte" {% if operation.typeoperation == 'Récolte' %}selected{% endif %}>Récolte</option>
+                                    <option value="Traitement" {% if operation.typeoperation == 'Traitement' %}selected{% endif %}>Traitement</option>
+                                    <option value="Autre" {% if operation.typeoperation == 'Autre' %}selected{% endif %}>Autre</option>
                                 </select>
                             </div>
                         </div>
@@ -84,10 +92,10 @@
 						<div class="card-body">
 							<div class="table-responsive deleted-table">
 								{% comment %} <button id="button" class="btn btn-primary mb-4 data-table-btn">Delete selected row</button> {% endcomment %}
-								<table id="delete-datatable" class="table editable-table table-nowrap table-bordered table-edit">
+								<table id="main-doeuvre-table" class="table editable-table table-nowrap table-bordered table-edit">
 									<thead>
 										<tr>
-											<th>ID</th>
+											<th></th>
 											<th>Main d'œuvre</th>
 											<th>Date et Heure de début</th>
 											<th>Date et Heure de fin</th>
@@ -113,6 +121,9 @@
 											<td data-field="gender" for="timefin">
 												<input type="datetime-local" class="form-control" name="timefin[]" value="{{ main_doeuvre.timefin|date:'Y-m-d\TH:i' }}">
 											</td>
+											<td>
+												<button type="button" class="btn btn-danger remove-main-doeuvre">Supprimer</button>
+											</td>
 											{% comment %} <td style="width: 100px">
 												<a class="btn btn-primary fs-14 text-white edit-icn" title="Edit">
 													<i class="fe fe-edit"></i>
@@ -122,6 +133,50 @@
 										{% endfor %}
 									</tbody>
 								</table>
+								<button type="button" class="btn btn-info" id="add-main-doeuvre">Ajouter une Main d'œuvre</button>
+								<script>
+									document.addEventListener("DOMContentLoaded", function() {
+										const mainDoeuvreTable = document.getElementById('main-doeuvre-table').getElementsByTagName('tbody')[0];
+								
+										// Ajouter une nouvelle ligne de Main d'œuvre
+										document.getElementById('add-main-doeuvre').addEventListener('click', function() {
+											const newRow = mainDoeuvreTable.insertRow();
+											const idCell = newRow.insertCell(0);
+											const typeCell = newRow.insertCell(1);
+											const startTimeCell = newRow.insertCell(2);
+											const endTimeCell = newRow.insertCell(3);
+											const deleteCell = newRow.insertCell(4);
+								
+											idCell.innerHTML = mainDoeuvreTable.rows.length;
+								
+											// Sélection de la Main d'œuvre
+											typeCell.innerHTML = `
+												<select class="form-control" id="type_rh" name="type_rh[]">
+													<option value="" disabled>Ouvrier</option>
+													{% for rh in all_rh %}
+													<option value="{{ rh.id }}">{{ rh.nom }} {{ rh.prenom }} ({{ rh.type }})</option>
+													{% endfor %}
+												</select>`;
+								
+											// Date et heure de début
+											startTimeCell.innerHTML = `<input type="datetime-local" class="form-control" name="time[]">`;
+								
+											// Date et heure de fin
+											endTimeCell.innerHTML = `<input type="datetime-local" class="form-control" name="timefin[]">`;
+								
+											// Bouton de suppression
+											deleteCell.innerHTML = `<button type="button" class="btn btn-danger remove-main-doeuvre">Supprimer</button>`;
+										});
+								
+										// Suppression d'une Main d'œuvre
+										mainDoeuvreTable.addEventListener('click', function(event) {
+											if (event.target && event.target.classList.contains('remove-main-doeuvre')) {
+												const row = event.target.closest('tr');
+												row.parentNode.removeChild(row);
+											}
+										});
+									});
+								</script>
 							</div>
 						</div>
 					
@@ -174,10 +229,10 @@
 						<div class="card-body">
 							<div class="table-responsive deleted-table">
 								{% comment %} <button id="button" class="btn btn-primary mb-4 data-table-btn">Delete selected row</button> {% endcomment %}
-								<table id="delete-datatable" class="table editable-table table-nowrap table-bordered table-edit">
+								<table id="machines-carburants-table" class="table editable-table table-nowrap table-bordered table-edit">
 									<thead>
 										<tr>
-											<th>ID</th>
+											<th></th>
 											<th>Type machine</th>
 											<th>Carburant</th>
 											<th>Quantité carburant en litres</th>
@@ -217,6 +272,9 @@
 											<td data-field="gender" for="heure_de_fin">
 												<input type="datetime-local" class="form-control" id="heure_de_fin" name="heure_de_fin[]" value="{{ machine_carburant.heure_de_fin|date:'Y-m-d\TH:i' }}">
 											</td>
+											<td>
+												<button type="button" class="btn btn-danger remove-machine-carburant">Supprimer</button>
+											</td>
 											{% comment %} <td style="width: 100px">
 												<a class="btn btn-primary fs-14 text-white edit-icn" title="Edit">
 													<i class="fe fe-edit"></i>
@@ -226,6 +284,64 @@
 										{% endfor %}
 									</tbody>
 								</table>
+								<button type="button" class="btn btn-info" id="add-machine-carburant">Ajouter une Machine et Carburant</button>
+								<script>
+									document.addEventListener("DOMContentLoaded", function() {
+										const machineCarburantTable = document.getElementById('machines-carburants-table').getElementsByTagName('tbody')[0];
+									
+										// Ajouter une nouvelle ligne de Machine et Carburant
+										document.getElementById('add-machine-carburant').addEventListener('click', function() {
+											const newRow = machineCarburantTable.insertRow();
+											const idCell = newRow.insertCell(0);
+											const typeMachineCell = newRow.insertCell(1);
+											const carburantCell = newRow.insertCell(2);
+											const quantiteCarburantCell = newRow.insertCell(3);
+											const dureeCell = newRow.insertCell(4);
+											const finCell = newRow.insertCell(5);
+											const deleteCell = newRow.insertCell(6);
+									
+											idCell.innerHTML = machineCarburantTable.rows.length;
+									
+											// Sélection de la Machine
+											typeMachineCell.innerHTML = `
+												<select class="form-control" id="type_machine_engins" name="type_machine_engins[]">
+													<option value="" selected disabled>Camion</option>
+													{% for machine in machines_tables %}
+													<option value="{{ machine.id }}">{{ machine.type }} ({{ machine.matricule }})</option>
+													{% endfor %}
+												</select>`;
+									
+											// Sélection du Carburant
+											carburantCell.innerHTML = `
+												<select class="form-control" id="carburant" name="carburant[]">
+													<option value="" selected disabled>Carburant</option>
+													{% for carburant in carburants %}
+													<option value="{{ carburant.type_carburant }}">{{ carburant.type_carburant }}</option>
+													{% endfor %}
+												</select>`;
+									
+											// Quantité de Carburant
+											quantiteCarburantCell.innerHTML = `<input type="number" class="form-control" name="quantite_carburant[]" placeholder="Quantité de Carburant">`;
+									
+											// Durée du programme
+											dureeCell.innerHTML = `<input type="datetime-local" class="form-control" name="duree_utilisation_programme[]">`;
+									
+											// Heure de fin
+											finCell.innerHTML = `<input type="datetime-local" class="form-control" name="heure_de_fin[]">`;
+									
+											// Bouton de suppression
+											deleteCell.innerHTML = `<button type="button" class="btn btn-danger remove-machine-carburant">Supprimer</button>`;
+										});
+									
+										// Suppression d'une ligne de Machine et Carburant
+										machineCarburantTable.addEventListener('click', function(event) {
+											if (event.target && event.target.classList.contains('remove-machine-carburant')) {
+												const row = event.target.closest('tr');
+												row.parentNode.removeChild(row);
+											}
+										});
+									});
+								</script>									
 							</div>
 						</div>
 						
@@ -368,6 +484,9 @@
 											<td data-field="quantite_graine_utilisee">
 												<input type="number" class="form-control" id="quantite_graine_utilisee" name="quantite_graine_utilisee" value="{{ operation.quantite_graine_utilisee }}" placeholder="Quantité de graines utilisée">
 											</td>
+											<td>
+												<button type="button" class="btn btn-danger remove-graine">Supprimer</button>
+											</td>
 										</tr>
 
 										<tr>
@@ -385,6 +504,9 @@
 											</td>
 											<td data-field="quantite_engrais_utilisee">
 												<input type="number" class="form-control" id="quantite_engrais_utilisee" name="quantite_engrais_utilisee" value="{{ operation.quantite_engrais_utilisee }}" placeholder="Quantité d'engrais utilisée">
+											</td>
+											<td>
+												<button type="button" class="btn btn-danger remove-fertilisant">Supprimer</button>
 											</td>
 										</tr>
 
@@ -404,9 +526,42 @@
 											<td data-field="quantite_traitement_utilisee">
 												<input type="number" class="form-control" id="quantite_traitement_utilisee" name="quantite_traitement_utilisee" value="{{ operation.quantite_traitement_utilisee }}" placeholder="Quantité de traitement utilisée">
 											</td>
+											<td>
+												<button type="button" class="btn btn-danger remove-traitement">Supprimer</button>
+											</td>
 										</tr>
 									</tbody>
 								</table>
+								<script>
+									document.addEventListener("DOMContentLoaded", function() {
+										const graineTable = document.getElementById('delete-datatable').getElementsByTagName('tbody')[0];
+								
+								
+										// Suppression d'une Graine
+										graineTable.addEventListener('click', function(event) {
+											if (event.target && event.target.classList.contains('remove-graine')) {
+												const row = event.target.closest('tr');
+												row.parentNode.removeChild(row);
+											}
+										});
+
+										// Suppression de Fertilisants
+										graineTable.addEventListener('click', function(event) {
+											if (event.target && event.target.classList.contains('remove-fertilisant')) {
+												const row = event.target.closest('tr');
+												row.parentNode.removeChild(row);
+											}
+										});
+
+										// Suppression de Traitement
+										graineTable.addEventListener('click', function(event) {
+											if (event.target && event.target.classList.contains('remove-traitement')) {
+												const row = event.target.closest('tr');
+												row.parentNode.removeChild(row);
+											}
+										});
+									});
+								</script>
 							</div>
 						</div>
 					</div>
@@ -415,10 +570,12 @@
 					<div class="row mb-4">
 						<p class="mb-4 text-17"><strong>Pièces de Rechange</strong></p>
 						<div class="card-body">
+							
 							<div class="table-responsive deleted-table">
 								<table id="pieces-rechange-table" class="table editable-table table-nowrap table-bordered table-edit">
 									<thead>
 										<tr>
+											<th></th>
 											<th>Type de Pièce</th>
 											<th>Nombre de Pièces</th>
 										</tr>
@@ -426,6 +583,7 @@
 									<tbody>
 										{% for piece in pieces %}
 										<tr>
+											<td data-field="id">{{ forloop.counter }}</td>
 											<td>
 												<select class="form-control" name="type_pieces[]">
 													<option value="" disabled selected>Sélectionnez une pièce</option>
@@ -439,16 +597,67 @@
 											<td>
 												<input type="number" class="form-control" name="nombre_de_pieces[]" value="{{ piece.nombre_de_pieces }}" />
 											</td>
+											<td>
+												<button type="button" class="btn btn-danger remove-piece">Supprimer</button>
+											</td>
 										</tr>
 										{% endfor %}
 									</tbody>
 								</table>
+								<button type="button" class="btn btn-info" id="add-piece-btn">Ajouter une Pièce</button>
+								<script>
+									document.addEventListener("DOMContentLoaded", function() {
+										const pieceTableBody = document.getElementById('pieces-rechange-table').getElementsByTagName('tbody')[0];
+										
+										const emptyRowTemplate = `
+											<tr>
+												<td data-field="id"></td>
+												<td>
+													<select class="form-control" name="type_pieces[]">
+														<option value="" disabled selected>Sélectionnez une pièce</option>
+														{% for type_piece in type_pieces %}
+														<option value="{{ type_piece.id }}">{{ type_piece.type_pieces }}</option>
+														{% endfor %}
+													</select>
+												</td>
+												<td>
+													<input type="number" class="form-control" name="nombre_de_pieces[]" value="" />
+												</td>
+												<td>
+													<button type="button" class="btn btn-danger remove-piece">Supprimer</button>
+												</td>
+											</tr>`;
+								
+										let rowCounter = pieceTableBody.getElementsByTagName('tr').length;
+								
+										document.getElementById('add-piece-btn').addEventListener('click', function() {
+											const newRow = document.createElement('tr');
+											newRow.innerHTML = emptyRowTemplate;
+											rowCounter += 1;
+											newRow.querySelector('td[data-field="id"]').textContent = rowCounter;
+											pieceTableBody.appendChild(newRow);
+										});
+								
+										pieceTableBody.addEventListener('click', function(event) {
+											if (event.target && event.target.classList.contains('remove-piece')) {
+												const row = event.target.closest('tr');
+												row.parentNode.removeChild(row);
+								
+												rowCounter = 0;
+												pieceTableBody.querySelectorAll('tr').forEach(function(tr) {
+													rowCounter += 1;
+													tr.querySelector('td[data-field="id"]').textContent = rowCounter;
+												});
+											}
+										});
+									});
+								</script>
 							</div>
 						</div>
 					</div>
 
 					<!-- Description -->
-					<div class="row mb-4">
+					{% comment %} <div class="row mb-4">
 						<div class="form-group">
 							<p class="mb-4 text-17"><strong>Description</strong></p>
 							<div class="card-body">
@@ -459,7 +668,7 @@
 								<input type="text" class="form-control" id="description" name="description" value="{{ operation.description }}" />
 							</div>
 						</div>
-					</div>
+					</div> {% endcomment %}
 
 
 					<div class="row mb-4">
@@ -479,27 +688,146 @@
 						
 						<!-- Outils Agricoles -->
 						<div class="col-md-6">
-							<p class="mb-4 text-17"><strong>Outils Agricoles</strong></p>
-							<div class="form-row">
-								<div class="col-md-12 mb-10">
-									<div class="avatar mb-2 p-2 lh-1 mb-sm-0 avatar-md rounded-circle me-2">
-										<img src="{% static 'assets/images/icons/outils-de-jardinage.png' %}" class="side-menu__icon img" />
+							<div class="form-group">
+								<p class="mb-4 text-17"><strong>Outils Agricoles</strong></p>
+									<div class="card-body">
+										<div class="avatar mb-2 p-2 lh-1 mb-sm-0 avatar-md rounded-circle me-2">
+											<img src="{% static 'assets/images/icons/outils-de-jardinage.png' %}" class="side-menu__icon img" />
+										</div>
+										<label for="outil">Outils</label>
+										<select class="form-control" id="outil" name="outil[]" multiple>
+											<option value="" selected disabled>Outil</option>
+											{% for outil in outils %}
+												<option value="{{ outil.id }}" {% if outil.id in selected_outils_ids %}selected{% endif %}>
+													{{ outil.name }}
+												</option>
+											{% endfor %}
+										</select>
 									</div>
-									<label for="outil">Outil</label>
-									<select class="form-control" id="outil" name="outil[]" multiple>
-										<option value="" selected disabled>Outil</option>
-										{% for outil in outils %}
-											<option value="{{ outil.id }}" {% if outil.id in selected_outils_ids %}selected{% endif %}>
-												{{ outil.name }}
-											</option>
-										{% endfor %}
-									</select>
-								</div>
 							</div>
 						</div>
 					</div>
-					
-					
+
+					<!-- Emplacement d'Opération Agricole -->
+					<div class="row mb-4">
+						<p class="mb-4 text-17"><strong>Emplacement d'Opération Agricole</strong></p>
+						<div class="col-md-12">
+							<div class="card">
+								<div class="card-body pb-0">
+
+									<div id="map">
+										<!-- Map coordinate  -->
+										<div class="leaflet-control map-coordinate">
+											<div class="coordinate"></div>
+										</div>
+									</div>
+										<!-- leaflet js  -->
+										<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+										<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+										<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+										<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+										<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.js"></script>
+										<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+										<script src="{% static './lib/leaflet.markercluster.js' %}"></script>
+										<script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
+										<script src="{% static './data/test.js' %}"></script>
+										<script src="{% static './dist/main.js' %}"></script>
+										<script src="{% static './dist/web-GIS.js' %}"></script>
+			
+										<!-- leaflet draw plugin  -->
+										<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/0.4.2/leaflet.draw.css"/>
+										<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/0.4.2/leaflet.draw.js"></script>
+										<input type="hidden" id="marker_lat" name="marker_lat" value="{{ markers.0.latitude }}">
+										<input type="hidden" id="marker_lng" name="marker_lng" value="{{ markers.0.longitude }}">
+
+										<script>
+											// Initialize the map
+											var mapcenter = [51.505, -0.09];  // Default map center if no points are provided
+											var map = L.map('map', {zoomControl: false}).setView(mapcenter, 11);
+										
+											// Base layers
+											var googleSat = L.tileLayer('http://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}', {
+												maxZoom: 20,
+												subdomains: ['mt0', 'mt1', 'mt2', 'mt3']
+											}).addTo(map);
+										
+											var googleStreets = L.tileLayer('http://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}', {
+												maxZoom: 20,
+												subdomains: ['mt0', 'mt1', 'mt2', 'mt3']
+											});
+										
+											L.control.layers({
+												"Satellite": googleSat,
+												"Street": googleStreets
+											}).addTo(map);
+										
+											// Group layers for markers and project points
+											var projectLayer = L.layerGroup().addTo(map);
+											var markerLayer = L.layerGroup().addTo(map);
+										
+											// Add project points to the map
+											var projectPoints = {{ project_points|safe }};
+											var allPoints = [];
+											
+											projectPoints.forEach(function(shape) {
+												if (shape.type === 'circle') {
+													var circle = L.circle([shape.center.latitude, shape.center.longitude], {radius: shape.radius}).addTo(projectLayer)
+														.bindPopup("Circle with radius: " + shape.radius);
+													allPoints.push([shape.center.latitude, shape.center.longitude]);
+												} else if (shape.type === 'polygon') {
+													var latlngs = shape.coordinates.map(function(coord) {
+														return [coord.latitude, coord.longitude];
+													});
+													L.polygon(latlngs).addTo(projectLayer).bindPopup("Polygon");
+													allPoints = allPoints.concat(latlngs);  // Add all polygon points to the array
+												} else if (shape.type === 'rectangle') {
+													var latlngs = shape.coordinates.map(function(coord) {
+														return [coord.latitude, coord.longitude];
+													});
+													L.rectangle(latlngs).addTo(projectLayer).bindPopup("Rectangle");
+													allPoints = allPoints.concat(latlngs);  // Add all rectangle points to the array
+												} else if (shape.type === 'point') {
+													var pointMarker = L.marker([shape.latitude, shape.longitude]).addTo(projectLayer)
+														.bindPopup("Point: (" + shape.latitude + ", " + shape.longitude + ")");
+													allPoints.push([shape.latitude, shape.longitude]);
+												}
+											});
+										
+											// Add operation markers to the map
+											var markers = {{ markers|safe }};
+											markers.forEach(function(marker) {
+												var markerPoint = L.marker([marker.latitude, marker.longitude]).addTo(markerLayer)
+													.bindPopup("Marker: (" + marker.latitude + ", " + marker.longitude + ")");
+												allPoints.push([marker.latitude, marker.longitude]);  // Add each marker to the array
+											});
+										
+											// If there are points, adjust the map to fit all points
+											if (allPoints.length > 0) {
+												var bounds = L.latLngBounds(allPoints);
+												map.fitBounds(bounds);
+											} else {
+												// If no points, set default center and zoom level
+												map.setView(mapcenter, 11);
+											}
+										</script>
+										<script>
+											var marker = L.marker([{{ markers.0.latitude }}, {{ markers.0.longitude }}], {
+												draggable: true
+											}).addTo(map);
+										
+											// Capture l'événement de déplacement du marker
+											marker.on('dragend', function (e) {
+												var latlng = e.target.getLatLng();
+												document.getElementById('marker_lat').value = latlng.lat;
+												document.getElementById('marker_lng').value = latlng.lng;
+											});
+										</script>
+										
+								</div> 
+							</div>
+						</div>
+					</div>
+												
 
 					<div class="row p-5">
 						<div class="btn-list text-end">

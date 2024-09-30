@@ -1,0 +1,112 @@
+{
+    "request": {
+        "headers": {
+            "accept": "image/png",
+            "content-type": "application/json"
+        },
+        "payload": {
+            "evalscript": "\n            //VERSION=3\n\n                let viz = ColorGradientVisualizer.createBlueRed();\n\n                function evaluatePixel(samples) {\n                    let val = index(samples.B08, samples.B04);\n                    val = viz.process(val);\n                    val.push(samples.dataMask);\n                    return val;\n                }\n\n                function setup() {\n                return {\n                    input: [{\n                    bands: [\n                        \"B04\",\n                        \"B08\",\n                        \"dataMask\"\n                    ]\n                    }],\n                    output: {\n                    bands: 4\n                    }\n                }\n                }\n        ",
+            "input": {
+                "bounds": {
+                    "bbox": [
+                        8.837471,
+                        34.658967,
+                        8.850217,
+                        34.669591
+                    ],
+                    "geometry": {
+                        "coordinates": [
+                            [
+                                [
+                                    8.843522,
+                                    34.669309
+                                ],
+                                [
+                                    8.843522,
+                                    34.669309
+                                ],
+                                [
+                                    8.850217,
+                                    34.66352
+                                ],
+                                [
+                                    8.850217,
+                                    34.66352
+                                ],
+                                [
+                                    8.846183,
+                                    34.658967
+                                ],
+                                [
+                                    8.846183,
+                                    34.658967
+                                ],
+                                [
+                                    8.837471,
+                                    34.666415
+                                ],
+                                [
+                                    8.837471,
+                                    34.666415
+                                ],
+                                [
+                                    8.843608,
+                                    34.669591
+                                ],
+                                [
+                                    8.843522,
+                                    34.669309
+                                ]
+                            ]
+                        ],
+                        "type": "Polygon"
+                    },
+                    "properties": {
+                        "crs": "http://www.opengis.net/def/crs/EPSG/0/4326"
+                    }
+                },
+                "data": [
+                    {
+                        "dataFilter": {
+                            "timeRange": {
+                                "from": "2023-07-31T00:00:00Z",
+                                "to": "2023-07-31T23:59:59Z"
+                            }
+                        },
+                        "type": "sentinel-2-l2a"
+                    }
+                ]
+            },
+            "output": {
+                "height": 512,
+                "responses": [
+                    {
+                        "format": {
+                            "type": "image/png"
+                        },
+                        "identifier": "default"
+                    }
+                ],
+                "width": 512
+            }
+        },
+        "timestamp": "2024-03-15T09:53:34.168212",
+        "url": "https://services.sentinel-hub.com/api/v1/process"
+    },
+    "response": {
+        "elapsed": 1.232528,
+        "headers": {
+            "Connection": "keep-alive",
+            "Content-Length": "2005",
+            "Content-Type": "image/png",
+            "Date": "Fri, 15 Mar 2024 08:53:33 GMT",
+            "access-control-allow-credentials": "true",
+            "access-control-allow-headers": "origin,content-type,accept,accept-crs,authorization,cache-control",
+            "access-control-allow-methods": "GET, POST, PUT, DELETE, OPTIONS, HEAD, PATCH",
+            "access-control-allow-origin": "*",
+            "access-control-max-age": "3600",
+            "x-processingunits-spent": "0.6666666865348816"
+        },
+        "status_code": 200
+    }
+}

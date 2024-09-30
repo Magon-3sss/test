@@ -1,0 +1,94 @@
+{
+    "headers": {
+        "accept": "image/png",
+        "content-type": "application/json"
+    },
+    "payload": {
+        "evalscript": "\n      //VERSION=3\nlet ndvi = (B08 - B04) / (B08 + B04);\n\nconst classes = {\n  0: [0, 0, 0], // No Data (Missing data) - black  \n  1: [255, 0, 0], // Saturated or defective pixel - red \n  2: [47, 47, 47], // Topographic casted shadows (\"Dark features/Shadows\" for data before 2022-01-25) - very dark grey\n  3: [100, 50, 0], // Cloud shadows - dark brown\n  4: [0, 160, 0], // Vegetation - green\n  5: [255, 230, 90], // Not-vegetated - dark yellow\n  6: [0, 0, 255], // Water (dark and bright) - blue\n  7: [128, 128, 128], // Unclassified - dark grey\n  8: [192, 192, 192], // Cloud medium probability - grey\n  9: [255, 255, 255], // Cloud high probability - white\n  10: [100, 200, 255], // Thin cirrus - very bright blue\n  11: [255, 150, 255], // Snow or ice - very bright pink\n}\n\nlet imgVals = classes[SCL] || [0, 0, 0];\n\nif(SCL == 6){\n   return imgVals.concat(dataMask * 255);\n  }\n//\n  \n\nlet test = colorBlend(ndvi,\n    [-0.2, 0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.55, 0.6, 0.65, 0.7, 0.75, 0.8, 0.85, 0.9, 0.95, 1.0 ],\n    [[0, 0, 0,dataMask],\t             //  < -.2 = #000000 (black)\n     [255/255,255/255,255/255,dataMask],      //  -> 0 = #a50026\n     [215/255,48/255,39/255,dataMask],   //  -> .1 = #d73027\n     [244/255,109/255,67/255,dataMask],  //  -> .2 = #f46d43\n     [253/255,174/255,97/255,dataMask],  //  -> .3 = #fdae61\n     [254/255,224/255,139/255,dataMask], //  -> .4 = #fee08b\n     [255/255,255/255,191/255,dataMask], //  -> .5 = #ffffbf\n     [217/255,239/255,139/255,dataMask], //  -> .6 = #d9ef8b\n    [166/255,217/255,106/255,dataMask], //  -> .7 = #a6d96a\n    [102/255,189/255,99/255,dataMask],  //  -> .8 = #66bd63\n     [26/255,152/255,80/255,dataMask],   //  -> .9 = #1a9850\n     [0,104/255,55/255,dataMask],        //  -> 0.95 = #006837\n     [59/255,120/255,29/255,dataMask],\n     [52/255,112/255,27/255,dataMask],\n     [27/255,75/255,18/255,dataMask],\n [23/255,64/255,17/255,dataMask],        //  -> 0.95 = #006837\n     [23/255,45/255,22/255,dataMask]         //  -> 1 = #006837\n    ]);\n\nreturn test;\n    ",
+        "input": {
+            "bounds": {
+                "bbox": [
+                    28.46077,
+                    22.752656,
+                    28.574409,
+                    22.859281
+                ],
+                "geometry": {
+                    "coordinates": [
+                        [
+                            [
+                                28.4618,
+                                22.8577
+                            ],
+                            [
+                                28.4618,
+                                22.8577
+                            ],
+                            [
+                                28.573723,
+                                22.859281
+                            ],
+                            [
+                                28.573723,
+                                22.859281
+                            ],
+                            [
+                                28.574409,
+                                22.753922
+                            ],
+                            [
+                                28.574409,
+                                22.753922
+                            ],
+                            [
+                                28.462486,
+                                22.752656
+                            ],
+                            [
+                                28.462486,
+                                22.752656
+                            ],
+                            [
+                                28.46077,
+                                22.8577
+                            ],
+                            [
+                                28.4618,
+                                22.8577
+                            ]
+                        ]
+                    ],
+                    "type": "Polygon"
+                },
+                "properties": {
+                    "crs": "http://www.opengis.net/def/crs/EPSG/0/4326"
+                }
+            },
+            "data": [
+                {
+                    "dataFilter": {
+                        "timeRange": {
+                            "from": "2024-03-21T00:00:00Z",
+                            "to": "2024-03-21T23:59:59Z"
+                        }
+                    },
+                    "type": "sentinel-2-l2a"
+                }
+            ]
+        },
+        "output": {
+            "height": 512,
+            "responses": [
+                {
+                    "format": {
+                        "type": "image/png"
+                    },
+                    "identifier": "default"
+                }
+            ],
+            "width": 512
+        }
+    },
+    "timestamp": "2024-05-29T17:17:42.999198",
+    "url": "https://services.sentinel-hub.com/api/v1/process"
+}

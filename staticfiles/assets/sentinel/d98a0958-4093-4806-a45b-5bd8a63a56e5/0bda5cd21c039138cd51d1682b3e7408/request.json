@@ -1,0 +1,94 @@
+{
+    "headers": {
+        "accept": "image/png",
+        "content-type": "application/json"
+    },
+    "payload": {
+        "evalscript": "\n      //VERSION=3\n        const moistureRamps = [\n        [-0.8, 0x800000],\n        [-0.24, 0xff0000],\n        [-0.032, 0xffff00],\n        [0.032, 0x00ffff],\n        [0.24, 0x0000ff],\n        [0.8, 0x000080]\n        ];\n\n        const viz = new ColorRampVisualizer(moistureRamps);\n\n        function setup() {\n        return {\n            input: [\"B8A\", \"B11\", \"dataMask\"],\n            output: { bands: 4 }\n        };\n        }\n\n        function evaluatePixel(samples) {\n        let val = index(samples.B8A, samples.B11);\n        let imgVals = viz.process(val);\n        return imgVals.concat(samples.dataMask);\n        }\n    ",
+        "input": {
+            "bounds": {
+                "bbox": [
+                    8.837471,
+                    34.658967,
+                    8.850217,
+                    34.669591
+                ],
+                "geometry": {
+                    "coordinates": [
+                        [
+                            [
+                                8.843522,
+                                34.669309
+                            ],
+                            [
+                                8.843522,
+                                34.669309
+                            ],
+                            [
+                                8.850217,
+                                34.66352
+                            ],
+                            [
+                                8.850217,
+                                34.66352
+                            ],
+                            [
+                                8.846183,
+                                34.658967
+                            ],
+                            [
+                                8.846183,
+                                34.658967
+                            ],
+                            [
+                                8.837471,
+                                34.666415
+                            ],
+                            [
+                                8.837471,
+                                34.666415
+                            ],
+                            [
+                                8.843608,
+                                34.669591
+                            ],
+                            [
+                                8.843522,
+                                34.669309
+                            ]
+                        ]
+                    ],
+                    "type": "Polygon"
+                },
+                "properties": {
+                    "crs": "http://www.opengis.net/def/crs/EPSG/0/4326"
+                }
+            },
+            "data": [
+                {
+                    "dataFilter": {
+                        "timeRange": {
+                            "from": "2024-04-07T00:00:00Z",
+                            "to": "2024-04-07T23:59:59Z"
+                        }
+                    },
+                    "type": "sentinel-2-l2a"
+                }
+            ]
+        },
+        "output": {
+            "height": 512,
+            "responses": [
+                {
+                    "format": {
+                        "type": "image/png"
+                    },
+                    "identifier": "default"
+                }
+            ],
+            "width": 512
+        }
+    },
+    "timestamp": "2024-05-29T15:25:17.220489",
+    "url": "https://services.sentinel-hub.com/api/v1/process"
+}
