@@ -139,7 +139,9 @@
                                                                                     </div> {% endcomment %}
                                                                                     <a href="#" class="option-dots" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fe fe-more-vertical"></i></a>
                                                                                     <div class="dropdown-menu dropdown-menu-start">
-                                                                                        <a class="dropdown-item" href="carburant-modifier"><i class="fe fe-edit me-2"></i>Modifier</a>
+                                                                                        <a class="dropdown-item" href="javascript:void(0)" onclick="openEditModal({{ carburant.id }})">
+                                                                                            <i class="fe fe-edit me-2"></i>Modifier
+                                                                                        </a>                                                                                        
                                                                                         {% comment %} <a class="dropdown-item" href="#"><i class="fe fe-share me-2"></i> Share</a>
                                                                                         <a class="dropdown-item" href="#"><i class="fe fe-download me-2"></i> Clone</a> {% endcomment %}
                                                                                         <a class="dropdown-item" href="javascript:void(0)" onclick="deleteCarburant({{ carburant.id }})">
@@ -271,8 +273,145 @@
 
 		<!--/Modal-->
 
+        <!--Modal Modifier Carburant-->
+
+        <div class="modal fade" id="editCarburantModal" tabindex="-1" aria-labelledby="editCarburantModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <div class="avatar mb-2 p-2 lh-1 mb-sm-0 avatar-md rounded-circle  me-2">
+                            <img src="{% static 'assets/images/icons/camion-de-carburant.png' %}" class="side-menu__icon img" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
+                        </div>
+                        <h5 class="modal-title" id="editCarburantModalLabel">Modifier Carburant</h5>
+                        <button aria-label="Close" class="btn-close" data-bs-dismiss="modal" ><span aria-hidden="true">&times;</span></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="edit-carburant-form" method="POST">
+                            {% csrf_token %}
+                            <input type="hidden" id="carburant-id" name="carburant-id">
+                            
+                            <div class="form-row">
+                                <div class="col-md-6 mb-3">
+                                    <div class="avatar mb-2 p-2 lh-1 mb-sm-0 avatar-md rounded-circle  me-2">
+                                        <img src="{% static 'assets/images/icons/pompe-carburant.png' %}" class="side-menu__icon img" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
+                                    </div>
+                                    <label for="edit-nom">Nom :</label>
+                                    <input type="text" class="form-control" id="edit-nom" name="nom" required>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <div class="avatar mb-2 p-2 lh-1 mb-sm-0 avatar-md rounded-circle  me-2">
+                                        <img src="{% static 'assets/images/icons/pompe-a-carburant.png' %}" class="side-menu__icon img" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
+                                    </div>
+                                    <label for="edit-type">Type :</label>
+                                    <select class="form-control" id="edit-type" name="type" required>
+                                        <option value="" selected disabled>Choisissez un type de carburant</option>
+                                        {% for data in data %}
+                                            {% for type in data.types %}
+                                                <option value="{{ type.type_carburant }}" {% if type.type_carburant == carburant.type %}selected{% endif %}>
+                                                    {{ type.type_carburant }}
+                                                </option>
+                                            {% endfor %}
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>                           
+        
+                            <div class="form-row">
+                                <div class="col-md-6 mb-3">
+                                    <div class="avatar mb-2 p-2 lh-1 mb-sm-0 avatar-md rounded-circle  me-2">
+                                        <img src="{% static 'assets/images/icons/compteur-de-carburant.png' %}" class="side-menu__icon img" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
+                                    </div>
+                                    <label for="edit-quantite">Quantité :</label>
+                                    <input type="number" class="form-control" id="edit-quantite" name="quantite" required>
+                                </div>
+
+                                <div class="col-md-6 mb-3">
+                                    <div class="avatar mb-2 p-2 lh-1 mb-sm-0 avatar-md rounded-circle  me-2">
+                                        <img src="{% static 'assets/images/icons/euro.png' %}" class="side-menu__icon img" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
+                                    </div>
+                                    <label for="edit-cout">Coût :</label>
+                                    <input type="number" class="form-control" id="edit-cout" name="cout" required>
+                                </div>
+                            </div>
+        
+                            <div class="form-row">
+                                <div class="col-md-6 mb-3">
+                                    <div class="avatar mb-2 p-2 lh-1 mb-sm-0 avatar-md rounded-circle  me-2">
+                                        <img src="{% static 'assets/images/icons/calendrier.png' %}" class="side-menu__icon img" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
+                                    </div>
+                                    <label for="edit-date">Date d'approvisionnement :</label>
+                                    <input type="date" class="form-control" id="edit-date" name="date_approvisionnement" required>
+                                </div>
+                            </div>
+                            
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                                <button type="submit" class="btn btn-primary">Enregistrer les modifications</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!--/Modal Modifier Carburant-->
+
         {% endblock %}
-    {% block scripts %}   
+    {% block scripts %} 
+    
+    <script>
+        function openEditModal(carburantId) {
+            // Récupérer les données du carburant à modifier via une requête AJAX
+            fetch(`/get-carburant/${carburantId}/`)
+                .then(response => response.json())
+                .then(data => {
+                    // Pré-remplir les champs du formulaire avec les données du carburant
+                    document.getElementById('carburant-id').value = data.id;
+                    document.getElementById('edit-nom').value = data.nom;
+                    document.getElementById('edit-type').value = data.type;
+                    document.getElementById('edit-quantite').value = data.quantite;
+                    document.getElementById('edit-cout').value = data.cout;
+                    document.getElementById('edit-date').value = data.date_approvisionnement;
+    
+                    // Ouvrir le modal
+                    var editModal = new bootstrap.Modal(document.getElementById('editCarburantModal'));
+                    editModal.show();
+                })
+                .catch(error => console.error('Erreur:', error));
+        }
+    
+        // Envoyer les modifications via AJAX
+        document.getElementById('edit-carburant-form').addEventListener('submit', function(e) {
+            e.preventDefault();  // Empêcher le rechargement de la page
+    
+            const carburantId = document.getElementById('carburant-id').value;
+    
+            const formData = {
+                nom: document.getElementById('edit-nom').value,
+                type: document.getElementById('edit-type').value,
+                quantite: document.getElementById('edit-quantite').value,
+                cout: document.getElementById('edit-cout').value,
+                date_approvisionnement: document.getElementById('edit-date').value,
+            };
+    
+            fetch(`/edit-carburant/${carburantId}/`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': '{{ csrf_token }}'
+                },
+                body: JSON.stringify(formData),
+            }).then(response => {
+                if (response.ok) {
+                    alert("Carburant modifié avec succès");
+                    location.reload();  // Recharger la page pour voir les changements
+                } else {
+                    alert("Erreur lors de la modification");
+                }
+            }).catch(error => console.error('Erreur:', error));
+        });
+    </script>
+    
 
         <!-- PROJECT JS-->
         <script src=" {% static 'assets/js/carburant.js' %} "></script>

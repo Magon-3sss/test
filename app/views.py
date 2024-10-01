@@ -606,9 +606,37 @@ def save_carburant(request):
             print('no')
             return JsonResponse({"Erreur": "Some error occured"}, status=status.HTTP_201_CREATED)
         
-def carburant_modifier (request):
-    return render(request, 'carburant-modifier.html') 
+def get_carburant(request, carburant_id):
+    try:
+        carburant = Carburants_Tables.objects.get(id=carburant_id)
+        data = {
+            'id': carburant.id,
+            'nom': carburant.nom,
+            'type': carburant.type,
+            'quantite': carburant.quantite,
+            'cout': carburant.cout,
+            'date_approvisionnement': carburant.date_approvisionnement,
+        }
+        return JsonResponse(data, status=200)
+    except Carburants_Tables.DoesNotExist:
+        return JsonResponse({"error": "Carburant non trouvé"}, status=404)
+    
+@require_http_methods(["PUT"])
+def edit_carburant(request, carburant_id):
+    try:
+        carburant = Carburants_Tables.objects.get(id=carburant_id)
+        
+        data = json.loads(request.body)
+        carburant.nom = data['nom']
+        carburant.type = data['type']
+        carburant.quantite = data['quantite']
+        carburant.cout = data['cout']
+        carburant.date_approvisionnement = data['date_approvisionnement']
+        carburant.save()
 
+        return JsonResponse({"success": "Carburant modifié avec succès"}, status=200)
+    except Carburants_Tables.DoesNotExist:
+        return JsonResponse({"error": "Carburant non trouvé"}, status=404)
 
 """ Outils Agricoles"""
 @api_view(['POST'])
