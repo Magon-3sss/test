@@ -2,7 +2,11 @@
 {% load static %}
 
     {% block styles %}
-
+	<style>
+		.img{
+			width:30px;
+		}
+	</style>
     {% endblock %}
     
         {% block content %}
@@ -131,62 +135,69 @@
             <div class="modal-dialog modal-dialog-centered modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
-						<div class="avatar mb-2 p-2 lh-1 mb-sm-0 avatar-md rounded-circle  me-2">
+                        <div class="avatar mb-2 p-2 lh-1 mb-sm-0 avatar-md rounded-circle  me-2">
                             <img src="{% static 'assets/images/icons/camion-de-carburant.png' %}" class="side-menu__icon img" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
                         </div>
                         <h5 class="modal-title" id="editCarburantModalLabel">Modifier Carburant</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <button aria-label="Close" class="btn-close" data-bs-dismiss="modal" ><span aria-hidden="true">&times;</span></button>
                     </div>
                     <div class="modal-body">
                         <form id="edit-carburant-form" method="POST">
                             {% csrf_token %}
                             <input type="hidden" id="carburant-id" name="carburant-id">
                             
-                            <div class="form-group">
-								<div class="avatar mb-2 p-2 lh-1 mb-sm-0 avatar-md rounded-circle  me-2">
-									<img src="{% static 'assets/images/icons/pompe-carburant.png' %}" class="side-menu__icon img" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
-								</div>
-                                <label for="edit-nom">Nom :</label>
-                                <input type="text" class="form-control" id="edit-nom" name="nom" required>
-                            </div>
-                            
-                            <div class="form-group">
-								<div class="avatar mb-2 p-2 lh-1 mb-sm-0 avatar-md rounded-circle  me-2">
-                                    <img src="{% static 'assets/images/icons/pompe-a-carburant.png' %}" class="side-menu__icon img" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
+                            <div class="form-row">
+                                <div class="col-md-6 mb-3">
+                                    <div class="avatar mb-2 p-2 lh-1 mb-sm-0 avatar-md rounded-circle  me-2">
+                                        <img src="{% static 'assets/images/icons/pompe-carburant.png' %}" class="side-menu__icon img" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
+                                    </div>
+                                    <label for="edit-nom">Nom :</label>
+                                    <input type="text" class="form-control" id="edit-nom" name="nom" required>
                                 </div>
-                                <label for="edit-type">Type :</label>
-                                <select class="form-control" id="edit-type" name="type_carburant" required>
-                                    <option value="" selected disabled>Choisissez un type de carburant</option>
-                                    {% for data in data %}
-                                        {% for type in data.types %}
-                                            <option value="{{ type.type_carburant }}">{{ type.type_carburant }}</option>
+                                <div class="col-md-6 mb-3">
+                                    <div class="avatar mb-2 p-2 lh-1 mb-sm-0 avatar-md rounded-circle  me-2">
+                                        <img src="{% static 'assets/images/icons/pompe-a-carburant.png' %}" class="side-menu__icon img" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
+                                    </div>
+                                    <label for="edit-type">Type :</label>
+                                    <select class="form-control" id="edit-type" name="type" required>
+                                        <option value="" selected disabled>Choisissez un type de carburant</option>
+                                        {% for data in data %}
+                                            {% for type in data.types %}
+                                                <option value="{{ type.type_carburant }}" {% if type.type_carburant == carburant.type %}selected{% endif %}>
+                                                    {{ type.type_carburant }}
+                                                </option>
+                                            {% endfor %}
                                         {% endfor %}
-                                    {% endfor %}
-                                </select>
+                                    </select>
+                                </div>
+                            </div>                           
+        
+                            <div class="form-row">
+                                <div class="col-md-6 mb-3">
+                                    <div class="avatar mb-2 p-2 lh-1 mb-sm-0 avatar-md rounded-circle  me-2">
+                                        <img src="{% static 'assets/images/icons/compteur-de-carburant.png' %}" class="side-menu__icon img" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
+                                    </div>
+                                    <label for="edit-quantite">Quantité :</label>
+                                    <input type="number" class="form-control" id="edit-quantite" name="quantite" required>
+                                </div>
+
+                                <div class="col-md-6 mb-3">
+                                    <div class="avatar mb-2 p-2 lh-1 mb-sm-0 avatar-md rounded-circle  me-2">
+                                        <img src="{% static 'assets/images/icons/euro.png' %}" class="side-menu__icon img" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
+                                    </div>
+                                    <label for="edit-cout">Coût :</label>
+                                    <input type="number" class="form-control" id="edit-cout" name="cout" required>
+                                </div>
                             </div>
         
-                            <div class="form-group">
-								<div class="avatar mb-2 p-2 lh-1 mb-sm-0 avatar-md rounded-circle  me-2">
-									<img src="{% static 'assets/images/icons/compteur-de-carburant.png' %}" class="side-menu__icon img" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
-								</div>
-                                <label for="edit-quantite">Quantité :</label>
-                                <input type="number" class="form-control" id="edit-quantite" name="quantite" required>
-                            </div>
-        
-                            <div class="form-group">
-								<div class="avatar mb-2 p-2 lh-1 mb-sm-0 avatar-md rounded-circle  me-2">
-									<img src="{% static 'assets/images/icons/euro.png' %}" class="side-menu__icon img" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
-								</div>
-                                <label for="edit-cout">Coût :</label>
-                                <input type="number" class="form-control" id="edit-cout" name="cout" required>
-                            </div>
-        
-                            <div class="form-group">
-								<div class="avatar mb-2 p-2 lh-1 mb-sm-0 avatar-md rounded-circle  me-2">
-									<img src="{% static 'assets/images/icons/calendrier.png' %}" class="side-menu__icon img" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
-								</div>
-                                <label for="edit-date">Date d'approvisionnement :</label>
-                                <input type="date" class="form-control" id="edit-date" name="date_approvisionnement" required>
+                            <div class="form-row">
+                                <div class="col-md-6 mb-3">
+                                    <div class="avatar mb-2 p-2 lh-1 mb-sm-0 avatar-md rounded-circle  me-2">
+                                        <img src="{% static 'assets/images/icons/calendrier.png' %}" class="side-menu__icon img" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
+                                    </div>
+                                    <label for="edit-date">Date d'approvisionnement :</label>
+                                    <input type="date" class="form-control" id="edit-date" name="date_approvisionnement" required>
+                                </div>
                             </div>
                             
                             <div class="modal-footer">
