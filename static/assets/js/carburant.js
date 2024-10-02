@@ -14,7 +14,7 @@ window.onload = function () {
           event.preventDefault();
           var formData = new FormData(this);
           $.ajax({
-              url: 'http://localhost:8000/api/saveCarburant/',
+              url: 'http://57.129.38.15:8000/api/saveCarburant/',
               type: 'POST',
               data: formData,
               processData: false,
