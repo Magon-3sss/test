@@ -13,7 +13,7 @@
         event.preventDefault();
         var formData = new FormData(this);
         $.ajax({
-            url: 'http://localhost:8000/api/saveGraine/',
+            url: '/saveGraine/',
             type: 'POST',
             data: formData,
             processData: false,

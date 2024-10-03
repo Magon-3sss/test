@@ -31,7 +31,7 @@ $(document).ready(function() {
         event.preventDefault();
         var formData = new FormData(this);
         $.ajax({
-            url: 'http://localhost:8000/api/saveOutil/',
+            url: '/saveOutil/',
             type: 'POST',
             data: formData,
             processData: false,

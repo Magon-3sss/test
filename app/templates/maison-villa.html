@@ -519,7 +519,7 @@
             let data = JSON.parse(localStorage.getItem('data'));
             console.log(data);
         
-            fetch('http://localhost:8000/api/save/', {
+            fetch('/save/', {
                 method: 'POST',
                 headers: {
                     'Accept': 'application/json',

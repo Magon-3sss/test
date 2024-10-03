@@ -61,7 +61,7 @@ document.addEventListener("DOMContentLoaded", function() {
           const form = document.getElementById('step-10');
           const formData = new FormData(form);
 
-          fetch('/api/step1/', {
+          fetch('/step1/', {
               method: 'POST',
               body: formData,
           })
@@ -81,7 +81,7 @@ document.addEventListener("DOMContentLoaded", function() {
           const form = document.getElementById('step-11');
           const formData = new FormData(form);
 
-          fetch('/api/step2/', {
+          fetch('/step2/', {
               method: 'POST',
               body: formData,
           })
@@ -100,7 +100,7 @@ document.addEventListener("DOMContentLoaded", function() {
         const form = document.getElementById('step-12');
         const formData = new FormData(form);
 
-        fetch('/api/step2/', {
+        fetch('/step2/', {
             method: 'POST',
             body: formData,
         })
@@ -120,7 +120,7 @@ document.addEventListener("DOMContentLoaded", function() {
     const form = document.getElementById('step-13');
     const formData = new FormData(form);
 
-    fetch('/api/step2/', {
+    fetch('/step2/', {
         method: 'POST',
         body: formData,
     })
@@ -139,7 +139,7 @@ function submitStep5() {
   const form = document.getElementById('step-14');
   const formData = new FormData(form);
 
-  fetch('/api/step2/', {
+  fetch('/step2/', {
       method: 'POST',
       body: formData,
   })
@@ -158,7 +158,7 @@ function submitStep6() {
 const form = document.getElementById('step-15');
 const formData = new FormData(form);
 
-fetch('/api/step2/', {
+fetch('/step2/', {
     method: 'POST',
     body: formData,
 })
@@ -178,7 +178,7 @@ function submitStep7() {
 const form = document.getElementById('step-16');
 const formData = new FormData(form);
 
-fetch('/api/step2/', {
+fetch('/step2/', {
     method: 'POST',
     body: formData,
 })
@@ -198,7 +198,7 @@ function submitStep8() {
 const form = document.getElementById('step-17');
 const formData = new FormData(form);
 
-fetch('/api/step2/', {
+fetch('/step2/', {
     method: 'POST',
     body: formData,
 })
@@ -218,7 +218,7 @@ function submitStep9() {
 const form = document.getElementById('step-18');
 const formData = new FormData(form);
 
-fetch('/api/step2/', {
+fetch('/step2/', {
     method: 'POST',
     body: formData,
 })
@@ -238,7 +238,7 @@ function submitStep9() {
     const form = document.getElementById('step-19');
     const formData = new FormData(form);
     
-    fetch('/api/step2/', {
+    fetch('/step2/', {
         method: 'POST',
         body: formData,
     })
@@ -318,7 +318,7 @@ function submitStep9() {
             event.preventDefault();
             var formData = new FormData(this);
             $.ajax({
-                url: 'http://localhost:8000/api/save_operation/',
+                url: 'save_operation/',
                 type: 'POST',
                 data: formData,
                 processData: false,

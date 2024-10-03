@@ -11,7 +11,7 @@ window.onload = function () {
         event.preventDefault();
         var formData = new FormData(this);
         $.ajax({
-            url: 'http://localhost:8000/api/saveMaison/',
+            url: '/saveMaison/',
             type: 'POST',
             data: formData,
             processData: false,

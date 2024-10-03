@@ -283,7 +283,7 @@ map.on(L.Draw.Event.DELETED, function(event) {
     console.log(data);
 	data.id_projet = id_projet;
 	console.log(data);
-    fetch('http://localhost:8000/api/saveparcelle/', {
+    fetch('/saveparcelle/', {
         method: 'POST',
         headers: {
             'Accept': 'application/json',

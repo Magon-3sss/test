@@ -251,7 +251,7 @@ function getRasterImage() {
       "points": points_parcelle
   };
 
-  fetch('http://localhost:8000/api/eos-raster-image/', {
+  fetch('/eos-raster-image/', {
       method: 'POST',
       headers: {
           'Accept': 'application/json',

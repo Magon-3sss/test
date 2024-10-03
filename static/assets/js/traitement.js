@@ -13,7 +13,7 @@
         event.preventDefault();
         var formData = new FormData(this);
         $.ajax({
-            url: 'http://localhost:8000/api/saveTraitement/',
+            url: '/saveTraitement/',
             type: 'POST',
             data: formData,
             processData: false,

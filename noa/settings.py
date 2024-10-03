@@ -62,7 +62,7 @@ SECRET_KEY = 'django-insecure-(5d_*k*!6*rk=g=+06jl+=u%d76p&2jps!!1zhf#lck(=lg*nx
 DEBUG = True
 """ ALLOWED_HOSTS = ['*'] """
 
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
+ALLOWED_HOSTS = ['app.magon.cloud', '57.129.38.15', '127.0.0.1', 'localhost']
 # Application definition
 
 INSTALLED_APPS = [

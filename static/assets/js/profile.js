@@ -3,7 +3,7 @@ $(document).ready(function() {
 		event.preventDefault();
 		var formData = new FormData(this);
 		$.ajax({
-			url: 'http://localhost:8000/api/edit-profile',
+			url: '/edit-profile',
 			type: 'POST',
 			data: formData,
 			processData: false,

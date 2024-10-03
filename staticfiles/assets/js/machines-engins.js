@@ -51,7 +51,7 @@ $(document).ready(function() {
 
         if (jwtToken) {
             $.ajax({
-                url: 'http://127.0.0.1:8000/api/saveMachine/',
+                url: 'saveMachine/',
                 type: 'POST',
                 data: formData,
                 processData: false,

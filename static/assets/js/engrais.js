@@ -13,7 +13,7 @@
         event.preventDefault();
         var formData = new FormData(this);
         $.ajax({
-            url: 'http://localhost:8000/api/saveEngrais/',
+            url: '/saveEngrais/',
             type: 'POST',
             data: formData,
             processData: false,

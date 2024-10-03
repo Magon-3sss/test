@@ -14,7 +14,7 @@ $(document).ready(function() {
         event.preventDefault();
         var formData = new FormData(this);
         $.ajax({
-            url: 'http://localhost:8000/api/savepieces/',
+            url: '/savepieces/',
             type: 'POST',
             data: formData,
             processData: false,

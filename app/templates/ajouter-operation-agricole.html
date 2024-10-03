@@ -151,7 +151,7 @@
                                                                         });
                                                                 
                                                                         // Faites une requête AJAX pour récupérer les points du projet sélectionné
-                                                                        fetch('/api/get-points/' + geozoneId)
+                                                                        fetch('get-points/' + geozoneId)
                                                                             .then(response => response.json())
                                                                             .then(data => {
                                                                                 // Convertissez les données en un tableau de coordonnées LatLng
@@ -373,7 +373,7 @@
                                             };
                                         
                                             // Faites une requête AJAX pour envoyer les données au serveur
-                                            fetch('/api/save-marker/', {
+                                            fetch('save-marker/', {
                                                 method: 'POST',
                                                 headers: {
                                                     'Content-Type': 'application/json',
