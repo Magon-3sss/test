@@ -498,6 +498,21 @@
 							<img src="{% static 'assets/images/icons/iot.png' %}" class="side-menu__icon" enable-background="new 0 0 24 24" viewBox="0 0 24 24" {% comment %} style="margin-right: 10px; width: 10%;filter: contrast(20%);" {% endcomment %}/>
 							<span class="side-menu__label">Objets connectés</span><i class="angle fa fa-angle-right"></i></a>
 					</li>
+				</li>
+				<!-- Section Gestion des Utilisateurs -->
+				<h3>Gestion Admin</h3>
+				<li class="slide">
+					<a class="side-menu__item has-link" href="{% url 'admin_dashboard' %}">
+						<img src="{% static 'assets/images/icons/management.png' %}" class="side-menu__icon" />
+						<span class="side-menu__label">Gestion des Utilisateurs</span>
+					</a>
+				</li>
+				<!-- Section Gestion des Groupes -->
+				<li class="slide">
+					<a class="side-menu__item has-link" href="{% url 'manage_groups_permissions' %}">
+						<img src="{% static 'assets/images/icons/process.png' %}" class="side-menu__icon" />
+						<span class="side-menu__label">Gestion des Groupes</span>
+					</a>
 				</li>				
 				{% endif %}
 

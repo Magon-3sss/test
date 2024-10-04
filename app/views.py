@@ -113,6 +113,141 @@ from django.views.decorators.http import require_http_methods
 from django.core.paginator import Paginator
 from django.db.models import Q
 
+##############  ADMIN #####################
+# Formulaire pour ajouter un nouvel utilisateur avec un groupe
+class UserCreationForm(forms.ModelForm):
+    password = forms.CharField(widget=forms.PasswordInput)
+    group = forms.ModelChoiceField(queryset=Group.objects.all(), required=True, label="Groupe d'utilisateur")
+
+    class Meta:
+        model = User
+        fields = ['username', 'email', 'password', 'group']
+
+# Formulaire pour gérer les permissions d'un groupe
+class GroupPermissionForm(forms.ModelForm):
+    permissions = forms.ModelMultipleChoiceField(
+        queryset=Permission.objects.all(),
+        widget=forms.CheckboxSelectMultiple,
+        required=False,
+        label="Permissions"
+    )
+
+    class Meta:
+        model = Group
+        fields = ['permissions']
+
+# Formulaire pour modifier le groupe d'un utilisateur existant
+class UserGroupForm(forms.ModelForm):
+    groups = forms.ModelChoiceField(queryset=Group.objects.all(), required=True, label="Groupe")
+
+    class Meta:
+        model = User
+        fields = ['groups']
+        
+# Formulaire pour ajouter un nouveau groupe
+class GroupCreationForm(forms.ModelForm):
+    class Meta:
+        model = Group
+        fields = ['name']
+        labels = {'name': "Nom du groupe"}
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['name'].widget.attrs.update({'class': 'form-control', 'placeholder': 'Nom du Groupe'})
+
+@login_required
+def admin_dashboard(request):
+    total_users = User.objects.count()
+
+    # Initialisation des formulaires
+    user_form = UserCreationForm()
+    group_form = UserGroupForm()
+    group_creation_form = GroupCreationForm()  # Nouveau formulaire pour créer un groupe
+
+    if request.method == "POST":
+        # Ajouter un nouvel utilisateur
+        if 'add_user' in request.POST:
+            form = UserCreationForm(request.POST)
+            if form.is_valid():
+                user = form.save(commit=False)
+                user.set_password(form.cleaned_data['password'])
+                user.save()
+                selected_group = form.cleaned_data['group']
+                selected_group.user_set.add(user)
+                messages.success(request, f"Utilisateur {user.username} ajouté avec succès au groupe {selected_group.name} !")
+                return redirect('admin_dashboard')
+
+        # Supprimer un utilisateur existant
+        if 'delete_user' in request.POST:
+            username_to_delete = request.POST.get('username_to_delete')
+            try:
+                user_to_delete = User.objects.get(username=username_to_delete)
+                user_to_delete.delete()
+                messages.success(request, 'Utilisateur supprimé avec succès !')
+            except User.DoesNotExist:
+                messages.error(request, 'Utilisateur non trouvé.')
+
+        # Changer le groupe d'un utilisateur existant
+        if 'change_group' in request.POST:
+            username_to_update = request.POST.get('username_to_update')
+            group_id = request.POST.get('group')
+            try:
+                user_to_update = User.objects.get(username=username_to_update)
+                new_group = Group.objects.get(id=group_id)
+                
+                # Supprimer l'utilisateur de tous ses groupes actuels
+                user_to_update.groups.clear()
+                
+                # Ajouter l'utilisateur au nouveau groupe
+                user_to_update.groups.add(new_group)
+                messages.success(request, f"Groupe de {user_to_update.username} mis à jour avec succès au groupe {new_group.name} !")
+            except (User.DoesNotExist, Group.DoesNotExist):
+                messages.error(request, 'Utilisateur ou groupe non trouvé.')
+
+        # Ajouter un nouveau groupe
+        if 'add_group' in request.POST:
+            group_form = GroupCreationForm(request.POST)
+            if group_form.is_valid():
+                group_form.save()
+                messages.success(request, 'Nouveau groupe ajouté avec succès !')
+                return redirect('admin_dashboard')
+
+    users = User.objects.all()
+    groups = Group.objects.all()  # Récupérer tous les groupes
+
+    context = {
+        'total_users': total_users,
+        'users': users,
+        'groups': groups,
+        'user_form': user_form,
+        'group_form': group_form,
+        'group_creation_form': group_creation_form,  # Formulaire pour créer un nouveau groupe
+    }
+    return render(request, 'admin_dashboard.html', context)
+
+# Vue pour gérer les permissions des groupes
+@login_required
+def manage_groups_permissions(request):
+    groups = Group.objects.all()
+    
+    if request.method == 'POST':
+        for group in groups:
+            form = GroupPermissionForm(request.POST, instance=group)
+            if form.is_valid():
+                form.save()
+                messages.success(request, f"Permissions du groupe {group.name} mises à jour avec succès !")
+        return redirect('manage_groups_permissions')
+
+    # Créer un formulaire pour chaque groupe
+    group_forms = {group.name: GroupPermissionForm(instance=group) for group in groups}
+
+    context = {
+        'groups': groups,
+        'group_forms': group_forms,
+    }
+    return render(request, 'manage_groups_permissions.html', context)
+##############  ADMIN #####################
+
 """ def get_sidebar_content_based_on_group(request, user_group):
     if user_group == 'Basic':
         return render(request, 'app-sidebar.html')

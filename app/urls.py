@@ -22,7 +22,9 @@ from .views import popup_view
 #app_name = 'app'
 
 urlpatterns = [
-    path('', views.landing_page, name='landing-page'),   
+    path('', views.landing_page, name='landing-page'),
+    path('admin_dashboard/', views.admin_dashboard, name='admin_dashboard'),
+    path('groups_permissions/', views.manage_groups_permissions, name='manage_groups_permissions'),   
     path('sidebar/', SidebarView.as_view(), name='app-sidebar'),
     path('api/token/', CustomTokenObtainPairView.as_view(), name='token_obtain_pair'), 
     path('api/test/refresh/',TokenRefreshView.as_view(), name='token_refresh'),

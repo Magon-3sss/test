@@ -1,0 +1,57 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestion des Permissions de Groupes</title>
+    {% include 'components/layouts/styles.html' %}
+</head>
+<body class="ltr app sidebar-mini light-mode">
+    <div id="global-loader">
+        <img src="{% static 'assets/images/loader.svg' %}" class="loader-img" alt="Loader">
+    </div>
+
+    <div style="display: flex; flex-direction: column; min-height: 100vh;">
+        <div style="flex: 1 1 1;">
+            {% include 'components/layouts/app-header.html' %}
+            {% include 'components/layouts/app-sidebar.html' %}
+
+            <div class="app-content main-content mt-0">
+                <div class="side-app">
+                    <div class="main-container container-fluid">
+                        <h1>Gestion des Permissions de Groupes</h1>
+                        
+                        <!-- Formulaire de gestion des permissions pour chaque groupe -->
+                        <form method="POST">
+                            {% csrf_token %}
+                            {% for group, form in group_forms.items %}
+                                <div class="card mb-4">
+                                    <div class="card-header">
+                                        <h2>{{ group }}</h2>
+                                    </div>
+                                    <div class="card-body">
+                                        {{ form.as_p }}
+                                    </div>
+                                </div>
+                            {% endfor %}
+                            <button type="submit" class="btn btn-primary">Mettre à jour les permissions</button>
+                        </form>
+
+                        {% if messages %}
+                            {% for message in messages %}
+                                <div class="alert alert-info mt-3">{{ message }}</div>
+                            {% endfor %}
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {% include 'components/layouts/modal.html' %}
+        {% include 'components/layouts/footer.html' %}
+    </div>
+
+    {% include 'components/layouts/scripts.html' %}
+</body>
+</html>

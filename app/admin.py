@@ -60,4 +60,3 @@ admin.site.register(CategorieGrainesPousses)
 admin.site.register(TypeCarburant)
 admin.site.register(TypePieces)
 admin.site.register(TypeRh)
-

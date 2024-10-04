@@ -1,0 +1,134 @@
+{% load static %}
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name='viewport' content='width=device-width, initial-scale=1.0, user-scalable=0'>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="description" content="Magon – Smart Agriculture Solution">
+    <meta name="author" content="Spruko Technologies Private Limited">
+    <meta name="keywords" content="admin,admin dashboard,admin panel,admin template,bootstrap,clean,dashboard,flat,jquery,modern,responsive,premium admin templates,responsive admin,ui,ui kit.">
+
+    <title>Magon</title>
+    {% include 'components/layouts/styles.html' %}
+    {% block styles %}{% endblock %}
+</head>
+
+<body class="ltr app sidebar-mini light-mode">
+    {% include 'components/layouts/switcher.html' %}
+    
+    <div id="global-loader">
+        <img src="{% static 'assets/images/loader.svg'%}" class="loader-img" alt="Loader">
+    </div>
+    
+    <div style="display: flex; flex-direction: column; min-height: 100vh;">
+        <div style="flex: 1 1 1;">
+            {% include 'components/layouts/app-header.html' %}
+            {% include 'components/layouts/app-sidebar.html' %}
+
+            <div class="app-content main-content mt-0">
+                <div class="side-app">
+                    <div class="main-container container-fluid">
+                        <h1>Gestion des Utilisateurs</h1>
+
+                        <!-- Ajouter un groupe -->
+                        <div class="card mb-4">
+                            <div class="card-header">
+                                <h2>Ajouter un Nouveau Groupe</h2>
+                            </div>
+                            <div class="card-body">
+                                <form method="POST">
+                                    {% csrf_token %}
+                                    {{ group_creation_form.as_p }}
+                                    <button type="submit" name="add_group" class="btn btn-primary">Ajouter Groupe</button>
+                                </form>
+                            </div>
+                        </div>
+
+                        <!-- Liste des groupes -->
+                        {% comment %} <div class="card mb-4">
+                            <div class="card-header">
+                                <h2>Groupes Existants</h2>
+                            </div>
+                            <div class="card-body">
+                                <ul class="list-group">
+                                    {% for group in groups %}
+                                        <li class="list-group-item">{{ group.name }}</li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        </div> {% endcomment %}
+                        
+                        <!-- Ajouter un utilisateur -->
+                        <div class="card mb-4">
+                            <div class="card-header">
+                                <h2>Ajouter un Utilisateur</h2>
+                            </div>
+                            <div class="card-body">
+                                <form method="POST">
+                                    {% csrf_token %}
+                                    {{ user_form.as_p }}
+                                    <button type="submit" name="add_user" class="btn btn-success">Ajouter Utilisateur</button>
+                                </form>
+                            </div>
+                        </div>
+
+                        <!-- Liste des utilisateurs avec formulaire de modification de groupe et suppression -->
+                        <div class="card">
+                            <div class="card-header">
+                                <h2>Utilisateurs Existants</h2>
+                            </div>
+                            <div class="card-body">
+                                <ul class="list-group">
+                                    {% for user in users %}
+                                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                                            <div>
+                                                {{ user.username }} - {{ user.email }} - Groupes: {% for group in user.groups.all %}{{ group.name }}{% if not forloop.last %}, {% endif %}{% endfor %}
+                                            </div>
+                                            
+                                            <!-- Formulaire de modification de groupe et suppression -->
+                                            <div class="d-flex">
+                                                <!-- Formulaire de modification de groupe -->
+                                                <form method="POST" class="form-inline">
+                                                    {% csrf_token %}
+                                                    <input type="hidden" name="username_to_update" value="{{ user.username }}">
+                                                    <select name="group" class="form-control form-control-sm">
+                                                        {% for group in group_form.fields.groups.queryset %}
+                                                            <option value="{{ group.id }}" {% if group in user.groups.all %}selected{% endif %}>{{ group.name }}</option>
+                                                        {% endfor %}
+                                                    </select>
+                                                    <button type="submit" name="change_group" class="btn btn-warning btn-sm">Changer de Groupe</button>
+                                                </form>
+
+                                                <!-- Formulaire de suppression d'utilisateur -->
+                                                <form method="POST" class="ml-2">
+                                                    {% csrf_token %}
+                                                    <input type="hidden" name="username_to_delete" value="{{ user.username }}">
+                                                    <button type="submit" name="delete_user" class="btn btn-danger btn-sm">Supprimer</button>
+                                                </form>
+                                            </div>
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        </div>
+
+                        {% if messages %}
+                            {% for message in messages %}
+                                <div class="alert alert-info mt-3">{{ message }}</div>
+                            {% endfor %}
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {% block modal %}{% endblock %}
+        {% include 'components/layouts/modal.html' %}
+        {% include 'components/layouts/footer.html' %}
+    </div>
+
+    {% include 'components/layouts/scripts.html' %}
+    {% block scripts %}{% endblock %}
+</body>
+</html>
