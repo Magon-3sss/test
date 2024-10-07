@@ -499,8 +499,9 @@
 							<span class="side-menu__label">Objets connectés</span><i class="angle fa fa-angle-right"></i></a>
 					</li>
 				</li>
-				<!-- Section Gestion des Utilisateurs -->
+				<!-- Section Gestion Admin -->
 				<h3>Gestion Admin</h3>
+				<!-- Section Gestion des Utilisateurs -->
 				<li class="slide">
 					<a class="side-menu__item has-link" href="{% url 'admin_dashboard' %}">
 						<img src="{% static 'assets/images/icons/management.png' %}" class="side-menu__icon" />
@@ -512,6 +513,13 @@
 					<a class="side-menu__item has-link" href="{% url 'manage_groups_permissions' %}">
 						<img src="{% static 'assets/images/icons/process.png' %}" class="side-menu__icon" />
 						<span class="side-menu__label">Gestion des Groupes</span>
+					</a>
+				</li>
+				<!-- Section Gestion des Filtres -->
+				<li class="slide">
+					<a class="side-menu__item has-link" href="{% url 'filtre_vegetation_view' %}">
+						<img src="{% static 'assets/images/icons/management.png' %}" class="side-menu__icon" />
+						<span class="side-menu__label">Gestion des Filtres</span>
 					</a>
 				</li>				
 				{% endif %}

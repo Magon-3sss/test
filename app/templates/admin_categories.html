@@ -1,0 +1,65 @@
+{% load static %}
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name='viewport' content='width=device-width, initial-scale=1.0, user-scalable=0'>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="description" content="Magon – Smart Agriculture Solution">
+    <meta name="author" content="Spruko Technologies Private Limited">
+    <meta name="keywords" content="admin,admin dashboard,admin panel,admin template,bootstrap,clean,dashboard,flat,jquery,modern,responsive,premium admin templates,responsive admin,ui,ui kit.">
+
+    <title>Magon</title>
+    {% include 'components/layouts/styles.html' %}
+    {% block styles %}{% endblock %}
+</head>
+
+<body class="ltr app sidebar-mini light-mode">
+    {% include 'components/layouts/switcher.html' %}
+    
+    <div id="global-loader">
+        <img src="{% static 'assets/images/loader.svg'%}" class="loader-img" alt="Loader">
+    </div>
+    
+    <div style="display: flex; flex-direction: column; min-height: 100vh;">
+        <div style="flex: 1 1 1;">
+            {% include 'components/layouts/app-header.html' %}
+            {% include 'components/layouts/app-sidebar.html' %}
+    <div class="app-content main-content mt-0">
+        <h2>Gestion des {{ title }}</h2>
+
+        <!-- Afficher la liste des filtres -->
+        <div class="mt-4">
+            <h4>Liste des {{ title }}</h4>
+            <ul class="list-group">
+                {% for filtre in filtres %}
+                    <li class="list-group-item">
+                        <strong>{{ filtre.abreviation }}:</strong> {{ filtre.descriptionFr }} ({{ filtre.descriptionAr }})
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <!-- Formulaire d'ajout -->
+        <div class="mt-4">
+            <h4>Ajouter un nouveau {{ title }}</h4>
+            <form method="post">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit" class="btn btn-primary">Ajouter</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+</div>
+
+{% block modal %}{% endblock %}
+{% include 'components/layouts/modal.html' %}
+{% include 'components/layouts/footer.html' %}
+</div>
+
+{% include 'components/layouts/scripts.html' %}
+{% block scripts %}{% endblock %}
+</body>
+</html>

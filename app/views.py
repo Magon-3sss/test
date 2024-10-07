@@ -246,6 +246,57 @@ def manage_groups_permissions(request):
         'group_forms': group_forms,
     }
     return render(request, 'manage_groups_permissions.html', context)
+
+class FiltreVegetationForm(forms.ModelForm):
+    class Meta:
+        model = FiltreVegitation
+        fields = ['abreviation', 'descriptionFr', 'descriptionAr', 'details']
+
+class FiltreHumiditeForm(forms.ModelForm):
+    class Meta:
+        model = FiltreHumidite
+        fields = ['abreviation', 'descriptionFr', 'descriptionAr', 'details']
+
+class FiltreIrrigationForm(forms.ModelForm):
+    class Meta:
+        model = FiltreIrrigation
+        fields = ['abreviation', 'descriptionFr', 'descriptionAr', 'details']
+
+# Vue pour gérer les filtres de végétation
+def filtre_vegetation_view(request):
+    filtres = FiltreVegitation.objects.all()
+    if request.method == 'POST':
+        form = FiltreVegetationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('filtre_vegetation_view')  # Redirection après l'ajout
+    else:
+        form = FiltreVegetationForm()
+    return render(request, 'admin_categories.html', {'filtres': filtres, 'form': form, 'title': 'Filtre Végétation'})
+
+# Vue pour gérer les filtres d'humidité
+def filtre_humidite_view(request):
+    filtres = FiltreHumidite.objects.all()
+    if request.method == 'POST':
+        form = FiltreHumiditeForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('filtre_humidite_view')
+    else:
+        form = FiltreHumiditeForm()
+    return render(request, 'admin_categories.html', {'filtres': filtres, 'form': form, 'title': 'Filtre Humidité'})
+
+# Vue pour gérer les filtres d'irrigation
+def filtre_irrigation_view(request):
+    filtres = FiltreIrrigation.objects.all()
+    if request.method == 'POST':
+        form = FiltreIrrigationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('filtre_irrigation_view')
+    else:
+        form = FiltreIrrigationForm()
+    return render(request, 'admin_categories.html', {'filtres': filtres, 'form': form, 'title': 'Filtre Irrigation'})
 ##############  ADMIN #####################
 
 """ def get_sidebar_content_based_on_group(request, user_group):
