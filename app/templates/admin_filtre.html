@@ -1,0 +1,496 @@
+{% extends 'components/base.html' %}
+{% load static %}
+
+    {% block styles %}
+    <style>
+        .modal-content .form-group input,
+        .modal-content .form-group textarea {
+            width: 80%; /* Decrease the input size */
+        }
+
+        .modal-content .form-group {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .modal-content .form-group label {
+            flex: 1;
+            text-align: right;
+            margin-right: 10px;
+        }
+        
+        .modal-content .form-group input, 
+        .modal-content .form-group textarea {
+            flex: 2;
+            width: 100%; /* To fill the available space */
+        }
+        
+        .modal-content .form-group input[type="text"] {
+            min-width: 200px; /* Set the minimum width for inputs */
+        }
+        
+        .modal-content .form-group textarea {
+            min-height: 50px; /* Adjust height for textareas */
+        }        
+    </style>
+
+    {% endblock %}
+    
+        {% block content %}
+        
+							<!-- PAGE-HEADER -->
+							<div class="page-header">
+								<div>
+									<h1 class="page-title">Listes des Filtres</h1>
+								</div>
+								<div class="ms-auto pageheader-btn">
+									<ol class="breadcrumb">
+										<li class="breadcrumb-item">Apps</li>
+										<li class="breadcrumb-item"><a href="javascript:void(0);">Gestion Admin</a></li>
+										<li class="breadcrumb-item active" aria-current="page">Gestion des Filtres</li>
+									</ol>
+								</div>
+							</div>
+							<!-- PAGE-HEADER END -->
+
+							<!-- ROW-1 OPEN -->
+                                <div class="row">
+                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-6">
+                                        <div class="card">
+                                            <div class="card-body p-0">
+                                                <div class="options-inv">
+                                                    <a href="#" class="option-dots" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fe fe-more-vertical"></i></a>
+                                                    <div class="dropdown-menu dropdown-menu-start">
+                                                        <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#addVegetationModal">
+                                                            <i class="fe fe-plus me-2"></i> Ajouter
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                                <div class="d-flex align-items-center justify-content-between py-5 px-6 mt-2">
+                                                    <div>
+                                                        <h6 class="text-muted"><strong>Listes des Filtres de Végitations</strong></h6>
+                                                    </div>
+                                                </div>
+                                                <hr class="mt-0 mb-0">
+                                                <div class="d-sm-flex align-items-center justify-content-between py-5 px-6">
+                                                    <div class="d-flex align-items-center">
+                                                        <div>
+                                                            <ul class="list-group">
+                                                                {% for filtre in filtres_vegetation %}
+                                                                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                                                                        <span>
+                                                                            <strong>{{ filtre.abreviation }}:</strong> {{ filtre.descriptionFr }} ({{ filtre.descriptionAr }})
+                                                                        </span>
+                                                                        <div>
+                                                                            <button class="btn btn-sm btn-primary" 
+                                                                                    onclick="editVegetationFilter({{ filtre.id }}, '{{ filtre.abreviation|escapejs }}', '{{ filtre.descriptionFr|escapejs }}', '{{ filtre.descriptionAr|escapejs }}', '{{ filtre.details|escapejs }}')">
+                                                                                <!-- Icone Modifier -->
+                                                                                <svg height="16" width="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                                    <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                                                                                    <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                                                                                    <g id="SVGRepo_iconCarrier">
+                                                                                        <path fill-rule="evenodd" clip-rule="evenodd" d="M8.56078 20.2501L20.5608 8.25011L15.7501 3.43945L3.75012 15.4395V20.2501H8.56078ZM15.7501 5.56077L18.4395 8.25011L16.5001 10.1895L13.8108 7.50013L15.7501 5.56077ZM12.7501 8.56079L15.4395 11.2501L7.93946 18.7501H5.25012L5.25012 16.0608L12.7501 8.56079Z" fill="#ffffff"></path>
+                                                                                    </g>
+                                                                                </svg>
+                                                                            </button>
+                                                            
+                                                                            <button class="btn btn-sm btn-danger ms-2" 
+                                                                                onclick="confirmDeleteVegetationFilter({{ filtre.id }})">
+                                                                                <!-- Icone Supprimer -->
+                                                                                <svg fill="#000000" height="16" width="16" viewBox="-3.5 0 19 19" xmlns="http://www.w3.org/2000/svg" class="cf-icon-svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><path d="M11.383 13.644A1.03 1.03 0 0 1 9.928 15.1L6 11.172 2.072 15.1a1.03 1.03 0 1 1-1.455-1.456l3.928-3.928L.617 5.79a1.03 1.03 0 1 1 1.455-1.456L6 8.261l3.928-3.928a1.03 1.03 0 0 1 1.455 1.456L7.455 9.716z"></path></g></svg>
+                                                                            </button>
+                                                                        </div>
+                                                                    </li>
+                                                                {% endfor %}
+                                                            </ul>
+                                                                                                                                                                                   
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- Modal pour Ajouter un Filtre de Végétation -->
+                                        <div class="modal fade" id="addVegetationModal" tabindex="-1" aria-labelledby="addVegetationModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="addVegetationModalLabel">Ajouter un Nouveau Filtre de Végétation</h5>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <form method="POST" id="addVegetationForm" action="{% url 'admin_filtre_view' %}">
+                                                            {% csrf_token %}
+                                                            <div class="form-group">
+                                                                <label for="abreviation">Abreviation:</label>
+                                                                <input type="text" id="abreviation" name="vegetation-abreviation" class="form-control" required>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label for="descriptionFr">DescriptionFr:</label>
+                                                                <textarea id="descriptionFr" name="vegetation-descriptionFr" class="form-control" required></textarea>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label for="descriptionAr">DescriptionAr:</label>
+                                                                <textarea id="descriptionAr" name="vegetation-descriptionAr" class="form-control" required></textarea>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label for="details">Details:</label>
+                                                                <input type="text" id="details" name="vegetation-details" class="form-control" value="" required>
+                                                            </div>                                                            
+                                                        </form>                                                        
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                                                        <button type="button" class="btn btn-primary" onclick="submitVegetationForm()">Ajouter</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- Modal pour Modifier un Filtre de Végétation -->
+                                        <div class="modal fade" id="editVegetationModal" tabindex="-1" aria-labelledby="editVegetationModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="editVegetationModalLabel">Modifier le Filtre de Végétation</h5>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <form method="POST" id="editVegetationForm" action="{% url 'edit_filtre_view' %}">
+                                                            {% csrf_token %}
+                                                            <input type="hidden" id="edit-filter-id" name="filter-id">
+                                                            <div class="form-group">
+                                                                <label for="edit-abreviation">Abreviation:</label>
+                                                                <input type="text" id="edit-abreviation" name="edit-abreviation" class="form-control" required>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label for="edit-descriptionFr">DescriptionFr:</label>
+                                                                <textarea id="edit-descriptionFr" name="edit-descriptionFr" class="form-control" required></textarea>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label for="edit-descriptionAr">DescriptionAr:</label>
+                                                                <textarea id="edit-descriptionAr" name="edit-descriptionAr" class="form-control" required></textarea>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label for="edit-details">Details:</label>
+                                                                <input type="text" id="edit-details" name="edit-details" class="form-control" required>
+                                                            </div>
+                                                        </form>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                                                        <button type="button" class="btn btn-primary" onclick="submitEditVegetationForm()">Enregistrer</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- Modal pour confirmation de suppression --> 
+                                        <div class="modal fade" id="deleteConfirmationModal" tabindex="-1" aria-labelledby="deleteConfirmationModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="deleteConfirmationModalLabel">Confirmation de Suppression</h5>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        Êtes-vous sûr de vouloir supprimer ce filtre ?
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                                                        <button type="button" class="btn btn-danger" id="confirmDeleteBtn">Supprimer</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+                                    </div>
+                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-6">
+                                        <div class="card">
+                                            <div class="card-body p-0">
+                                                <div class="options-inv">
+                                                    <a href="#" class="option-dots" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fe fe-more-vertical"></i></a>
+                                                    <div class="dropdown-menu dropdown-menu-start">
+                                                        <a class="dropdown-item" href="#"><i class="fe fe-edit me-2"></i> Modifier</a>
+                                                        <a class="dropdown-item" href="#" ><i class="fe fe-plus me-2"></i> Ajouter</a>
+                                                        <a class="dropdown-item" href="#"><i class="fe fe-trash me-2"></i> Supprimer</a>
+                                                    </div>
+                                                </div>
+                                                <div class="d-flex align-items-center justify-content-between py-5 px-6 mt-2">
+                                                    <div>
+                                                        <h6 class="text-muted"><strong>Listes des Filtres d'Humidité</strong></h6>
+                                                    </div>
+                                                </div>
+                                                <hr class="mt-0 mb-0">
+                                                <div class="d-sm-flex align-items-center justify-content-between py-5 px-6">
+                                                    <div class="d-flex align-items-center">
+                                                        <div>
+                                                            <ul class="list-group">
+                                                                {% for filtre in filtres_humidite %}
+                                                                    <li class="list-group-item">
+                                                                        <strong>{{ filtre.abreviation }}:</strong> {{ filtre.descriptionFr }} ({{ filtre.descriptionAr }})
+                                                                    </li>
+                                                                {% endfor %}
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-6">
+                                        <div class="card">
+                                            <div class="card-body p-0">
+                                                <div class="options-inv">
+                                                    <a href="#" class="option-dots" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fe fe-more-vertical"></i></a>
+                                                    <div class="dropdown-menu dropdown-menu-start">
+                                                        <a class="dropdown-item" href="#"><i class="fe fe-edit me-2"></i> Modifier</a>
+                                                        <a class="dropdown-item" href="#"><i class="fe fe-plus me-2"></i> Ajouter</a>
+                                                        <a class="dropdown-item" href="#"><i class="fe fe-trash me-2"></i> Supprimer</a>
+                                                    </div>
+                                                </div>
+                                                <div class="d-flex align-items-center justify-content-between py-5 px-6 mt-2">
+                                                    <div>
+                                                        <h6 class="text-muted"><strong>Listes des Filtres d'Irrigations</strong></h6>
+                                                    </div>
+                                                </div>
+                                                <hr class="mt-0 mb-0">
+                                                <div class="d-sm-flex align-items-center justify-content-between py-5 px-6">
+                                                    <div class="d-flex align-items-center">
+                                                        <div>
+                                                            <ul class="list-group">
+                                                                {% for filtre in filtres_irrigation %}
+                                                                    <li class="list-group-item">
+                                                                        <strong>{{ filtre.abreviation }}:</strong> {{ filtre.descriptionFr }} ({{ filtre.descriptionAr }})
+                                                                    </li>
+                                                                {% endfor %}
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-6">
+                                        <div class="card">
+                                            <div class="card-body p-0">
+                                                <div class="options-inv">
+                                                    <a href="#" class="option-dots" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fe fe-more-vertical"></i></a>
+                                                    <div class="dropdown-menu dropdown-menu-start">
+                                                        <a class="dropdown-item" href="#"><i class="fe fe-edit me-2"></i> Modifier</a>
+                                                        <a class="dropdown-item" href="#"><i class="fe fe-plus me-2"></i> Ajouter</a>
+                                                        <a class="dropdown-item" href="#"><i class="fe fe-trash me-2"></i> Supprimer</a>
+                                                    </div>
+                                                </div>
+                                                <div class="d-flex align-items-center justify-content-between py-5 px-6 mt-2">
+                                                    <div>
+                                                        <h6 class="text-muted"><strong>Listes des Filtres de Fertilisation</strong></h6>
+                                                    </div>
+                                                </div>
+                                                <hr class="mt-0 mb-0">
+                                                <div class="d-sm-flex align-items-center justify-content-between py-5 px-6">
+                                                    <div class="d-flex align-items-center">
+                                                        <div>
+                                                            <ul class="list-group">
+                                                                {% for filtre in filtres_fertilisation %}
+                                                                    <li class="list-group-item">
+                                                                        <strong>{{ filtre.abreviation }}:</strong> {{ filtre.descriptionFr }} ({{ filtre.descriptionAr }})
+                                                                    </li>
+                                                                {% endfor %}
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-6">
+                                        <div class="card">
+                                            <div class="card-body p-0">
+                                                <div class="options-inv">
+                                                    <a href="#" class="option-dots" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fe fe-more-vertical"></i></a>
+                                                    <div class="dropdown-menu dropdown-menu-start">
+                                                        <a class="dropdown-item" href="#"><i class="fe fe-edit me-2"></i> Modifier</a>
+                                                        <a class="dropdown-item" href="#"><i class="fe fe-plus me-2"></i> Ajouter</a>
+                                                        <a class="dropdown-item" href="#"><i class="fe fe-trash me-2"></i> Supprimer</a>
+                                                    </div>
+                                                </div>
+                                                <div class="d-flex align-items-center justify-content-between py-5 px-6 mt-2">
+                                                    <div>
+                                                        <h6 class="text-muted"><strong>Listes des Filtres d'Evolutions</strong></h6>
+                                                    </div>
+                                                </div>
+                                                <hr class="mt-0 mb-0">
+                                                <div class="d-sm-flex align-items-center justify-content-between py-5 px-6">
+                                                    <div class="d-flex align-items-center">
+                                                        <div>
+                                                            <ul class="list-group">
+                                                                {% for filtre in filtres_evolution %}
+                                                                    <li class="list-group-item">
+                                                                        <strong>{{ filtre.abreviation }}:</strong> {{ filtre.descriptionFr }} ({{ filtre.descriptionAr }})
+                                                                    </li>
+                                                                {% endfor %}
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-6">
+                                        <div class="card">
+                                            <div class="card-body p-0">
+                                                <div class="options-inv">
+                                                    <a href="#" class="option-dots" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fe fe-more-vertical"></i></a>
+                                                    <div class="dropdown-menu dropdown-menu-start">
+                                                        <a class="dropdown-item" href="#"><i class="fe fe-edit me-2"></i> Modifier</a>
+                                                        <a class="dropdown-item" href="#"><i class="fe fe-plus me-2"></i> Ajouter</a>
+                                                        <a class="dropdown-item" href="#"><i class="fe fe-trash me-2"></i> Supprimer</a>
+                                                    </div>
+                                                </div>
+                                                <div class="d-flex align-items-center justify-content-between py-5 px-6 mt-2">
+                                                    <div>
+                                                        <h6 class="text-muted"><strong>Listes des Filtres de Maladies</strong></h6>
+                                                    </div>
+                                                </div>
+                                                <hr class="mt-0 mb-0">
+                                                <div class="d-sm-flex align-items-center justify-content-between py-5 px-6">
+                                                    <div class="d-flex align-items-center">
+                                                        <div>
+                                                            <ul class="list-group">
+                                                                {% for filtre in filtres_maladie %}
+                                                                    <li class="list-group-item">
+                                                                        <strong>{{ filtre.abreviation }}:</strong> {{ filtre.descriptionFr }} ({{ filtre.descriptionAr }})
+                                                                    </li>
+                                                                {% endfor %}
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+							<!-- ROW-1 CLOSED -->
+
+        {% endblock %}
+
+    {% block scripts %}
+    <script>
+        // Modifier Filtre Vigetation
+        function editVegetationFilter(id, abreviation, descriptionFr, descriptionAr, details) {
+            console.log("ID:", id, "Abréviation:", abreviation, "DescriptionFr:", descriptionFr, "DescriptionAr:", descriptionAr, "Details:", details);
+            document.getElementById('edit-filter-id').value = id;
+            document.getElementById('edit-abreviation').value = abreviation;
+            document.getElementById('edit-descriptionFr').value = descriptionFr;
+            document.getElementById('edit-descriptionAr').value = descriptionAr;
+            document.getElementById('edit-details').value = details;
+            var editModal = new bootstrap.Modal(document.getElementById('editVegetationModal'));
+            editModal.show();
+        }        
+        
+        function submitEditVegetationForm() {
+            document.getElementById('editVegetationForm').submit();
+        }                
+        // Ajouter Filtre Vigetation
+        function submitVegetationForm() {
+            var form = document.getElementById('addVegetationForm');
+            if (form.checkValidity()) {
+                var formData = new FormData(form);
+        
+                // Ajout de la clé pour identifier le formulaire soumis
+                formData.append('add_vegetation', true);
+        
+                fetch(form.action, {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest',
+                    },
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.success) {
+                        var modal = bootstrap.Modal.getInstance(document.getElementById('addVegetationModal'));
+                        modal.hide();
+                        location.reload(); // Recharger la page pour afficher le nouvel élément ajouté
+                    } else {
+                        alert('Erreur lors de l\'ajout du filtre : ' + data.message);
+                    }
+                })
+                .catch(error => {
+                    console.error('Erreur:', error);
+                    //alert('Erreur lors de l\'ajout du filtre.');
+                    location.reload();
+                });
+            } else {
+                form.reportValidity();
+            }
+        }
+        // Supprimer Filtre Vigetation
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+        
+        let filterIdToDelete = null;
+        
+        function confirmDeleteVegetationFilter(id) {
+            filterIdToDelete = id; // Stocke l'ID du filtre à supprimer
+            // Ouvre le modal
+            $('#deleteConfirmationModal').modal('show');
+        }
+        
+        document.getElementById('confirmDeleteBtn').onclick = function() {
+            deleteVegetationFilter(filterIdToDelete); // Appelle la fonction de suppression avec l'ID stocké
+            $('#deleteConfirmationModal').modal('hide'); // Ferme le modal
+        };
+        
+        function deleteVegetationFilter(id) {
+            console.log(`Deleting vegetation filter with ID: ${id}`); // Vérifiez l'ID
+        
+            fetch(`/delete-filtre/${id}/`, {  // Assurez-vous que l'URL est correcte
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCookie('csrftoken')  // Assurez-vous d'envoyer le token CSRF si nécessaire
+                }
+            })
+            .then(response => {
+                console.log('Response:', response); // Vérifiez la réponse
+                if (response.ok) {
+                    alert('Filtre de végétation supprimé avec succès.');
+                    location.reload(); // Recharge la page pour voir la mise à jour
+                } else {
+                    alert('Erreur lors de la suppression du filtre de végétation.');
+                }
+            })
+            .catch(error => console.error('Erreur:', error));
+        }
+                
+        
+        
+    </script>
+
+	<!-- THEMECOLORS JS -->
+	<script src="{% static 'assets/js/themeColors.js'%}"></script>
+
+    {% endblock %}

@@ -8,7 +8,7 @@ from uuid import uuid4
 import uuid
 from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
 from django.utils.encoding import force_bytes, force_text
-from django.http import HttpResponse, HttpResponseServerError, JsonResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseServerError, JsonResponse, HttpResponseRedirect, HttpResponseBadRequest
 from django.shortcuts import get_object_or_404, render, redirect
 from django.contrib.auth.tokens import default_token_generator 
 from django.contrib.auth.models import User
@@ -261,42 +261,114 @@ class FiltreIrrigationForm(forms.ModelForm):
     class Meta:
         model = FiltreIrrigation
         fields = ['abreviation', 'descriptionFr', 'descriptionAr', 'details']
+        
+class FiltreFertilisationForm(forms.ModelForm):
+    class Meta:
+        model = FiltreFertilisation
+        fields = ['abreviation', 'descriptionFr', 'descriptionAr', 'details']
+        
+class FiltreEvolutionForm(forms.ModelForm):
+    class Meta:
+        model = FiltreEvolution
+        fields = ['abreviation', 'descriptionFr', 'descriptionAr', 'details']
+        
+class FiltreMaladieForm(forms.ModelForm):
+    class Meta:
+        model = FiltreMaladie
+        fields = ['abreviation', 'descriptionFr', 'descriptionAr', 'details']
 
-# Vue pour gérer les filtres de végétation
-def filtre_vegetation_view(request):
-    filtres = FiltreVegitation.objects.all()
-    if request.method == 'POST':
-        form = FiltreVegetationForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('filtre_vegetation_view')  # Redirection après l'ajout
-    else:
-        form = FiltreVegetationForm()
-    return render(request, 'admin_categories.html', {'filtres': filtres, 'form': form, 'title': 'Filtre Végétation'})
+# Vue pour gérer les filtres 
+def admin_filtre_view(request):
+    # Récupérer tous les filtres de chaque catégorie
+    filtres_vegetation = FiltreVegitation.objects.all()
+    filtres_humidite = FiltreHumidite.objects.all()
+    filtres_irrigation = FiltreIrrigation.objects.all()
+    filtres_fertilisation = FiltreFertilisation.objects.all()
+    filtres_evolution = FiltreEvolution.objects.all()
+    filtres_maladie = FiltreMaladie.objects.all()
 
-# Vue pour gérer les filtres d'humidité
-def filtre_humidite_view(request):
-    filtres = FiltreHumidite.objects.all()
-    if request.method == 'POST':
-        form = FiltreHumiditeForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('filtre_humidite_view')
-    else:
-        form = FiltreHumiditeForm()
-    return render(request, 'admin_categories.html', {'filtres': filtres, 'form': form, 'title': 'Filtre Humidité'})
+    # Initialiser les formulaires pour chaque catégorie
+    form_vegetation = FiltreVegetationForm(request.POST or None, prefix='vegetation')
+    form_humidite = FiltreHumiditeForm(request.POST or None, prefix='humidite')
+    form_irrigation = FiltreIrrigationForm(request.POST or None, prefix='irrigation')
+    form_fertilisation = FiltreFertilisationForm(request.POST or None, prefix='fertilisation')
+    form_evolution = FiltreEvolutionForm(request.POST or None, prefix='evolution')
+    form_maladie = FiltreMaladieForm(request.POST or None, prefix='maladie')
 
-# Vue pour gérer les filtres d'irrigation
-def filtre_irrigation_view(request):
-    filtres = FiltreIrrigation.objects.all()
+    # Gérer l'ajout selon le formulaire envoyé
     if request.method == 'POST':
-        form = FiltreIrrigationForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('filtre_irrigation_view')
-    else:
-        form = FiltreIrrigationForm()
-    return render(request, 'admin_categories.html', {'filtres': filtres, 'form': form, 'title': 'Filtre Irrigation'})
+        if 'add_vegetation' in request.POST:
+            # Vérifier la validité du formulaire de Végétation
+            if form_vegetation.is_valid():
+                form_vegetation.save()
+                return redirect('admin_filtre_view')
+
+        elif 'add_humidite' in request.POST:
+            if form_humidite.is_valid():
+                form_humidite.save()
+                return redirect('admin_filtre_view')
+
+        elif 'add_irrigation' in request.POST:
+            if form_irrigation.is_valid():
+                form_irrigation.save()
+                return redirect('admin_filtre_view')
+
+        elif 'add_fertilisation' in request.POST:
+            if form_fertilisation.is_valid():
+                form_fertilisation.save()
+                return redirect('admin_filtre_view')
+
+        elif 'add_evolution' in request.POST:
+            if form_evolution.is_valid():
+                form_evolution.save()
+                return redirect('admin_filtre_view')
+
+        elif 'add_maladie' in request.POST:
+            if form_maladie.is_valid():
+                form_maladie.save()
+                return redirect('admin_filtre_view')
+
+        return redirect('admin_filtre_view')
+
+    return render(request, 'admin_filtre.html', {
+        'filtres_vegetation': filtres_vegetation,
+        'filtres_humidite': filtres_humidite,
+        'filtres_irrigation': filtres_irrigation,
+        'filtres_fertilisation': filtres_fertilisation,
+        'filtres_evolution': filtres_evolution,
+        'filtres_maladie': filtres_maladie,
+        'form_vegetation': form_vegetation,
+        'form_humidite': form_humidite,
+        'form_irrigation': form_irrigation,
+        'form_fertilisation': form_fertilisation,
+        'form_evolution': form_evolution,
+        'form_maladie': form_maladie,
+    })
+    
+def edit_filtre_view(request):
+    if request.method == 'POST':
+        filtre_id = request.POST.get('filter-id')
+        abreviation = request.POST.get('edit-abreviation')
+        descriptionFr = request.POST.get('edit-descriptionFr')
+        descriptionAr = request.POST.get('edit-descriptionAr')
+        details = request.POST.get('edit-details')
+        
+        filtre = get_object_or_404(FiltreVegitation, id=filtre_id)
+        filtre.abreviation = abreviation
+        filtre.descriptionFr = descriptionFr
+        filtre.descriptionAr = descriptionAr
+        filtre.details = details
+        filtre.save()
+        
+        messages.success(request, "Filtre de végétation modifié avec succès.")
+        return redirect('admin_filtre_view')
+    
+def delete_filtre(request, id):
+    if request.method == 'DELETE':
+        filtre = get_object_or_404(FiltreVegitation, id=id)
+        filtre.delete()
+        return JsonResponse({'success': True})
+    return HttpResponseBadRequest("Invalid request")
 ##############  ADMIN #####################
 
 """ def get_sidebar_content_based_on_group(request, user_group):
