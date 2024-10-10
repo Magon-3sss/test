@@ -354,18 +354,21 @@ def edit_filtre_view(request):
         details = request.POST.get('edit-details')
         
         filtre = get_object_or_404(FiltreVegitation, id=filtre_id)
+        #filtre = get_object_or_404(FiltreHumidite, id=filtre_id)
+            
         filtre.abreviation = abreviation
         filtre.descriptionFr = descriptionFr
         filtre.descriptionAr = descriptionAr
         filtre.details = details
         filtre.save()
         
-        messages.success(request, "Filtre de végétation modifié avec succès.")
+        messages.success(request, "Filtre modifié avec succès.")
         return redirect('admin_filtre_view')
     
 def delete_filtre(request, id):
     if request.method == 'DELETE':
         filtre = get_object_or_404(FiltreVegitation, id=id)
+        #filtre = get_object_or_404(FiltreHumidite, id=id)
         filtre.delete()
         return JsonResponse({'success': True})
     return HttpResponseBadRequest("Invalid request")
