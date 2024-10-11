@@ -80,7 +80,7 @@
                                                                         </span>
                                                                         <div>
                                                                             <button class="btn btn-sm btn-primary" 
-                                                                                    onclick="editVegetationFilter({{ filtre.id }}, '{{ filtre.abreviation|escapejs }}', '{{ filtre.descriptionFr|escapejs }}', '{{ filtre.descriptionAr|escapejs }}', '{{ filtre.details|escapejs }}')">
+                                                                            onclick="editFilter('vegetation', {{ filtre.id }}, '{{ filtre.abreviation|escapejs }}', '{{ filtre.descriptionFr|escapejs }}', '{{ filtre.descriptionAr|escapejs }}', '{{ filtre.details|escapejs }}')">
                                                                                 <!-- Icone Modifier -->
                                                                                 <svg height="16" width="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                                                                     <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
@@ -154,6 +154,7 @@
                                                         <form method="POST" id="editVegetationForm" action="{% url 'edit_filtre_view' %}">
                                                             {% csrf_token %}
                                                             <input type="hidden" id="edit-filter-id" name="filter-id">
+                                                            <input type="hidden" name="filter_type" value="vegetation">
                                                             <div class="form-group">
                                                                 <label for="edit-abreviation">Abreviation:</label>
                                                                 <input type="text" id="edit-abreviation" name="edit-abreviation" class="form-control" required>
@@ -222,7 +223,7 @@
                                                                         </span>
                                                                         <div>
                                                                             <button class="btn btn-sm btn-primary" 
-                                                                                    onclick="editHumiditeFilter({{ filtre.id }}, '{{ filtre.abreviation|escapejs }}', '{{ filtre.descriptionFr|escapejs }}', '{{ filtre.descriptionAr|escapejs }}', '{{ filtre.details|escapejs }}')">
+                                                                            onclick="editFilter('humidite', {{ filtre.id }}, '{{ filtre.abreviation|escapejs }}', '{{ filtre.descriptionFr|escapejs }}', '{{ filtre.descriptionAr|escapejs }}', '{{ filtre.details|escapejs }}')">
                                                                                 <!-- Icone Modifier -->
                                                                                 <svg height="16" width="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                                                                     <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
@@ -274,7 +275,8 @@
                                                             <div class="form-group">
                                                                 <label for="details">Details:</label>
                                                                 <input type="text" id="details" name="humidite-details" class="form-control" value="" required>
-                                                            </div>                                                            
+                                                            </div>
+                                                            <input type="hidden" name="add_humidite" value="true">                                                            
                                                         </form>                                                        
                                                     </div>
                                                     <div class="modal-footer">
@@ -296,6 +298,7 @@
                                                         <form method="POST" id="editHumiditeForm" action="{% url 'edit_filtre_view' %}">
                                                             {% csrf_token %}
                                                             <input type="hidden" id="edit-filter-id" name="filter-id">
+                                                            <input type="hidden" name="filter_type" value="humidite">
                                                             <div class="form-group">
                                                                 <label for="edit-abreviation">Abreviation:</label>
                                                                 <input type="text" id="edit-abreviation" name="edit-abreviation" class="form-control" required>
@@ -481,222 +484,263 @@
 
         {% endblock %}
 
-    {% block scripts %}
-    <script>
-        // Modifier Filtre Vigetation
-        function editVegetationFilter(id, abreviation, descriptionFr, descriptionAr, details) {
-            console.log("ID:", id, "Abréviation:", abreviation, "DescriptionFr:", descriptionFr, "DescriptionAr:", descriptionAr, "Details:", details);
-            document.getElementById('edit-filter-id').value = id;
-            document.getElementById('edit-abreviation').value = abreviation;
-            document.getElementById('edit-descriptionFr').value = descriptionFr;
-            document.getElementById('edit-descriptionAr').value = descriptionAr;
-            document.getElementById('edit-details').value = details;
-            var editModal = new bootstrap.Modal(document.getElementById('editVegetationModal'));
-            editModal.show();
-        }        
-        
-        function submitEditVegetationForm() {
-            document.getElementById('editVegetationForm').submit();
-        }                
-        // Ajouter Filtre Vigetation
-        function submitVegetationForm() {
-            var form = document.getElementById('addVegetationForm');
-            if (form.checkValidity()) {
-                var formData = new FormData(form);
-        
-                // Ajout de la clé pour identifier le formulaire soumis
-                formData.append('add_vegetation', true);
-        
-                fetch(form.action, {
-                    method: 'POST',
-                    body: formData,
-                    headers: {
-                        'X-Requested-With': 'XMLHttpRequest',
-                    },
-                })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    if (data.success) {
-                        var modal = bootstrap.Modal.getInstance(document.getElementById('addVegetationModal'));
-                        modal.hide();
-                        location.reload(); // Recharger la page pour afficher le nouvel élément ajouté
-                    } else {
-                        alert('Erreur lors de l\'ajout du filtre : ' + data.message);
-                    }
-                })
-                .catch(error => {
-                    console.error('Erreur:', error);
-                    //alert('Erreur lors de l\'ajout du filtre.');
-                    location.reload();
-                });
-            } else {
-                form.reportValidity();
-            }
-        }
-        // Supprimer Filtre Vigetation
-        function getCookie(name) {
-            let cookieValue = null;
-            if (document.cookie && document.cookie !== '') {
-                const cookies = document.cookie.split(';');
-                for (let i = 0; i < cookies.length; i++) {
-                    const cookie = cookies[i].trim();
-                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                        break;
-                    }
-                }
-            }
-            return cookieValue;
-        }
-        
-        let filterIdToDelete = null;
-        
-        function confirmDeleteVegetationFilter(id) {
-            filterIdToDelete = id; // Stocke l'ID du filtre à supprimer
-            // Ouvre le modal
-            $('#deleteConfirmationModal').modal('show');
-        }
-        
-        document.getElementById('confirmDeleteBtn').onclick = function() {
-            deleteVegetationFilter(filterIdToDelete); // Appelle la fonction de suppression avec l'ID stocké
-            $('#deleteConfirmationModal').modal('hide'); // Ferme le modal
-        };
-        
-        function deleteVegetationFilter(id) {
-            console.log(`Deleting vegetation filter with ID: ${id}`); // Vérifiez l'ID
-        
-            fetch(`/delete-filtre/${id}/`, {  // Assurez-vous que l'URL est correcte
-                method: 'DELETE',
+        {% block scripts %}
+<script>
+    // Fonction pour ajouter un filtre de végétation
+    function submitVegetationForm() {
+        var form = document.getElementById('addVegetationForm');
+        if (form.checkValidity()) {
+            var formData = new FormData(form);
+            formData.append('add_vegetation', true);
+
+            fetch(form.action, {
+                method: 'POST',
+                body: formData,
                 headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRFToken': getCookie('csrftoken')  // Assurez-vous d'envoyer le token CSRF si nécessaire
+                    'X-Requested-With': 'XMLHttpRequest'
                 }
             })
             .then(response => {
-                console.log('Response:', response); // Vérifiez la réponse
-                if (response.ok) {
-                    alert('Filtre de végétation supprimé avec succès.');
-                    location.reload(); // Recharge la page pour voir la mise à jour
+                if (!response.ok) {
+                    return response.text().then(text => {
+                        console.error('Erreur serveur:', text); 
+                        throw new Error('Erreur serveur');
+                    });
+                }
+                return response.json();  
+            })
+            .then(data => {
+                if (data.success) {
+                    var modal = bootstrap.Modal.getInstance(document.getElementById('addVegetationModal'));
+                    modal.hide();
+                    location.reload();
                 } else {
-                    alert('Erreur lors de la suppression du filtre de végétation.');
+                    alert('Erreur lors de l\'ajout du filtre : ' + data.message);
                 }
             })
-            .catch(error => console.error('Erreur:', error));
-        }   
-        // Modifier Filtre Humidite
-        function editHumiditeFilter(id, abreviation, descriptionFr, descriptionAr, details) {
-            console.log("ID:", id, "Abréviation:", abreviation, "DescriptionFr:", descriptionFr, "DescriptionAr:", descriptionAr, "Details:", details);
-            document.getElementById('edit-filter-id').value = id;
-            document.getElementById('edit-abreviation').value = abreviation;
-            document.getElementById('edit-descriptionFr').value = descriptionFr;
-            document.getElementById('edit-descriptionAr').value = descriptionAr;
-            document.getElementById('edit-details').value = details;
-            var editModal = new bootstrap.Modal(document.getElementById('editHumiditeModal'));
-            editModal.show();
-        }        
-        
-        function submitEditHumiditeForm() {
-            document.getElementById('editHumiditeForm').submit();
-        }                
-        // Ajouter Filtre Humidite
-        function submitHumiditeForm() {
-            var form = document.getElementById('addHumiditeForm');
-            if (form.checkValidity()) {
-                var formData = new FormData(form);
-        
-                // Ajout de la clé pour identifier le formulaire soumis
-                formData.append('add_humidite', true);
-        
-                fetch(form.action, {
-                    method: 'POST',
-                    body: formData,
-                    headers: {
-                        'X-Requested-With': 'XMLHttpRequest',
-                    },
-                })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    if (data.success) {
-                        var modal = bootstrap.Modal.getInstance(document.getElementById('addHumiditeModal'));
-                        modal.hide();
-                        location.reload(); 
-                    } else {
-                        alert('Erreur lors de l\'ajout du filtre : ' + data.message);
-                    }
-                })
-                .catch(error => {
-                    console.error('Erreur:', error);
-                    //alert('Erreur lors de l\'ajout du filtre.');
-                    location.reload();
-                });
-            } else {
-                form.reportValidity();
-            }
+            .catch(error => {
+                console.error('Erreur:', error);
+                alert('Une erreur s\'est produite lors de l\'ajout du filtre.');
+            });
+        } else {
+            form.reportValidity();
         }
-        // Supprimer Filtre Humidite
-        function getCookie(name) {
-            let cookieValue = null;
-            if (document.cookie && document.cookie !== '') {
-                const cookies = document.cookie.split(';');
-                for (let i = 0; i < cookies.length; i++) {
-                    const cookie = cookies[i].trim();
-                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                        break;
-                    }
-                }
-            }
-            return cookieValue;
-        }
-        
-        let filterIdToDelete = null;
-        
-        function confirmDeleteHumiditeFilter(id) {
-            filterIdToDelete = id; // Stocke l'ID du filtre à supprimer
-            // Ouvre le modal
-            $('#deleteConfirmationModal').modal('show');
-        }
-        
-        document.getElementById('confirmDeleteBtn').onclick = function() {
-            deleteHumiditeFilter(filterIdToDelete); // Appelle la fonction de suppression avec l'ID stocké
-            $('#deleteConfirmationModal').modal('hide'); // Ferme le modal
-        };
-        
-        function deleteHumiditeFilter(id) {
-            console.log(`Deleting Humidite filter with ID: ${id}`); // Vérifiez l'ID
-        
-            fetch(`/delete-filtre/${id}/`, {  // Assurez-vous que l'URL est correcte
-                method: 'DELETE',
+    }
+
+    // Fonction pour soumettre le formulaire de modification du filtre de végétation
+    function submitEditVegetationForm() {
+        var form = document.getElementById('editVegetationForm');
+        if (form.checkValidity()) {
+            var formData = new FormData(form);
+            fetch(form.action, {
+                method: 'POST',
+                body: formData,
                 headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRFToken': getCookie('csrftoken')  // Assurez-vous d'envoyer le token CSRF si nécessaire
+                    'X-Requested-With': 'XMLHttpRequest'
                 }
             })
             .then(response => {
-                console.log('Response:', response); // Vérifiez la réponse
-                if (response.ok) {
-                    alert('Filtre de végétation supprimé avec succès.');
-                    location.reload(); // Recharge la page pour voir la mise à jour
+                if (!response.ok) {
+                    return response.text().then(text => {
+                        console.error('Erreur serveur:', text);
+                        throw new Error('Erreur lors de la soumission');
+                    });
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.success) {
+                    var modal = bootstrap.Modal.getInstance(document.getElementById('editVegetationModal'));
+                    modal.hide();
+                    location.reload();
                 } else {
-                    alert('Erreur lors de la suppression du filtre de végétation.');
+                    alert('Erreur lors de la modification du filtre : ' + data.message);
                 }
             })
-            .catch(error => console.error('Erreur:', error));
+            .catch(error => {
+                console.error('Erreur:', error);
+                location.reload();
+                //alert('Une erreur s\'est produite lors de la modification du filtre.');
+            });
+        } else {
+            form.reportValidity();
         }
-        
-    </script>
+    } 
 
-	<!-- THEMECOLORS JS -->
-	<script src="{% static 'assets/js/themeColors.js'%}"></script>
+    // Fonction pour confirmer la suppression d'un filtre de végétation
+    function confirmDeleteVegetationFilter(id) {
+        var filterIdToDelete = id;
+        $('#deleteConfirmationModal').modal('show');
+        document.getElementById('confirmDeleteBtn').onclick = function() {
+            deleteVegetationFilter(filterIdToDelete);
+            $('#deleteConfirmationModal').modal('hide');
+        };
+    }
 
-    {% endblock %}
+    // Fonction pour supprimer un filtre de végétation
+    function deleteVegetationFilter(id) {
+        fetch(`/delete-filtre/${id}/?filter_type=vegetation`, {
+            method: 'DELETE',
+            headers: {
+                'X-CSRFToken': getCookie('csrftoken')
+            }
+        })
+        .then(response => {
+            if (!response.ok) {
+                return response.text().then(text => {
+                    console.error('Erreur serveur:', text); 
+                    throw new Error('Erreur lors de la suppression');
+                });
+            }
+            alert('Filtre de végétation supprimé avec succès.');
+            location.reload();
+        })
+        .catch(error => console.error('Erreur:', error));
+    }
+
+    // Fonction pour ajouter un filtre d'humidité
+    function submitHumiditeForm() {
+        var form = document.getElementById('addHumiditeForm');
+        if (form.checkValidity()) {
+            var formData = new FormData(form);
+            formData.append('add_humidite', true);
+
+            fetch(form.action, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            })
+            .then(response => {
+                if (!response.ok) {
+                    return response.text().then(text => {
+                        console.error('Erreur serveur:', text);
+                        throw new Error('Erreur serveur');
+                    });
+                }
+                return response.json();  
+            })
+            .then(data => {
+                if (data.success) {
+                    var modal = bootstrap.Modal.getInstance(document.getElementById('addHumiditeModal'));
+                    modal.hide();
+                    location.reload();
+                } else {
+                    alert('Erreur lors de l\'ajout du filtre : ' + data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Erreur:', error);
+                alert('Une erreur s\'est produite lors de l\'ajout du filtre.');
+            });
+        } else {
+            form.reportValidity();
+        }
+    }
+
+    // Fonction pour soumettre le formulaire de modification du filtre de végétation
+    function submitEditHumiditeForm() {
+        var form = document.getElementById('editHumiditeForm');
+        if (form.checkValidity()) {
+            var formData = new FormData(form);
+            fetch(form.action, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            })
+            .then(response => {
+                if (!response.ok) {
+                    return response.text().then(text => {
+                        console.error('Erreur serveur:', text);
+                        throw new Error('Erreur lors de la soumission');
+                    });
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.success) {
+                    var modal = bootstrap.Modal.getInstance(document.getElementById('edithumiditeModal'));
+                    modal.hide();
+                    location.reload();
+                } else {
+                    alert('Erreur lors de la modification du filtre : ' + data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Erreur:', error);
+                location.reload();
+                //alert('Une erreur s\'est produite lors de la modification du filtre.');
+            });
+        } else {
+            form.reportValidity();
+        }
+    }
+
+    // Fonction pour confirmer la suppression d'un filtre d'humidité
+    function confirmDeleteHumiditeFilter(id) {
+        var filterIdToDelete = id;
+        $('#deleteConfirmationModal').modal('show');
+        document.getElementById('confirmDeleteBtn').onclick = function() {
+            deleteHumiditeFilter(filterIdToDelete);
+            $('#deleteConfirmationModal').modal('hide');
+        };
+    }
+
+    // Fonction pour supprimer un filtre d'humidité
+    function deleteHumiditeFilter(id) {
+        fetch(`/delete-filtre/${id}/?filter_type=humidite`, {
+            method: 'DELETE',
+            headers: {
+                'X-CSRFToken': getCookie('csrftoken')
+            }
+        })
+        .then(response => {
+            if (!response.ok) {
+                return response.text().then(text => {
+                    console.error('Erreur serveur:', text); // Affiche l'erreur serveur
+                    throw new Error('Erreur lors de la suppression');
+                });
+            }
+            alert('Filtre d\'humidité supprimé avec succès.');
+            location.reload();
+        })
+        .catch(error => console.error('Erreur:', error));
+    }
+
+    // Fonction utilitaire pour obtenir le CSRF token
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+
+    // Fonction pour modifier un filtre
+    function editFilter(type, id, abreviation, descriptionFr, descriptionAr, details) {
+        document.getElementById('edit-filter-id').value = id;
+        document.getElementById('edit-abreviation').value = abreviation;
+        document.getElementById('edit-descriptionFr').value = descriptionFr;
+        document.getElementById('edit-descriptionAr').value = descriptionAr;
+        document.getElementById('edit-details').value = details;
+    
+        var modalId = type === 'vegetation' ? 'editVegetationModal' : 'editHumiditeModal';
+        var editModal = new bootstrap.Modal(document.getElementById(modalId));
+        editModal.show();
+    }
+</script>
+
+<!-- THEMECOLORS JS -->
+<script src="{% static 'assets/js/themeColors.js' %}"></script>
+
+{% endblock %}
