@@ -317,22 +317,34 @@ def admin_filtre_view(request):
         elif 'add_irrigation' in request.POST:
             if form_irrigation.is_valid():
                 form_irrigation.save()
-                return redirect('admin_filtre_view')
+                return JsonResponse({'success': True})
+            else:
+                return JsonResponse({'success': False, 'message': 'Form invalid'}, status=400)
+                #return redirect('admin_filtre_view')
 
         elif 'add_fertilisation' in request.POST:
             if form_fertilisation.is_valid():
                 form_fertilisation.save()
-                return redirect('admin_filtre_view')
+                return JsonResponse({'success': True})
+            else:
+                return JsonResponse({'success': False, 'message': 'Form invalid'}, status=400)
+                #return redirect('admin_filtre_view')
 
         elif 'add_evolution' in request.POST:
             if form_evolution.is_valid():
                 form_evolution.save()
-                return redirect('admin_filtre_view')
+                return JsonResponse({'success': True})
+            else:
+                return JsonResponse({'success': False, 'message': 'Form invalid'}, status=400)
+                #return redirect('admin_filtre_view')
 
         elif 'add_maladie' in request.POST:
             if form_maladie.is_valid():
                 form_maladie.save()
-                return redirect('admin_filtre_view')
+                return JsonResponse({'success': True})
+            else:
+                return JsonResponse({'success': False, 'message': 'Form invalid'}, status=400)
+                #return redirect('admin_filtre_view')
 
         return redirect('admin_filtre_view')
 
@@ -350,67 +362,55 @@ def admin_filtre_view(request):
         'form_evolution': form_evolution,
         'form_maladie': form_maladie,
     })
- 
+
 def edit_filtre_view(request):
     if request.method == 'POST':
-        # Retrieve the filter type and filter ID from the form
         filter_type = request.POST.get('filter_type')
         filtre_id = request.POST.get('filter-id')
-
-        # Get the updated data from the form
+        
+        # Debugging: Print the POST data
+        print("Received POST data:", request.POST)
+        
+        if not filtre_id:
+            return JsonResponse({'success': False, 'message': 'Filter ID is missing.'}, status=400)
+        
+        try:
+            filtre_id = int(filtre_id)
+        except ValueError:
+            return JsonResponse({'success': False, 'message': 'Invalid Filter ID.'}, status=400)
+        
         abreviation = request.POST.get('edit-abreviation')
         descriptionFr = request.POST.get('edit-descriptionFr')
         descriptionAr = request.POST.get('edit-descriptionAr')
         details = request.POST.get('edit-details')
-
-        # Detect the type of filter and get the correct model instance
-        if filter_type == 'vegetation':
-            filtre = get_object_or_404(FiltreVegitation, id=filtre_id)
-        elif filter_type == 'humidite':
-            filtre = get_object_or_404(FiltreHumidite, id=filtre_id)
-        elif filter_type == 'irrigation':
-            filtre = get_object_or_404(FiltreIrrigation, id=filtre_id)
-        elif filter_type == 'fertilisation':
-            filtre = get_object_or_404(FiltreFertilisation, id=filtre_id)
-        elif filter_type == 'evolution':
-            filtre = get_object_or_404(FiltreEvolution, id=filtre_id)
-        elif filter_type == 'maladie':
-            filtre = get_object_or_404(FiltreMaladie, id=filtre_id)
-        else:
-            return HttpResponseBadRequest("Type de filtre non pris en charge")
-
-        # Update the filter with the new values
+        
+        # Determine the correct model based on filter_type
+        filter_models = {
+            'vegetation': FiltreVegitation,
+            'humidite': FiltreHumidite,
+            'irrigation': FiltreIrrigation,
+            'fertilisation': FiltreFertilisation,
+            'evolution': FiltreEvolution,
+            'maladie': FiltreMaladie,
+        }
+        
+        Model = filter_models.get(filter_type)
+        if not Model:
+            return JsonResponse({'success': False, 'message': 'Unsupported filter type.'}, status=400)
+        
+        filtre = get_object_or_404(Model, id=filtre_id)
+        
+        # Update the filter fields
         filtre.abreviation = abreviation
         filtre.descriptionFr = descriptionFr
         filtre.descriptionAr = descriptionAr
         filtre.details = details
         filtre.save()
-
-        # Success message and redirect
+        
         messages.success(request, "Filtre modifié avec succès.")
-        return redirect('admin_filtre_view')
-
+        return JsonResponse({'success': True})
+    
     return HttpResponseBadRequest("Invalid request")
-   
-""" def edit_filtre_view(request):
-    if request.method == 'POST':
-        filtre_id = request.POST.get('filter-id')
-        abreviation = request.POST.get('edit-abreviation')
-        descriptionFr = request.POST.get('edit-descriptionFr')
-        descriptionAr = request.POST.get('edit-descriptionAr')
-        details = request.POST.get('edit-details')
-        
-        filtre = get_object_or_404(FiltreVegitation, id=filtre_id)
-        #filtre = get_object_or_404(FiltreHumidite, id=filtre_id)
-            
-        filtre.abreviation = abreviation
-        filtre.descriptionFr = descriptionFr
-        filtre.descriptionAr = descriptionAr
-        filtre.details = details
-        filtre.save()
-        
-        messages.success(request, "Filtre modifié avec succès.")
-        return redirect('admin_filtre_view') """
     
 def delete_filtre(request, id):
     if request.method == 'DELETE':

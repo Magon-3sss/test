@@ -143,43 +143,48 @@
                                             </div>
                                         </div>
                                         <!-- Modal pour Modifier un Filtre de Végétation -->
-                                        <div class="modal fade" id="editVegetationModal" tabindex="-1" aria-labelledby="editVegetationModalLabel" aria-hidden="true">
-                                            <div class="modal-dialog">
-                                                <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <h5 class="modal-title" id="editVegetationModalLabel">Modifier le Filtre de Végétation</h5>
-                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                    </div>
-                                                    <div class="modal-body">
-                                                        <form method="POST" id="editVegetationForm" action="{% url 'edit_filtre_view' %}">
-                                                            {% csrf_token %}
-                                                            <input type="hidden" id="edit-filter-id" name="filter-id">
-                                                            <input type="hidden" name="filter_type" value="vegetation">
-                                                            <div class="form-group">
-                                                                <label for="edit-abreviation">Abreviation:</label>
-                                                                <input type="text" id="edit-abreviation" name="edit-abreviation" class="form-control" required>
-                                                            </div>
-                                                            <div class="form-group">
-                                                                <label for="edit-descriptionFr">DescriptionFr:</label>
-                                                                <textarea id="edit-descriptionFr" name="edit-descriptionFr" class="form-control" required></textarea>
-                                                            </div>
-                                                            <div class="form-group">
-                                                                <label for="edit-descriptionAr">DescriptionAr:</label>
-                                                                <textarea id="edit-descriptionAr" name="edit-descriptionAr" class="form-control" required></textarea>
-                                                            </div>
-                                                            <div class="form-group">
-                                                                <label for="edit-details">Details:</label>
-                                                                <input type="text" id="edit-details" name="edit-details" class="form-control" required>
-                                                            </div>
-                                                        </form>
-                                                    </div>
-                                                    <div class="modal-footer">
-                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
-                                                        <button type="button" class="btn btn-primary" onclick="submitEditVegetationForm()">Enregistrer</button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
+<div class="modal fade" id="editVegetationModal" tabindex="-1" aria-labelledby="editVegetationModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Modifier le Filtre de Végétation</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form method="POST" id="editVegetationForm" action="{% url 'edit_filtre_view' %}">
+                    {% csrf_token %}
+                    <input type="hidden" id="edit-vegetation-filter-id" name="filter-id">
+                    <input type="hidden" name="filter_type" value="vegetation">
+                    
+                    <div class="form-group">
+                        <label for="edit-vegetation-abreviation">Abreviation:</label>
+                        <input type="text" id="edit-vegetation-abreviation" name="edit-abreviation" class="form-control" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="edit-vegetation-descriptionFr">DescriptionFr:</label>
+                        <textarea id="edit-vegetation-descriptionFr" name="edit-descriptionFr" class="form-control" required></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="edit-vegetation-descriptionAr">DescriptionAr:</label>
+                        <textarea id="edit-vegetation-descriptionAr" name="edit-descriptionAr" class="form-control" required></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="edit-vegetation-details">Details:</label>
+                        <input type="text" id="edit-vegetation-details" name="edit-details" class="form-control" required>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                <button type="button" class="btn btn-primary" onclick="submitEditVegetationForm()">Enregistrer</button>
+            </div>
+        </div>
+    </div>
+</div>
+
                                         <!-- Modal pour confirmation de suppression --> 
                                         <div class="modal fade" id="deleteConfirmationModal" tabindex="-1" aria-labelledby="deleteConfirmationModalLabel" aria-hidden="true">
                                             <div class="modal-dialog">
@@ -287,43 +292,48 @@
                                             </div>
                                         </div>
                                         <!-- Modal pour Modifier un Filtre d'Humidité -->
-                                        <div class="modal fade" id="editHumiditeModal" tabindex="-1" aria-labelledby="editHumiditeModalLabel" aria-hidden="true">
-                                            <div class="modal-dialog">
-                                                <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <h5 class="modal-title" id="editHumiditeModalLabel">Modifier le Filtre d'Humidité</h5>
-                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                    </div>
-                                                    <div class="modal-body">
-                                                        <form method="POST" id="editHumiditeForm" action="{% url 'edit_filtre_view' %}">
-                                                            {% csrf_token %}
-                                                            <input type="hidden" id="edit-filter-id" name="filter-id">
-                                                            <input type="hidden" name="filter_type" value="humidite">
-                                                            <div class="form-group">
-                                                                <label for="edit-abreviation">Abreviation:</label>
-                                                                <input type="text" id="edit-abreviation" name="edit-abreviation" class="form-control" required>
-                                                            </div>
-                                                            <div class="form-group">
-                                                                <label for="edit-descriptionFr">DescriptionFr:</label>
-                                                                <textarea id="edit-descriptionFr" name="edit-descriptionFr" class="form-control" required></textarea>
-                                                            </div>
-                                                            <div class="form-group">
-                                                                <label for="edit-descriptionAr">DescriptionAr:</label>
-                                                                <textarea id="edit-descriptionAr" name="edit-descriptionAr" class="form-control" required></textarea>
-                                                            </div>
-                                                            <div class="form-group">
-                                                                <label for="edit-details">Details:</label>
-                                                                <input type="text" id="edit-details" name="edit-details" class="form-control" required>
-                                                            </div>
-                                                        </form>
-                                                    </div>
-                                                    <div class="modal-footer">
-                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
-                                                        <button type="button" class="btn btn-primary" onclick="submitEditHumiditeForm()">Enregistrer</button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
+<div class="modal fade" id="editHumiditeModal" tabindex="-1" aria-labelledby="editHumiditeModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Modifier le Filtre d'Humidité</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form method="POST" id="editHumiditeForm" action="{% url 'edit_filtre_view' %}">
+                    {% csrf_token %}
+                    <input type="hidden" id="edit-humidite-filter-id" name="filter-id">
+                    <input type="hidden" name="filter_type" value="humidite">
+                    
+                    <div class="form-group">
+                        <label for="edit-humidite-abreviation">Abreviation:</label>
+                        <input type="text" id="edit-humidite-abreviation" name="edit-abreviation" class="form-control" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="edit-humidite-descriptionFr">DescriptionFr:</label>
+                        <textarea id="edit-humidite-descriptionFr" name="edit-descriptionFr" class="form-control" required></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="edit-humidite-descriptionAr">DescriptionAr:</label>
+                        <textarea id="edit-humidite-descriptionAr" name="edit-descriptionAr" class="form-control" required></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="edit-humidite-details">Details:</label>
+                        <input type="text" id="edit-humidite-details" name="edit-details" class="form-control" required>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                <button type="button" class="btn btn-primary" onclick="submitEditHumiditeForm()">Enregistrer</button>
+            </div>
+        </div>
+    </div>
+</div>
+
                                         <!-- Modal pour confirmation de suppression --> 
                                         <div class="modal fade" id="deleteConfirmationModal" tabindex="-1" aria-labelledby="deleteConfirmationModalLabel" aria-hidden="true">
                                             <div class="modal-dialog">
@@ -532,6 +542,7 @@
         var form = document.getElementById('editVegetationForm');
         if (form.checkValidity()) {
             var formData = new FormData(form);
+            
             fetch(form.action, {
                 method: 'POST',
                 body: formData,
@@ -542,11 +553,11 @@
             .then(response => {
                 if (!response.ok) {
                     return response.text().then(text => {
-                        console.error('Erreur serveur:', text);
-                        throw new Error('Erreur lors de la soumission');
+                        console.error('Erreur serveur:', text); 
+                        throw new Error('Erreur serveur');
                     });
                 }
-                return response.json();
+                return response.json();  
             })
             .then(data => {
                 if (data.success) {
@@ -559,13 +570,12 @@
             })
             .catch(error => {
                 console.error('Erreur:', error);
-                location.reload();
-                //alert('Une erreur s\'est produite lors de la modification du filtre.');
+                alert('Une erreur s\'est produite lors de la modification du filtre.');
             });
         } else {
             form.reportValidity();
         }
-    } 
+    }     
 
     // Fonction pour confirmer la suppression d'un filtre de végétation
     function confirmDeleteVegetationFilter(id) {
@@ -644,6 +654,7 @@
         var form = document.getElementById('editHumiditeForm');
         if (form.checkValidity()) {
             var formData = new FormData(form);
+            
             fetch(form.action, {
                 method: 'POST',
                 body: formData,
@@ -654,15 +665,15 @@
             .then(response => {
                 if (!response.ok) {
                     return response.text().then(text => {
-                        console.error('Erreur serveur:', text);
-                        throw new Error('Erreur lors de la soumission');
+                        console.error('Erreur serveur:', text); 
+                        throw new Error('Erreur serveur');
                     });
                 }
-                return response.json();
+                return response.json();  
             })
             .then(data => {
                 if (data.success) {
-                    var modal = bootstrap.Modal.getInstance(document.getElementById('edithumiditeModal'));
+                    var modal = bootstrap.Modal.getInstance(document.getElementById('editHumiditeModal'));
                     modal.hide();
                     location.reload();
                 } else {
@@ -671,13 +682,13 @@
             })
             .catch(error => {
                 console.error('Erreur:', error);
-                location.reload();
-                //alert('Une erreur s\'est produite lors de la modification du filtre.');
+                alert('Une erreur s\'est produite lors de la modification du filtre.');
             });
         } else {
             form.reportValidity();
         }
     }
+    
 
     // Fonction pour confirmer la suppression d'un filtre d'humidité
     function confirmDeleteHumiditeFilter(id) {
@@ -728,16 +739,30 @@
 
     // Fonction pour modifier un filtre
     function editFilter(type, id, abreviation, descriptionFr, descriptionAr, details) {
-        document.getElementById('edit-filter-id').value = id;
-        document.getElementById('edit-abreviation').value = abreviation;
-        document.getElementById('edit-descriptionFr').value = descriptionFr;
-        document.getElementById('edit-descriptionAr').value = descriptionAr;
-        document.getElementById('edit-details').value = details;
-    
-        var modalId = type === 'vegetation' ? 'editVegetationModal' : 'editHumiditeModal';
+        if (type === 'vegetation') {
+            document.getElementById('edit-vegetation-filter-id').value = id;
+            document.getElementById('edit-vegetation-abreviation').value = abreviation;
+            document.getElementById('edit-vegetation-descriptionFr').value = descriptionFr;
+            document.getElementById('edit-vegetation-descriptionAr').value = descriptionAr;
+            document.getElementById('edit-vegetation-details').value = details;
+            var modalId = 'editVegetationModal';
+        } else if (type === 'humidite') {
+            document.getElementById('edit-humidite-filter-id').value = id;
+            document.getElementById('edit-humidite-abreviation').value = abreviation;
+            document.getElementById('edit-humidite-descriptionFr').value = descriptionFr;
+            document.getElementById('edit-humidite-descriptionAr').value = descriptionAr;
+            document.getElementById('edit-humidite-details').value = details;
+            var modalId = 'editHumiditeModal';
+        } else {
+            console.error('Unsupported filter type:', type);
+            return;
+        }
+        
+        // Initialize and show the appropriate modal
         var editModal = new bootstrap.Modal(document.getElementById(modalId));
         editModal.show();
     }
+    
 </script>
 
 <!-- THEMECOLORS JS -->
