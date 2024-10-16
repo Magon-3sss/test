@@ -17,7 +17,7 @@ from django.contrib import messages
 from django.core.serializers import serialize
 #from rest_framework import serializers
 #from django.core import serializers as core_serializers
-
+from rest_framework.authentication import SessionAuthentication
 from django.core.mail import send_mail, EmailMessage
 from numpy import DataSource
 from app.authentication import get_user_permissions
@@ -877,14 +877,16 @@ def save_pieces(request):
 """ carburant """
 def carburant (request):
     list = []
-    carburants = Carburants_Tables.objects.all()
+    carburants = Carburants_Tables.objects.filter(user=request.user)
+    #carburants = Carburants_Tables.objects.all()
     types_carburants = TypeCarburant.objects.all()
     list.append({"types": types_carburants,"carburants": carburants})
     return render(request, 'carburant.html', {'data': list})
 
 def carburant_list (request):
     list = []
-    carburants = Carburants_Tables.objects.all()
+    carburants = Carburants_Tables.objects.filter(user=request.user)
+    #carburants = Carburants_Tables.objects.all()
     types_carburants = TypeCarburant.objects.all()
     list.append({"types": types_carburants,"carburants": carburants})
     return render(request, 'carburant-list.html', {'data': list})
@@ -898,7 +900,10 @@ def delete_carburant(request, carburant_id):
     except Carburants_Tables.DoesNotExist:
         return JsonResponse({"error": "Carburant non trouvé"}, status=404)
 
+
 @api_view(['POST'])
+@authentication_classes([SessionAuthentication])  
+@permission_classes([IsAuthenticated])
 def save_carburant(request):
     if request.method == "POST":
         nom = request.POST.get('nom')
@@ -906,29 +911,32 @@ def save_carburant(request):
         quantite = request.POST.get('quantite')
         cout = request.POST.get('cout')
         date_approvisionnement = request.POST.get('date_approvisionnement')
-        print(nom)
-        print(type)
-        print(quantite)
-        print(cout)
-        print(date_approvisionnement)
-        
-        form = {
+
+        # Check that the user is authenticated
+        if request.user.is_authenticated:
+            # Create a dictionary of the data including the user field (not user_id)
+            form = {
                 "nom": nom,
                 "type": type,
                 "quantite": quantite,
                 "cout": cout,
-                "date_approvisionnement": date_approvisionnement
+                "date_approvisionnement": date_approvisionnement,
+                "user": request.user.id  # Pass the user ID here correctly
             }
-        
-        carburant_serializer = CarburantsSerializer(data=form)
-                
-        if carburant_serializer.is_valid():
-            print('yes')
-            carburant_serializer.save()
-            return JsonResponse(carburant_serializer.data, status=status.HTTP_201_CREATED)
+
+            # Use the serializer to validate and save
+            carburant_serializer = CarburantsSerializer(data=form)
+            
+            if carburant_serializer.is_valid():
+                carburant_serializer.save()  # This will save the instance to the DB
+                return JsonResponse(carburant_serializer.data, status=status.HTTP_201_CREATED)
+            else:
+                # If data is not valid, return errors
+                return JsonResponse({"Erreur": carburant_serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
         else:
-            print('no')
-            return JsonResponse({"Erreur": "Some error occured"}, status=status.HTTP_201_CREATED)
+            # Handle cases where the user is not authenticated
+            return JsonResponse({"Erreur": "User not authenticated"}, status=status.HTTP_403_FORBIDDEN)
+
         
 def get_carburant(request, carburant_id):
     try:
