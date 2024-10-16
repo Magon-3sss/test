@@ -357,30 +357,145 @@
                                         <div class="card">
                                             <div class="card-body p-0">
                                                 <div class="options-inv">
-                                                    <a href="#" class="option-dots" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fe fe-more-vertical"></i></a>
-                                                    <div class="dropdown-menu dropdown-menu-start">
-                                                        <a class="dropdown-item" href="#"><i class="fe fe-edit me-2"></i> Modifier</a>
-                                                        <a class="dropdown-item" href="#"><i class="fe fe-plus me-2"></i> Ajouter</a>
-                                                        <a class="dropdown-item" href="#"><i class="fe fe-trash me-2"></i> Supprimer</a>
-                                                    </div>
+                                                    <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addIrrigationModal"><i class="fe fe-plus me-2"></i></button>
                                                 </div>
                                                 <div class="d-flex align-items-center justify-content-between py-5 px-6 mt-2">
                                                     <div>
                                                         <h6 class="text-muted"><strong>Listes des Filtres d'Irrigations</strong></h6>
                                                     </div>
                                                 </div>
+                                    
                                                 <hr class="mt-0 mb-0">
                                                 <div class="d-sm-flex align-items-center justify-content-between py-5 px-6">
                                                     <div class="d-flex align-items-center">
                                                         <div>
                                                             <ul class="list-group">
                                                                 {% for filtre in filtres_irrigation %}
-                                                                    <li class="list-group-item">
-                                                                        <strong>{{ filtre.abreviation }}:</strong> {{ filtre.descriptionFr }} ({{ filtre.descriptionAr }})
+                                                                    <li class="list-group-item d-flex justify-content-between align-items-center" style="width: 100%;">
+                                                                        <span style="width: 70%;">
+                                                                            <strong>{{ filtre.abreviation }}:</strong> {{ filtre.descriptionFr }} ({{ filtre.descriptionAr }})
+                                                                        </span>
+                                                                        <div>
+                                                                            <button class="btn btn-sm btn-primary" 
+                                                                            onclick="editFilter('irrigation', {{ filtre.id }}, '{{ filtre.abreviation|escapejs }}', '{{ filtre.descriptionFr|escapejs }}', '{{ filtre.descriptionAr|escapejs }}', '{{ filtre.details|escapejs }}')">
+                                                                                <!-- Icone Modifier -->
+                                                                                <svg height="16" width="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                                    <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                                                                                    <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                                                                                    <g id="SVGRepo_iconCarrier">
+                                                                                        <path fill-rule="evenodd" clip-rule="evenodd" d="M8.56078 20.2501L20.5608 8.25011L15.7501 3.43945L3.75012 15.4395V20.2501H8.56078ZM15.7501 5.56077L18.4395 8.25011L16.5001 10.1895L13.8108 7.50013L15.7501 5.56077ZM12.7501 8.56079L15.4395 11.2501L7.93946 18.7501H5.25012L5.25012 16.0608L12.7501 8.56079Z" fill="#ffffff"></path>
+                                                                                    </g>
+                                                                                </svg>
+                                                                            </button>
+                                                            
+                                                                            <button class="btn btn-sm btn-danger ms-2" 
+                                                                                onclick="confirmDeleteIrrigationFilter({{ filtre.id }})">
+                                                                                <!-- Icone Supprimer -->
+                                                                                <svg fill="#000000" height="16" width="16" viewBox="-3.5 0 19 19" xmlns="http://www.w3.org/2000/svg" class="cf-icon-svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><path d="M11.383 13.644A1.03 1.03 0 0 1 9.928 15.1L6 11.172 2.072 15.1a1.03 1.03 0 1 1-1.455-1.456l3.928-3.928L.617 5.79a1.03 1.03 0 1 1 1.455-1.456L6 8.261l3.928-3.928a1.03 1.03 0 0 1 1.455 1.456L7.455 9.716z"></path></g></svg>
+                                                                            </button>
+                                                                        </div>
                                                                     </li>
                                                                 {% endfor %}
                                                             </ul>
+                                                                                                                                                                                    
                                                         </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- Modal pour Ajouter un Filtre d'Irrigation -->
+                                        <div class="modal fade" id="addIrrigationModal" tabindex="-1" aria-labelledby="addIrrigationModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="addIrrigationModalLabel">Ajouter un Nouveau Filtre d'Irrigation</h5>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <form method="POST" id="addIrrigationForm" action="{% url 'admin_filtre_view' %}">
+                                                            {% csrf_token %}
+                                                            <div class="form-group">
+                                                                <label for="abreviation">Abreviation:</label>
+                                                                <input type="text" id="abreviation" name="irrigation-abreviation" class="form-control" required>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label for="descriptionFr">DescriptionFr:</label>
+                                                                <textarea id="descriptionFr" name="irrigation-descriptionFr" class="form-control" required></textarea>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label for="descriptionAr">DescriptionAr:</label>
+                                                                <textarea id="descriptionAr" name="irrigation-descriptionAr" class="form-control" required></textarea>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label for="details">Details:</label>
+                                                                <input type="text" id="details" name="irrigation-details" class="form-control" value="" required>
+                                                            </div>
+                                                            <input type="hidden" name="add_irrigation" value="true">                                                            
+                                                        </form>                                                        
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                                                        <button type="button" class="btn btn-primary" onclick="submitIrrigationForm()">Ajouter</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- Modal pour Modifier un Filtre d'Irrigation -->
+                                        <div class="modal fade" id="editIrrigationModal" tabindex="-1" aria-labelledby="editIrrigationModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title">Modifier le Filtre d'Irrigation</h5>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <form method="POST" id="editIrrigationForm" action="{% url 'edit_filtre_view' %}">
+                                                            {% csrf_token %}
+                                                            <input type="hidden" id="edit-irrigation-filter-id" name="filter-id">
+                                                            <input type="hidden" name="filter_type" value="irrigation">
+                                                            
+                                                            <div class="form-group">
+                                                                <label for="edit-irrigation-abreviation">Abreviation:</label>
+                                                                <input type="text" id="edit-irrigation-abreviation" name="edit-abreviation" class="form-control" required>
+                                                            </div>
+                                                            
+                                                            <div class="form-group">
+                                                                <label for="edit-irrigation-descriptionFr">DescriptionFr:</label>
+                                                                <textarea id="edit-irrigation-descriptionFr" name="edit-descriptionFr" class="form-control" required></textarea>
+                                                            </div>
+                                                            
+                                                            <div class="form-group">
+                                                                <label for="edit-irrigation-descriptionAr">DescriptionAr:</label>
+                                                                <textarea id="edit-irrigation-descriptionAr" name="edit-descriptionAr" class="form-control" required></textarea>
+                                                            </div>
+                                                            
+                                                            <div class="form-group">
+                                                                <label for="edit-irrigation-details">Details:</label>
+                                                                <input type="text" id="edit-irrigation-details" name="edit-details" class="form-control" required>
+                                                            </div>
+                                                        </form>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                                                        <button type="button" class="btn btn-primary" onclick="submitEditIrrigationForm()">Enregistrer</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- Modal pour confirmation de suppression --> 
+                                        <div class="modal fade" id="deleteConfirmationModal" tabindex="-1" aria-labelledby="deleteConfirmationModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="deleteConfirmationModalLabel">Confirmation de Suppression</h5>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        Êtes-vous sûr de vouloir supprimer ce filtre ?
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                                                        <button type="button" class="btn btn-danger" id="confirmDeleteBtn">Supprimer</button>
                                                     </div>
                                                 </div>
                                             </div>
@@ -390,30 +505,145 @@
                                         <div class="card">
                                             <div class="card-body p-0">
                                                 <div class="options-inv">
-                                                    <a href="#" class="option-dots" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fe fe-more-vertical"></i></a>
-                                                    <div class="dropdown-menu dropdown-menu-start">
-                                                        <a class="dropdown-item" href="#"><i class="fe fe-edit me-2"></i> Modifier</a>
-                                                        <a class="dropdown-item" href="#"><i class="fe fe-plus me-2"></i> Ajouter</a>
-                                                        <a class="dropdown-item" href="#"><i class="fe fe-trash me-2"></i> Supprimer</a>
-                                                    </div>
+                                                    <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addFertilisationModal"><i class="fe fe-plus me-2"></i></button>
                                                 </div>
                                                 <div class="d-flex align-items-center justify-content-between py-5 px-6 mt-2">
                                                     <div>
                                                         <h6 class="text-muted"><strong>Listes des Filtres de Fertilisation</strong></h6>
                                                     </div>
                                                 </div>
+                                    
                                                 <hr class="mt-0 mb-0">
                                                 <div class="d-sm-flex align-items-center justify-content-between py-5 px-6">
                                                     <div class="d-flex align-items-center">
                                                         <div>
                                                             <ul class="list-group">
                                                                 {% for filtre in filtres_fertilisation %}
-                                                                    <li class="list-group-item">
-                                                                        <strong>{{ filtre.abreviation }}:</strong> {{ filtre.descriptionFr }} ({{ filtre.descriptionAr }})
+                                                                    <li class="list-group-item d-flex justify-content-between align-items-center" style="width: 100%;">
+                                                                        <span style="width: 70%;">
+                                                                            <strong>{{ filtre.abreviation }}:</strong> {{ filtre.descriptionFr }} ({{ filtre.descriptionAr }})
+                                                                        </span>
+                                                                        <div>
+                                                                            <button class="btn btn-sm btn-primary" 
+                                                                            onclick="editFilter('fertilisation', {{ filtre.id }}, '{{ filtre.abreviation|escapejs }}', '{{ filtre.descriptionFr|escapejs }}', '{{ filtre.descriptionAr|escapejs }}', '{{ filtre.details|escapejs }}')">
+                                                                                <!-- Icone Modifier -->
+                                                                                <svg height="16" width="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                                    <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                                                                                    <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                                                                                    <g id="SVGRepo_iconCarrier">
+                                                                                        <path fill-rule="evenodd" clip-rule="evenodd" d="M8.56078 20.2501L20.5608 8.25011L15.7501 3.43945L3.75012 15.4395V20.2501H8.56078ZM15.7501 5.56077L18.4395 8.25011L16.5001 10.1895L13.8108 7.50013L15.7501 5.56077ZM12.7501 8.56079L15.4395 11.2501L7.93946 18.7501H5.25012L5.25012 16.0608L12.7501 8.56079Z" fill="#ffffff"></path>
+                                                                                    </g>
+                                                                                </svg>
+                                                                            </button>
+                                                            
+                                                                            <button class="btn btn-sm btn-danger ms-2" 
+                                                                                onclick="confirmDeleteFertilisationFilter({{ filtre.id }})">
+                                                                                <!-- Icone Supprimer -->
+                                                                                <svg fill="#000000" height="16" width="16" viewBox="-3.5 0 19 19" xmlns="http://www.w3.org/2000/svg" class="cf-icon-svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><path d="M11.383 13.644A1.03 1.03 0 0 1 9.928 15.1L6 11.172 2.072 15.1a1.03 1.03 0 1 1-1.455-1.456l3.928-3.928L.617 5.79a1.03 1.03 0 1 1 1.455-1.456L6 8.261l3.928-3.928a1.03 1.03 0 0 1 1.455 1.456L7.455 9.716z"></path></g></svg>
+                                                                            </button>
+                                                                        </div>
                                                                     </li>
                                                                 {% endfor %}
                                                             </ul>
+                                                                                                                                                                                    
                                                         </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- Modal pour Ajouter un Filtre de Fertilisation -->
+                                        <div class="modal fade" id="addFertilisationModal" tabindex="-1" aria-labelledby="addFertilisationModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="addFertilisationModalLabel">Ajouter un Nouveau Filtre de Fertilisation</h5>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <form method="POST" id="addFertilisationForm" action="{% url 'admin_filtre_view' %}">
+                                                            {% csrf_token %}
+                                                            <div class="form-group">
+                                                                <label for="abreviation">Abreviation:</label>
+                                                                <input type="text" id="abreviation" name="fertilisation-abreviation" class="form-control" required>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label for="descriptionFr">DescriptionFr:</label>
+                                                                <textarea id="descriptionFr" name="fertilisation-descriptionFr" class="form-control" required></textarea>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label for="descriptionAr">DescriptionAr:</label>
+                                                                <textarea id="descriptionAr" name="fertilisation-descriptionAr" class="form-control" required></textarea>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label for="details">Details:</label>
+                                                                <input type="text" id="details" name="fertilisation-details" class="form-control" value="" required>
+                                                            </div>
+                                                            <input type="hidden" name="add_fertilisation" value="true">                                                            
+                                                        </form>                                                        
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                                                        <button type="button" class="btn btn-primary" onclick="submitFertilisationForm()">Ajouter</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- Modal pour Modifier un Filtre de Fertilisation -->
+                                        <div class="modal fade" id="editFertilisationModal" tabindex="-1" aria-labelledby="editFertilisationModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title">Modifier le Filtre de Fertilisation</h5>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <form method="POST" id="editFertilisationForm" action="{% url 'edit_filtre_view' %}">
+                                                            {% csrf_token %}
+                                                            <input type="hidden" id="edit-fertilisation-filter-id" name="filter-id">
+                                                            <input type="hidden" name="filter_type" value="fertilisation">
+                                                            
+                                                            <div class="form-group">
+                                                                <label for="edit-fertilisation-abreviation">Abreviation:</label>
+                                                                <input type="text" id="edit-fertilisation-abreviation" name="edit-abreviation" class="form-control" required>
+                                                            </div>
+                                                            
+                                                            <div class="form-group">
+                                                                <label for="edit-fertilisation-descriptionFr">DescriptionFr:</label>
+                                                                <textarea id="edit-fertilisation-descriptionFr" name="edit-descriptionFr" class="form-control" required></textarea>
+                                                            </div>
+                                                            
+                                                            <div class="form-group">
+                                                                <label for="edit-fertilisation-descriptionAr">DescriptionAr:</label>
+                                                                <textarea id="edit-fertilisation-descriptionAr" name="edit-descriptionAr" class="form-control" required></textarea>
+                                                            </div>
+                                                            
+                                                            <div class="form-group">
+                                                                <label for="edit-fertilisation-details">Details:</label>
+                                                                <input type="text" id="edit-fertilisation-details" name="edit-details" class="form-control" required>
+                                                            </div>
+                                                        </form>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                                                        <button type="button" class="btn btn-primary" onclick="submitEditFertilisationForm()">Enregistrer</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- Modal pour confirmation de suppression --> 
+                                        <div class="modal fade" id="deleteConfirmationModal" tabindex="-1" aria-labelledby="deleteConfirmationModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="deleteConfirmationModalLabel">Confirmation de Suppression</h5>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        Êtes-vous sûr de vouloir supprimer ce filtre ?
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                                                        <button type="button" class="btn btn-danger" id="confirmDeleteBtn">Supprimer</button>
                                                     </div>
                                                 </div>
                                             </div>
@@ -425,30 +655,145 @@
                                         <div class="card">
                                             <div class="card-body p-0">
                                                 <div class="options-inv">
-                                                    <a href="#" class="option-dots" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fe fe-more-vertical"></i></a>
-                                                    <div class="dropdown-menu dropdown-menu-start">
-                                                        <a class="dropdown-item" href="#"><i class="fe fe-edit me-2"></i> Modifier</a>
-                                                        <a class="dropdown-item" href="#"><i class="fe fe-plus me-2"></i> Ajouter</a>
-                                                        <a class="dropdown-item" href="#"><i class="fe fe-trash me-2"></i> Supprimer</a>
-                                                    </div>
+                                                    <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addEvolutionModal"><i class="fe fe-plus me-2"></i></button>
                                                 </div>
                                                 <div class="d-flex align-items-center justify-content-between py-5 px-6 mt-2">
                                                     <div>
                                                         <h6 class="text-muted"><strong>Listes des Filtres d'Evolutions</strong></h6>
                                                     </div>
                                                 </div>
+                                    
                                                 <hr class="mt-0 mb-0">
                                                 <div class="d-sm-flex align-items-center justify-content-between py-5 px-6">
                                                     <div class="d-flex align-items-center">
                                                         <div>
                                                             <ul class="list-group">
                                                                 {% for filtre in filtres_evolution %}
-                                                                    <li class="list-group-item">
-                                                                        <strong>{{ filtre.abreviation }}:</strong> {{ filtre.descriptionFr }} ({{ filtre.descriptionAr }})
+                                                                    <li class="list-group-item d-flex justify-content-between align-items-center" style="width: 100%;">
+                                                                        <span style="width: 70%;">
+                                                                            <strong>{{ filtre.abreviation }}:</strong> {{ filtre.descriptionFr }} ({{ filtre.descriptionAr }})
+                                                                        </span>
+                                                                        <div>
+                                                                            <button class="btn btn-sm btn-primary" 
+                                                                            onclick="editFilter('evolution', {{ filtre.id }}, '{{ filtre.abreviation|escapejs }}', '{{ filtre.descriptionFr|escapejs }}', '{{ filtre.descriptionAr|escapejs }}', '{{ filtre.details|escapejs }}')">
+                                                                                <!-- Icone Modifier -->
+                                                                                <svg height="16" width="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                                    <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                                                                                    <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                                                                                    <g id="SVGRepo_iconCarrier">
+                                                                                        <path fill-rule="evenodd" clip-rule="evenodd" d="M8.56078 20.2501L20.5608 8.25011L15.7501 3.43945L3.75012 15.4395V20.2501H8.56078ZM15.7501 5.56077L18.4395 8.25011L16.5001 10.1895L13.8108 7.50013L15.7501 5.56077ZM12.7501 8.56079L15.4395 11.2501L7.93946 18.7501H5.25012L5.25012 16.0608L12.7501 8.56079Z" fill="#ffffff"></path>
+                                                                                    </g>
+                                                                                </svg>
+                                                                            </button>
+                                                            
+                                                                            <button class="btn btn-sm btn-danger ms-2" 
+                                                                                onclick="confirmDeleteEvolutionFilter({{ filtre.id }})">
+                                                                                <!-- Icone Supprimer -->
+                                                                                <svg fill="#000000" height="16" width="16" viewBox="-3.5 0 19 19" xmlns="http://www.w3.org/2000/svg" class="cf-icon-svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><path d="M11.383 13.644A1.03 1.03 0 0 1 9.928 15.1L6 11.172 2.072 15.1a1.03 1.03 0 1 1-1.455-1.456l3.928-3.928L.617 5.79a1.03 1.03 0 1 1 1.455-1.456L6 8.261l3.928-3.928a1.03 1.03 0 0 1 1.455 1.456L7.455 9.716z"></path></g></svg>
+                                                                            </button>
+                                                                        </div>
                                                                     </li>
                                                                 {% endfor %}
                                                             </ul>
+                                                                                                                                                                                    
                                                         </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- Modal pour Ajouter un Filtre de Evolution -->
+                                        <div class="modal fade" id="addEvolutionModal" tabindex="-1" aria-labelledby="addEvolutionModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="addEvolutionModalLabel">Ajouter un Nouveau Filtre d'Evolution</h5>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <form method="POST" id="addEvolutionForm" action="{% url 'admin_filtre_view' %}">
+                                                            {% csrf_token %}
+                                                            <div class="form-group">
+                                                                <label for="abreviation">Abreviation:</label>
+                                                                <input type="text" id="abreviation" name="evolution-abreviation" class="form-control" required>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label for="descriptionFr">DescriptionFr:</label>
+                                                                <textarea id="descriptionFr" name="evolution-descriptionFr" class="form-control" required></textarea>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label for="descriptionAr">DescriptionAr:</label>
+                                                                <textarea id="descriptionAr" name="evolution-descriptionAr" class="form-control" required></textarea>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label for="details">Details:</label>
+                                                                <input type="text" id="details" name="evolution-details" class="form-control" value="" required>
+                                                            </div>
+                                                            <input type="hidden" name="add_evolution" value="true">                                                            
+                                                        </form>                                                        
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                                                        <button type="button" class="btn btn-primary" onclick="submitEvolutionForm()">Ajouter</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- Modal pour Modifier un Filtre d'Evolution -->
+                                        <div class="modal fade" id="editEvolutionModal" tabindex="-1" aria-labelledby="editEvolutionModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title">Modifier le Filtre d'Evolution</h5>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <form method="POST" id="editEvolutionForm" action="{% url 'edit_filtre_view' %}">
+                                                            {% csrf_token %}
+                                                            <input type="hidden" id="edit-evolution-filter-id" name="filter-id">
+                                                            <input type="hidden" name="filter_type" value="evolution">
+                                                            
+                                                            <div class="form-group">
+                                                                <label for="edit-evolution-abreviation">Abreviation:</label>
+                                                                <input type="text" id="edit-evolution-abreviation" name="edit-abreviation" class="form-control" required>
+                                                            </div>
+                                                            
+                                                            <div class="form-group">
+                                                                <label for="edit-evolution-descriptionFr">DescriptionFr:</label>
+                                                                <textarea id="edit-evolution-descriptionFr" name="edit-descriptionFr" class="form-control" required></textarea>
+                                                            </div>
+                                                            
+                                                            <div class="form-group">
+                                                                <label for="edit-evolution-descriptionAr">DescriptionAr:</label>
+                                                                <textarea id="edit-evolution-descriptionAr" name="edit-descriptionAr" class="form-control" required></textarea>
+                                                            </div>
+                                                            
+                                                            <div class="form-group">
+                                                                <label for="edit-evolution-details">Details:</label>
+                                                                <input type="text" id="edit-evolution-details" name="edit-details" class="form-control" required>
+                                                            </div>
+                                                        </form>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                                                        <button type="button" class="btn btn-primary" onclick="submitEditEvolutionForm()">Enregistrer</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- Modal pour confirmation de suppression --> 
+                                        <div class="modal fade" id="deleteConfirmationModal" tabindex="-1" aria-labelledby="deleteConfirmationModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="deleteConfirmationModalLabel">Confirmation de Suppression</h5>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        Êtes-vous sûr de vouloir supprimer ce filtre ?
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                                                        <button type="button" class="btn btn-danger" id="confirmDeleteBtn">Supprimer</button>
                                                     </div>
                                                 </div>
                                             </div>
@@ -458,30 +803,145 @@
                                         <div class="card">
                                             <div class="card-body p-0">
                                                 <div class="options-inv">
-                                                    <a href="#" class="option-dots" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fe fe-more-vertical"></i></a>
-                                                    <div class="dropdown-menu dropdown-menu-start">
-                                                        <a class="dropdown-item" href="#"><i class="fe fe-edit me-2"></i> Modifier</a>
-                                                        <a class="dropdown-item" href="#"><i class="fe fe-plus me-2"></i> Ajouter</a>
-                                                        <a class="dropdown-item" href="#"><i class="fe fe-trash me-2"></i> Supprimer</a>
-                                                    </div>
+                                                    <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addMaladieModal"><i class="fe fe-plus me-2"></i></button>
                                                 </div>
                                                 <div class="d-flex align-items-center justify-content-between py-5 px-6 mt-2">
                                                     <div>
                                                         <h6 class="text-muted"><strong>Listes des Filtres de Maladies</strong></h6>
                                                     </div>
                                                 </div>
+                                    
                                                 <hr class="mt-0 mb-0">
                                                 <div class="d-sm-flex align-items-center justify-content-between py-5 px-6">
                                                     <div class="d-flex align-items-center">
                                                         <div>
                                                             <ul class="list-group">
                                                                 {% for filtre in filtres_maladie %}
-                                                                    <li class="list-group-item">
-                                                                        <strong>{{ filtre.abreviation }}:</strong> {{ filtre.descriptionFr }} ({{ filtre.descriptionAr }})
+                                                                    <li class="list-group-item d-flex justify-content-between align-items-center" style="width: 100%;">
+                                                                        <span style="width: 70%;">
+                                                                            <strong>{{ filtre.abreviation }}:</strong> {{ filtre.descriptionFr }} ({{ filtre.descriptionAr }})
+                                                                        </span>
+                                                                        <div>
+                                                                            <button class="btn btn-sm btn-primary" 
+                                                                            onclick="editFilter('maladie', {{ filtre.id }}, '{{ filtre.abreviation|escapejs }}', '{{ filtre.descriptionFr|escapejs }}', '{{ filtre.descriptionAr|escapejs }}', '{{ filtre.details|escapejs }}')">
+                                                                                <!-- Icone Modifier -->
+                                                                                <svg height="16" width="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                                    <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                                                                                    <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                                                                                    <g id="SVGRepo_iconCarrier">
+                                                                                        <path fill-rule="evenodd" clip-rule="evenodd" d="M8.56078 20.2501L20.5608 8.25011L15.7501 3.43945L3.75012 15.4395V20.2501H8.56078ZM15.7501 5.56077L18.4395 8.25011L16.5001 10.1895L13.8108 7.50013L15.7501 5.56077ZM12.7501 8.56079L15.4395 11.2501L7.93946 18.7501H5.25012L5.25012 16.0608L12.7501 8.56079Z" fill="#ffffff"></path>
+                                                                                    </g>
+                                                                                </svg>
+                                                                            </button>
+                                                            
+                                                                            <button class="btn btn-sm btn-danger ms-2" 
+                                                                                onclick="confirmDeleteMaladieFilter({{ filtre.id }})">
+                                                                                <!-- Icone Supprimer -->
+                                                                                <svg fill="#000000" height="16" width="16" viewBox="-3.5 0 19 19" xmlns="http://www.w3.org/2000/svg" class="cf-icon-svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><path d="M11.383 13.644A1.03 1.03 0 0 1 9.928 15.1L6 11.172 2.072 15.1a1.03 1.03 0 1 1-1.455-1.456l3.928-3.928L.617 5.79a1.03 1.03 0 1 1 1.455-1.456L6 8.261l3.928-3.928a1.03 1.03 0 0 1 1.455 1.456L7.455 9.716z"></path></g></svg>
+                                                                            </button>
+                                                                        </div>
                                                                     </li>
                                                                 {% endfor %}
                                                             </ul>
+                                                                                                                                                                                    
                                                         </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- Modal pour Ajouter un Filtre de Maladie -->
+                                        <div class="modal fade" id="addMaladieModal" tabindex="-1" aria-labelledby="addMaladieModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="addMaladieModalLabel">Ajouter un Nouveau Filtre de Maladie</h5>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <form method="POST" id="addMaladieForm" action="{% url 'admin_filtre_view' %}">
+                                                            {% csrf_token %}
+                                                            <div class="form-group">
+                                                                <label for="abreviation">Abreviation:</label>
+                                                                <input type="text" id="abreviation" name="maladie-abreviation" class="form-control" required>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label for="descriptionFr">DescriptionFr:</label>
+                                                                <textarea id="descriptionFr" name="maladie-descriptionFr" class="form-control" required></textarea>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label for="descriptionAr">DescriptionAr:</label>
+                                                                <textarea id="descriptionAr" name="maladie-descriptionAr" class="form-control" required></textarea>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label for="details">Details:</label>
+                                                                <input type="text" id="details" name="maladie-details" class="form-control" value="" required>
+                                                            </div>
+                                                            <input type="hidden" name="add_maladie" value="true">                                                            
+                                                        </form>                                                        
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                                                        <button type="button" class="btn btn-primary" onclick="submitMaladieForm()">Ajouter</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- Modal pour Modifier un Filtre de Maladie -->
+                                        <div class="modal fade" id="editMaladieModal" tabindex="-1" aria-labelledby="editMaladieModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title">Modifier le Filtre de Maladie</h5>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <form method="POST" id="editMaladieForm" action="{% url 'edit_filtre_view' %}">
+                                                            {% csrf_token %}
+                                                            <input type="hidden" id="edit-maladie-filter-id" name="filter-id">
+                                                            <input type="hidden" name="filter_type" value="maladie">
+                                                            
+                                                            <div class="form-group">
+                                                                <label for="edit-maladie-abreviation">Abreviation:</label>
+                                                                <input type="text" id="edit-maladie-abreviation" name="edit-abreviation" class="form-control" required>
+                                                            </div>
+                                                            
+                                                            <div class="form-group">
+                                                                <label for="edit-maladie-descriptionFr">DescriptionFr:</label>
+                                                                <textarea id="edit-maladie-descriptionFr" name="edit-descriptionFr" class="form-control" required></textarea>
+                                                            </div>
+                                                            
+                                                            <div class="form-group">
+                                                                <label for="edit-maladie-descriptionAr">DescriptionAr:</label>
+                                                                <textarea id="edit-maladie-descriptionAr" name="edit-descriptionAr" class="form-control" required></textarea>
+                                                            </div>
+                                                            
+                                                            <div class="form-group">
+                                                                <label for="edit-maladie-details">Details:</label>
+                                                                <input type="text" id="edit-maladie-details" name="edit-details" class="form-control" required>
+                                                            </div>
+                                                        </form>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                                                        <button type="button" class="btn btn-primary" onclick="submitEditMaladieForm()">Enregistrer</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- Modal pour confirmation de suppression --> 
+                                        <div class="modal fade" id="deleteConfirmationModal" tabindex="-1" aria-labelledby="deleteConfirmationModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="deleteConfirmationModalLabel">Confirmation de Suppression</h5>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        Êtes-vous sûr de vouloir supprimer ce filtre ?
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                                                        <button type="button" class="btn btn-danger" id="confirmDeleteBtn">Supprimer</button>
                                                     </div>
                                                 </div>
                                             </div>
@@ -647,7 +1107,7 @@
         }
     }
 
-    // Fonction pour soumettre le formulaire de modification du filtre de végétation
+    // Fonction pour soumettre le formulaire de modification du filtre d'humidité'
     function submitEditHumiditeForm() {
         var form = document.getElementById('editHumiditeForm');
         if (form.checkValidity()) {
@@ -735,6 +1195,458 @@
         return cookieValue;
     }
 
+    // Fonction pour ajouter un filtre d'irrigation
+    function submitIrrigationForm() {
+        var form = document.getElementById('addIrrigationForm');
+        if (form.checkValidity()) {
+            var formData = new FormData(form);
+            formData.append('add_irrigation', true);
+
+            fetch(form.action, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            })
+            .then(response => {
+                if (!response.ok) {
+                    return response.text().then(text => {
+                        console.error('Erreur serveur:', text);
+                        throw new Error('Erreur serveur');
+                    });
+                }
+                return response.json();  
+            })
+            .then(data => {
+                if (data.success) {
+                    var modal = bootstrap.Modal.getInstance(document.getElementById('addIrrigationModal'));
+                    modal.hide();
+                    location.reload();
+                } else {
+                    alert('Erreur lors de l\'ajout du filtre : ' + data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Erreur:', error);
+                alert('Une erreur s\'est produite lors de l\'ajout du filtre.');
+            });
+        } else {
+            form.reportValidity();
+        }
+    }
+
+    // Fonction pour soumettre le formulaire de modification du filtre d'irrigation'
+    function submitEditIrrigationForm() {
+        var form = document.getElementById('editIrrigationForm');
+        if (form.checkValidity()) {
+            var formData = new FormData(form);
+            
+            fetch(form.action, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            })
+            .then(response => {
+                if (!response.ok) {
+                    return response.text().then(text => {
+                        console.error('Erreur serveur:', text); 
+                        throw new Error('Erreur serveur');
+                    });
+                }
+                return response.json();  
+            })
+            .then(data => {
+                if (data.success) {
+                    var modal = bootstrap.Modal.getInstance(document.getElementById('editIrrigationModal'));
+                    modal.hide();
+                    location.reload();
+                } else {
+                    alert('Erreur lors de la modification du filtre : ' + data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Erreur:', error);
+                alert('Une erreur s\'est produite lors de la modification du filtre.');
+            });
+        } else {
+            form.reportValidity();
+        }
+    }
+    
+
+    // Fonction pour confirmer la suppression d'un filtre d'irrigation
+    function confirmDeleteIrrigationFilter(id) {
+        var filterIdToDelete = id;
+        $('#deleteConfirmationModal').modal('show');
+        document.getElementById('confirmDeleteBtn').onclick = function() {
+            deleteIrrigationFilter(filterIdToDelete);
+            $('#deleteConfirmationModal').modal('hide');
+        };
+    }
+
+    // Fonction pour supprimer un filtre d'irrigation
+    function deleteIrrigationFilter(id) {
+        fetch(`/delete-filtre/${id}/?filter_type=irrigation`, {
+            method: 'DELETE',
+            headers: {
+                'X-CSRFToken': getCookie('csrftoken')
+            }
+        })
+        .then(response => {
+            if (!response.ok) {
+                return response.text().then(text => {
+                    console.error('Erreur serveur:', text); // Affiche l'erreur serveur
+                    throw new Error('Erreur lors de la suppression');
+                });
+            }
+            alert('Filtre d\'irrigation supprimé avec succès.');
+            location.reload();
+        })
+        .catch(error => console.error('Erreur:', error));
+    }
+
+    // Fonction pour ajouter un filtre de fertilisation
+    function submitFertilisationForm() {
+        var form = document.getElementById('addFertilisationForm');
+        if (form.checkValidity()) {
+            var formData = new FormData(form);
+            formData.append('add_fertilisation', true);
+
+            fetch(form.action, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            })
+            .then(response => {
+                if (!response.ok) {
+                    return response.text().then(text => {
+                        console.error('Erreur serveur:', text);
+                        throw new Error('Erreur serveur');
+                    });
+                }
+                return response.json();  
+            })
+            .then(data => {
+                if (data.success) {
+                    var modal = bootstrap.Modal.getInstance(document.getElementById('addFertilisationModal'));
+                    modal.hide();
+                    location.reload();
+                } else {
+                    alert('Erreur lors de l\'ajout du filtre : ' + data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Erreur:', error);
+                alert('Une erreur s\'est produite lors de l\'ajout du filtre.');
+            });
+        } else {
+            form.reportValidity();
+        }
+    }
+
+    // Fonction pour soumettre le formulaire de modification du filtre de fertilisation'
+    function submitEditFertilisationForm() {
+        var form = document.getElementById('editFertilisationForm');
+        if (form.checkValidity()) {
+            var formData = new FormData(form);
+            
+            fetch(form.action, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            })
+            .then(response => {
+                if (!response.ok) {
+                    return response.text().then(text => {
+                        console.error('Erreur serveur:', text); 
+                        throw new Error('Erreur serveur');
+                    });
+                }
+                return response.json();  
+            })
+            .then(data => {
+                if (data.success) {
+                    var modal = bootstrap.Modal.getInstance(document.getElementById('editFertilisationModal'));
+                    modal.hide();
+                    location.reload();
+                } else {
+                    alert('Erreur lors de la modification du filtre : ' + data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Erreur:', error);
+                alert('Une erreur s\'est produite lors de la modification du filtre.');
+            });
+        } else {
+            form.reportValidity();
+        }
+    }
+    
+
+    // Fonction pour confirmer la suppression d'un filtre de fertilisation
+    function confirmDeleteFertilisationFilter(id) {
+        var filterIdToDelete = id;
+        $('#deleteConfirmationModal').modal('show');
+        document.getElementById('confirmDeleteBtn').onclick = function() {
+            deleteFertilisationFilter(filterIdToDelete);
+            $('#deleteConfirmationModal').modal('hide');
+        };
+    }
+
+    // Fonction pour supprimer un filtre de fertilisation
+    function deleteFertilisationFilter(id) {
+        fetch(`/delete-filtre/${id}/?filter_type=fertilisation`, {
+            method: 'DELETE',
+            headers: {
+                'X-CSRFToken': getCookie('csrftoken')
+            }
+        })
+        .then(response => {
+            if (!response.ok) {
+                return response.text().then(text => {
+                    console.error('Erreur serveur:', text); // Affiche l'erreur serveur
+                    throw new Error('Erreur lors de la suppression');
+                });
+            }
+            alert('Filtre de fertilisation supprimé avec succès.');
+            location.reload();
+        })
+        .catch(error => console.error('Erreur:', error));
+    }
+
+    // Fonction pour ajouter un filtre d'evolution'
+    function submitEvolutionForm() {
+        var form = document.getElementById('addEvolutionForm');
+        if (form.checkValidity()) {
+            var formData = new FormData(form);
+            formData.append('add_evolution', true);
+
+            fetch(form.action, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            })
+            .then(response => {
+                if (!response.ok) {
+                    return response.text().then(text => {
+                        console.error('Erreur serveur:', text);
+                        throw new Error('Erreur serveur');
+                    });
+                }
+                return response.json();  
+            })
+            .then(data => {
+                if (data.success) {
+                    var modal = bootstrap.Modal.getInstance(document.getElementById('addEvolutionModal'));
+                    modal.hide();
+                    location.reload();
+                } else {
+                    alert('Erreur lors de l\'ajout du filtre : ' + data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Erreur:', error);
+                alert('Une erreur s\'est produite lors de l\'ajout du filtre.');
+            });
+        } else {
+            form.reportValidity();
+        }
+    }
+
+    // Fonction pour soumettre le formulaire de modification du filtre d'evolution'
+    function submitEditEvolutionForm() {
+        var form = document.getElementById('editEvolutionForm');
+        if (form.checkValidity()) {
+            var formData = new FormData(form);
+            
+            fetch(form.action, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            })
+            .then(response => {
+                if (!response.ok) {
+                    return response.text().then(text => {
+                        console.error('Erreur serveur:', text); 
+                        throw new Error('Erreur serveur');
+                    });
+                }
+                return response.json();  
+            })
+            .then(data => {
+                if (data.success) {
+                    var modal = bootstrap.Modal.getInstance(document.getElementById('editEvolutionModal'));
+                    modal.hide();
+                    location.reload();
+                } else {
+                    alert('Erreur lors de la modification du filtre : ' + data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Erreur:', error);
+                alert('Une erreur s\'est produite lors de la modification du filtre.');
+            });
+        } else {
+            form.reportValidity();
+        }
+    }
+    
+
+    // Fonction pour confirmer la suppression d'un filtre d'evolution'
+    function confirmDeleteEvolutionFilter(id) {
+        var filterIdToDelete = id;
+        $('#deleteConfirmationModal').modal('show');
+        document.getElementById('confirmDeleteBtn').onclick = function() {
+            deleteEvolutionFilter(filterIdToDelete);
+            $('#deleteConfirmationModal').modal('hide');
+        };
+    }
+
+    // Fonction pour supprimer un filtre de Evolution
+    function deleteEvolutionFilter(id) {
+        fetch(`/delete-filtre/${id}/?filter_type=evolution`, {
+            method: 'DELETE',
+            headers: {
+                'X-CSRFToken': getCookie('csrftoken')
+            }
+        })
+        .then(response => {
+            if (!response.ok) {
+                return response.text().then(text => {
+                    console.error('Erreur serveur:', text); // Affiche l'erreur serveur
+                    throw new Error('Erreur lors de la suppression');
+                });
+            }
+            alert('Filtre d\'evolution supprimé avec succès.');
+            location.reload();
+        })
+        .catch(error => console.error('Erreur:', error));
+    }
+
+    // Fonction pour ajouter un filtre de maladie'
+    function submitMaladieForm() {
+        var form = document.getElementById('addMaladieForm');
+        if (form.checkValidity()) {
+            var formData = new FormData(form);
+            formData.append('add_maladie', true);
+
+            fetch(form.action, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            })
+            .then(response => {
+                if (!response.ok) {
+                    return response.text().then(text => {
+                        console.error('Erreur serveur:', text);
+                        throw new Error('Erreur serveur');
+                    });
+                }
+                return response.json();  
+            })
+            .then(data => {
+                if (data.success) {
+                    var modal = bootstrap.Modal.getInstance(document.getElementById('addMaladieModal'));
+                    modal.hide();
+                    location.reload();
+                } else {
+                    alert('Erreur lors de l\'ajout du filtre : ' + data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Erreur:', error);
+                alert('Une erreur s\'est produite lors de l\'ajout du filtre.');
+            });
+        } else {
+            form.reportValidity();
+        }
+    }
+
+    // Fonction pour soumettre le formulaire de modification du filtre de maladie'
+    function submitEditMaladieForm() {
+        var form = document.getElementById('editMaladieForm');
+        if (form.checkValidity()) {
+            var formData = new FormData(form);
+            
+            fetch(form.action, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            })
+            .then(response => {
+                if (!response.ok) {
+                    return response.text().then(text => {
+                        console.error('Erreur serveur:', text); 
+                        throw new Error('Erreur serveur');
+                    });
+                }
+                return response.json();  
+            })
+            .then(data => {
+                if (data.success) {
+                    var modal = bootstrap.Modal.getInstance(document.getElementById('editMaladieModal'));
+                    modal.hide();
+                    location.reload();
+                } else {
+                    alert('Erreur lors de la modification du filtre : ' + data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Erreur:', error);
+                alert('Une erreur s\'est produite lors de la modification du filtre.');
+            });
+        } else {
+            form.reportValidity();
+        }
+    }
+    
+
+    // Fonction pour confirmer la suppression d'un filtre de maladie'
+    function confirmDeleteMaladieFilter(id) {
+        var filterIdToDelete = id;
+        $('#deleteConfirmationModal').modal('show');
+        document.getElementById('confirmDeleteBtn').onclick = function() {
+            deleteMaladieFilter(filterIdToDelete);
+            $('#deleteConfirmationModal').modal('hide');
+        };
+    }
+
+    // Fonction pour supprimer un filtre de Maladie
+    function deleteMaladieFilter(id) {
+        fetch(`/delete-filtre/${id}/?filter_type=maladie`, {
+            method: 'DELETE',
+            headers: {
+                'X-CSRFToken': getCookie('csrftoken')
+            }
+        })
+        .then(response => {
+            if (!response.ok) {
+                return response.text().then(text => {
+                    console.error('Erreur serveur:', text); // Affiche l'erreur serveur
+                    throw new Error('Erreur lors de la suppression');
+                });
+            }
+            alert('Filtre de maladie supprimé avec succès.');
+            location.reload();
+        })
+        .catch(error => console.error('Erreur:', error));
+    }
+
     // Fonction pour modifier un filtre
     function editFilter(type, id, abreviation, descriptionFr, descriptionAr, details) {
         if (type === 'vegetation') {
@@ -751,6 +1663,34 @@
             document.getElementById('edit-humidite-descriptionAr').value = descriptionAr;
             document.getElementById('edit-humidite-details').value = details;
             var modalId = 'editHumiditeModal';
+        } else if (type === 'irrigation') {
+            document.getElementById('edit-irrigation-filter-id').value = id;
+            document.getElementById('edit-irrigation-abreviation').value = abreviation;
+            document.getElementById('edit-irrigation-descriptionFr').value = descriptionFr;
+            document.getElementById('edit-irrigation-descriptionAr').value = descriptionAr;
+            document.getElementById('edit-irrigation-details').value = details;
+            var modalId = 'editIrrigationModal';
+        } else if (type === 'fertilisation') {
+            document.getElementById('edit-fertilisation-filter-id').value = id;
+            document.getElementById('edit-fertilisation-abreviation').value = abreviation;
+            document.getElementById('edit-fertilisation-descriptionFr').value = descriptionFr;
+            document.getElementById('edit-fertilisation-descriptionAr').value = descriptionAr;
+            document.getElementById('edit-fertilisation-details').value = details;
+            var modalId = 'editFertilisationModal';
+        } else if (type === 'evolution') {
+            document.getElementById('edit-evolution-filter-id').value = id;
+            document.getElementById('edit-evolution-abreviation').value = abreviation;
+            document.getElementById('edit-evolution-descriptionFr').value = descriptionFr;
+            document.getElementById('edit-evolution-descriptionAr').value = descriptionAr;
+            document.getElementById('edit-evolution-details').value = details;
+            var modalId = 'editEvolutionModal';
+        } else if (type === 'maladie') {
+            document.getElementById('edit-maladie-filter-id').value = id;
+            document.getElementById('edit-maladie-abreviation').value = abreviation;
+            document.getElementById('edit-maladie-descriptionFr').value = descriptionFr;
+            document.getElementById('edit-maladie-descriptionAr').value = descriptionAr;
+            document.getElementById('edit-maladie-details').value = details;
+            var modalId = 'editMaladieModal';
         } else {
             console.error('Unsupported filter type:', type);
             return;
