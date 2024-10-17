@@ -969,8 +969,36 @@ def edit_carburant(request, carburant_id):
         return JsonResponse({"success": "Carburant modifié avec succès"}, status=200)
     except Carburants_Tables.DoesNotExist:
         return JsonResponse({"error": "Carburant non trouvé"}, status=404)
+    
+def get_carburant_details(request, carburant_id):
+    try:
+        carburant = Carburants_Tables.objects.get(id=carburant_id)
+        data = {
+            'nom': carburant.nom,
+            'type': carburant.type,
+            'quantite': carburant.quantite,
+            'cout': carburant.cout,
+            'date_approvisionnement': carburant.date_approvisionnement
+        }
+        return JsonResponse(data, status=200)
+    except Carburants_Tables.DoesNotExist:
+        return JsonResponse({"error": "Carburant non trouvé"}, status=404)
 
 """ Outils Agricoles"""
+def outils_agricoles (request):
+    list = []
+    outils = Outils_Tables.objects.all()
+    types_outils = TypeOutilsAgricoles.objects.all()
+    list.append({"types": types_outils,"outils": outils})
+    return render(request, 'outils-agricoles.html', {'data': list})
+
+def outils_agricoles_list (request):
+    list = []
+    outils = Outils_Tables.objects.all()
+    types_outils = TypeOutilsAgricoles.objects.all()
+    list.append({"types": types_outils,"outils": outils})
+    return render(request, 'outils-agricoles-list.html', {'data': list})
+
 @api_view(['POST'])
 def save_outil(request):
     if request.method == "POST":
@@ -1028,6 +1056,74 @@ def save_outil(request):
         else:
             print('no')
             return JsonResponse({"Erreur": "Some error occured"}, status=status.HTTP_201_CREATED) 
+        
+def get_outil(request, outil_id):
+    try:
+        outil = Outils_Tables.objects.get(id=outil_id)
+        data = {
+            'id': outil.id,
+            'type': outil.type,
+            'numero_de_serie': outil.numero_de_serie,
+            'marque': outil.marque,
+            'allocation': outil.allocation,
+            'prix_location_heure': outil.prix_location_heure,
+            'prix_location_jour': outil.prix_location_jour,
+            'prix_location_mois': outil.prix_location_mois,
+            'date_location': outil.date_location,
+            'prix_achat': outil.prix_achat,
+            'date_achat': outil.date_achat,
+            'image': outil.image.url if outil.image else None,  
+            'description': outil.description,
+        }
+        return JsonResponse(data, status=200)
+    except Outils_Tables.DoesNotExist:
+        return JsonResponse({"error": "Outil non trouvé"}, status=404)
+    
+import logging
+logger = logging.getLogger(__name__)
+
+@require_http_methods(["POST"])
+def edit_outil(request, outil_id):
+    try:
+        outil = Outils_Tables.objects.get(id=outil_id)
+        
+        # Retrieve form data and handle empty decimal fields
+        outil.type = request.POST.get('type_outils_agricoles')
+        outil.numero_de_serie = request.POST.get('numero_de_serie')
+        outil.marque = request.POST.get('marque')
+        outil.allocation = request.POST.get('allocation', 'non')
+
+        # Handle empty values for decimal fields
+        outil.prix_location_heure = request.POST.get('prix_location_heure') or None
+        outil.prix_location_jour = request.POST.get('prix_location_jour') or None
+        outil.prix_location_mois = request.POST.get('prix_location_mois') or None
+        outil.date_location = request.POST.get('date_location')
+        outil.prix_achat = request.POST.get('prix_achat') or None
+        outil.date_achat = request.POST.get('date_achat')
+
+        # Handle file upload
+        if 'image' in request.FILES:
+            outil.image = request.FILES['image']
+
+        outil.description = request.POST.get('description')
+        outil.save()
+
+        return JsonResponse({"success": "Outil modifié avec succès"}, status=200)
+    except Outils_Tables.DoesNotExist:
+        return JsonResponse({"error": "Outil non trouvé"}, status=404)
+    except Exception as e:
+        return JsonResponse({"error": str(e)}, status=500)
+
+@require_http_methods(["DELETE"])
+def delete_outil(request, outil_id):
+    try:
+        outil = get_object_or_404(Outils_Tables, id=outil_id)
+        outil.delete()
+        return JsonResponse({"success": "Outil supprimé avec succès"}, status=200)
+    except Outils_Tables.DoesNotExist:
+        return JsonResponse({"error": "Outil non trouvé"}, status=404)
+    except Exception as e:
+        return JsonResponse({"error": str(e)}, status=500)
 
         
 """ Machines & Engins """
@@ -3239,12 +3335,7 @@ def popup_view(request):
 """ def popup (request):
     return render(request, 'popup.html') """
 
-def outils_agricoles (request):
-    list = []
-    outils = Outils_Tables.objects.all()
-    types_outils = TypeOutilsAgricoles.objects.all()
-    list.append({"types": types_outils,"outils": outils})
-    return render(request, 'outils-agricoles.html', {'data': list})
+
 
 def infrastructure (request):
     return render(request, 'infrastructure.html')

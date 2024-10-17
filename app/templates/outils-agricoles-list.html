@@ -1,0 +1,327 @@
+{% extends 'components/base.html' %}
+{% load static %}
+
+    {% block styles %}
+	<style>
+		.img{
+			width:30px;
+		}
+	</style>
+    {% endblock %}
+    
+        {% block content %}
+        
+							<!-- PAGE-HEADER -->
+							<div class="page-header">
+								<div>
+									<h1 class="page-title">Outils Agricoles</h1>
+								</div>
+								<div class="ms-auto pageheader-btn">
+									<ol class="breadcrumb">
+                                        {% comment %} <li class="breadcrumb-item">Logistiques</li> {% endcomment %}
+                                        <li class="breadcrumb-item"><a href="logistiques">Logistiques</a></li>
+                                        <li class="breadcrumb-item active" aria-current="page">Outils Agricoles</li>
+                                    </ol>
+								</div>
+							</div>
+							<!-- PAGE-HEADER END -->
+
+							<!--ROW OPENED-->
+							<div class="row">
+								<div class="col-md-12">
+									<div class="card">
+										<div class="card-body p-4">
+											<div class="d-flex align-items-center justify-content-between">
+												<h4 class="m-0">Tous les Outils Agricoles</h4>
+												<div class="btn-list">
+													<a class="btn btn-outline-primary" href="outils-agricoles">
+														<svg xmlns="http://www.w3.org/2000/svg" class="w-inner-icn" enable-background="new 0 0 24 24" viewBox="0 0 24 24"><path d="M21.5,13h-8.0005493C13.2234497,13.0001831,12.9998169,13.223999,13,13.5v8.0005493C13.0001831,21.7765503,13.223999,22.0001831,13.5,22h8.0006104C21.7765503,21.9998169,22.0001831,21.776001,22,21.5v-8.0006104C21.9998169,13.2234497,21.776001,12.9998169,21.5,13z M21,21h-7v-7h7V21z M10.5,2H2.4993896C2.2234497,2.0001831,1.9998169,2.223999,2,2.5v8.0005493C2.0001831,10.7765503,2.223999,11.0001831,2.5,11h8.0006104C10.7765503,10.9998169,11.0001831,10.776001,11,10.5V2.4993896C10.9998169,2.2234497,10.776001,1.9998169,10.5,2z M10,10H3V3h7V10z M10.5,13H2.4993896C2.2234497,13.0001831,1.9998169,13.223999,2,13.5v8.0005493C2.0001831,21.7765503,2.223999,22.0001831,2.5,22h8.0006104C10.7765503,21.9998169,11.0001831,21.776001,11,21.5v-8.0006104C10.9998169,13.2234497,10.776001,12.9998169,10.5,13z M10,21H3v-7h7V21z M21.5,2h-8.0005493C13.2234497,2.0001831,12.9998169,2.223999,13,2.5v8.0005493C13.0001831,10.7765503,13.223999,11.0001831,13.5,11h8.0006104C21.7765503,10.9998169,22.0001831,10.776001,22,10.5V2.4993896C21.9998169,2.2234497,21.776001,1.9998169,21.5,2z M21,10h-7V3h7V10z"/></svg>
+													</a>
+													<a class="btn btn-primary" href="#">
+														<svg xmlns="http://www.w3.org/2000/svg" class="w-inner-icn text-white" enable-background="new 0 0 24 24" viewBox="0 0 24 24"><path d="M3.5,12C3.223877,12,3,12.223877,3,12.5S3.223877,13,3.5,13S4,12.776123,4,12.5S3.776123,12,3.5,12z M6.5,8h15C21.776123,8,22,7.776123,22,7.5S21.776123,7,21.5,7h-15C6.223877,7,6,7.223877,6,7.5S6.223877,8,6.5,8z M3.5,17C3.223877,17,3,17.223877,3,17.5S3.223877,18,3.5,18S4,17.776123,4,17.5S3.776123,17,3.5,17z M21.5,12h-15C6.223877,12,6,12.223877,6,12.5S6.223877,13,6.5,13h15c0.276123,0,0.5-0.223877,0.5-0.5S21.776123,12,21.5,12z M3.5,7C3.223877,7,3,7.223877,3,7.5S3.223877,8,3.5,8S4,7.776123,4,7.5S3.776123,7,3.5,7z M21.5,17h-15C6.223877,17,6,17.223877,6,17.5S6.223877,18,6.5,18h15c0.276123,0,0.5-0.223877,0.5-0.5S21.776123,17,21.5,17z"/></svg>
+													</a>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="col-12 col-sm-12"> 
+                                    <div class="card">
+                                        <div class="card-body project-list-table-container">
+                                            <div class="table-responsive">
+                                                <table id="project-table" class="table text-nowrap mb-0 table-bordered border-top border-bottom project-list-main">
+                                                    <thead class="table-head">
+                                                        <tr>
+                                                            <th class="bg-transparent border-bottom-0 w-5"></th>
+                                                            <th class="bg-transparent border-bottom-0">Type d'Outil</th>
+                                                            <th class="bg-transparent border-bottom-0">Numéro de Série</th>
+                                                            <th class="bg-transparent border-bottom-0">Marque</th>
+                                                            <th class="bg-transparent border-bottom-0">Prix d'Achat</th>
+                                                            <th class="bg-transparent border-bottom-0">Date d'Achat</th>
+                                                            <th class="bg-transparent border-bottom-0">Prix de Location (Heure/Jour/Mois)</th>
+                                                            <th class="bg-transparent border-bottom-0">Image</th>
+                                                            <th class="bg-transparent border-bottom-0">Description</th>
+                                                            <th class="bg-transparent border-bottom-0 no-btn">Action</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody class="table-body">
+                                                        {% for item in data %}
+                                                            {% for outil in item.outils %}
+                                                            <tr>
+                                                                <td class="text-muted fs-15 fw-semibold text-center">{{ forloop.counter }}</td>
+                                                                <td>
+                                                                    <h6 class="mb-0 fs-14 fw-semibold"><a href="#" class="float-start">{{ outil.type|default:"N/A" }}</h6>
+                                                                </td>
+                                                                <td class="text-muted fs-15 fw-semibold">{{ outil.numero_de_serie|default:"N/A" }}</td>
+                                                                <td class="text-muted fs-15 fw-semibold">{{ outil.marque|default:"N/A" }}</td>
+                                                                <td class="text-muted fs-15 fw-semibold">{{ outil.prix_achat|default_if_none:"N/A" }}</td>
+                                                                <td class="text-muted fs-15 fw-semibold">{{ outil.date_achat|default:"N/A" }}</td>
+                                                                <td class="text-muted fs-15 fw-semibold">
+                                                                    Heure: {{ outil.prix_location_heure|default_if_none:"N/A" }}<br>
+                                                                    Jour: {{ outil.prix_location_jour|default_if_none:"N/A" }}<br>
+                                                                    Mois: {{ outil.prix_location_mois|default_if_none:"N/A" }}
+                                                                </td>
+                                                                <td>
+                                                                    {% if outil.image %}
+                                                                        <img src="{{ outil.image.url }}" alt="Image de l'outil" width="100" height="100">
+                                                                    {% else %}
+                                                                        <span class="text-muted">Pas d'image</span>
+                                                                    {% endif %}
+                                                                </td>
+                                                                <td class="text-muted fs-15 fw-semibold">{{ outil.description|default:"N/A" }}</td>
+                                                                <td>
+                                                                    <div class="d-flex align-items-stretch">
+                                                                        <a class="btn btn-sm btn-outline-secondary border me-2" data-bs-toggle="tooltip" onclick="deleteOutil({{ outil.id }})" data-bs-original-title="Supprimer">
+                                                                            <svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 0 24 24" width="16">
+                                                                                <path d="M0 0h24v24H0V0z" fill="none" />
+                                                                                <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM8 9h8v10H8V9zm7.5-5l-1-1h-5l-1 1H5v2h14V4h-3.5z" />
+                                                                            </svg>
+                                                                        </a>
+                                                                        <a class="btn btn-sm btn-outline-secondary border me-2" data-bs-toggle="tooltip" href="javascript:void(0)" onclick="openEditModal({{ outil.id }})" data-bs-original-title="Modifier">
+                                                                            <svg height="24" viewBox="0 0 24 24" width="24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                                <path d="M17.25 10.9921C15.129 11.6991 12.3009 8.87105 13.0079 6.75M13.8793 5.87857L9.30971 10.4482C7.3231 12.4348 5.91376 14.924 5.23236 17.6496L5.01156 18.5328C4.94276 18.808 5.19204 19.0572 5.46723 18.9884L6.35044 18.7676C9.07604 18.0862 11.5652 16.6769 13.5518 14.6903L18.1214 10.1207C18.684 9.55813 19 8.79516 19 7.99962C19 6.34297 17.657 5 16.0004 5C15.2048 5 14.4419 5.31603 13.8793 5.87857Z"></path>
+                                                                            </svg>
+                                                                        </a>
+                                                                    </div>
+                                                                </td>
+                                                            </tr>
+                                                            {% endfor %}
+                                                        {% endfor %}
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- COL END -->
+							</div>
+							<!--ROW CLOSED-->
+
+        {% endblock %}
+		 
+		{% block modal %}
+		<!-- Edit Outil Modal -->
+<div class="modal fade" id="editOutilModal" tabindex="-1" aria-labelledby="editOutilLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="avatar mb-2 p-2 lh-1 mb-sm-0 avatar-md rounded-circle me-2">
+                    <img src="{% static 'assets/images/icons/outils-de-jardin.png' %}" class="side-menu__icon img" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
+                </div>
+                <h5 class="modal-title" id="editOutilLabel">Modifier Outil Agricole</h5>
+                <button aria-label="Close" class="btn-close" data-bs-dismiss="modal"><span aria-hidden="true">&times;</span></button>
+            </div>
+            <div class="modal-body pd-0">
+                <form id="editOutilForm" method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <input type="hidden" id="editOutilId">
+                    
+                    <div class="form-row">
+                        <div class="col-md-6 mb-3">
+                            <label for="editOutilType">Type d'Outil</label>
+                            <select class="form-control" id="editOutilType" name="type_outils_agricoles" required>
+                                <option value="" selected disabled>Choisir Type</option>
+                                {% for data in data %}
+                                    {% for type in data.types %}
+                                    <option value="{{ type.type_outils_agricoles }}">{{ type.type_outils_agricoles }}</option>
+                                    {% endfor %}
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="editOutilNumero">Numéro de Série</label>
+                            <input class="form-control" id="editOutilNumero" type="text" name="numero_de_serie" required>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="col-md-6 mb-3">
+                            <label for="editOutilMarque">Marque</label>
+                            <input class="form-control" id="editOutilMarque" type="text" name="marque" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="editOutilAllocation">Allocation</label>
+                            <input type="checkbox" id="editOutilAllocation" name="allocation">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="col-md-6 mb-3">
+                            <label for="editOutilPrixLocationHeure">Prix par Heure</label>
+                            <input class="form-control" id="editOutilPrixLocationHeure" type="number" name="prix_location_heure" placeholder="10 Dt">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="editOutilPrixLocationJour">Prix par Jour</label>
+                            <input class="form-control" id="editOutilPrixLocationJour" type="number" name="prix_location_jour" placeholder="100 Dt">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="col-md-6 mb-3">
+                            <label for="editOutilPrixLocationMois">Prix par Mois</label>
+                            <input class="form-control" id="editOutilPrixLocationMois" type="number" name="prix_location_mois" placeholder="500 Dt">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="editOutilDateLocation">Date de Location</label>
+                            <input class="form-control" id="editOutilDateLocation" type="date" name="date_location">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="col-md-6 mb-3">
+                            <label for="editOutilPrixAchat">Prix d'Achat</label>
+                            <input class="form-control" id="editOutilPrixAchat" type="number" name="prix_achat" placeholder="5000 Dt" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="editOutilDateAchat">Date d'Achat</label>
+                            <input class="form-control" id="editOutilDateAchat" type="date" name="date_achat" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="editOutilImage">Image :</label>
+                        <input class="form-control" id="editOutilImage" type="file" name="image" accept="image/*">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="editOutilDescription">Description :</label>
+                        <textarea class="form-control" id="editOutilDescription" name="description" rows="3" required></textarea>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary" onclick="saveEditOutil()">Enregistrer</button>
+                        <button type="button" class="btn btn-light" data-bs-dismiss="modal">Annuler</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+        <!-- /Edit Outil Modal -->					
+		{% endblock %}
+
+    {% block scripts %}
+
+    <script>
+        // Open the modal and populate the form with Outil data
+function openEditModal(outilId) {
+fetch(`/get-outil/${outilId}/`)
+    .then(response => response.json())
+    .then(data => {
+        document.getElementById('editOutilId').value = data.id;
+        document.getElementById('editOutilType').value = data.type;
+        document.getElementById('editOutilNumero').value = data.numero_de_serie;
+        document.getElementById('editOutilMarque').value = data.marque;
+        document.getElementById('editOutilAllocation').checked = data.allocation; // For checkbox
+        document.getElementById('editOutilPrixLocationHeure').value = data.prix_location_heure;
+        document.getElementById('editOutilPrixLocationJour').value = data.prix_location_jour;
+        document.getElementById('editOutilPrixLocationMois').value = data.prix_location_mois;
+        document.getElementById('editOutilDateLocation').value = data.date_location;
+        document.getElementById('editOutilPrixAchat').value = data.prix_achat;
+        document.getElementById('editOutilDateAchat').value = data.date_achat;
+        document.getElementById('editOutilDescription').value = data.description;
+
+        var editModal = new bootstrap.Modal(document.getElementById('editOutilModal'));
+        editModal.show();
+    });
+}
+
+// Submit the updated Outil data via AJAX
+function saveEditOutil() {
+const outilId = document.getElementById('editOutilId').value;
+const formData = new FormData(document.getElementById('editOutilForm'));  // Prepare the form data
+
+fetch(`/edit-outil/${outilId}/`, {
+    method: 'POST',  // Use POST for form submissions
+    headers: {
+        'X-CSRFToken': getCookie('csrftoken')  // Include the CSRF token for security
+    },
+    body: formData
+})
+.then(response => response.json())
+.then(result => {
+    if (result.success) {
+        location.reload();  // Reload the page after successful save
+    } else {
+        alert(result.error || 'Une erreur est survenue.');
+    }
+});
+}
+
+
+function getCookie(name) {
+let cookieValue = null;
+if (document.cookie && document.cookie !== '') {
+    const cookies = document.cookie.split(';');
+    for (let i = 0; i < cookies.length; i++) {
+        const cookie = cookies[i].trim();
+        if (cookie.substring(0, name.length + 1) === (name + '=')) {
+            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+            break;
+        }
+    }
+}
+return cookieValue;
+}
+
+function deleteOutil(outilId) {
+    if (confirm('Êtes-vous sûr de vouloir supprimer cet outil ?')) {  // Ask for confirmation
+        fetch(`/delete-outil/${outilId}/`, {
+            method: 'DELETE',
+            headers: {
+                'X-CSRFToken': getCookie('csrftoken'),  // Include the CSRF token
+            }
+        })
+        .then(response => response.json())
+        .then(result => {
+            if (result.success) {
+                alert(result.success);
+                location.reload();  // Reload the page after successful deletion
+            } else {
+                alert(result.error || 'Une erreur est survenue.');
+            }
+        });
+    }
+}
+
+</script>
+		<!-- INTERNAL DATA-TABLES JS-->
+		<script src=" {% static 'assets/plugins/datatable/js/jquery.dataTables.min.js' %} "></script>
+		<script src=" {% static 'assets/plugins/datatable/js/dataTables.bootstrap5.js' %} "></script>
+		<script src=" {% static 'assets/plugins/datatable/dataTables.responsive.min.js' %} "></script>
+
+		<!-- INTERNAL SELECT2 JS -->
+		<script src=" {% static 'assets/plugins/select2/select2.full.min.js' %} "></script>
+
+		<!-- PROJECT-LIST JS-->
+		<script src=" {% static 'assets/js/carburant-list.js' %} "></script>
+
+        <!-- THEMECOLORS JS -->
+        <script src="{% static 'assets/js/themeColors.js'%}"></script>
+
+    {% endblock %}
+
+
+

@@ -127,8 +127,12 @@
                                                                                         </div> {% endcomment %}
                                                                                     {% comment %} </div> {% endcomment %}
                                                                                     <div class="ms-1">
-                                                                                        <h6 class="mb-1"> <a href="#" class="float-start">{{ carburant.type }}</a> </h6>
-                                                                                        <h6 class="mb-1"> <a href="#" class="float-start">{{ carburant.nom }}</a> </h6>
+                                                                                        <h6 class="mb-1">
+                                                                                            <a href="javascript:void(0)" class="float-start" onclick="fetchCarburantDetails({{ carburant.id }})">
+                                                                                                {{ carburant.type }}<i class="fe fe-eye ms-2"></i>
+                                                                                            </a>
+                                                                                        </h6>                                                                                        
+                                                                                        <h6 class="mb-1"> <a  class="float-start">{{ carburant.nom }}</a> </h6>
                                                                                     </div>
                                                                                 </div>
                                                                             </div>
@@ -356,6 +360,25 @@
         
         <!--/Modal Modifier Carburant-->
 
+        <!-- Carburant Details Modal -->
+<div class="modal fade" id="carburantModal" tabindex="-1" aria-labelledby="carburantModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="carburantModalLabel">Détails du Carburant</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="carburant-modal-body">
+                <!-- Details will be loaded here dynamically -->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /Carburant Details Modal -->
+
         {% endblock %}
     {% block scripts %} 
     
@@ -410,6 +433,29 @@
                 }
             }).catch(error => console.error('Erreur:', error));
         });
+
+        function fetchCarburantDetails(carburantId) {
+            fetch(`/get-carburant-details/${carburantId}/`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.error) {
+                        alert(data.error);
+                    } else {
+                        // Update the modal content with carburant details
+                        document.getElementById('carburant-modal-body').innerHTML = `
+                            <p><strong>Type:</strong> ${data.type}</p>
+                            <p><strong>Quantité:</strong> ${data.quantite}</p>
+                            <p><strong>Coût:</strong> ${data.cout}</p>
+                            <p><strong>Date d'approvisionnement:</strong> ${data.date_approvisionnement}</p>
+                        `;
+                        
+                        // Show the modal using Bootstrap's modal function
+                        var myModal = new bootstrap.Modal(document.getElementById('carburantModal'));
+                        myModal.show();
+                    }
+                });
+        }        
+        
     </script>
     
 
