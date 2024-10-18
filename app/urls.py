@@ -223,20 +223,31 @@ urlpatterns = [
     #path('popup/', views.popup, name='popup'),
     path('logistiques-list', views.logistiques_list, name='logistiques-list'),
     path('machines-engins', views.machines_engins, name='machines-engins'),
+    ### Outils Agricoles ###
     path('outils-agricoles', views.outils_agricoles, name='outils-agricoles'),
     path('outils-agricoles-list', views.outils_agricoles_list, name='outils-agricoles-list'),
     path('get-outil/<int:outil_id>/', views.get_outil, name='get_outil'),
     path('edit-outil/<int:outil_id>/', views.edit_outil, name='edit_outil'),
     path('delete-outil/<int:outil_id>/', views.delete_outil, name='delete_outil'),
+    path('get-outil-details/<int:outil_id>/', views.get_outil_details, name='get_outil_details'),
+    
     path('infrastructure', views.infrastructure, name='infrastructure'),
     path('fertilisants-traitements', views.fertilisants_traitements, name='fertilisants-traitements'),
+    ### Graines & Pousses ###
     path('graines-pousses', views.graines_pousses, name='graines-pousses'),
+    path('graines-pousses-list', views.graines_pousses_list, name='graines-pousses-list'),
+    path('get-graine/<int:graine_id>/', views.get_graine, name='get_graine'),
+    path('edit-graine/<int:graine_id>/', views.edit_graine, name='edit_graine'),
+    path('delete-graine/<int:graine_id>/', views.delete_graine, name='delete_graine'),
+    path('get-graine-details/<int:graine_id>/', views.get_graine_details, name='get_graine_details'),
+    ### Carburant ###
     path('carburant', views.carburant, name='carburant'),
     path('carburant-list', views.carburant_list, name='carburant-list'),
     path('delete-carburant/<int:carburant_id>/', views.delete_carburant, name='delete_carburant'),
     path('get-carburant/<int:carburant_id>/', views.get_carburant, name='get_carburant'),
     path('edit-carburant/<int:carburant_id>/', views.edit_carburant, name='edit_carburant'),
     path('get-carburant-details/<int:carburant_id>/', views.get_carburant_details, name='get_carburant_details'),
+    
     path('pieces-rechange', views.pieces_rechange, name='pieces-rechange'),
     path('rh', views.rh, name='rh'),
     path('reseaux-irrigation', views.reseaux_irrigation, name='reseaux-irrigation'),

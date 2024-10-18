@@ -225,6 +225,7 @@ class Outils_Tables(models.Model):
     date_achat = models.CharField(max_length=100, null=True, blank=True)
     image = models.ImageField(upload_to=filepath , null=True, blank=True)
     description = models.TextField(null=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
     
 class Carburants_Tables(models.Model):
     nom = models.CharField(max_length=100)
@@ -270,6 +271,7 @@ class Graine_Tables(models.Model):
     image = models.ImageField(upload_to=filepath , null=True, blank=True)
     geozone = models.ForeignKey(Zone,on_delete=models.CASCADE)
     description = models.TextField(null=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
 
 class Traitement_Tables(models.Model):
     nom = models.CharField(max_length=100)

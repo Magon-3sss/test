@@ -129,7 +129,7 @@
                                                                                     <div class="ms-1">
                                                                                         <h6 class="mb-1">
                                                                                             <a href="javascript:void(0)" class="float-start" onclick="fetchCarburantDetails({{ carburant.id }})">
-                                                                                                {{ carburant.type }}<i class="fe fe-eye ms-2"></i>
+                                                                                                <i class="fa fa-plus-circle ms-2"></i> {{ carburant.type }}
                                                                                             </a>
                                                                                         </h6>                                                                                        
                                                                                         <h6 class="mb-1"> <a  class="float-start">{{ carburant.nom }}</a> </h6>
@@ -152,29 +152,55 @@
                                                                                             <i class="fe fe-trash me-2"></i>Supprimer
                                                                                         </a>
                                                                                         <script>
-                                                                                            function deleteCarburant(carburantId) {
-                                                                                                if (confirm("Êtes-vous sûr de vouloir supprimer ce carburant ?")) {
-                                                                                                    fetch(`/delete-carburant/${carburantId}/`, {
-                                                                                                        method: 'DELETE',
-                                                                                                        headers: {
-                                                                                                            'X-CSRFToken': '{{ csrf_token }}',  // CSRF token for Django
-                                                                                                            'Content-Type': 'application/json'
-                                                                                                        },
-                                                                                                    }).then(response => {
-                                                                                                        if (response.ok) {
-                                                                                                            alert("Carburant supprimé avec succès");
-                                                                                                            // Optionally, remove the deleted item from the DOM without a reload
-                                                                                                            location.reload();  // Reload the page to reflect the changes
-                                                                                                        } else {
-                                                                                                            alert("Erreur lors de la suppression du carburant");
-                                                                                                        }
-                                                                                                    }).catch(error => {
-                                                                                                        console.error('Error:', error);
-                                                                                                    });
-                                                                                                }
-                                                                                            }
-                                                                                        </script>
-                                                                                                                                                                                
+                                                                                            function deleteCarburant(carburantId) { 
+                                                                                                Swal.fire({
+                                                                                                    title: 'Êtes-vous sûr ?',
+                                                                                                    text: "Voulez-vous vraiment supprimer ce carburant ?",
+                                                                                                    icon: 'warning',
+                                                                                                    showCancelButton: true,
+                                                                                                    confirmButtonText: 'Oui, supprimer !',
+                                                                                                    cancelButtonText: 'Annuler',
+                                                                                                    customClass: {
+                                                                                                        confirmButton: 'btn btn-primary',  // Green button for confirm
+                                                                                                        cancelButton: 'btn btn-danger'     // Red button for cancel
+                                                                                                    },
+                                                                                                    //buttonsStyling: false // Disable default styling to apply custom button classes
+                                                                                                }).then((result) => {
+                                                                                                    if (result.isConfirmed) {
+                                                                                                        fetch(`/delete-carburant/${carburantId}/`, {
+                                                                                                            method: 'DELETE',
+                                                                                                            headers: {
+                                                                                                                'X-CSRFToken': '{{ csrf_token }}',  // CSRF token for Django
+                                                                                                                'Content-Type': 'application/json'
+                                                                                                            },
+                                                                                                        }).then(response => {
+                                                                                                            if (response.ok) {
+                                                                                                                Swal.fire(
+                                                                                                                    'Supprimé!',
+                                                                                                                    'Le carburant a été supprimé avec succès.',
+                                                                                                                    'success'
+                                                                                                                ).then(() => {
+                                                                                                                    location.reload();  // Reload the page to reflect the changes
+                                                                                                                });
+                                                                                                            } else {
+                                                                                                                Swal.fire(
+                                                                                                                    'Erreur!',
+                                                                                                                    'Une erreur est survenue lors de la suppression du carburant.',
+                                                                                                                    'error'
+                                                                                                                );
+                                                                                                            }
+                                                                                                        }).catch(error => {
+                                                                                                            console.error('Error:', error);
+                                                                                                            Swal.fire(
+                                                                                                                'Erreur!',
+                                                                                                                'Une erreur est survenue lors de la suppression du carburant.',
+                                                                                                                'error'
+                                                                                                            );
+                                                                                                        });
+                                                                                                    }
+                                                                                                });
+                                                                                            }                                                                                                                                                                                        
+                                                                                        </script>                                                                        
                                                                                     </div>
                                                                                 </div>
                                                                             </div>
@@ -266,8 +292,8 @@
                                 </div>
                             </div>
                             <div class="modal-footer">
-                                <button type="submit" class="btn btn-primary" >Save</button>
-                                <button class="btn btn-light" data-bs-dismiss="modal" aria-label="Close" >Cancel</button>
+                                <button type="submit" class="btn btn-primary" >Enregistrer</button>
+                                <button class="btn btn-light" data-bs-dismiss="modal" aria-label="Close" >Annuler</button>
                             </div>
                         </form>
 					</div>
@@ -361,103 +387,105 @@
         <!--/Modal Modifier Carburant-->
 
         <!-- Carburant Details Modal -->
-<div class="modal fade" id="carburantModal" tabindex="-1" aria-labelledby="carburantModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="carburantModalLabel">Détails du Carburant</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body" id="carburant-modal-body">
-                <!-- Details will be loaded here dynamically -->
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+        <div class="modal fade" id="carburantModal" tabindex="-1" aria-labelledby="carburantModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="carburantModalLabel">Détails du Carburant</h5>
+                        <button aria-label="Close" class="btn-close" data-bs-dismiss="modal" ><span aria-hidden="true">&times;</span></button>
+                    </div>
+                    <div class="modal-body" id="carburant-modal-body">
+                        <!-- Details will be loaded here dynamically -->
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
-</div>
-<!-- /Carburant Details Modal -->
+        <!-- /Carburant Details Modal -->
 
-        {% endblock %}
-    {% block scripts %} 
-    
-    <script>
-        function openEditModal(carburantId) {
-            // Récupérer les données du carburant à modifier via une requête AJAX
-            fetch(`/get-carburant/${carburantId}/`)
-                .then(response => response.json())
-                .then(data => {
-                    // Pré-remplir les champs du formulaire avec les données du carburant
-                    document.getElementById('carburant-id').value = data.id;
-                    document.getElementById('edit-nom').value = data.nom;
-                    document.getElementById('edit-type').value = data.type;
-                    document.getElementById('edit-quantite').value = data.quantite;
-                    document.getElementById('edit-cout').value = data.cout;
-                    document.getElementById('edit-date').value = data.date_approvisionnement;
-    
-                    // Ouvrir le modal
-                    var editModal = new bootstrap.Modal(document.getElementById('editCarburantModal'));
-                    editModal.show();
-                })
-                .catch(error => console.error('Erreur:', error));
-        }
-    
-        // Envoyer les modifications via AJAX
-        document.getElementById('edit-carburant-form').addEventListener('submit', function(e) {
-            e.preventDefault();  // Empêcher le rechargement de la page
-    
-            const carburantId = document.getElementById('carburant-id').value;
-    
-            const formData = {
-                nom: document.getElementById('edit-nom').value,
-                type: document.getElementById('edit-type').value,
-                quantite: document.getElementById('edit-quantite').value,
-                cout: document.getElementById('edit-cout').value,
-                date_approvisionnement: document.getElementById('edit-date').value,
-            };
-    
-            fetch(`/edit-carburant/${carburantId}/`, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRFToken': '{{ csrf_token }}'
-                },
-                body: JSON.stringify(formData),
-            }).then(response => {
-                if (response.ok) {
-                    alert("Carburant modifié avec succès");
-                    location.reload();  // Recharger la page pour voir les changements
-                } else {
-                    alert("Erreur lors de la modification");
-                }
-            }).catch(error => console.error('Erreur:', error));
-        });
-
-        function fetchCarburantDetails(carburantId) {
-            fetch(`/get-carburant-details/${carburantId}/`)
-                .then(response => response.json())
-                .then(data => {
-                    if (data.error) {
-                        alert(data.error);
-                    } else {
-                        // Update the modal content with carburant details
-                        document.getElementById('carburant-modal-body').innerHTML = `
-                            <p><strong>Type:</strong> ${data.type}</p>
-                            <p><strong>Quantité:</strong> ${data.quantite}</p>
-                            <p><strong>Coût:</strong> ${data.cout}</p>
-                            <p><strong>Date d'approvisionnement:</strong> ${data.date_approvisionnement}</p>
-                        `;
-                        
-                        // Show the modal using Bootstrap's modal function
-                        var myModal = new bootstrap.Modal(document.getElementById('carburantModal'));
-                        myModal.show();
-                    }
-                });
-        }        
+            {% endblock %}
+        {% block scripts %} 
         
-    </script>
+        <script>
+            function openEditModal(carburantId) {
+                // Récupérer les données du carburant à modifier via une requête AJAX
+                fetch(`/get-carburant/${carburantId}/`)
+                    .then(response => response.json())
+                    .then(data => {
+                        // Pré-remplir les champs du formulaire avec les données du carburant
+                        document.getElementById('carburant-id').value = data.id;
+                        document.getElementById('edit-nom').value = data.nom;
+                        document.getElementById('edit-type').value = data.type;
+                        document.getElementById('edit-quantite').value = data.quantite;
+                        document.getElementById('edit-cout').value = data.cout;
+                        document.getElementById('edit-date').value = data.date_approvisionnement;
+        
+                        // Ouvrir le modal
+                        var editModal = new bootstrap.Modal(document.getElementById('editCarburantModal'));
+                        editModal.show();
+                    })
+                    .catch(error => console.error('Erreur:', error));
+            }
+        
+            // Envoyer les modifications via AJAX
+            document.getElementById('edit-carburant-form').addEventListener('submit', function(e) {
+                e.preventDefault();  // Empêcher le rechargement de la page
+        
+                const carburantId = document.getElementById('carburant-id').value;
+        
+                const formData = {
+                    nom: document.getElementById('edit-nom').value,
+                    type: document.getElementById('edit-type').value,
+                    quantite: document.getElementById('edit-quantite').value,
+                    cout: document.getElementById('edit-cout').value,
+                    date_approvisionnement: document.getElementById('edit-date').value,
+                };
+        
+                fetch(`/edit-carburant/${carburantId}/`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': '{{ csrf_token }}'
+                    },
+                    body: JSON.stringify(formData),
+                }).then(response => {
+                    if (response.ok) {
+                        alert("Carburant modifié avec succès");
+                        location.reload();  // Recharger la page pour voir les changements
+                    } else {
+                        alert("Erreur lors de la modification");
+                    }
+                }).catch(error => console.error('Erreur:', error));
+            });
+
+            function fetchCarburantDetails(carburantId) {
+                fetch(`/get-carburant-details/${carburantId}/`)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.error) {
+                            alert(data.error);
+                        } else {
+                            // Update the modal content with carburant details
+                            document.getElementById('carburant-modal-body').innerHTML = `
+                                <p><strong>Type:</strong> ${data.type}</p>
+                                <p><strong>Quantité:</strong> ${data.quantite}</p>
+                                <p><strong>Coût:</strong> ${data.cout}</p>
+                                <p><strong>Date d'approvisionnement:</strong> ${data.date_approvisionnement}</p>
+                            `;
+                            
+                            // Show the modal using Bootstrap's modal function
+                            var myModal = new bootstrap.Modal(document.getElementById('carburantModal'));
+                            myModal.show();
+                        }
+                    });
+            }        
+            
+        </script>
     
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
         <!-- PROJECT JS-->
         <script src=" {% static 'assets/js/carburant.js' %} "></script>

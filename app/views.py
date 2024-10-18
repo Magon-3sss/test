@@ -736,7 +736,27 @@ def save_traitement(request):
             return JsonResponse({"Erreur": "Some error occured"}, status=status.HTTP_201_CREATED)
 
 """ Graines et Pousses """
+def graines_pousses (request):
+    list = []
+    graines = Graine_Tables.objects.filter(user=request.user)
+    types_graines = TypeGrainesPousses.objects.all()
+    categories_graines = CategorieGrainesPousses.objects.all()
+    projects = MapForm.objects.all()
+    list.append({"types": types_graines,"categories": categories_graines, "graines":graines, "projects": projects})
+    return render(request, 'graines-pousses.html', {'data': list})
+
+def graines_pousses_list (request):
+    list = []
+    graines = Graine_Tables.objects.filter(user=request.user)
+    types_graines = TypeGrainesPousses.objects.all()
+    categories_graines = CategorieGrainesPousses.objects.all()
+    projects = MapForm.objects.all()
+    list.append({"types": types_graines,"categories": categories_graines, "graines":graines, "projects": projects})
+    return render(request, 'graines-pousses-list.html', {'data': list})
+
 @api_view(['POST'])
+@authentication_classes([SessionAuthentication])  
+@permission_classes([IsAuthenticated])
 def save_graine(request):
     if request.method == "POST":
         nom = request.POST.get('nom')
@@ -767,7 +787,8 @@ def save_graine(request):
                 "cout": cout,
                 "image": image,
                 "geozone": geozone,
-                "description": description
+                "description": description,
+                "user": request.user.id
             }
         
         graine_serializer = GraineSerializer(data=form)
@@ -779,6 +800,75 @@ def save_graine(request):
         else:
             print('no')
             return JsonResponse({"Erreur": "Some error occured"}, status=status.HTTP_201_CREATED)
+        
+def get_graine(request, graine_id):
+    try:
+        graine = Graine_Tables.objects.get(id=graine_id)
+        data = {
+            'id': graine.id,
+            'nom': graine.nom,
+            'type': graine.type,
+            'categorie': graine.categorie,
+            'origine': graine.origine,
+            'quantite': graine.quantite,
+            'cout': graine.cout,
+            'geozone': graine.geozone_id,
+            'description': graine.description,
+        }
+        return JsonResponse(data, status=200)
+    except Graine_Tables.DoesNotExist:
+        return JsonResponse({"error": "Graine not found"}, status=404)
+    
+def get_graine_details(request, graine_id):
+    try:
+        graine = Graine_Tables.objects.get(id=graine_id)
+        data = {
+            'id': graine.id,
+            'nom': graine.nom,
+            'type': graine.type,
+            'categorie': graine.categorie,
+            'origine': graine.origine,
+            'quantite': graine.quantite,
+            'cout': graine.cout,
+            'description': graine.description,
+            'image': graine.image.url if graine.image else None,
+        }
+        return JsonResponse(data, status=200)
+    except Graine_Tables.DoesNotExist:
+        return JsonResponse({"error": "Graine not found"}, status=404)
+
+
+# Edit Graine details
+def edit_graine(request, graine_id):
+    try:
+        graine = Graine_Tables.objects.get(id=graine_id)
+
+        graine.nom = request.POST.get('nom')
+        graine.type = request.POST.get('type_graines_pousses')
+        graine.categorie = request.POST.get('categorie_graines_pousses')
+        graine.origine = request.POST.get('origine')
+        graine.quantite = request.POST.get('quantite')
+        graine.cout = request.POST.get('cout')
+        graine.description = request.POST.get('description')
+        graine.geozone_id = request.POST.get('geozone')
+
+        if 'image' in request.FILES:
+            graine.image = request.FILES['image']
+
+        graine.save()
+
+        return JsonResponse({"success": "Graine updated successfully"}, status=200)
+    except Graine_Tables.DoesNotExist:
+        return JsonResponse({"error": "Graine not found"}, status=404)
+
+# Delete Graine
+def delete_graine(request, graine_id):
+    try:
+        graine = Graine_Tables.objects.get(id=graine_id)
+        graine.delete()
+        return JsonResponse({"success": "Graine deleted successfully"}, status=200)
+    except Graine_Tables.DoesNotExist:
+        return JsonResponse({"error": "Graine not found"}, status=404)
 
 """ Ressources Humaines"""
 @api_view(['POST'])
@@ -987,19 +1077,21 @@ def get_carburant_details(request, carburant_id):
 """ Outils Agricoles"""
 def outils_agricoles (request):
     list = []
-    outils = Outils_Tables.objects.all()
+    outils = Outils_Tables.objects.filter(user=request.user)
     types_outils = TypeOutilsAgricoles.objects.all()
     list.append({"types": types_outils,"outils": outils})
     return render(request, 'outils-agricoles.html', {'data': list})
 
 def outils_agricoles_list (request):
     list = []
-    outils = Outils_Tables.objects.all()
+    outils = Outils_Tables.objects.filter(user=request.user)
     types_outils = TypeOutilsAgricoles.objects.all()
     list.append({"types": types_outils,"outils": outils})
     return render(request, 'outils-agricoles-list.html', {'data': list})
 
 @api_view(['POST'])
+@authentication_classes([SessionAuthentication])  
+@permission_classes([IsAuthenticated])
 def save_outil(request):
     if request.method == "POST":
         allocation = ""
@@ -1044,7 +1136,8 @@ def save_outil(request):
                 "date_achat": date_achat,
                 "image": image,
                 "description": description,
-                "allocation": allocation
+                "allocation": allocation,
+                "user": request.user.id
             }
         
         outils_serializer = OutilsSerializer(data=form)
@@ -1125,6 +1218,26 @@ def delete_outil(request, outil_id):
     except Exception as e:
         return JsonResponse({"error": str(e)}, status=500)
 
+def get_outil_details(request, outil_id):
+    try:
+        outil = Outils_Tables.objects.get(id=outil_id)
+        data = {
+            'type': outil.type,
+            'numero_de_serie': outil.numero_de_serie,
+            'marque': outil.marque,
+            'allocation': outil.allocation,
+            'prix_location_heure': outil.prix_location_heure,
+            'prix_location_jour': outil.prix_location_jour,
+            'prix_location_mois': outil.prix_location_mois,
+            'date_location': outil.date_location,
+            'prix_achat': outil.prix_achat,
+            'date_achat': outil.date_achat,
+            'image': outil.image.url if outil.image else '',
+            'description': outil.description,
+        }
+        return JsonResponse(data)
+    except Outils_Tables.DoesNotExist:
+        return JsonResponse({'error': 'Outil non trouvé'}, status=404)
         
 """ Machines & Engins """
 def machines_engins (request):
@@ -3342,14 +3455,7 @@ def infrastructure (request):
 def fertilisants_traitements (request):
     return render(request, 'fertilisants-traitements.html')
 
-def graines_pousses (request):
-    list = []
-    graines = Graine_Tables.objects.all()
-    types_graines = TypeGrainesPousses.objects.all()
-    categories_graines = CategorieGrainesPousses.objects.all()
-    projects = MapForm.objects.all()
-    list.append({"types": types_graines,"categories": categories_graines, "graines":graines, "projects": projects})
-    return render(request, 'graines-pousses.html', {'data': list})
+
 
 
 

@@ -123,11 +123,15 @@
                                                                                 <div class="d-sm-flex align-items-center">
                                                                                     {% comment %} <div class="avatar mb-2 p-2 lh-1 mb-sm-0 avatar-md rounded-circle bg-primary me-2"> {% endcomment %}
                                                                                         <div class="image_div">
-                                                                                            <img src="{{ outil.image.url }}" class="outil_image" style="width: 100px;height: 100px;"/>
+                                                                                            <img src="{{ outil.image.url }}" class="outil_image" style="width: 75px;height: 75px;"/>
                                                                                         </div>
                                                                                     {% comment %} </div> {% endcomment %}
                                                                                     <div class="ms-1">
-                                                                                        <h6 class="mb-1"> <a href="#" class="float-start">{{ outil.type }}</a> </h6>
+                                                                                        <h6 class="mb-1">
+                                                                                            <a href="javascript:void(0)" class="float-start" onclick="fetchOutilDetails({{ outil.id }})">
+                                                                                                <i class="fa fa-plus-circle ms-2"></i> {{ outil.type }}
+                                                                                            </a>
+                                                                                        </h6>                                                                                                                                                                                
                                                                                     </div>
                                                                                 </div>
                                                                             </div>
@@ -324,104 +328,160 @@
 		<!--/Modal-->
 
         <!-- Edit Outil Modal -->
-<div class="modal fade" id="editOutilModal" tabindex="-1" aria-labelledby="editOutilLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <div class="avatar mb-2 p-2 lh-1 mb-sm-0 avatar-md rounded-circle me-2">
-                    <img src="{% static 'assets/images/icons/outils-de-jardin.png' %}" class="side-menu__icon img" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
+        <div class="modal fade" id="editOutilModal" tabindex="-1" aria-labelledby="editOutilLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <div class="avatar mb-2 p-2 lh-1 mb-sm-0 avatar-md rounded-circle me-2">
+                            <img src="{% static 'assets/images/icons/outils-de-jardin.png' %}" class="side-menu__icon img" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
+                        </div>
+                        <h5 class="modal-title" id="editOutilLabel">Modifier Outil Agricole</h5>
+                        <button aria-label="Close" class="btn-close" data-bs-dismiss="modal"><span aria-hidden="true">&times;</span></button>
+                    </div>
+                    <div class="modal-body pd-0">
+                        <form id="editOutilForm" method="POST" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <input type="hidden" id="editOutilId">
+                            
+                            <div class="form-row">
+                                <div class="col-md-6 mb-3">
+                                    <div class="avatar mb-2 p-2 lh-1 mb-sm-0 avatar-md rounded-circle  me-2">
+                                        <img src="{% static 'assets/images/icons/tracteur.png' %}" class="side-menu__icon img" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
+                                    </div>
+                                    <label for="editOutilType">Type d'Outil</label>
+                                    <select class="form-control" id="editOutilType" name="type_outils_agricoles" required>
+                                        <option value="" selected disabled>Choisir Type</option>
+                                        {% for data in data %}
+                                            {% for type in data.types %}
+                                            <option value="{{ type.type_outils_agricoles }}">{{ type.type_outils_agricoles }}</option>
+                                            {% endfor %}
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <div class="avatar mb-2 p-2 lh-1 mb-sm-0 avatar-md rounded-circle  me-2">
+                                        <img src="{% static 'assets/images/icons/numero-de-serie.png' %}" class="side-menu__icon img" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
+                                    </div>
+                                    <label for="editOutilNumero">Numéro de Série</label>
+                                    <input class="form-control" id="editOutilNumero" type="text" name="numero_de_serie" required>
+                                </div>
+                            </div>
+            
+                            <div class="form-row">
+                                <div class="col-md-6 mb-3">
+                                    <div class="avatar mb-2 p-2 lh-1 mb-sm-0 avatar-md rounded-circle  me-2">
+                                        <img src="{% static 'assets/images/icons/construction-tools.png' %}" class="side-menu__icon img" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
+                                    </div>
+                                    <label for="editOutilMarque">Marque</label>
+                                    <input class="form-control" id="editOutilMarque" type="text" name="marque" required>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <div class="avatar mb-2 p-2 lh-1 mb-sm-0 avatar-md rounded-circle  me-2">
+                                        <img src="{% static 'assets/images/icons/gains.png' %}" class="side-menu__icon img" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
+                                    </div>
+                                    <label for="editOutilAllocation">Allocation</label>
+                                    <input type="checkbox" id="editOutilAllocation" name="allocation">
+                                </div>
+                            </div>
+            
+                            <div class="form-row">
+                                <div class="col-md-6 mb-3">
+                                    <div class="avatar mb-2 p-2 lh-1 mb-sm-0 avatar-md rounded-circle  me-2">
+                                        <img src="{% static 'assets/images/icons/euro.png' %}" class="side-menu__icon img" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
+                                    </div>
+                                    <label for="editOutilPrixLocationHeure">Prix par Heure</label>
+                                    <input class="form-control" id="editOutilPrixLocationHeure" type="number" name="prix_location_heure" placeholder="10 Dt">
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <div class="avatar mb-2 p-2 lh-1 mb-sm-0 avatar-md rounded-circle  me-2">
+                                        <img src="{% static 'assets/images/icons/euro.png' %}" class="side-menu__icon img" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
+                                    </div>
+                                    <label for="editOutilPrixLocationJour">Prix par Jour</label>
+                                    <input class="form-control" id="editOutilPrixLocationJour" type="number" name="prix_location_jour" placeholder="100 Dt">
+                                </div>
+                            </div>
+            
+                            <div class="form-row">
+                                <div class="col-md-6 mb-3">
+                                    <div class="avatar mb-2 p-2 lh-1 mb-sm-0 avatar-md rounded-circle  me-2">
+                                        <img src="{% static 'assets/images/icons/euro.png' %}" class="side-menu__icon img" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
+                                    </div>
+                                    <label for="editOutilPrixLocationMois">Prix par Mois</label>
+                                    <input class="form-control" id="editOutilPrixLocationMois" type="number" name="prix_location_mois" placeholder="500 Dt">
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <div class="avatar mb-2 p-2 lh-1 mb-sm-0 avatar-md rounded-circle  me-2">
+                                        <img src="{% static 'assets/images/icons/calendrier.png' %}" class="side-menu__icon img" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
+                                    </div>
+                                    <label for="editOutilDateLocation">Date de Location</label>
+                                    <input class="form-control" id="editOutilDateLocation" type="date" name="date_location">
+                                </div>
+                            </div>
+            
+                            <div class="form-row">
+                                <div class="col-md-6 mb-3">
+                                    <div class="avatar mb-2 p-2 lh-1 mb-sm-0 avatar-md rounded-circle  me-2">
+                                        <img src="{% static 'assets/images/icons/euro.png' %}" class="side-menu__icon img" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
+                                    </div>
+                                    <label for="editOutilPrixAchat">Prix d'Achat</label>
+                                    <input class="form-control" id="editOutilPrixAchat" type="number" name="prix_achat" placeholder="5000 Dt" required>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <div class="avatar mb-2 p-2 lh-1 mb-sm-0 avatar-md rounded-circle  me-2">
+                                        <img src="{% static 'assets/images/icons/calendrier.png' %}" class="side-menu__icon img" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
+                                    </div>
+                                    <label for="editOutilDateAchat">Date d'Achat</label>
+                                    <input class="form-control" id="editOutilDateAchat" type="date" name="date_achat" required>
+                                </div>
+                            </div>
+            
+                            <div class="form-group">
+                                <div class="avatar mb-2 p-2 lh-1 mb-sm-0 avatar-md rounded-circle  me-2">
+                                    <img src="{% static 'assets/images/icons/image-gallery.png' %}" class="side-menu__icon img" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
+                                </div>
+                                <label for="editOutilImage">Image :</label>
+                                <input class="form-control" id="editOutilImage" type="file" name="image" accept="image/*">
+                            </div>
+            
+                            <div class="form-group">
+                                <div class="avatar mb-2 p-2 lh-1 mb-sm-0 avatar-md rounded-circle  me-2">
+                                    <img src="{% static 'assets/images/icons/project.png' %}" class="side-menu__icon img" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
+                                </div>
+                                <label for="editOutilDescription">Description :</label>
+                                <textarea class="form-control" id="editOutilDescription" name="description" rows="3" required></textarea>
+                            </div>
+            
+                            <div class="modal-footer">
+                                <button type="submit" class="btn btn-primary" onclick="saveEditOutil()">Enregistrer</button>
+                                <button type="button" class="btn btn-light" data-bs-dismiss="modal">Annuler</button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
-                <h5 class="modal-title" id="editOutilLabel">Modifier Outil Agricole</h5>
-                <button aria-label="Close" class="btn-close" data-bs-dismiss="modal"><span aria-hidden="true">&times;</span></button>
-            </div>
-            <div class="modal-body pd-0">
-                <form id="editOutilForm" method="POST" enctype="multipart/form-data">
-                    {% csrf_token %}
-                    <input type="hidden" id="editOutilId">
-                    
-                    <div class="form-row">
-                        <div class="col-md-6 mb-3">
-                            <label for="editOutilType">Type d'Outil</label>
-                            <select class="form-control" id="editOutilType" name="type_outils_agricoles" required>
-                                <option value="" selected disabled>Choisir Type</option>
-                                {% for data in data %}
-                                    {% for type in data.types %}
-                                    <option value="{{ type.type_outils_agricoles }}">{{ type.type_outils_agricoles }}</option>
-                                    {% endfor %}
-                                {% endfor %}
-                            </select>
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label for="editOutilNumero">Numéro de Série</label>
-                            <input class="form-control" id="editOutilNumero" type="text" name="numero_de_serie" required>
-                        </div>
-                    </div>
-
-                    <div class="form-row">
-                        <div class="col-md-6 mb-3">
-                            <label for="editOutilMarque">Marque</label>
-                            <input class="form-control" id="editOutilMarque" type="text" name="marque" required>
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label for="editOutilAllocation">Allocation</label>
-                            <input type="checkbox" id="editOutilAllocation" name="allocation">
-                        </div>
-                    </div>
-
-                    <div class="form-row">
-                        <div class="col-md-6 mb-3">
-                            <label for="editOutilPrixLocationHeure">Prix par Heure</label>
-                            <input class="form-control" id="editOutilPrixLocationHeure" type="number" name="prix_location_heure" placeholder="10 Dt">
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label for="editOutilPrixLocationJour">Prix par Jour</label>
-                            <input class="form-control" id="editOutilPrixLocationJour" type="number" name="prix_location_jour" placeholder="100 Dt">
-                        </div>
-                    </div>
-
-                    <div class="form-row">
-                        <div class="col-md-6 mb-3">
-                            <label for="editOutilPrixLocationMois">Prix par Mois</label>
-                            <input class="form-control" id="editOutilPrixLocationMois" type="number" name="prix_location_mois" placeholder="500 Dt">
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label for="editOutilDateLocation">Date de Location</label>
-                            <input class="form-control" id="editOutilDateLocation" type="date" name="date_location">
-                        </div>
-                    </div>
-
-                    <div class="form-row">
-                        <div class="col-md-6 mb-3">
-                            <label for="editOutilPrixAchat">Prix d'Achat</label>
-                            <input class="form-control" id="editOutilPrixAchat" type="number" name="prix_achat" placeholder="5000 Dt" required>
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label for="editOutilDateAchat">Date d'Achat</label>
-                            <input class="form-control" id="editOutilDateAchat" type="date" name="date_achat" required>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="editOutilImage">Image :</label>
-                        <input class="form-control" id="editOutilImage" type="file" name="image" accept="image/*">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="editOutilDescription">Description :</label>
-                        <textarea class="form-control" id="editOutilDescription" name="description" rows="3" required></textarea>
-                    </div>
-
-                    <div class="modal-footer">
-                        <button type="submit" class="btn btn-primary" onclick="saveEditOutil()">Enregistrer</button>
-                        <button type="button" class="btn btn-light" data-bs-dismiss="modal">Annuler</button>
-                    </div>
-                </form>
             </div>
         </div>
-    </div>
-</div>
 
         <!-- /Edit Outil Modal -->
+
+        <!-- Modal Outil Details -->
+        <div class="modal fade" id="outilModal" tabindex="-1" aria-labelledby="outilModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="outilModalLabel">Détails de l'outil</h5>
+                        <button aria-label="Close" class="btn-close" data-bs-dismiss="modal" ><span aria-hidden="true">&times;</span></button>
+                    </div>
+                    <div class="modal-body" id="outil-modal-body">
+                        <!-- Les détails de l'outil seront remplis ici -->
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /Modal Outil Details -->
+
 
 
         {% endblock %}
@@ -429,88 +489,153 @@
 
         <script>
             // Open the modal and populate the form with Outil data
-function openEditModal(outilId) {
-    fetch(`/get-outil/${outilId}/`)
-        .then(response => response.json())
-        .then(data => {
-            document.getElementById('editOutilId').value = data.id;
-            document.getElementById('editOutilType').value = data.type;
-            document.getElementById('editOutilNumero').value = data.numero_de_serie;
-            document.getElementById('editOutilMarque').value = data.marque;
-            document.getElementById('editOutilAllocation').checked = data.allocation; // For checkbox
-            document.getElementById('editOutilPrixLocationHeure').value = data.prix_location_heure;
-            document.getElementById('editOutilPrixLocationJour').value = data.prix_location_jour;
-            document.getElementById('editOutilPrixLocationMois').value = data.prix_location_mois;
-            document.getElementById('editOutilDateLocation').value = data.date_location;
-            document.getElementById('editOutilPrixAchat').value = data.prix_achat;
-            document.getElementById('editOutilDateAchat').value = data.date_achat;
-            document.getElementById('editOutilDescription').value = data.description;
+            function openEditModal(outilId) {
+                fetch(`/get-outil/${outilId}/`)
+                    .then(response => response.json())
+                    .then(data => {
+                        document.getElementById('editOutilId').value = data.id;
+                        document.getElementById('editOutilType').value = data.type;
+                        document.getElementById('editOutilNumero').value = data.numero_de_serie;
+                        document.getElementById('editOutilMarque').value = data.marque;
+                        document.getElementById('editOutilAllocation').checked = data.allocation; // For checkbox
+                        document.getElementById('editOutilPrixLocationHeure').value = data.prix_location_heure;
+                        document.getElementById('editOutilPrixLocationJour').value = data.prix_location_jour;
+                        document.getElementById('editOutilPrixLocationMois').value = data.prix_location_mois;
+                        document.getElementById('editOutilDateLocation').value = data.date_location;
+                        document.getElementById('editOutilPrixAchat').value = data.prix_achat;
+                        document.getElementById('editOutilDateAchat').value = data.date_achat;
+                        document.getElementById('editOutilDescription').value = data.description;
 
-            var editModal = new bootstrap.Modal(document.getElementById('editOutilModal'));
-            editModal.show();
-        });
-}
-
-// Submit the updated Outil data via AJAX
-function saveEditOutil() {
-    const outilId = document.getElementById('editOutilId').value;
-    const formData = new FormData(document.getElementById('editOutilForm'));  // Prepare the form data
-
-    fetch(`/edit-outil/${outilId}/`, {
-        method: 'POST',  // Use POST for form submissions
-        headers: {
-            'X-CSRFToken': getCookie('csrftoken')  // Include the CSRF token for security
-        },
-        body: formData
-    })
-    .then(response => response.json())
-    .then(result => {
-        if (result.success) {
-            location.reload();  // Reload the page after successful save
-        } else {
-            alert(result.error || 'Une erreur est survenue.');
-        }
-    });
-}
-
-
-function getCookie(name) {
-    let cookieValue = null;
-    if (document.cookie && document.cookie !== '') {
-        const cookies = document.cookie.split(';');
-        for (let i = 0; i < cookies.length; i++) {
-            const cookie = cookies[i].trim();
-            if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                break;
+                        var editModal = new bootstrap.Modal(document.getElementById('editOutilModal'));
+                        editModal.show();
+                    });
             }
-        }
-    }
-    return cookieValue;
-}
 
-function deleteOutil(outilId) {
-    if (confirm('Êtes-vous sûr de vouloir supprimer cet outil ?')) {  // Ask for confirmation
-        fetch(`/delete-outil/${outilId}/`, {
-            method: 'DELETE',
-            headers: {
-                'X-CSRFToken': getCookie('csrftoken'),  // Include the CSRF token
+            // Submit the updated Outil data via AJAX
+            function saveEditOutil() {
+                const outilId = document.getElementById('editOutilId').value;
+                const formData = new FormData(document.getElementById('editOutilForm'));  // Prepare the form data
+
+                fetch(`/edit-outil/${outilId}/`, {
+                    method: 'POST',  // Use POST for form submissions
+                    headers: {
+                        'X-CSRFToken': getCookie('csrftoken')  // Include the CSRF token for security
+                    },
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(result => {
+                    if (result.success) {
+                        location.reload();  // Reload the page after successful save
+                    } else {
+                        alert(result.error || 'Une erreur est survenue.');
+                    }
+                });
             }
-        })
-        .then(response => response.json())
-        .then(result => {
-            if (result.success) {
-                alert(result.success);
-                location.reload();  // Reload the page after successful deletion
-            } else {
-                alert(result.error || 'Une erreur est survenue.');
+
+
+            function getCookie(name) {
+                let cookieValue = null;
+                if (document.cookie && document.cookie !== '') {
+                    const cookies = document.cookie.split(';');
+                    for (let i = 0; i < cookies.length; i++) {
+                        const cookie = cookies[i].trim();
+                        if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                            break;
+                        }
+                    }
+                }
+                return cookieValue;
             }
-        });
-    }
-}
 
+            function deleteOutil(outilId) {
+                // Show SweetAlert confirmation dialog
+                Swal.fire({
+                    title: 'Êtes-vous sûr ?',
+                    text: "Voulez-vous vraiment supprimer cet outil ?",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Oui, supprimer !',
+                    cancelButtonText: 'Annuler',
+                    customClass: {
+                        confirmButton: 'btn btn-primary',  // Green button for confirm
+                        cancelButton: 'btn btn-danger'     // Red button for cancel
+                    },
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // If the user confirms, proceed with deletion
+                        fetch(`/delete-outil/${outilId}/`, {
+                            method: 'DELETE',
+                            headers: {
+                                'X-CSRFToken': getCookie('csrftoken'),  // Ensure CSRF token is passed correctly
+                            }
+                        })
+                        .then(response => response.json())
+                        .then(result => {
+                            if (result.success) {
+                                // Show SweetAlert success message
+                                Swal.fire(
+                                    'Supprimé!',
+                                    'L\'outil a été supprimé avec succès.',
+                                    'success'
+                                ).then(() => {
+                                    location.reload();  // Reload the page after successful deletion
+                                });
+                            } else {
+                                // Show SweetAlert error message
+                                Swal.fire(
+                                    'Erreur!',
+                                    result.error || 'Une erreur est survenue lors de la suppression de l\'outil.',
+                                    'error'
+                                );
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                            // Show SweetAlert error message in case of network issues or unexpected error
+                            Swal.fire(
+                                'Erreur!',
+                                'Une erreur est survenue lors de la suppression de l\'outil.',
+                                'error'
+                            );
+                        });
+                    }
+                });
+            }
 
+            function fetchOutilDetails(outilId) {
+                fetch(`/get-outil-details/${outilId}/`)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.error) {
+                            alert(data.error);
+                        } else {
+                            // Mettre à jour le contenu du modal avec les détails de l'outil
+                            document.getElementById('outil-modal-body').innerHTML = `
+                                <p><strong>Type:</strong> ${data.type}</p>
+                                <p><strong>Numéro de série:</strong> ${data.numero_de_serie}</p>
+                                <p><strong>Marque:</strong> ${data.marque}</p>
+                                <p><strong>Allocation:</strong> ${data.allocation}</p>
+                                <p><strong>Prix location par heure:</strong> ${data.prix_location_heure}</p>
+                                <p><strong>Prix location par jour:</strong> ${data.prix_location_jour}</p>
+                                <p><strong>Prix location par mois:</strong> ${data.prix_location_mois}</p>
+                                <p><strong>Date de location:</strong> ${data.date_location}</p>
+                                <p><strong>Prix d'achat:</strong> ${data.prix_achat}</p>
+                                <p><strong>Date d'achat:</strong> ${data.date_achat}</p>
+                                <p><strong>Description:</strong> ${data.description}</p>
+                                <img src="${data.image}" alt="${data.type}" class="img-fluid w-50" />
+                            `;
+                            
+                            // Afficher le modal en utilisant la fonction Bootstrap
+                            var myModal = new bootstrap.Modal(document.getElementById('outilModal'));
+                            myModal.show();
+                        }
+                    });
+            }
         </script>
+
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
         <!-- PROJECT JS-->
         <script src=" {% static 'assets/js/outils-agricoles.js' %} "></script>

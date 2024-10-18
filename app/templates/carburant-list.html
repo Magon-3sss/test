@@ -90,27 +90,54 @@
                                                                         </a> 
 																	</div> {% endcomment %}
                                                                     <script>
-                                                                        function deleteCarburant(carburantId) {
-                                                                            if (confirm("Êtes-vous sûr de vouloir supprimer ce carburant ?")) {
-                                                                                fetch(`/delete-carburant/${carburantId}/`, {
-                                                                                    method: 'DELETE',
-                                                                                    headers: {
-                                                                                        'X-CSRFToken': '{{ csrf_token }}',  // CSRF token for Django
-                                                                                        'Content-Type': 'application/json'
-                                                                                    },
-                                                                                }).then(response => {
-                                                                                    if (response.ok) {
-                                                                                        alert("Carburant supprimé avec succès");
-                                                                                        // Optionally, remove the deleted item from the DOM without a reload
-                                                                                        location.reload();  // Reload the page to reflect the changes
-                                                                                    } else {
-                                                                                        alert("Erreur lors de la suppression du carburant");
-                                                                                    }
-                                                                                }).catch(error => {
-                                                                                    console.error('Error:', error);
-                                                                                });
-                                                                            }
-                                                                        }
+                                                                        function deleteCarburant(carburantId) { 
+                                                                            Swal.fire({
+                                                                                title: 'Êtes-vous sûr ?',
+                                                                                text: "Voulez-vous vraiment supprimer ce carburant ?",
+                                                                                icon: 'warning',
+                                                                                icon: 'warning',
+                                                                                showCancelButton: true,
+                                                                                confirmButtonText: 'Oui, supprimer !',
+                                                                                cancelButtonText: 'Annuler',
+                                                                                customClass: {
+                                                                                    confirmButton: 'btn btn-primary',  // Green button for confirm
+                                                                                    cancelButton: 'btn btn-danger'     // Red button for cancel
+                                                                                },
+                                                                            }).then((result) => {
+                                                                                if (result.isConfirmed) {
+                                                                                    fetch(`/delete-carburant/${carburantId}/`, {
+                                                                                        method: 'DELETE',
+                                                                                        headers: {
+                                                                                            'X-CSRFToken': '{{ csrf_token }}',  // CSRF token for Django
+                                                                                            'Content-Type': 'application/json'
+                                                                                        },
+                                                                                    }).then(response => {
+                                                                                        if (response.ok) {
+                                                                                            Swal.fire(
+                                                                                                'Supprimé!',
+                                                                                                'Le carburant a été supprimé avec succès.',
+                                                                                                'success'
+                                                                                            ).then(() => {
+                                                                                                location.reload();  // Reload the page to reflect the changes
+                                                                                            });
+                                                                                        } else {
+                                                                                            Swal.fire(
+                                                                                                'Erreur!',
+                                                                                                'Une erreur est survenue lors de la suppression du carburant.',
+                                                                                                'error'
+                                                                                            );
+                                                                                        }
+                                                                                    }).catch(error => {
+                                                                                        console.error('Error:', error);
+                                                                                        Swal.fire(
+                                                                                            'Erreur!',
+                                                                                            'Une erreur est survenue lors de la suppression du carburant.',
+                                                                                            'error'
+                                                                                        );
+                                                                                    });
+                                                                                }
+                                                                            });
+                                                                        } 
                                                                     </script>
 																</div>
 															</td>
@@ -267,7 +294,8 @@
             }).catch(error => console.error('Erreur:', error));
         });
     </script>
-
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 		<!-- INTERNAL DATA-TABLES JS-->
 		<script src=" {% static 'assets/plugins/datatable/js/jquery.dataTables.min.js' %} "></script>
 		<script src=" {% static 'assets/plugins/datatable/js/dataTables.bootstrap5.js' %} "></script>

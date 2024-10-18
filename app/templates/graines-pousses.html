@@ -65,7 +65,7 @@
                                         <div class="col-md-12">
                                             <div class="card">
                                                 <div class="card-body project-type-container projects p-4">
-                                                    <h4 class="m-0" id="typeTitle">All Graines & Pousses</h4>
+                                                    <h4 class="m-0" id="typeTitle">Tous les Graines & Pousses</h4>
                                                     <div class="d-sm-flex align-items-center">
                                                         <div class="btn-list mx-4">
                                                             <a class="btn btn-outline-primary"  data-bs-target="#modalQuill" data-bs-toggle="modal" href="javascript:void(0)">
@@ -76,7 +76,7 @@
                                                             <a class="btn btn-primary" href="#">
                                                                 <svg xmlns="http://www.w3.org/2000/svg" class="w-inner-icn text-white" enable-background="new 0 0 24 24" viewBox="0 0 24 24"><path d="M21.5,13h-8.0005493C13.2234497,13.0001831,12.9998169,13.223999,13,13.5v8.0005493C13.0001831,21.7765503,13.223999,22.0001831,13.5,22h8.0006104C21.7765503,21.9998169,22.0001831,21.776001,22,21.5v-8.0006104C21.9998169,13.2234497,21.776001,12.9998169,21.5,13z M21,21h-7v-7h7V21z M10.5,2H2.4993896C2.2234497,2.0001831,1.9998169,2.223999,2,2.5v8.0005493C2.0001831,10.7765503,2.223999,11.0001831,2.5,11h8.0006104C10.7765503,10.9998169,11.0001831,10.776001,11,10.5V2.4993896C10.9998169,2.2234497,10.776001,1.9998169,10.5,2z M10,10H3V3h7V10z M10.5,13H2.4993896C2.2234497,13.0001831,1.9998169,13.223999,2,13.5v8.0005493C2.0001831,21.7765503,2.223999,22.0001831,2.5,22h8.0006104C10.7765503,21.9998169,11.0001831,21.776001,11,21.5v-8.0006104C10.9998169,13.2234497,10.776001,12.9998169,10.5,13z M10,21H3v-7h7V21z M21.5,2h-8.0005493C13.2234497,2.0001831,12.9998169,2.223999,13,2.5v8.0005493C13.0001831,10.7765503,13.223999,11.0001831,13.5,11h8.0006104C21.7765503,10.9998169,22.0001831,10.776001,22,10.5V2.4993896C21.9998169,2.2234497,21.776001,1.9998169,21.5,2z M21,10h-7V3h7V10z"/></svg>
                                                             </a>
-                                                            <a class="btn btn-outline-primary" href="logistiques-list">
+                                                            <a class="btn btn-outline-primary" href="graines-pousses-list">
                                                                 <svg xmlns="http://www.w3.org/2000/svg" class="w-inner-icn" enable-background="new 0 0 24 24" viewBox="0 0 24 24"><path d="M3.5,12C3.223877,12,3,12.223877,3,12.5S3.223877,13,3.5,13S4,12.776123,4,12.5S3.776123,12,3.5,12z M6.5,8h15C21.776123,8,22,7.776123,22,7.5S21.776123,7,21.5,7h-15C6.223877,7,6,7.223877,6,7.5S6.223877,8,6.5,8z M3.5,17C3.223877,17,3,17.223877,3,17.5S3.223877,18,3.5,18S4,17.776123,4,17.5S3.776123,17,3.5,17z M21.5,12h-15C6.223877,12,6,12.223877,6,12.5S6.223877,13,6.5,13h15c0.276123,0,0.5-0.223877,0.5-0.5S21.776123,12,21.5,12z M3.5,7C3.223877,7,3,7.223877,3,7.5S3.223877,8,3.5,8S4,7.776123,4,7.5S3.776123,7,3.5,7z M21.5,17h-15C6.223877,17,6,17.223877,6,17.5S6.223877,18,6.5,18h15c0.276123,0,0.5-0.223877,0.5-0.5S21.776123,17,21.5,17z"/></svg>
                                                             </a>
                                                         </div>
@@ -128,7 +128,12 @@
                                                                                         <img src="{% static 'assets/images/icons/excavator.png' %}" class="side-menu__icon" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
                                                                                     </div> {% endcomment %}
                                                                                     <div class="ms-1">
-                                                                                        <h6 class="mb-1"> <a href="#" class="float-start">{{graine.type}}</a> </h6>
+                                                                                        <h6 class="mb-1">
+                                                                                            <a href="javascript:void(0)" class="float-start" onclick="fetchGraineDetails({{ graine.id }})">
+                                                                                                <i class="fa fa-plus-circle ms-2"></i> {{ graine.type }}
+                                                                                            </a>
+                                                                                        </h6>
+                                                                                        {% comment %} <h6 class="mb-1"> <a href="#" class="float-start">{{graine.type}}</a> </h6> {% endcomment %}
                                                                                     </div>
                                                                                     
                                                                                 </div>
@@ -140,10 +145,12 @@
                                                                                     </div>
                                                                                     <a href="#" class="option-dots" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fe fe-more-vertical"></i></a>
                                                                                     <div class="dropdown-menu dropdown-menu-start">
-                                                                                        <a class="dropdown-item" href="#"><i class="fe fe-edit me-2"></i> Edit</a>
-                                                                                        <a class="dropdown-item" href="#"><i class="fe fe-share me-2"></i> Share</a>
-                                                                                        <a class="dropdown-item" href="#"><i class="fe fe-download me-2"></i> Clone</a>
-                                                                                        <a class="dropdown-item" href="#"><i class="fe fe-trash me-2"></i> Delete</a>
+                                                                                        <a class="dropdown-item" href="javascript:void(0)" onclick="openEditGraineModal({{ graine.id }})">
+                                                                                            <i class="fe fe-edit me-2"></i>Modifier
+                                                                                        </a>
+                                                                                        <a class="dropdown-item" href="javascript:void(0)" onclick="deleteGraine({{ graine.id }})">
+                                                                                            <i class="fe fe-trash me-2"></i>Supprimer
+                                                                                        </a>
                                                                                     </div>
                                                                                 </div>
                                                                             </div>
@@ -155,257 +162,6 @@
                                                     </div>
                                                     {% endfor %}
                                                     {% endfor %}
-                                                    {% comment %} <div class="col-sm-12 col-md-12 col-lg-12 col-xl-4">
-                                                        <div class="card">
-                                                            <div class="card-body">
-                                                                <div class="row">
-                                                                    <div class="col-md-12">
-                                                                        <div class="row">
-                                                                            <div class="col">
-                                                                                <div class="d-sm-flex align-items-center">
-                                                                                    <div class="avatar mb-2 p-2 lh-1 mb-sm-0 avatar-md rounded-circle bg-info me-2">
-                                                                                        <img src="{% static 'assets/images/icons/shovel-and-rake.png' %}" class="side-menu__icon" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
-                                                                                    </div>
-                                                                                    <div class="ms-1">
-                                                                                        <h6 class="mb-1 text-normal"> <a href="project-details" class="float-start">Outils Agricoles</a> </h6>
-                                                                                    </div>
-                                                                                </div>
-                                                                            </div>
-                                                                            <div class="col-auto">
-                                                                                <div class="d-flex align-items-center">
-                                                                                    <div class="stars-main me-3">
-                                                                                        <i class="fa fa-star text-light star"></i>
-                                                                                    </div>
-                                                                                    <a href="#" class="option-dots" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fe fe-more-vertical"></i></a>
-                                                                                    <div class="dropdown-menu dropdown-menu-start">
-                                                                                        <a class="dropdown-item" href="project-edit"><i class="fe fe-edit me-2"></i> Edit</a>
-                                                                                        <a class="dropdown-item" href="#"><i class="fe fe-share me-2"></i> Suspend</a>
-                                                                                        <a class="dropdown-item" href="#"><i class="fe fe-trash me-2"></i> Delete</a>
-                                                                                    </div>
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-4">
-                                                        <div class="card">
-                                                            <div class="card-body">
-                                                                <div class="row">
-                                                                    <div class="col-md-12">
-                                                                        <div class="row">
-                                                                            <div class="col">
-                                                                                <div class="d-sm-flex align-items-center">
-                                                                                    <div class="avatar mb-2 p-2 lh-1 mb-sm-0 avatar-md rounded-circle bg-warning me-2">
-                                                                                        <img src="{% static 'assets/images/icons/infrastructure.png' %}" class="side-menu__icon" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
-                                                                                    </div>
-                                                                                    <div class="ms-1">
-                                                                                        <h6 class="mb-1 text-normal"> <a href="project-details" class="float-start">Infrastructure </a> </h6>   
-                                                                                    </div>
-                                                                                </div>
-                                                                            </div>
-                                                                            <div class="col-auto">
-                                                                                <div class="d-flex align-items-center">
-                                                                                    <div class="stars-main me-3">
-                                                                                        <i class="fa fa-star text-light star"></i>
-                                                                                    </div>
-                                                                                    <a href="#" class="option-dots" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fe fe-more-vertical"></i></a>
-                                                                                    <div class="dropdown-menu dropdown-menu-start">
-                                                                                        <a class="dropdown-item" href="#"><i class="fe fe-edit me-2"></i> Edit</a>
-                                                                                        <a class="dropdown-item" href="#"><i class="fe fe-share me-2"></i> Share</a>
-                                                                                        <a class="dropdown-item" href="#"><i class="fe fe-download me-2"></i> Clone</a>
-                                                                                        <a class="dropdown-item" href="#"><i class="fe fe-trash me-2"></i> Delete</a>
-                                                                                    </div>
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-4">
-                                                        <div class="card">
-                                                            <div class="card-body">
-                                                                <div class="row">
-                                                                    <div class="col-md-12">
-                                                                        <div class="row">
-                                                                            <div class="col">
-                                                                                <div class="d-sm-flex align-items-center">
-                                                                                    <div class="avatar mb-2 p-2 lh-1 mb-sm-0 avatar-md rounded-circle bg-info me-2">
-                                                                                        <img src="{% static 'assets/images/icons/fertilize.png' %}" class="side-menu__icon" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
-                                                                                    </div>
-                                                                                    <div class="ms-1">
-                                                                                        <h6 class="mb-1 text-normal"> <a href="project-details" class="float-start">Fertilisants et Traitements</a></h6>
-                                                                                    </div>
-                                                                                </div>
-                                                                            </div>
-                                                                            <div class="col-auto">
-                                                                                <div class="d-flex align-items-center">
-                                                                                    <div class="stars-main me-3">
-                                                                                        <i class="fa fa-star text-light star"></i>
-                                                                                    </div>
-                                                                                    <a href="#" class="option-dots" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fe fe-more-vertical"></i></a>
-                                                                                    <div class="dropdown-menu dropdown-menu-start">
-                                                                                        <a class="dropdown-item" href="#"><i class="fe fe-edit me-2"></i> Edit</a>
-                                                                                        <a class="dropdown-item" href="#"><i class="fe fe-share me-2"></i> Share</a>
-                                                                                        <a class="dropdown-item" href="#"><i class="fe fe-download me-2"></i> Clone</a>
-                                                                                        <a class="dropdown-item" href="#"><i class="fe fe-trash me-2"></i> Delete</a>
-                                                                                    </div>
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-4">
-                                                        <div class="card">
-                                                            <div class="card-body">
-                                                                <div class="row">
-                                                                    <div class="col-md-12">
-                                                                        <div class="row">
-                                                                            <div class="col">
-                                                                                <div class="d-sm-flex align-items-center">
-                                                                                    <div class="avatar mb-2 p-2 lh-1 mb-sm-0 avatar-md rounded-circle bg-primary me-2">
-                                                                                        <img src="{% static 'assets/images/icons/wheat-sack.png' %}" class="side-menu__icon" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
-                                                                                    </div>
-                                                                                    <div class="ms-1">
-                                                                                        <h6 class="mb-1 text-normal"> <a href="project-details" class="float-start">Graines et Pousses</a> </h6>
-                                                                                    </div>
-                                                                                </div>
-                                                                            </div>
-                                                                            <div class="col-auto">
-                                                                                <div class="d-flex align-items-center">
-                                                                                    <div class="stars-main me-3">
-                                                                                        <i class="fa fa-star text-light star"></i>
-                                                                                    </div>
-                                                                                    <a href="#" class="option-dots" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fe fe-more-vertical"></i></a>
-                                                                                    <div class="dropdown-menu dropdown-menu-start">
-                                                                                        <a class="dropdown-item" href="#"><i class="fe fe-edit me-2"></i> Edit</a>
-                                                                                        <a class="dropdown-item" href="#"><i class="fe fe-share me-2"></i> Share</a>
-                                                                                        <a class="dropdown-item" href="#"><i class="fe fe-download me-2"></i> Clone</a>
-                                                                                        <a class="dropdown-item" href="#"><i class="fe fe-trash me-2"></i> Delete</a>
-                                                                                    </div>
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-4">
-                                                        <div class="card">
-                                                            <div class="card-body">
-                                                                <div class="row">
-                                                                    <div class="col-md-12">
-                                                                        <div class="row">
-                                                                            <div class="col">
-                                                                                <div class="d-sm-flex align-items-center">
-                                                                                    <div class="avatar mb-2 p-2 lh-1 mb-sm-0 avatar-md rounded-circle bg-orange me-2">
-                                                                                        <img src="{% static 'assets/images/icons/gasoline.png' %}" class="side-menu__icon" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
-                                                                                    </div>
-                                                                                    <div class="ms-1">
-                                                                                        <h6 class="mb-1 text-normal"> <a href="project-details" class="float-start">Carburant</a> </h6>
-                                                                                    </div>
-                                                                                </div>
-                                                                            </div>
-                                                                            <div class="col-auto">
-                                                                                <div class="d-flex align-items-center">
-                                                                                    <div class="stars-main me-3">
-                                                                                        <i class="fa fa-star text-light star"></i>
-                                                                                    </div>
-                                                                                    <a href="#" class="option-dots" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fe fe-more-vertical"></i></a>
-                                                                                    <div class="dropdown-menu dropdown-menu-start">
-                                                                                        <a class="dropdown-item" href="#"><i class="fe fe-edit me-2"></i> Edit</a>
-                                                                                        <a class="dropdown-item" href="#"><i class="fe fe-share me-2"></i> Share</a>
-                                                                                        <a class="dropdown-item" href="#"><i class="fe fe-download me-2"></i> Clone</a>
-                                                                                        <a class="dropdown-item" href="#"><i class="fe fe-trash me-2"></i> Delete</a>
-                                                                                    </div>
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-4">
-                                                        <div class="card">
-                                                            <div class="card-body">
-                                                                <div class="row">
-                                                                    <div class="col-md-12">
-                                                                        <div class="row">
-                                                                            <div class="col">
-                                                                                <div class="d-sm-flex align-items-center">
-                                                                                    <div class="avatar mb-2 p-2 lh-1 mb-sm-0 avatar-md rounded-circle bg-warning me-2">
-                                                                                        <img src="{% static 'assets/images/icons/tire.png' %}" class="side-menu__icon" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
-                                                                                    </div>
-                                                                                    <div class="ms-1">
-                                                                                        <h6 class="mb-1 text-normal"> <a href="project-details" class="float-start">Pièces de rechange</a> </h6>
-                                                                                    </div>
-                                                                                </div>
-                                                                            </div>
-                                                                            <div class="col-auto">
-                                                                                <div class="d-flex align-items-center">
-                                                                                    <div class="stars-main me-3">
-                                                                                        <i class="fa fa-star text-light star"></i>
-                                                                                    </div>
-                                                                                    <a href="#" class="option-dots" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fe fe-more-vertical"></i></a>
-                                                                                    <div class="dropdown-menu dropdown-menu-start">
-                                                                                        <a class="dropdown-item" href="#"><i class="fe fe-edit me-2"></i> Edit</a>
-                                                                                        <a class="dropdown-item" href="#"><i class="fe fe-share me-2"></i> Share</a>
-                                                                                        <a class="dropdown-item" href="#"><i class="fe fe-download me-2"></i> Clone</a>
-                                                                                        <a class="dropdown-item" href="#"><i class="fe fe-trash me-2"></i> Delete</a>
-                                                                                    </div>
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-4">
-                                                        <div class="card">
-                                                            <div class="card-body">
-                                                                <div class="row">
-                                                                    <div class="col-md-12">
-                                                                        <div class="row">
-                                                                            <div class="col">
-                                                                                <div class="d-sm-flex align-items-center">
-                                                                                    <div class="avatar mb-2 p-2 lh-1 mb-sm-0 avatar-md rounded-circle bg-info me-2">
-                                                                                        <img src="{% static 'assets/images/icons/rh.png' %}" class="side-menu__icon" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
-                                                                                    </div>
-                                                                                    <div class="ms-1">
-                                                                                        <h6 class="mb-1 text-normal"> <a href="project-details" class="float-start">Ressources Humaines</a></h6>
-                                                                                    </div>
-                                                                                </div>
-                                                                            </div>
-                                                                            <div class="col-auto">
-                                                                                <div class="d-flex align-items-center">
-                                                                                    <div class="stars-main me-3">
-                                                                                        <i class="fa fa-star text-light star"></i>
-                                                                                    </div>
-                                                                                    <a href="#" class="option-dots" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fe fe-more-vertical"></i></a>
-                                                                                    <div class="dropdown-menu dropdown-menu-start">
-                                                                                        <a class="dropdown-item" href="#"><i class="fe fe-edit me-2"></i> Edit</a>
-                                                                                        <a class="dropdown-item" href="#"><i class="fe fe-share me-2"></i> Share</a>
-                                                                                        <a class="dropdown-item" href="#"><i class="fe fe-download me-2"></i> Clone</a>
-                                                                                        <a class="dropdown-item" href="#"><i class="fe fe-trash me-2"></i> Delete</a>
-                                                                                    </div>
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div> {% endcomment %}
                                                 </div>
                                             </div>
                                         </div>
@@ -540,11 +296,305 @@
 		</div>
 		<!--/Modal-->
 
+        <!-- Edit Graine Modal -->
+        <div class="modal fade" id="editGraineModal" tabindex="-1" aria-labelledby="editGraineLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <div class="avatar mb-2 p-2 lh-1 mb-sm-0 avatar-md rounded-circle  me-2">
+                            <img src="{% static 'assets/images/icons/sac-de-graines.png' %}" class="side-menu__icon img" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
+                        </div>
+                        <h5 class="modal-title" id="editGraineLabel">Modifier Graine</h5>
+                        <button aria-label="Close" class="btn-close" data-bs-dismiss="modal"><span aria-hidden="true">&times;</span></button>
+                    </div>
+                    <div class="modal-body pd-0">
+                        <form id="editGraineForm" method="POST" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <input type="hidden" id="editGraineId">
+
+                            <div class="form-row">
+                                <div class="col-md-6 mb-3">
+                                    <div class="avatar mb-2 p-2 lh-1 mb-sm-0 avatar-md rounded-circle  me-2">
+                                        <img src="{% static 'assets/images/icons/nom.png' %}" class="side-menu__icon img" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
+                                    </div>
+                                    <label for="editGraineNom">Nom de la Graine</label>
+                                    <input class="form-control" id="editGraineNom" type="text" name="nom" required>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <div class="avatar mb-2 p-2 lh-1 mb-sm-0 avatar-md rounded-circle  me-2">
+                                        <img src="{% static 'assets/images/icons/grains-de-ble.png' %}" class="side-menu__icon img" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
+                                    </div>
+                                    <label for="editGraineType">Type de Graine</label>
+                                    <select class="form-control" id="editGraineType" name="type_graines_pousses" required>
+                                        <option value="" selected disabled>Select type</option>
+                                        {% for data in data %}
+                                            {% for type in data.types %}
+                                                <option value="{{ type.type_graines_pousses }}">{{ type.type_graines_pousses }}</option>
+                                            {% endfor %}
+                                        {% endfor %}
+                                    </select>                                    
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="col-md-6 mb-3">
+                                    <div class="avatar mb-2 p-2 lh-1 mb-sm-0 avatar-md rounded-circle  me-2">
+                                        <img src="{% static 'assets/images/icons/menu.png' %}" class="side-menu__icon img" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
+                                    </div>
+                                    <label for="editGraineCategorie">Catégorie</label>
+                                    <select class="form-control" id="editGraineCategorie" name="categorie_graines_pousses" required>
+                                        <option value="" selected disabled>Select a category</option>
+                                        {% for data in data %}
+                                            {% for categorie in data.categories %}
+                                                <option value="{{ categorie.categorie_graines_pousses }}">{{ categorie.categorie_graines_pousses }}</option>
+                                            {% endfor %}
+                                        {% endfor %}
+                                    </select>                                    
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <div class="avatar mb-2 p-2 lh-1 mb-sm-0 avatar-md rounded-circle  me-2">
+                                        <img src="{% static 'assets/images/icons/sesame.png' %}" class="side-menu__icon img" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
+                                    </div>
+                                    <label for="editGraineOrigine">Origine</label>
+                                    <input class="form-control" id="editGraineOrigine" type="text" name="origine" required>
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="col-md-6 mb-3">
+                                    <div class="avatar mb-2 p-2 lh-1 mb-sm-0 avatar-md rounded-circle  me-2">
+                                        <img src="{% static 'assets/images/icons/equilibre.png' %}" class="side-menu__icon img" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
+                                    </div>
+                                    <label for="editGraineQuantite">Quantité</label>
+                                    <input class="form-control" id="editGraineQuantite" type="number" name="quantite" required>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <div class="avatar mb-2 p-2 lh-1 mb-sm-0 avatar-md rounded-circle  me-2">
+                                        <img src="{% static 'assets/images/icons/euro.png' %}" class="side-menu__icon img" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
+                                    </div>
+                                    <label for="editGraineCout">Coût</label>
+                                    <input class="form-control" id="editGraineCout" type="number" name="cout" required>
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="col-md-6 mb-3">
+                                    <div class="avatar mb-2 p-2 lh-1 mb-sm-0 avatar-md rounded-circle  me-2">
+                                        <img src="{% static 'assets/images/icons/image-gallery.png' %}" class="side-menu__icon img" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
+                                    </div>
+                                    <label for="editGraineImage">Image</label>
+                                    <input class="form-control" id="editGraineImage" type="file" name="image" accept="image/*">
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <div class="avatar mb-2 p-2 lh-1 mb-sm-0 avatar-md rounded-circle  me-2">
+                                        <img src="{% static 'assets/images/icons/projet.png' %}" class="side-menu__icon img" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
+                                    </div>
+                                    <label for="editGraineGeozone">Projet</label>
+                                    <select class="form-control" id="editGraineGeozone" name="geozone" required>
+                                        <option value="" selected disabled>Projet 1</option>
+                                        {% for data in data %}
+                                            {% for projet in data.projects %}
+                                            <option value="{{ projet.geozone_id }}">{{ projet.project_name }}</option>
+                                            {% endfor %}
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="editGraineDescription">Description</label>
+                                <textarea class="form-control" id="editGraineDescription" name="description" rows="3" required></textarea>
+                            </div>
+                            
+                            <div class="modal-footer">
+                                <button type="submit" class="btn btn-primary" onclick="saveEditGraine()">Enregistrer</button>
+                                <button type="button" class="btn btn-light" data-bs-dismiss="modal">Annuler</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /Edit Graine Modal -->
+
+        <!-- Modal Graine Details -->
+        <div class="modal fade" id="graineModal" tabindex="-1" aria-labelledby="graineModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="graineModalLabel">Détails de la Graine</h5>
+                        <button aria-label="Close" class="btn-close" data-bs-dismiss="modal"><span aria-hidden="true">&times;</span></button>
+                    </div>
+                    <div class="modal-body" id="graine-modal-body">
+                        <!-- Les détails de la graine seront insérés ici -->
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /Modal Graine Details -->
+
+
         {% endblock %}
     {% block scripts %}
 
-    
+        <script>
+            // Open the Edit Graine Modal with the current data
+            function openEditGraineModal(graineId) {
+                fetch(`/get-graine/${graineId}/`)
+                    .then(response => response.json())
+                    .then(data => {
+                        // Populate the modal fields with the current Graine data
+                        document.getElementById('editGraineId').value = data.id;
+                        document.getElementById('editGraineNom').value = data.nom;
+                        document.getElementById('editGraineType').value = data.type;
+                        document.getElementById('editGraineCategorie').value = data.categorie;
+                        document.getElementById('editGraineOrigine').value = data.origine;
+                        document.getElementById('editGraineQuantite').value = data.quantite;
+                        document.getElementById('editGraineCout').value = data.cout;
+                        document.getElementById('editGraineDescription').value = data.description;
+                        document.getElementById('editGraineGeozone').value = data.geozone;
 
+                        // Show the modal
+                        const editModal = new bootstrap.Modal(document.getElementById('editGraineModal'));
+                        editModal.show();
+                    })
+                    .catch(error => console.error('Error fetching graine data:', error));
+            }
+
+            // Save the edited Graine
+            function saveEditGraine() {
+                const graineId = document.getElementById('editGraineId').value;
+                const formData = new FormData(document.getElementById('editGraineForm'));
+
+                fetch(`/edit-graine/${graineId}/`, {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRFToken': getCookie('csrftoken')
+                    },
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(result => {
+                    if (result.success) {
+                        location.reload(); // Reload the page after successful save
+                    } else {
+                        alert(result.error || 'Une erreur s\'est produite.');
+                    }
+                })
+                .catch(error => console.error('Error saving graine:', error));
+            }
+
+
+            // Delete Graine with confirmation
+            function deleteGraine(graineId) {
+                // Afficher la boîte de dialogue SweetAlert de confirmation
+                Swal.fire({
+                    title: 'Êtes-vous sûr ?',
+                    text: "Voulez-vous vraiment supprimer cette graine ?",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Oui, supprimer !',
+                    cancelButtonText: 'Annuler',
+                    customClass: {
+                        confirmButton: 'btn btn-primary',  // Bouton de confirmation en bleu
+                        cancelButton: 'btn btn-danger'     // Bouton d'annulation en rouge
+                    },
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // Si l'utilisateur confirme, procéder à la suppression
+                        fetch(`/delete-graine/${graineId}/`, {
+                            method: 'DELETE',
+                            headers: {
+                                'X-CSRFToken': getCookie('csrftoken'),  // Assurez-vous que le token CSRF est passé correctement
+                            }
+                        })
+                        .then(response => response.json())
+                        .then(result => {
+                            if (result.success) {
+                                // Afficher un message de succès avec SweetAlert
+                                Swal.fire(
+                                    'Supprimé!',
+                                    'La graine a été supprimée avec succès.',
+                                    'success'
+                                ).then(() => {
+                                    location.reload();  // Recharger la page après la suppression réussie
+                                });
+                            } else {
+                                // Afficher un message d'erreur avec SweetAlert
+                                Swal.fire(
+                                    'Erreur!',
+                                    result.error || 'Une erreur est survenue lors de la suppression de la graine.',
+                                    'error'
+                                );
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                            // En cas de problème de réseau ou d'erreur inattendue, afficher un message d'erreur
+                            Swal.fire(
+                                'Erreur!',
+                                'Une erreur est survenue lors de la suppression de la graine.',
+                                'error'
+                            );
+                        });
+                    }
+                });
+            }
+            
+
+            // Helper function to get CSRF token from cookies
+            function getCookie(name) {
+                let cookieValue = null;
+                if (document.cookie && document.cookie !== '') {
+                    const cookies = document.cookie.split(';');
+                    for (let i = 0; i < cookies.length; i++) {
+                        const cookie = cookies[i].trim();
+                        if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                            break;
+                        }
+                    }
+                }
+                return cookieValue;
+            }
+
+            function fetchGraineDetails(graineId) {
+                fetch(`/get-graine/${graineId}/`)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.error) {
+                            alert(data.error);
+                        } else {
+                            // Mettre à jour le contenu du modal avec les détails de la graine
+                            document.getElementById('graine-modal-body').innerHTML = `
+                                <p><strong>Nom:</strong> ${data.nom}</p>
+                                <p><strong>Type:</strong> ${data.type}</p>
+                                <p><strong>Catégorie:</strong> ${data.categorie}</p>
+                                <p><strong>Origine:</strong> ${data.origine}</p>
+                                <p><strong>Quantité:</strong> ${data.quantite}</p>
+                                <p><strong>Coût:</strong> ${data.cout}</p>
+                                <p><strong>Description:</strong> ${data.description}</p>
+                                <img src="${data.image}" alt="${data.nom}" class="img-fluid w-50" />
+                            `;
+            
+                            // Afficher le modal avec Bootstrap
+                            var myModal = new bootstrap.Modal(document.getElementById('graineModal'));
+                            myModal.show();
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Erreur lors du chargement des détails de la graine:', error);
+                    });
+            }
+            
+
+        </script>
+
+    
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <!-- PROJECT JS-->
         <script src=" {% static 'assets/js/graines-pousses.js' %} "></script>
 
