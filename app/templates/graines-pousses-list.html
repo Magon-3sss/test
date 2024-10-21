@@ -14,13 +14,13 @@
 							<!-- PAGE-HEADER -->
 							<div class="page-header">
 								<div>
-									<h1 class="page-title">Outils Agricoles</h1>
+									<h1 class="page-title">Graines et Pousses</h1>
 								</div>
 								<div class="ms-auto pageheader-btn">
 									<ol class="breadcrumb">
                                         {% comment %} <li class="breadcrumb-item">Logistiques</li> {% endcomment %}
                                         <li class="breadcrumb-item"><a href="logistiques">Logistiques</a></li>
-                                        <li class="breadcrumb-item active" aria-current="page">Outils Agricoles</li>
+                                        <li class="breadcrumb-item active" aria-current="page">Graines et Pousses</li>
                                     </ol>
 								</div>
 							</div>
@@ -32,7 +32,7 @@
 									<div class="card">
 										<div class="card-body p-4">
 											<div class="d-flex align-items-center justify-content-between">
-												<h4 class="m-0">Tous les Outils Agricoles</h4>
+												<h4 class="m-0">Tous les Graines et Pousses</h4>
 												<div class="btn-list">
 													<a class="btn btn-outline-primary" href="graines-pousses">
 														<svg xmlns="http://www.w3.org/2000/svg" class="w-inner-icn" enable-background="new 0 0 24 24" viewBox="0 0 24 24"><path d="M21.5,13h-8.0005493C13.2234497,13.0001831,12.9998169,13.223999,13,13.5v8.0005493C13.0001831,21.7765503,13.223999,22.0001831,13.5,22h8.0006104C21.7765503,21.9998169,22.0001831,21.776001,22,21.5v-8.0006104C21.9998169,13.2234497,21.776001,12.9998169,21.5,13z M21,21h-7v-7h7V21z M10.5,2H2.4993896C2.2234497,2.0001831,1.9998169,2.223999,2,2.5v8.0005493C2.0001831,10.7765503,2.223999,11.0001831,2.5,11h8.0006104C10.7765503,10.9998169,11.0001831,10.776001,11,10.5V2.4993896C10.9998169,2.2234497,10.776001,1.9998169,10.5,2z M10,10H3V3h7V10z M10.5,13H2.4993896C2.2234497,13.0001831,1.9998169,13.223999,2,13.5v8.0005493C2.0001831,21.7765503,2.223999,22.0001831,2.5,22h8.0006104C10.7765503,21.9998169,11.0001831,21.776001,11,21.5v-8.0006104C10.9998169,13.2234497,10.776001,12.9998169,10.5,13z M10,21H3v-7h7V21z M21.5,2h-8.0005493C13.2234497,2.0001831,12.9998169,2.223999,13,2.5v8.0005493C13.0001831,10.7765503,13.223999,11.0001831,13.5,11h8.0006104C21.7765503,10.9998169,22.0001831,10.776001,22,10.5V2.4993896C21.9998169,2.2234497,21.776001,1.9998169,21.5,2z M21,10h-7V3h7V10z"/></svg>
@@ -53,12 +53,12 @@
                                                     <thead class="table-head">
                                                         <tr>
                                                             <th class="bg-transparent border-bottom-0 w-5"></th>
-                                                            <th class="bg-transparent border-bottom-0">Type d'Outil</th>
-                                                            <th class="bg-transparent border-bottom-0">Numéro de Série</th>
-                                                            <th class="bg-transparent border-bottom-0">Marque</th>
-                                                            <th class="bg-transparent border-bottom-0">Prix d'Achat</th>
-                                                            <th class="bg-transparent border-bottom-0">Date d'Achat</th>
-                                                            <th class="bg-transparent border-bottom-0">Prix de Location (Heure/Jour/Mois)</th>
+                                                            <th class="bg-transparent border-bottom-0">Nom</th>
+                                                            <th class="bg-transparent border-bottom-0">Type</th>
+                                                            <th class="bg-transparent border-bottom-0">Catégorie</th>
+                                                            <th class="bg-transparent border-bottom-0">Origine</th>
+                                                            <th class="bg-transparent border-bottom-0">quantité</th>
+                                                            <th class="bg-transparent border-bottom-0">Coût</th>
                                                             <th class="bg-transparent border-bottom-0">Image</th>
                                                             <th class="bg-transparent border-bottom-0">Description</th>
                                                             <th class="bg-transparent border-bottom-0 no-btn">Action</th>
@@ -70,34 +70,30 @@
                                                             <tr>
                                                                 <td class="text-muted fs-15 fw-semibold text-center">{{ forloop.counter }}</td>
                                                                 <td>
-                                                                    <h6 class="mb-0 fs-14 fw-semibold"><a href="#" class="float-start">{{ outil.type|default:"N/A" }}</h6>
+                                                                    <h6 class="mb-0 fs-14 fw-semibold"><a href="#" class="float-start">{{ graine.nom|default:"N/A" }}</h6>
                                                                 </td>
-                                                                <td class="text-muted fs-15 fw-semibold">{{ outil.numero_de_serie|default:"N/A" }}</td>
-                                                                <td class="text-muted fs-15 fw-semibold">{{ outil.marque|default:"N/A" }}</td>
-                                                                <td class="text-muted fs-15 fw-semibold">{{ outil.prix_achat|default_if_none:"N/A" }}</td>
-                                                                <td class="text-muted fs-15 fw-semibold">{{ outil.date_achat|default:"N/A" }}</td>
-                                                                <td class="text-muted fs-15 fw-semibold">
-                                                                    Heure: {{ outil.prix_location_heure|default_if_none:"N/A" }}<br>
-                                                                    Jour: {{ outil.prix_location_jour|default_if_none:"N/A" }}<br>
-                                                                    Mois: {{ outil.prix_location_mois|default_if_none:"N/A" }}
-                                                                </td>
+                                                                <td class="text-muted fs-15 fw-semibold">{{ graine.type|default:"N/A" }}</td>
+                                                                <td class="text-muted fs-15 fw-semibold">{{ graine.categorie|default:"N/A" }}</td>
+                                                                <td class="text-muted fs-15 fw-semibold">{{ graine.origine|default_if_none:"N/A" }}</td>
+                                                                <td class="text-muted fs-15 fw-semibold">{{ graine.quantite|default:"N/A" }}</td>
+                                                                <td class="text-muted fs-15 fw-semibold">{{ graine.cout|default_if_none:"N/A" }}<br></td>
                                                                 <td>
-                                                                    {% if outil.image %}
-                                                                        <img src="{{ outil.image.url }}" alt="Image de l'outil" width="100" height="100">
+                                                                    {% if graine.image %}
+                                                                        <img src="{{ graine.image.url }}" alt="Image de l'graine" width="100" height="100">
                                                                     {% else %}
                                                                         <span class="text-muted">Pas d'image</span>
                                                                     {% endif %}
                                                                 </td>
-                                                                <td class="text-muted fs-15 fw-semibold">{{ outil.description|default:"N/A" }}</td>
+                                                                <td class="text-muted fs-15 fw-semibold">{{ graine.description|default:"N/A" }}</td>
                                                                 <td>
                                                                     <div class="d-flex align-items-stretch">
-                                                                        <a class="btn btn-sm btn-outline-secondary border me-2" data-bs-toggle="tooltip" onclick="deleteOutil({{ outil.id }})" data-bs-original-title="Supprimer">
+                                                                        <a class="btn btn-sm btn-outline-secondary border me-2" data-bs-toggle="tooltip" onclick="deleteGraine({{ graine.id }})" data-bs-original-title="Supprimer">
                                                                             <svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 0 24 24" width="16">
                                                                                 <path d="M0 0h24v24H0V0z" fill="none" />
                                                                                 <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM8 9h8v10H8V9zm7.5-5l-1-1h-5l-1 1H5v2h14V4h-3.5z" />
                                                                             </svg>
                                                                         </a>
-                                                                        <a class="btn btn-sm btn-outline-secondary border me-2" data-bs-toggle="tooltip" href="javascript:void(0)" onclick="openEditModal({{ outil.id }})" data-bs-original-title="Modifier">
+                                                                        <a class="btn btn-sm btn-outline-secondary border me-2" data-bs-toggle="tooltip" href="javascript:void(0)" onclick="openEditGraineModal({{ graine.id }})" data-bs-original-title="Modifier">
                                                                             <svg height="24" viewBox="0 0 24 24" width="24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                                                                 <path d="M17.25 10.9921C15.129 11.6991 12.3009 8.87105 13.0079 6.75M13.8793 5.87857L9.30971 10.4482C7.3231 12.4348 5.91376 14.924 5.23236 17.6496L5.01156 18.5328C4.94276 18.808 5.19204 19.0572 5.46723 18.9884L6.35044 18.7676C9.07604 18.0862 11.5652 16.6769 13.5518 14.6903L18.1214 10.1207C18.684 9.55813 19 8.79516 19 7.99962C19 6.34297 17.657 5 16.0004 5C15.2048 5 14.4419 5.31603 13.8793 5.87857Z"></path>
                                                                             </svg>
@@ -121,189 +117,233 @@
         {% endblock %}
 		 
 		{% block modal %}
-		<!-- Edit Outil Modal -->
-        <div class="modal fade" id="editOutilModal" tabindex="-1" aria-labelledby="editOutilLabel" aria-hidden="true">
+		<!-- Edit Graine Modal -->
+        <div class="modal fade" id="editGraineModal" tabindex="-1" aria-labelledby="editGraineLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <div class="avatar mb-2 p-2 lh-1 mb-sm-0 avatar-md rounded-circle me-2">
-                            <img src="{% static 'assets/images/icons/outils-de-jardin.png' %}" class="side-menu__icon img" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
+                        <div class="avatar mb-2 p-2 lh-1 mb-sm-0 avatar-md rounded-circle  me-2">
+                            <img src="{% static 'assets/images/icons/sac-de-graines.png' %}" class="side-menu__icon img" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
                         </div>
-                        <h5 class="modal-title" id="editOutilLabel">Modifier Outil Agricole</h5>
+                        <h5 class="modal-title" id="editGraineLabel">Modifier Graine</h5>
                         <button aria-label="Close" class="btn-close" data-bs-dismiss="modal"><span aria-hidden="true">&times;</span></button>
                     </div>
                     <div class="modal-body pd-0">
-                        <form id="editOutilForm" method="POST" enctype="multipart/form-data">
+                        <form id="editGraineForm" method="POST" enctype="multipart/form-data">
                             {% csrf_token %}
-                            <input type="hidden" id="editOutilId">
-                            
+                            <input type="hidden" id="editGraineId">
+
                             <div class="form-row">
                                 <div class="col-md-6 mb-3">
                                     <div class="avatar mb-2 p-2 lh-1 mb-sm-0 avatar-md rounded-circle  me-2">
-                                        <img src="{% static 'assets/images/icons/tracteur.png' %}" class="side-menu__icon img" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
+                                        <img src="{% static 'assets/images/icons/nom.png' %}" class="side-menu__icon img" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
                                     </div>
-                                    <label for="editOutilType">Type d'Outil</label>
-                                    <select class="form-control" id="editOutilType" name="type_outils_agricoles" required>
-                                        <option value="" selected disabled>Choisir Type</option>
+                                    <label for="editGraineNom">Nom de la Graine</label>
+                                    <input class="form-control" id="editGraineNom" type="text" name="nom" required>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <div class="avatar mb-2 p-2 lh-1 mb-sm-0 avatar-md rounded-circle  me-2">
+                                        <img src="{% static 'assets/images/icons/grains-de-ble.png' %}" class="side-menu__icon img" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
+                                    </div>
+                                    <label for="editGraineType">Type de Graine</label>
+                                    <select class="form-control" id="editGraineType" name="type_graines_pousses" required>
+                                        <option value="" selected disabled>Select type</option>
                                         {% for data in data %}
                                             {% for type in data.types %}
-                                            <option value="{{ type.type_outils_agricoles }}">{{ type.type_outils_agricoles }}</option>
+                                                <option value="{{ type.type_graines_pousses }}">{{ type.type_graines_pousses }}</option>
+                                            {% endfor %}
+                                        {% endfor %}
+                                    </select>                                    
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="col-md-6 mb-3">
+                                    <div class="avatar mb-2 p-2 lh-1 mb-sm-0 avatar-md rounded-circle  me-2">
+                                        <img src="{% static 'assets/images/icons/menu.png' %}" class="side-menu__icon img" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
+                                    </div>
+                                    <label for="editGraineCategorie">Catégorie</label>
+                                    <select class="form-control" id="editGraineCategorie" name="categorie_graines_pousses" required>
+                                        <option value="" selected disabled>Select a category</option>
+                                        {% for data in data %}
+                                            {% for categorie in data.categories %}
+                                                <option value="{{ categorie.categorie_graines_pousses }}">{{ categorie.categorie_graines_pousses }}</option>
+                                            {% endfor %}
+                                        {% endfor %}
+                                    </select>                                    
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <div class="avatar mb-2 p-2 lh-1 mb-sm-0 avatar-md rounded-circle  me-2">
+                                        <img src="{% static 'assets/images/icons/sesame.png' %}" class="side-menu__icon img" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
+                                    </div>
+                                    <label for="editGraineOrigine">Origine</label>
+                                    <input class="form-control" id="editGraineOrigine" type="text" name="origine" required>
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="col-md-6 mb-3">
+                                    <div class="avatar mb-2 p-2 lh-1 mb-sm-0 avatar-md rounded-circle  me-2">
+                                        <img src="{% static 'assets/images/icons/equilibre.png' %}" class="side-menu__icon img" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
+                                    </div>
+                                    <label for="editGraineQuantite">Quantité</label>
+                                    <input class="form-control" id="editGraineQuantite" type="number" name="quantite" required>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <div class="avatar mb-2 p-2 lh-1 mb-sm-0 avatar-md rounded-circle  me-2">
+                                        <img src="{% static 'assets/images/icons/euro.png' %}" class="side-menu__icon img" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
+                                    </div>
+                                    <label for="editGraineCout">Coût</label>
+                                    <input class="form-control" id="editGraineCout" type="number" name="cout" required>
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="col-md-6 mb-3">
+                                    <div class="avatar mb-2 p-2 lh-1 mb-sm-0 avatar-md rounded-circle  me-2">
+                                        <img src="{% static 'assets/images/icons/image-gallery.png' %}" class="side-menu__icon img" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
+                                    </div>
+                                    <label for="editGraineImage">Image</label>
+                                    <input class="form-control" id="editGraineImage" type="file" name="image" accept="image/*">
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <div class="avatar mb-2 p-2 lh-1 mb-sm-0 avatar-md rounded-circle  me-2">
+                                        <img src="{% static 'assets/images/icons/projet.png' %}" class="side-menu__icon img" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
+                                    </div>
+                                    <label for="editGraineGeozone">Projet</label>
+                                    <select class="form-control" id="editGraineGeozone" name="geozone" required>
+                                        <option value="" selected disabled>Projet 1</option>
+                                        {% for data in data %}
+                                            {% for projet in data.projects %}
+                                            <option value="{{ projet.geozone_id }}">{{ projet.project_name }}</option>
                                             {% endfor %}
                                         {% endfor %}
                                     </select>
                                 </div>
-                                <div class="col-md-6 mb-3">
-                                    <div class="avatar mb-2 p-2 lh-1 mb-sm-0 avatar-md rounded-circle  me-2">
-                                        <img src="{% static 'assets/images/icons/numero-de-serie.png' %}" class="side-menu__icon img" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
-                                    </div>
-                                    <label for="editOutilNumero">Numéro de Série</label>
-                                    <input class="form-control" id="editOutilNumero" type="text" name="numero_de_serie" required>
-                                </div>
                             </div>
-            
-                            <div class="form-row">
-                                <div class="col-md-6 mb-3">
-                                    <div class="avatar mb-2 p-2 lh-1 mb-sm-0 avatar-md rounded-circle  me-2">
-                                        <img src="{% static 'assets/images/icons/construction-tools.png' %}" class="side-menu__icon img" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
-                                    </div>
-                                    <label for="editOutilMarque">Marque</label>
-                                    <input class="form-control" id="editOutilMarque" type="text" name="marque" required>
-                                </div>
-                                <div class="col-md-6 mb-3">
-                                    <div class="avatar mb-2 p-2 lh-1 mb-sm-0 avatar-md rounded-circle  me-2">
-                                        <img src="{% static 'assets/images/icons/gains.png' %}" class="side-menu__icon img" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
-                                    </div>
-                                    <label for="editOutilAllocation">Allocation</label>
-                                    <input type="checkbox" id="editOutilAllocation" name="allocation">
-                                </div>
-                            </div>
-            
-                            <div class="form-row">
-                                <div class="col-md-6 mb-3">
-                                    <div class="avatar mb-2 p-2 lh-1 mb-sm-0 avatar-md rounded-circle  me-2">
-                                        <img src="{% static 'assets/images/icons/euro.png' %}" class="side-menu__icon img" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
-                                    </div>
-                                    <label for="editOutilPrixLocationHeure">Prix par Heure</label>
-                                    <input class="form-control" id="editOutilPrixLocationHeure" type="number" name="prix_location_heure" placeholder="10 Dt">
-                                </div>
-                                <div class="col-md-6 mb-3">
-                                    <div class="avatar mb-2 p-2 lh-1 mb-sm-0 avatar-md rounded-circle  me-2">
-                                        <img src="{% static 'assets/images/icons/euro.png' %}" class="side-menu__icon img" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
-                                    </div>
-                                    <label for="editOutilPrixLocationJour">Prix par Jour</label>
-                                    <input class="form-control" id="editOutilPrixLocationJour" type="number" name="prix_location_jour" placeholder="100 Dt">
-                                </div>
-                            </div>
-            
-                            <div class="form-row">
-                                <div class="col-md-6 mb-3">
-                                    <div class="avatar mb-2 p-2 lh-1 mb-sm-0 avatar-md rounded-circle  me-2">
-                                        <img src="{% static 'assets/images/icons/euro.png' %}" class="side-menu__icon img" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
-                                    </div>
-                                    <label for="editOutilPrixLocationMois">Prix par Mois</label>
-                                    <input class="form-control" id="editOutilPrixLocationMois" type="number" name="prix_location_mois" placeholder="500 Dt">
-                                </div>
-                                <div class="col-md-6 mb-3">
-                                    <div class="avatar mb-2 p-2 lh-1 mb-sm-0 avatar-md rounded-circle  me-2">
-                                        <img src="{% static 'assets/images/icons/calendrier.png' %}" class="side-menu__icon img" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
-                                    </div>
-                                    <label for="editOutilDateLocation">Date de Location</label>
-                                    <input class="form-control" id="editOutilDateLocation" type="date" name="date_location">
-                                </div>
-                            </div>
-            
-                            <div class="form-row">
-                                <div class="col-md-6 mb-3">
-                                    <div class="avatar mb-2 p-2 lh-1 mb-sm-0 avatar-md rounded-circle  me-2">
-                                        <img src="{% static 'assets/images/icons/euro.png' %}" class="side-menu__icon img" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
-                                    </div>
-                                    <label for="editOutilPrixAchat">Prix d'Achat</label>
-                                    <input class="form-control" id="editOutilPrixAchat" type="number" name="prix_achat" placeholder="5000 Dt" required>
-                                </div>
-                                <div class="col-md-6 mb-3">
-                                    <div class="avatar mb-2 p-2 lh-1 mb-sm-0 avatar-md rounded-circle  me-2">
-                                        <img src="{% static 'assets/images/icons/calendrier.png' %}" class="side-menu__icon img" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
-                                    </div>
-                                    <label for="editOutilDateAchat">Date d'Achat</label>
-                                    <input class="form-control" id="editOutilDateAchat" type="date" name="date_achat" required>
-                                </div>
-                            </div>
-            
+
                             <div class="form-group">
-                                <div class="avatar mb-2 p-2 lh-1 mb-sm-0 avatar-md rounded-circle  me-2">
-                                    <img src="{% static 'assets/images/icons/image-gallery.png' %}" class="side-menu__icon img" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
-                                </div>
-                                <label for="editOutilImage">Image :</label>
-                                <input class="form-control" id="editOutilImage" type="file" name="image" accept="image/*">
+                                <label for="editGraineDescription">Description</label>
+                                <textarea class="form-control" id="editGraineDescription" name="description" rows="3" required></textarea>
                             </div>
-            
-                            <div class="form-group">
-                                <div class="avatar mb-2 p-2 lh-1 mb-sm-0 avatar-md rounded-circle  me-2">
-                                    <img src="{% static 'assets/images/icons/project.png' %}" class="side-menu__icon img" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
-                                </div>
-                                <label for="editOutilDescription">Description :</label>
-                                <textarea class="form-control" id="editOutilDescription" name="description" rows="3" required></textarea>
-                            </div>
-            
+                            
                             <div class="modal-footer">
-                                <button type="submit" class="btn btn-primary" onclick="saveEditOutil()">Enregistrer</button>
-                                <button type="button" class="btn btn-light" data-bs-dismiss="modal">Annuler</button>
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                                <button type="button" class="btn btn-primary" onclick="saveEditGraine()">Enregistrer les modifications</button>
                             </div>
                         </form>
                     </div>
                 </div>
             </div>
         </div>
-
-        <!-- /Edit Outil Modal -->					
+        <!-- /Edit Graine Modal -->	
+         
+        
 		{% endblock %}
 
     {% block scripts %}
 
     <script>
-        // Open the modal and populate the form with Outil data
-function openEditModal(outilId) {
-fetch(`/get-outil/${outilId}/`)
-    .then(response => response.json())
-    .then(data => {
-        document.getElementById('editOutilId').value = data.id;
-        document.getElementById('editOutilType').value = data.type;
-        document.getElementById('editOutilNumero').value = data.numero_de_serie;
-        document.getElementById('editOutilMarque').value = data.marque;
-        document.getElementById('editOutilAllocation').checked = data.allocation; // For checkbox
-        document.getElementById('editOutilPrixLocationHeure').value = data.prix_location_heure;
-        document.getElementById('editOutilPrixLocationJour').value = data.prix_location_jour;
-        document.getElementById('editOutilPrixLocationMois').value = data.prix_location_mois;
-        document.getElementById('editOutilDateLocation').value = data.date_location;
-        document.getElementById('editOutilPrixAchat').value = data.prix_achat;
-        document.getElementById('editOutilDateAchat').value = data.date_achat;
-        document.getElementById('editOutilDescription').value = data.description;
+        // Open the Edit Graine Modal with the current data
+        function openEditGraineModal(graineId) {
+            fetch(`/get-graine/${graineId}/`)
+                .then(response => response.json())
+                .then(data => {
+                    // Populate the modal fields with the current Graine data
+                    document.getElementById('editGraineId').value = data.id;
+                    document.getElementById('editGraineNom').value = data.nom;
+                    document.getElementById('editGraineType').value = data.type;
+                    document.getElementById('editGraineCategorie').value = data.categorie;
+                    document.getElementById('editGraineOrigine').value = data.origine;
+                    document.getElementById('editGraineQuantite').value = data.quantite;
+                    document.getElementById('editGraineCout').value = data.cout;
+                    document.getElementById('editGraineDescription').value = data.description;
+                    document.getElementById('editGraineGeozone').value = data.geozone;
 
-        var editModal = new bootstrap.Modal(document.getElementById('editOutilModal'));
-        editModal.show();
+                    // Show the modal
+                    const editModal = new bootstrap.Modal(document.getElementById('editGraineModal'));
+                    editModal.show();
+                })
+                .catch(error => console.error('Error fetching graine data:', error));
+        }
+
+        // Save the edited Graine
+        function saveEditGraine() {
+            const graineId = document.getElementById('editGraineId').value;
+            const formData = new FormData(document.getElementById('editGraineForm'));
+
+            fetch(`/edit-graine/${graineId}/`, {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': getCookie('csrftoken')
+                },
+                body: formData
+            })
+            .then(response => response.json())
+            .then(result => {
+                if (result.success) {
+                    location.reload(); // Reload the page after successful save
+                } else {
+                    alert(result.error || 'Une erreur s\'est produite.');
+                }
+            })
+            .catch(error => console.error('Error saving graine:', error));
+        }
+
+ // Delete Graine with confirmation
+ function deleteGraine(graineId) {
+    // Afficher la boîte de dialogue SweetAlert de confirmation
+    Swal.fire({
+        title: 'Êtes-vous sûr ?',
+        text: "Voulez-vous vraiment supprimer cette graine ?",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Oui, supprimer !',
+        cancelButtonText: 'Annuler',
+        customClass: {
+            confirmButton: 'btn btn-primary',  // Bouton de confirmation en bleu
+            cancelButton: 'btn btn-danger'     // Bouton d'annulation en rouge
+        },
+    }).then((result) => {
+        if (result.isConfirmed) {
+            // Si l'utilisateur confirme, procéder à la suppression
+            fetch(`/delete-graine/${graineId}/`, {
+                method: 'DELETE',
+                headers: {
+                    'X-CSRFToken': getCookie('csrftoken'),  // Assurez-vous que le token CSRF est passé correctement
+                }
+            })
+            .then(response => response.json())
+            .then(result => {
+                if (result.success) {
+                    // Afficher un message de succès avec SweetAlert
+                    Swal.fire(
+                        'Supprimé!',
+                        'La graine a été supprimée avec succès.',
+                        'success'
+                    ).then(() => {
+                        location.reload();  // Recharger la page après la suppression réussie
+                    });
+                } else {
+                    // Afficher un message d'erreur avec SweetAlert
+                    Swal.fire(
+                        'Erreur!',
+                        result.error || 'Une erreur est survenue lors de la suppression de la graine.',
+                        'error'
+                    );
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                // En cas de problème de réseau ou d'erreur inattendue, afficher un message d'erreur
+                Swal.fire(
+                    'Erreur!',
+                    'Une erreur est survenue lors de la suppression de la graine.',
+                    'error'
+                );
+            });
+        }
     });
-}
-
-// Submit the updated Outil data via AJAX
-function saveEditOutil() {
-const outilId = document.getElementById('editOutilId').value;
-const formData = new FormData(document.getElementById('editOutilForm'));  // Prepare the form data
-
-fetch(`/edit-outil/${outilId}/`, {
-    method: 'POST',  // Use POST for form submissions
-    headers: {
-        'X-CSRFToken': getCookie('csrftoken')  // Include the CSRF token for security
-    },
-    body: formData
-})
-.then(response => response.json())
-.then(result => {
-    if (result.success) {
-        location.reload();  // Reload the page after successful save
-    } else {
-        alert(result.error || 'Une erreur est survenue.');
-    }
-});
 }
 
 
@@ -320,61 +360,6 @@ if (document.cookie && document.cookie !== '') {
     }
 }
 return cookieValue;
-}
-
-function deleteOutil(outilId) {
-    // Show SweetAlert confirmation dialog
-    Swal.fire({
-        title: 'Êtes-vous sûr ?',
-        text: "Voulez-vous vraiment supprimer cet outil ?",
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonText: 'Oui, supprimer !',
-        cancelButtonText: 'Annuler',
-        customClass: {
-            confirmButton: 'btn btn-primary',  // Green button for confirm
-            cancelButton: 'btn btn-danger'     // Red button for cancel
-        },
-    }).then((result) => {
-        if (result.isConfirmed) {
-            // If the user confirms, proceed with deletion
-            fetch(`/delete-outil/${outilId}/`, {
-                method: 'DELETE',
-                headers: {
-                    'X-CSRFToken': getCookie('csrftoken'),  // Ensure CSRF token is passed correctly
-                }
-            })
-            .then(response => response.json())
-            .then(result => {
-                if (result.success) {
-                    // Show SweetAlert success message
-                    Swal.fire(
-                        'Supprimé!',
-                        'L\'outil a été supprimé avec succès.',
-                        'success'
-                    ).then(() => {
-                        location.reload();  // Reload the page after successful deletion
-                    });
-                } else {
-                    // Show SweetAlert error message
-                    Swal.fire(
-                        'Erreur!',
-                        result.error || 'Une erreur est survenue lors de la suppression de l\'outil.',
-                        'error'
-                    );
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                // Show SweetAlert error message in case of network issues or unexpected error
-                Swal.fire(
-                    'Erreur!',
-                    'Une erreur est survenue lors de la suppression de l\'outil.',
-                    'error'
-                );
-            });
-        }
-    });
 }
 
 </script>

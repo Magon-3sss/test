@@ -223,6 +223,10 @@ urlpatterns = [
     #path('popup/', views.popup, name='popup'),
     path('logistiques-list', views.logistiques_list, name='logistiques-list'),
     path('machines-engins', views.machines_engins, name='machines-engins'),
+    
+    
+    path('infrastructure', views.infrastructure, name='infrastructure'),
+    path('fertilisants-traitements', views.fertilisants_traitements, name='fertilisants-traitements'),
     ### Outils Agricoles ###
     path('outils-agricoles', views.outils_agricoles, name='outils-agricoles'),
     path('outils-agricoles-list', views.outils_agricoles_list, name='outils-agricoles-list'),
@@ -230,9 +234,6 @@ urlpatterns = [
     path('edit-outil/<int:outil_id>/', views.edit_outil, name='edit_outil'),
     path('delete-outil/<int:outil_id>/', views.delete_outil, name='delete_outil'),
     path('get-outil-details/<int:outil_id>/', views.get_outil_details, name='get_outil_details'),
-    
-    path('infrastructure', views.infrastructure, name='infrastructure'),
-    path('fertilisants-traitements', views.fertilisants_traitements, name='fertilisants-traitements'),
     ### Graines & Pousses ###
     path('graines-pousses', views.graines_pousses, name='graines-pousses'),
     path('graines-pousses-list', views.graines_pousses_list, name='graines-pousses-list'),
@@ -247,8 +248,14 @@ urlpatterns = [
     path('get-carburant/<int:carburant_id>/', views.get_carburant, name='get_carburant'),
     path('edit-carburant/<int:carburant_id>/', views.edit_carburant, name='edit_carburant'),
     path('get-carburant-details/<int:carburant_id>/', views.get_carburant_details, name='get_carburant_details'),
-    
+    ### Pièces de Rechange ###
     path('pieces-rechange', views.pieces_rechange, name='pieces-rechange'),
+    path('pieces-rechange-list', views.pieces_rechange_list, name='pieces-rechange-list'),
+    path('delete-piece/<int:piece_id>/', views.delete_piece, name='delete_piece'),
+    path('get-piece/<int:piece_id>/', views.get_piece, name='get_piece'),
+    path('edit-piece/<int:piece_id>/', views.edit_piece, name='edit_piece'),
+    path('get-piece-details/<int:piece_id>/', views.get_piece_details, name='get_piece_details'),
+    
     path('rh', views.rh, name='rh'),
     path('reseaux-irrigation', views.reseaux_irrigation, name='reseaux-irrigation'),
     path('reseaux-electrique', views.reseaux_electrique, name='reseaux-electrique'),

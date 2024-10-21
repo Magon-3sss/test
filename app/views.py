@@ -831,7 +831,7 @@ def get_graine_details(request, graine_id):
             'quantite': graine.quantite,
             'cout': graine.cout,
             'description': graine.description,
-            'image': graine.image.url if graine.image else None,
+            'image': graine.image.url if graine.image else '',
         }
         return JsonResponse(data, status=200)
     except Graine_Tables.DoesNotExist:
@@ -931,7 +931,23 @@ def save_rh(request):
             return JsonResponse({"Erreur": "Some error occured"}, status=status.HTTP_201_CREATED)
 
 """ pieces de rechange """
+def pieces_rechange (request):
+    list = []
+    pieces = Pieces_Tables.objects.filter(user=request.user)
+    types_pieces = TypePieces.objects.all()
+    list.append({"types": types_pieces,"pieces": pieces})
+    return render(request, 'pieces-rechange.html', {'data': list})
+
+def pieces_rechange_list (request):
+    list = []
+    pieces = Pieces_Tables.objects.filter(user=request.user)
+    types_pieces = TypePieces.objects.all()
+    list.append({"types": types_pieces,"pieces": pieces})
+    return render(request, 'pieces-rechange-list.html', {'data': list})
+
 @api_view(['POST'])
+@authentication_classes([SessionAuthentication])  
+@permission_classes([IsAuthenticated])
 def save_pieces(request):
     if request.method == "POST":
         nom = request.POST.get('nom')
@@ -951,7 +967,8 @@ def save_pieces(request):
                 "type": type,
                 "cout": cout,
                 "date_achat": date_achat,
-                "image": image
+                "image": image,
+                "user": request.user.id
             }
         
         pieces_serializer = PiecesSerializer(data=form)
@@ -963,6 +980,78 @@ def save_pieces(request):
         else:
             print('no')
             return JsonResponse({"Erreur": "Some error occured"}, status=status.HTTP_201_CREATED)
+        
+def get_piece(request, piece_id):
+    try:
+        piece = Pieces_Tables.objects.get(id=piece_id)
+        data = {
+            'id': piece.id,
+            'nom': piece.nom,
+            'type': piece.type,
+            'cout': piece.cout,
+            'date_achat': piece.date_achat,
+            'image': piece.image.url if piece.image else None  
+        }
+        return JsonResponse(data)
+    except Pieces_Tables.DoesNotExist:
+        return JsonResponse({'error': 'Pièce non trouvée'}, status=404)
+
+@require_http_methods(["POST", "PUT"])
+def edit_piece(request, piece_id):
+    try:
+        piece = Pieces_Tables.objects.get(id=piece_id)
+
+        if request.method == "POST":
+            # Get data from form
+            nom = request.POST.get('nom')
+            type_piece = request.POST.get('type')  # Make sure 'type' is retrieved correctly
+            cout = request.POST.get('cout')
+            date_achat = request.POST.get('date_achat')
+
+            # Ensure type is not null
+            if not type_piece:
+                return JsonResponse({"error": "Le type de pièce est obligatoire"}, status=400)
+
+            # Update the piece fields
+            piece.nom = nom
+            piece.type = type_piece
+            piece.cout = cout
+            piece.date_achat = date_achat
+
+            # Update image if provided
+            if 'image' in request.FILES:
+                piece.image = request.FILES['image']
+
+            # Save the updated piece
+            piece.save()
+
+            return JsonResponse({"success": "Pièce modifiée avec succès"}, status=200)
+
+    except Pieces_Tables.DoesNotExist:
+        return JsonResponse({"error": "Pièce non trouvée"}, status=404)
+        
+# Delete Piece
+def delete_piece(request, piece_id):
+    try:
+        piece = Pieces_Tables.objects.get(id=piece_id)
+        piece.delete()
+        return JsonResponse({"success": "piece deleted successfully"}, status=200)
+    except Pieces_Tables.DoesNotExist:
+        return JsonResponse({"error": "piece not found"}, status=404)
+    
+def get_piece_details(request, piece_id):
+    try:
+        piece = Pieces_Tables.objects.get(id=piece_id)
+        data = {
+            'nom': piece.nom,
+            'type': piece.type,
+            'cout': piece.cout,
+            'date_achat': piece.date_achat,
+            'image': piece.image.url if piece.image else '', 
+        }
+        return JsonResponse(data)
+    except Pieces_Tables.DoesNotExist:
+        return JsonResponse({'error': 'La pièce demandée n\'existe pas.'}, status=404)
 
 """ carburant """
 def carburant (request):
@@ -3467,12 +3556,6 @@ def rh (request):
     list.append({"types": types_rhs,"rhs": rhs, "projects": projects})
     return render(request, 'rh.html', {'data': list})
 
-def pieces_rechange (request):
-    list = []
-    pieces = Pieces_Tables.objects.all()
-    types_pieces = TypePieces.objects.all()
-    list.append({"types": types_pieces,"pieces": pieces})
-    return render(request, 'pieces-rechange.html', {'data': list})
 
 def reseaux_irrigation (request):
     return render(request, 'reseaux-irrigation.html')

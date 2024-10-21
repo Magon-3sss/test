@@ -64,7 +64,7 @@
                                         <div class="col-md-12">
                                             <div class="card">
                                                 <div class="card-body project-type-container projects p-4">
-                                                    <h4 class="m-0" id="typeTitle">All Ressources Humaines</h4>
+                                                    <h4 class="m-0" id="typeTitle">Tous Ressources Humaines</h4>
                                                     <div class="d-sm-flex align-items-center">
                                                         <div class="btn-list mx-4">
                                                             <a class="btn btn-outline-primary"  data-bs-target="#modalQuill" data-bs-toggle="modal" href="javascript:void(0)">
@@ -75,7 +75,7 @@
                                                             <a class="btn btn-primary" href="#">
                                                                 <svg xmlns="http://www.w3.org/2000/svg" class="w-inner-icn text-white" enable-background="new 0 0 24 24" viewBox="0 0 24 24"><path d="M21.5,13h-8.0005493C13.2234497,13.0001831,12.9998169,13.223999,13,13.5v8.0005493C13.0001831,21.7765503,13.223999,22.0001831,13.5,22h8.0006104C21.7765503,21.9998169,22.0001831,21.776001,22,21.5v-8.0006104C21.9998169,13.2234497,21.776001,12.9998169,21.5,13z M21,21h-7v-7h7V21z M10.5,2H2.4993896C2.2234497,2.0001831,1.9998169,2.223999,2,2.5v8.0005493C2.0001831,10.7765503,2.223999,11.0001831,2.5,11h8.0006104C10.7765503,10.9998169,11.0001831,10.776001,11,10.5V2.4993896C10.9998169,2.2234497,10.776001,1.9998169,10.5,2z M10,10H3V3h7V10z M10.5,13H2.4993896C2.2234497,13.0001831,1.9998169,13.223999,2,13.5v8.0005493C2.0001831,21.7765503,2.223999,22.0001831,2.5,22h8.0006104C10.7765503,21.9998169,11.0001831,21.776001,11,21.5v-8.0006104C10.9998169,13.2234497,10.776001,12.9998169,10.5,13z M10,21H3v-7h7V21z M21.5,2h-8.0005493C13.2234497,2.0001831,12.9998169,2.223999,13,2.5v8.0005493C13.0001831,10.7765503,13.223999,11.0001831,13.5,11h8.0006104C21.7765503,10.9998169,22.0001831,10.776001,22,10.5V2.4993896C21.9998169,2.2234497,21.776001,1.9998169,21.5,2z M21,10h-7V3h7V10z"/></svg>
                                                             </a>
-                                                            <a class="btn btn-outline-primary" href="logistiques-list">
+                                                            <a class="btn btn-outline-primary" href="rh-list">
                                                                 <svg xmlns="http://www.w3.org/2000/svg" class="w-inner-icn" enable-background="new 0 0 24 24" viewBox="0 0 24 24"><path d="M3.5,12C3.223877,12,3,12.223877,3,12.5S3.223877,13,3.5,13S4,12.776123,4,12.5S3.776123,12,3.5,12z M6.5,8h15C21.776123,8,22,7.776123,22,7.5S21.776123,7,21.5,7h-15C6.223877,7,6,7.223877,6,7.5S6.223877,8,6.5,8z M3.5,17C3.223877,17,3,17.223877,3,17.5S3.223877,18,3.5,18S4,17.776123,4,17.5S3.776123,17,3.5,17z M21.5,12h-15C6.223877,12,6,12.223877,6,12.5S6.223877,13,6.5,13h15c0.276123,0,0.5-0.223877,0.5-0.5S21.776123,12,21.5,12z M3.5,7C3.223877,7,3,7.223877,3,7.5S3.223877,8,3.5,8S4,7.776123,4,7.5S3.776123,7,3.5,7z M21.5,17h-15C6.223877,17,6,17.223877,6,17.5S6.223877,18,6.5,18h15c0.276123,0,0.5-0.223877,0.5-0.5S21.776123,17,21.5,17z"/></svg>
                                                             </a>
                                                         </div>
@@ -120,18 +120,17 @@
                                                                         <div class="row">
                                                                             <div class="col">
                                                                                 <div class="d-sm-flex align-items-center">
-                                                                                    {% comment %} <div class="avatar mb-2 p-2 lh-1 mb-sm-0 avatar-md rounded-circle bg-primary me-2"> {% endcomment %}
                                                                                         <div class="image_div">
-                                                                                            <img src="{{ rh.image.url }}" class="rh_image" style="width: 100px;height: 100px;"/>
+                                                                                            <img src="{{ rh.image.url }}" class="rh_image" style="width: 75px;height: 75px;"/>
                                                                                         </div>
-                                                                                    {% comment %} </div> {% endcomment %}
                                                                                     <div class="ms-1">
-                                                                                         <h6 class="mb-1"> <a href="#" class="float-start">{{ rh.type }}</a> </h6>
-                                                                                         <h6 class="mb-1"> <a href="#" class="float-start">{{ rh.nom }} {{ rh.prenom }}</a> </h6>
-                                                                                    </div>
-                                                                                    {% comment %} <div class="ms-1">
+                                                                                        <h6 class="mb-1">
+                                                                                            <a href="javascript:void(0)" class="float-start" onclick="fetchRhDetails({{ rh.id }})">
+                                                                                                <i class="fa fa-plus-circle ms-2"></i> {{ rh.type }}
+                                                                                            </a>
+                                                                                        </h6>
                                                                                         <h6 class="mb-1"> <a href="#" class="float-start">{{ rh.nom }} {{ rh.prenom }}</a> </h6>
-                                                                                    </div> {% endcomment %}
+                                                                                    </div>
                                                                                 </div>
                                                                             </div>
                                                                             <div class="col-auto">
@@ -141,10 +140,12 @@
                                                                                     </div>
                                                                                     <a href="#" class="option-dots" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fe fe-more-vertical"></i></a>
                                                                                     <div class="dropdown-menu dropdown-menu-start">
-                                                                                        <a class="dropdown-item" href="#"><i class="fe fe-edit me-2"></i> Edit</a>
-                                                                                        <a class="dropdown-item" href="#"><i class="fe fe-share me-2"></i> Share</a>
-                                                                                        <a class="dropdown-item" href="#"><i class="fe fe-download me-2"></i> Clone</a>
-                                                                                        <a class="dropdown-item" href="#"><i class="fe fe-trash me-2"></i> Delete</a>
+                                                                                        <a class="dropdown-item" href="javascript:void(0)" onclick="openEditRhModal({{ rh.id }})">
+                                                                                            <i class="fe fe-edit me-2"></i>Modifier
+                                                                                        </a>
+                                                                                        <a class="dropdown-item" href="javascript:void(0)" onclick="deleteRh({{ rh.id }})">
+                                                                                            <i class="fe fe-trash me-2"></i>Supprimer
+                                                                                        </a>
                                                                                     </div>
                                                                                 </div>
                                                                             </div>

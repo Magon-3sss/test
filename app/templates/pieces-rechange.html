@@ -64,7 +64,7 @@
                                         <div class="col-md-12">
                                             <div class="card">
                                                 <div class="card-body project-type-container projects p-4">
-                                                    <h4 class="m-0" id="typeTitle">All Pièces de Rechange</h4>
+                                                    <h4 class="m-0" id="typeTitle">Tous les Pièces de Rechange</h4>
                                                     <div class="d-sm-flex align-items-center">
                                                         <div class="btn-list mx-4">
                                                             <a class="btn btn-outline-primary"  data-bs-target="#modalQuill" data-bs-toggle="modal" href="javascript:void(0)">
@@ -75,7 +75,7 @@
                                                             <a class="btn btn-primary" href="#">
                                                                 <svg xmlns="http://www.w3.org/2000/svg" class="w-inner-icn text-white" enable-background="new 0 0 24 24" viewBox="0 0 24 24"><path d="M21.5,13h-8.0005493C13.2234497,13.0001831,12.9998169,13.223999,13,13.5v8.0005493C13.0001831,21.7765503,13.223999,22.0001831,13.5,22h8.0006104C21.7765503,21.9998169,22.0001831,21.776001,22,21.5v-8.0006104C21.9998169,13.2234497,21.776001,12.9998169,21.5,13z M21,21h-7v-7h7V21z M10.5,2H2.4993896C2.2234497,2.0001831,1.9998169,2.223999,2,2.5v8.0005493C2.0001831,10.7765503,2.223999,11.0001831,2.5,11h8.0006104C10.7765503,10.9998169,11.0001831,10.776001,11,10.5V2.4993896C10.9998169,2.2234497,10.776001,1.9998169,10.5,2z M10,10H3V3h7V10z M10.5,13H2.4993896C2.2234497,13.0001831,1.9998169,13.223999,2,13.5v8.0005493C2.0001831,21.7765503,2.223999,22.0001831,2.5,22h8.0006104C10.7765503,21.9998169,11.0001831,21.776001,11,21.5v-8.0006104C10.9998169,13.2234497,10.776001,12.9998169,10.5,13z M10,21H3v-7h7V21z M21.5,2h-8.0005493C13.2234497,2.0001831,12.9998169,2.223999,13,2.5v8.0005493C13.0001831,10.7765503,13.223999,11.0001831,13.5,11h8.0006104C21.7765503,10.9998169,22.0001831,10.776001,22,10.5V2.4993896C21.9998169,2.2234497,21.776001,1.9998169,21.5,2z M21,10h-7V3h7V10z"/></svg>
                                                             </a>
-                                                            <a class="btn btn-outline-primary" href="logistiques-list">
+                                                            <a class="btn btn-outline-primary" href="pieces-rechange-list">
                                                                 <svg xmlns="http://www.w3.org/2000/svg" class="w-inner-icn" enable-background="new 0 0 24 24" viewBox="0 0 24 24"><path d="M3.5,12C3.223877,12,3,12.223877,3,12.5S3.223877,13,3.5,13S4,12.776123,4,12.5S3.776123,12,3.5,12z M6.5,8h15C21.776123,8,22,7.776123,22,7.5S21.776123,7,21.5,7h-15C6.223877,7,6,7.223877,6,7.5S6.223877,8,6.5,8z M3.5,17C3.223877,17,3,17.223877,3,17.5S3.223877,18,3.5,18S4,17.776123,4,17.5S3.776123,17,3.5,17z M21.5,12h-15C6.223877,12,6,12.223877,6,12.5S6.223877,13,6.5,13h15c0.276123,0,0.5-0.223877,0.5-0.5S21.776123,12,21.5,12z M3.5,7C3.223877,7,3,7.223877,3,7.5S3.223877,8,3.5,8S4,7.776123,4,7.5S3.776123,7,3.5,7z M21.5,17h-15C6.223877,17,6,17.223877,6,17.5S6.223877,18,6.5,18h15c0.276123,0,0.5-0.223877,0.5-0.5S21.776123,17,21.5,17z"/></svg>
                                                             </a>
                                                         </div>
@@ -123,11 +123,15 @@
                                                                                 <div class="d-sm-flex align-items-center">
                                                                                     {% comment %} <div class="avatar mb-2 p-2 lh-1 mb-sm-0 avatar-md rounded-circle bg-primary me-2"> {% endcomment %}
                                                                                         <div class="image_div">
-                                                                                            <img src="{{ piece.image.url }}" class="pieces_image" style="width: 100px;height: 100px;"/>
-                                                                                        </div> 
+                                                                                            <img src="{{ piece.image.url }}" class="piece_image" style="width: 75px;height: 75px;"/>
+                                                                                        </div>
                                                                                     {% comment %} </div> {% endcomment %}
                                                                                     <div class="ms-1">
-                                                                                        <h6 class="mb-1"> <a href="#" class="float-start">{{ piece.type }}</a> </h6>
+                                                                                        <h6 class="mb-1">
+                                                                                            <a href="javascript:void(0)" class="float-start" onclick="fetchPieceDetails({{ piece.id }})">
+                                                                                                <i class="fa fa-plus-circle ms-2"></i> {{ piece.nom }}
+                                                                                            </a>
+                                                                                        </h6>                                                                                                                                                                                
                                                                                     </div>
                                                                                 </div>
                                                                             </div>
@@ -138,10 +142,12 @@
                                                                                     </div>
                                                                                     <a href="#" class="option-dots" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fe fe-more-vertical"></i></a>
                                                                                     <div class="dropdown-menu dropdown-menu-start">
-                                                                                        <a class="dropdown-item" href="#"><i class="fe fe-edit me-2"></i> Edit</a>
-                                                                                        <a class="dropdown-item" href="#"><i class="fe fe-share me-2"></i> Share</a>
-                                                                                        <a class="dropdown-item" href="#"><i class="fe fe-download me-2"></i> Clone</a>
-                                                                                        <a class="dropdown-item" href="#"><i class="fe fe-trash me-2"></i> Delete</a>
+                                                                                        <a class="dropdown-item" href="javascript:void(0)" onclick="openEditPieceModal({{ piece.id }})">
+                                                                                            <i class="fe fe-edit me-2"></i>Modifier
+                                                                                        </a>
+                                                                                        <a class="dropdown-item" href="javascript:void(0)" onclick="deletePiece({{ piece.id }})">
+                                                                                            <i class="fe fe-trash me-2"></i>Supprimer
+                                                                                        </a>
                                                                                     </div>
                                                                                 </div>
                                                                             </div>
@@ -153,257 +159,6 @@
                                                     </div>
                                                     {% endfor %}
                                                     {% endfor %}
-                                                    {% comment %} <div class="col-sm-12 col-md-12 col-lg-12 col-xl-4">
-                                                        <div class="card">
-                                                            <div class="card-body">
-                                                                <div class="row">
-                                                                    <div class="col-md-12">
-                                                                        <div class="row">
-                                                                            <div class="col">
-                                                                                <div class="d-sm-flex align-items-center">
-                                                                                    <div class="avatar mb-2 p-2 lh-1 mb-sm-0 avatar-md rounded-circle bg-info me-2">
-                                                                                        <img src="{% static 'assets/images/icons/shovel-and-rake.png' %}" class="side-menu__icon" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
-                                                                                    </div>
-                                                                                    <div class="ms-1">
-                                                                                        <h6 class="mb-1 text-normal"> <a href="project-details" class="float-start">Outils Agricoles</a> </h6>
-                                                                                    </div>
-                                                                                </div>
-                                                                            </div>
-                                                                            <div class="col-auto">
-                                                                                <div class="d-flex align-items-center">
-                                                                                    <div class="stars-main me-3">
-                                                                                        <i class="fa fa-star text-light star"></i>
-                                                                                    </div>
-                                                                                    <a href="#" class="option-dots" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fe fe-more-vertical"></i></a>
-                                                                                    <div class="dropdown-menu dropdown-menu-start">
-                                                                                        <a class="dropdown-item" href="project-edit"><i class="fe fe-edit me-2"></i> Edit</a>
-                                                                                        <a class="dropdown-item" href="#"><i class="fe fe-share me-2"></i> Suspend</a>
-                                                                                        <a class="dropdown-item" href="#"><i class="fe fe-trash me-2"></i> Delete</a>
-                                                                                    </div>
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-4">
-                                                        <div class="card">
-                                                            <div class="card-body">
-                                                                <div class="row">
-                                                                    <div class="col-md-12">
-                                                                        <div class="row">
-                                                                            <div class="col">
-                                                                                <div class="d-sm-flex align-items-center">
-                                                                                    <div class="avatar mb-2 p-2 lh-1 mb-sm-0 avatar-md rounded-circle bg-warning me-2">
-                                                                                        <img src="{% static 'assets/images/icons/infrastructure.png' %}" class="side-menu__icon" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
-                                                                                    </div>
-                                                                                    <div class="ms-1">
-                                                                                        <h6 class="mb-1 text-normal"> <a href="project-details" class="float-start">Infrastructure </a> </h6>   
-                                                                                    </div>
-                                                                                </div>
-                                                                            </div>
-                                                                            <div class="col-auto">
-                                                                                <div class="d-flex align-items-center">
-                                                                                    <div class="stars-main me-3">
-                                                                                        <i class="fa fa-star text-light star"></i>
-                                                                                    </div>
-                                                                                    <a href="#" class="option-dots" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fe fe-more-vertical"></i></a>
-                                                                                    <div class="dropdown-menu dropdown-menu-start">
-                                                                                        <a class="dropdown-item" href="#"><i class="fe fe-edit me-2"></i> Edit</a>
-                                                                                        <a class="dropdown-item" href="#"><i class="fe fe-share me-2"></i> Share</a>
-                                                                                        <a class="dropdown-item" href="#"><i class="fe fe-download me-2"></i> Clone</a>
-                                                                                        <a class="dropdown-item" href="#"><i class="fe fe-trash me-2"></i> Delete</a>
-                                                                                    </div>
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-4">
-                                                        <div class="card">
-                                                            <div class="card-body">
-                                                                <div class="row">
-                                                                    <div class="col-md-12">
-                                                                        <div class="row">
-                                                                            <div class="col">
-                                                                                <div class="d-sm-flex align-items-center">
-                                                                                    <div class="avatar mb-2 p-2 lh-1 mb-sm-0 avatar-md rounded-circle bg-info me-2">
-                                                                                        <img src="{% static 'assets/images/icons/fertilize.png' %}" class="side-menu__icon" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
-                                                                                    </div>
-                                                                                    <div class="ms-1">
-                                                                                        <h6 class="mb-1 text-normal"> <a href="project-details" class="float-start">Fertilisants et Traitements</a></h6>
-                                                                                    </div>
-                                                                                </div>
-                                                                            </div>
-                                                                            <div class="col-auto">
-                                                                                <div class="d-flex align-items-center">
-                                                                                    <div class="stars-main me-3">
-                                                                                        <i class="fa fa-star text-light star"></i>
-                                                                                    </div>
-                                                                                    <a href="#" class="option-dots" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fe fe-more-vertical"></i></a>
-                                                                                    <div class="dropdown-menu dropdown-menu-start">
-                                                                                        <a class="dropdown-item" href="#"><i class="fe fe-edit me-2"></i> Edit</a>
-                                                                                        <a class="dropdown-item" href="#"><i class="fe fe-share me-2"></i> Share</a>
-                                                                                        <a class="dropdown-item" href="#"><i class="fe fe-download me-2"></i> Clone</a>
-                                                                                        <a class="dropdown-item" href="#"><i class="fe fe-trash me-2"></i> Delete</a>
-                                                                                    </div>
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-4">
-                                                        <div class="card">
-                                                            <div class="card-body">
-                                                                <div class="row">
-                                                                    <div class="col-md-12">
-                                                                        <div class="row">
-                                                                            <div class="col">
-                                                                                <div class="d-sm-flex align-items-center">
-                                                                                    <div class="avatar mb-2 p-2 lh-1 mb-sm-0 avatar-md rounded-circle bg-primary me-2">
-                                                                                        <img src="{% static 'assets/images/icons/wheat-sack.png' %}" class="side-menu__icon" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
-                                                                                    </div>
-                                                                                    <div class="ms-1">
-                                                                                        <h6 class="mb-1 text-normal"> <a href="project-details" class="float-start">Graines et Pousses</a> </h6>
-                                                                                    </div>
-                                                                                </div>
-                                                                            </div>
-                                                                            <div class="col-auto">
-                                                                                <div class="d-flex align-items-center">
-                                                                                    <div class="stars-main me-3">
-                                                                                        <i class="fa fa-star text-light star"></i>
-                                                                                    </div>
-                                                                                    <a href="#" class="option-dots" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fe fe-more-vertical"></i></a>
-                                                                                    <div class="dropdown-menu dropdown-menu-start">
-                                                                                        <a class="dropdown-item" href="#"><i class="fe fe-edit me-2"></i> Edit</a>
-                                                                                        <a class="dropdown-item" href="#"><i class="fe fe-share me-2"></i> Share</a>
-                                                                                        <a class="dropdown-item" href="#"><i class="fe fe-download me-2"></i> Clone</a>
-                                                                                        <a class="dropdown-item" href="#"><i class="fe fe-trash me-2"></i> Delete</a>
-                                                                                    </div>
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-4">
-                                                        <div class="card">
-                                                            <div class="card-body">
-                                                                <div class="row">
-                                                                    <div class="col-md-12">
-                                                                        <div class="row">
-                                                                            <div class="col">
-                                                                                <div class="d-sm-flex align-items-center">
-                                                                                    <div class="avatar mb-2 p-2 lh-1 mb-sm-0 avatar-md rounded-circle bg-orange me-2">
-                                                                                        <img src="{% static 'assets/images/icons/gasoline.png' %}" class="side-menu__icon" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
-                                                                                    </div>
-                                                                                    <div class="ms-1">
-                                                                                        <h6 class="mb-1 text-normal"> <a href="project-details" class="float-start">Carburant</a> </h6>
-                                                                                    </div>
-                                                                                </div>
-                                                                            </div>
-                                                                            <div class="col-auto">
-                                                                                <div class="d-flex align-items-center">
-                                                                                    <div class="stars-main me-3">
-                                                                                        <i class="fa fa-star text-light star"></i>
-                                                                                    </div>
-                                                                                    <a href="#" class="option-dots" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fe fe-more-vertical"></i></a>
-                                                                                    <div class="dropdown-menu dropdown-menu-start">
-                                                                                        <a class="dropdown-item" href="#"><i class="fe fe-edit me-2"></i> Edit</a>
-                                                                                        <a class="dropdown-item" href="#"><i class="fe fe-share me-2"></i> Share</a>
-                                                                                        <a class="dropdown-item" href="#"><i class="fe fe-download me-2"></i> Clone</a>
-                                                                                        <a class="dropdown-item" href="#"><i class="fe fe-trash me-2"></i> Delete</a>
-                                                                                    </div>
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-4">
-                                                        <div class="card">
-                                                            <div class="card-body">
-                                                                <div class="row">
-                                                                    <div class="col-md-12">
-                                                                        <div class="row">
-                                                                            <div class="col">
-                                                                                <div class="d-sm-flex align-items-center">
-                                                                                    <div class="avatar mb-2 p-2 lh-1 mb-sm-0 avatar-md rounded-circle bg-warning me-2">
-                                                                                        <img src="{% static 'assets/images/icons/tire.png' %}" class="side-menu__icon" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
-                                                                                    </div>
-                                                                                    <div class="ms-1">
-                                                                                        <h6 class="mb-1 text-normal"> <a href="project-details" class="float-start">Pièces de rechange</a> </h6>
-                                                                                    </div>
-                                                                                </div>
-                                                                            </div>
-                                                                            <div class="col-auto">
-                                                                                <div class="d-flex align-items-center">
-                                                                                    <div class="stars-main me-3">
-                                                                                        <i class="fa fa-star text-light star"></i>
-                                                                                    </div>
-                                                                                    <a href="#" class="option-dots" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fe fe-more-vertical"></i></a>
-                                                                                    <div class="dropdown-menu dropdown-menu-start">
-                                                                                        <a class="dropdown-item" href="#"><i class="fe fe-edit me-2"></i> Edit</a>
-                                                                                        <a class="dropdown-item" href="#"><i class="fe fe-share me-2"></i> Share</a>
-                                                                                        <a class="dropdown-item" href="#"><i class="fe fe-download me-2"></i> Clone</a>
-                                                                                        <a class="dropdown-item" href="#"><i class="fe fe-trash me-2"></i> Delete</a>
-                                                                                    </div>
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-4">
-                                                        <div class="card">
-                                                            <div class="card-body">
-                                                                <div class="row">
-                                                                    <div class="col-md-12">
-                                                                        <div class="row">
-                                                                            <div class="col">
-                                                                                <div class="d-sm-flex align-items-center">
-                                                                                    <div class="avatar mb-2 p-2 lh-1 mb-sm-0 avatar-md rounded-circle bg-info me-2">
-                                                                                        <img src="{% static 'assets/images/icons/rh.png' %}" class="side-menu__icon" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
-                                                                                    </div>
-                                                                                    <div class="ms-1">
-                                                                                        <h6 class="mb-1 text-normal"> <a href="project-details" class="float-start">Ressources Humaines</a></h6>
-                                                                                    </div>
-                                                                                </div>
-                                                                            </div>
-                                                                            <div class="col-auto">
-                                                                                <div class="d-flex align-items-center">
-                                                                                    <div class="stars-main me-3">
-                                                                                        <i class="fa fa-star text-light star"></i>
-                                                                                    </div>
-                                                                                    <a href="#" class="option-dots" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fe fe-more-vertical"></i></a>
-                                                                                    <div class="dropdown-menu dropdown-menu-start">
-                                                                                        <a class="dropdown-item" href="#"><i class="fe fe-edit me-2"></i> Edit</a>
-                                                                                        <a class="dropdown-item" href="#"><i class="fe fe-share me-2"></i> Share</a>
-                                                                                        <a class="dropdown-item" href="#"><i class="fe fe-download me-2"></i> Clone</a>
-                                                                                        <a class="dropdown-item" href="#"><i class="fe fe-trash me-2"></i> Delete</a>
-                                                                                    </div>
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div> {% endcomment %}
                                                 </div>
                                             </div>
                                         </div>
@@ -435,7 +190,7 @@
                                     </div>
                                     <label for="nom">Nom :</label>
                                     <div class="input-icon">
-                                        <input class="form-control" id="nom" type="text" name="nom" placeholder="Gaz naturel" required onclick="displayIcon(this)">
+                                        <input class="form-control" id="nom" type="text" name="nom" placeholder="nom pièce" required onclick="displayIcon(this)">
                                         <span class="icon"><i class="fas fa-id-card text-info fa-10x"></i></span>
                                     </div>  
                                 </div>
@@ -492,9 +247,274 @@
 
 		<!--/Modal-->
 
-        {% endblock %}
-    {% block scripts %}   
+        <!-- Edit Piece Modal -->
+        <div class="modal fade" id="editPieceModal" tabindex="-1" aria-labelledby="editPieceModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="editPieceModalLabel">Modifier Pièce</h5><button aria-label="Close" class="btn-close" data-bs-dismiss="modal" ><span aria-hidden="true">&times;</span></button>
+                        
+                    </div>
+                    <div class="modal-body">
+                        <form id="editPieceForm" method="POST" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <input type="hidden" id="editPieceId" name="id">
+                            <div class="form-row">
+                                <!-- Nom -->
+                                <div class="col-md-6 mb-3">
+                                    <div class="avatar mb-2 p-2 lh-1 mb-sm-0 avatar-md rounded-circle  me-2">
+                                        <img src="{% static 'assets/images/icons/plaque-dimmatriculation.png' %}" class="side-menu__icon img" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
+                                    </div>
+                                    <label for="editPieceNom" >Nom de la pièce</label>
+                                    <div class="input-icon">
+                                        <input class="form-control" id="editPieceNom" type="text" name="nom" placeholder="nom pièce"  onclick="displayIcon(this)">
+                                        <span class="icon"><i class="fas fa-id-card text-info fa-10x"></i></span>
+                                    </div>
+                                    {% comment %} <input type="text" class="form-control" id="editPieceNom" name="nom"> {% endcomment %}
+                                </div>
 
+                                <!-- Type -->
+                                <div class="col-md-6 mb-3">
+                                    <div class="avatar mb-2 p-2 lh-1 mb-sm-0 avatar-md rounded-circle  me-2">
+                                        <img src="{% static 'assets/images/icons/des-pieces-de-rechange.png' %}" class="side-menu__icon img" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
+                                    </div>
+                                    <label for="editPieceType" >Type de pièce</label>
+                                    <select class="form-control" id="editPieceType" name="type" required>
+                                        <option value="" selected disabled>A</option>
+                                        {% for data in data %}
+                                            {% for type in data.types %}
+                                            <option value="{{ type.type_pieces }}">{{ type.type_pieces }}</option>
+                                            {% endfor %}
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <!-- Coût -->
+                                <div class="col-md-6 mb-3">
+                                    <div class="avatar mb-2 p-2 lh-1 mb-sm-0 avatar-md rounded-circle  me-2">
+                                        <img src="{% static 'assets/images/icons/euro.png' %}" class="side-menu__icon img" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
+                                    </div>
+                                    <label for="editPieceCout">Coût</label>
+                                    <div class="input-icon">
+                                        <input type="number" class="form-control" id="editPieceCout" name="cout">
+                                        <span class="icon"><i class="fe fe-dollar-sign"></i></span>
+                                    </div>    
+                                </div>
+
+                                <!-- Date d'achat -->
+                                <div class="col-md-6 mb-3">
+                                    <div class="avatar mb-2 p-2 lh-1 mb-sm-0 avatar-md rounded-circle  me-2">
+                                        <img src="{% static 'assets/images/icons/calendrier.png' %}" class="side-menu__icon img" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
+                                    </div>
+                                    <label for="editPieceDate" >Date d'achat</label>
+                                    <input type="date" class="form-control" id="editPieceDate" name="date_achat">
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <!-- Image Upload -->
+                                <div class="col-md-6 mb-3">
+                                    <label for="editPieceImage" >Image actuelle</label>
+                                    <div>
+                                        <img id="currentPieceImage" src="#" alt="Current Image" class="img-thumbnail" style="width: 100px;">
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <div class="avatar mb-2 p-2 lh-1 mb-sm-0 avatar-md rounded-circle  me-2">
+                                        <img src="{% static 'assets/images/icons/image-gallery.png' %}" class="side-menu__icon img" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
+                                    </div>
+                                    <label for="editPieceImage" >Changer l'image</label>
+                                    <input type="file" class="form-control" id="editPieceImage" name="image">
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                        <button type="button" class="btn btn-primary" onclick="saveEditPiece()">Enregistrer les modifications</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /Edit Piece Modal -->
+
+        <!-- Details Piece Modal -->
+        <div class="modal fade" id="pieceModal" tabindex="-1" aria-labelledby="pieceModalLabel" aria-hidden="true">
+            <div class="modal-dialog ">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="pieceModalLabel">Détails de la pièce</h5>
+                        <button aria-label="Close" class="btn-close" data-bs-dismiss="modal" ><span aria-hidden="true">&times;</span></button>
+                    </div>
+                    <div class="modal-body" id="piece-modal-body">
+                        <!-- Les détails de la pièce seront chargés ici dynamiquement -->
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                    </div>
+                </div>
+            </div>
+        </div>        
+        <!-- /Details Piece Modal -->
+
+
+        {% endblock %}
+    {% block scripts %}
+    
+        <script>
+            
+            function openEditPieceModal(pieceId) {
+                fetch(`/get-piece/${pieceId}/`)
+                    .then(response => response.json())
+                    .then(data => {
+                        // Populate the modal fields with the current Piece data
+                        document.getElementById('editPieceId').value = data.id;
+                        document.getElementById('editPieceNom').value = data.nom;
+                        document.getElementById('editPieceType').value = data.type;
+                        document.getElementById('editPieceCout').value = data.cout;
+                        document.getElementById('editPieceDate').value = data.date_achat;
+
+                        // Set the current image if it exists
+                        const currentImage = document.getElementById('currentPieceImage');
+                        if (data.image) {
+                            currentImage.src = data.image;  // Set the image source to the current image URL
+                            currentImage.style.display = 'block';  // Ensure the image is visible
+                        } else {
+                            currentImage.style.display = 'none';  // Hide the image if there's none
+                        }
+
+                        // Show the modal
+                        const editModal = new bootstrap.Modal(document.getElementById('editPieceModal'));
+                        editModal.show();
+                    })
+                    .catch(error => console.error('Error fetching piece data:', error));
+            }
+
+            // Save the edited Piece
+            function saveEditPiece() {
+                const pieceId = document.getElementById('editPieceId').value;
+                const formData = new FormData(document.getElementById('editPieceForm'));
+
+                fetch(`/edit-piece/${pieceId}/`, {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRFToken': getCookie('csrftoken')
+                    },
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(result => {
+                    if (result.success) {
+                        location.reload(); // Reload the page after successful save
+                    } else {
+                        alert(result.error || 'Une erreur s\'est produite.');
+                    }
+                })
+                .catch(error => console.error('Error saving piece:', error));
+            }                        
+
+            // Delete Piece with confirmation
+            function deletePiece(pieceId) {
+                // Afficher la boîte de dialogue SweetAlert de confirmation
+                Swal.fire({
+                    title: 'Êtes-vous sûr ?',
+                    text: "Voulez-vous vraiment supprimer cette pièce ?",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Oui, supprimer !',
+                    cancelButtonText: 'Annuler',
+                    customClass: {
+                        confirmButton: 'btn btn-primary',  // Bouton de confirmation en bleu
+                        cancelButton: 'btn btn-danger'     // Bouton d'annulation en rouge
+                    },
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // Si l'utilisateur confirme, procéder à la suppression
+                        fetch(`/delete-piece/${pieceId}/`, {
+                            method: 'DELETE',
+                            headers: {
+                                'X-CSRFToken': getCookie('csrftoken'),  // Assurez-vous que le token CSRF est passé correctement
+                            }
+                        })
+                        .then(response => response.json())
+                        .then(result => {
+                            if (result.success) {
+                                // Afficher un message de succès avec SweetAlert
+                                Swal.fire(
+                                    'Supprimé!',
+                                    'La pièce a été supprimée avec succès.',
+                                    'success'
+                                ).then(() => {
+                                    location.reload();  // Recharger la page après la suppression réussie
+                                });
+                            } else {
+                                // Afficher un message d'erreur avec SweetAlert
+                                Swal.fire(
+                                    'Erreur!',
+                                    result.error || 'Une erreur est survenue lors de la suppression d\' une pièce.',
+                                    'error'
+                                );
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                            // En cas de problème de réseau ou d'erreur inattendue, afficher un message d'erreur
+                            Swal.fire(
+                                'Erreur!',
+                                'Une erreur est survenue lors de la suppression d\' une pièce.',
+                                'error'
+                            );
+                        });
+                    }
+                });
+            }
+            
+
+            // Helper function to get CSRF token from cookies
+            function getCookie(name) {
+                let cookieValue = null;
+                if (document.cookie && document.cookie !== '') {
+                    const cookies = document.cookie.split(';');
+                    for (let i = 0; i < cookies.length; i++) {
+                        const cookie = cookies[i].trim();
+                        if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                            break;
+                        }
+                    }
+                }
+                return cookieValue;
+            }
+
+            function fetchPieceDetails(pieceId) {
+                fetch(`/get-piece-details/${pieceId}/`)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.error) {
+                            alert(data.error);
+                        } else {
+                            // Mettre à jour le contenu du modal avec les détails de la pièce
+                            document.getElementById('piece-modal-body').innerHTML = `
+                                <p><strong>Nom:</strong> ${data.nom}</p>
+                                <p><strong>Type:</strong> ${data.type}</p>
+                                <p><strong>Cout:</strong> ${data.cout}</p>
+                                <p><strong>Date d'achat:</strong> ${data.date_achat}</p>
+                                <img src="${data.image}" alt="${data.nom}" class="img-fluid w-25" />
+                            `;
+                            
+                            // Afficher le modal en utilisant la fonction Bootstrap
+                            var myModal = new bootstrap.Modal(document.getElementById('pieceModal'));
+                            myModal.show();
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Erreur:', error);
+                        alert("Une erreur s'est produite lors de la récupération des détails de la pièce.");
+                    });
+            }
+            
+        </script>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <!-- PROJECT JS-->
         <script src=" {% static 'assets/js/pieces-rechange.js' %} "></script>
 
