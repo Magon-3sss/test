@@ -804,6 +804,7 @@ def save_graine(request):
 def get_graine(request, graine_id):
     try:
         graine = Graine_Tables.objects.get(id=graine_id)
+        project = MapForm.objects.filter(geozone=graine.geozone).first()
         data = {
             'id': graine.id,
             'nom': graine.nom,
@@ -812,8 +813,10 @@ def get_graine(request, graine_id):
             'origine': graine.origine,
             'quantite': graine.quantite,
             'cout': graine.cout,
-            'geozone': graine.geozone_id,
+            'geozone_name': project.project_name if project else 'No project found',  # Add project name
+            'geozone_id': graine.geozone.id if graine.geozone else None,  # Add geozone ID
             'description': graine.description,
+            'image': graine.image.url if graine.image else '',
         }
         return JsonResponse(data, status=200)
     except Graine_Tables.DoesNotExist:
@@ -822,6 +825,7 @@ def get_graine(request, graine_id):
 def get_graine_details(request, graine_id):
     try:
         graine = Graine_Tables.objects.get(id=graine_id)
+        project = MapForm.objects.filter(geozone=graine.geozone).first()
         data = {
             'id': graine.id,
             'nom': graine.nom,
@@ -831,12 +835,12 @@ def get_graine_details(request, graine_id):
             'quantite': graine.quantite,
             'cout': graine.cout,
             'description': graine.description,
+            'geozone': project.project_name if project else 'No project found',
             'image': graine.image.url if graine.image else '',
         }
         return JsonResponse(data, status=200)
     except Graine_Tables.DoesNotExist:
         return JsonResponse({"error": "Graine not found"}, status=404)
-
 
 # Edit Graine details
 def edit_graine(request, graine_id):
@@ -871,7 +875,25 @@ def delete_graine(request, graine_id):
         return JsonResponse({"error": "Graine not found"}, status=404)
 
 """ Ressources Humaines"""
+def rh (request):
+    list = []
+    rhs = Rh_Tables.objects.filter(user=request.user)
+    types_rhs = TypeRh.objects.all()
+    projects = MapForm.objects.all()
+    list.append({"types": types_rhs,"rhs": rhs, "projects": projects})
+    return render(request, 'rh.html', {'data': list})
+
+def rh_list (request):
+    list = []
+    rhs = Rh_Tables.objects.filter(user=request.user)
+    types_rhs = TypeRh.objects.all()
+    projects = MapForm.objects.all()
+    list.append({"types": types_rhs,"rhs": rhs, "projects": projects})
+    return render(request, 'rh-list.html', {'data': list})
+
 @api_view(['POST'])
+@authentication_classes([SessionAuthentication])  
+@permission_classes([IsAuthenticated])
 def save_rh(request):
     if request.method == "POST":
         nom = request.POST.get('nom')
@@ -881,7 +903,7 @@ def save_rh(request):
         num_tel = request.POST.get('telephone')
         email = request.POST.get('email')
         fonction = request.POST.get('fonction')
-        salaire_heure = request.POST.get('Salaire_heure')
+        salaire_heure = request.POST.get('salaire_heure')
         salaire_jour = request.POST.get('salaire_jour')
         salaire_mois = request.POST.get('salaire_mois')
         matricule_cnss = request.POST.get('matricule_cnss')
@@ -917,7 +939,8 @@ def save_rh(request):
                 "matricule_cnss": matricule_cnss,
                 "image": image,
                 "date_contrat": date_contrat,
-                "geozone": geozone
+                "geozone": geozone,
+                "user": request.user.id
             }
         
         rh_serializer = RhSerializer(data=form)
@@ -929,6 +952,94 @@ def save_rh(request):
         else:
             print('no')
             return JsonResponse({"Erreur": "Some error occured"}, status=status.HTTP_201_CREATED)
+
+def get_rh(request, rh_id):
+    try:
+        rh = Rh_Tables.objects.get(id=rh_id)
+        project = MapForm.objects.filter(geozone=rh.geozone).first()
+        data = {
+            'id': rh.id,
+            'nom': rh.nom,
+            'prenom': rh.prenom,
+            'type': rh.type,
+            'adresse': rh.adresse,
+            'num_tel': rh.num_tel,
+            'email': rh.email,
+            'fonction': rh.fonction,
+            'salaire_heure': rh.salaire_heure,
+            'salaire_jour': rh.salaire_jour,
+            'salaire_mois': rh.salaire_mois,
+            'matricule_cnss': rh.matricule_cnss,
+            'date_contrat': rh.date_contrat,
+            'geozone_name': project.project_name if project else 'No project found',  # Add project name
+            'geozone_id': rh.geozone.id if rh.geozone else None,  # Add geozone ID
+            'image': rh.image.url if rh.image else '',
+        }
+        return JsonResponse(data, status=200)
+    except Rh_Tables.DoesNotExist:
+        return JsonResponse({"error": "Rh not found"}, status=404)
+    
+# Edit Rh details
+def edit_rh(request, rh_id):
+    try:
+        rh = Rh_Tables.objects.get(id=rh_id)
+
+        rh.nom = request.POST.get('nom')
+        rh.prenom = request.POST.get('prenom')
+        rh.type = request.POST.get('type_rh')
+        rh.adresse = request.POST.get('adresse')
+        rh.num_tel = request.POST.get('num_tel')
+        rh.email = request.POST.get('email')
+        rh.fonction = request.POST.get('fonction')
+        rh.salaire_heure = request.POST.get('salaire_heure')
+        rh.salaire_jour = request.POST.get('salaire_jour')
+        rh.salaire_mois = request.POST.get('salaire_mois')
+        rh.matricule_cnss = request.POST.get('matricule_cnss')
+        rh.date_contrat = request.POST.get('date_contrat')
+        rh.geozone_id = request.POST.get('geozone')
+
+        if 'image' in request.FILES:
+            rh.image = request.FILES['image']
+
+        rh.save()
+
+        return JsonResponse({"success": "Rh updated successfully"}, status=200)
+    except Rh_Tables.DoesNotExist:
+        return JsonResponse({"error": "Rh not found"}, status=404)
+           
+def get_rh_details(request, rh_id):
+    try:
+        rh = Rh_Tables.objects.get(id=rh_id)
+        project = MapForm.objects.filter(geozone=rh.geozone).first()
+        data = {
+            'id': rh.id,
+            'nom': rh.nom,
+            'prenom': rh.prenom,
+            'type': rh.type,
+            'adresse': rh.adresse,
+            'num_tel': rh.num_tel,
+            'email': rh.email,
+            'fonction': rh.fonction,
+            'salaire_heure': rh.salaire_heure,
+            'salaire_jour': rh.salaire_jour,
+            'salaire_mois': rh.salaire_mois,
+            'matricule_cnss': rh.matricule_cnss,
+            'date_contrat': rh.date_contrat,
+            'geozone': project.project_name if project else 'No project found',
+            'image': rh.image.url if rh.image else '',
+        }
+        return JsonResponse(data, status=200)
+    except Rh_Tables.DoesNotExist:
+        return JsonResponse({"error": "Rh not found"}, status=404)
+    
+# Delete Rh
+def delete_rh(request, rh_id):
+    try:
+        rh = Rh_Tables.objects.get(id=rh_id)
+        rh.delete()
+        return JsonResponse({"success": "Rh deleted successfully"}, status=200)
+    except Rh_Tables.DoesNotExist:
+        return JsonResponse({"error": "Rh not found"}, status=404)
 
 """ pieces de rechange """
 def pieces_rechange (request):
@@ -3543,19 +3654,6 @@ def infrastructure (request):
     return render(request, 'infrastructure.html')
 def fertilisants_traitements (request):
     return render(request, 'fertilisants-traitements.html')
-
-
-
-
-
-def rh (request):
-    list = []
-    rhs = Rh_Tables.objects.all()
-    types_rhs = TypeRh.objects.all()
-    projects = MapForm.objects.all()
-    list.append({"types": types_rhs,"rhs": rhs, "projects": projects})
-    return render(request, 'rh.html', {'data': list})
-
 
 def reseaux_irrigation (request):
     return render(request, 'reseaux-irrigation.html')

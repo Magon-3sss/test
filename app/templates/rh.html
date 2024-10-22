@@ -157,264 +157,12 @@
                                                     </div>
                                                     {% endfor %}
                                                     {% endfor %}
-                                                    {% comment %} <div class="col-sm-12 col-md-12 col-lg-12 col-xl-4">
-                                                        <div class="card">
-                                                            <div class="card-body">
-                                                                <div class="row">
-                                                                    <div class="col-md-12">
-                                                                        <div class="row">
-                                                                            <div class="col">
-                                                                                <div class="d-sm-flex align-items-center">
-                                                                                    <div class="avatar mb-2 p-2 lh-1 mb-sm-0 avatar-md rounded-circle bg-info me-2">
-                                                                                        <img src="{% static 'assets/images/icons/shovel-and-rake.png' %}" class="side-menu__icon" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
-                                                                                    </div>
-                                                                                    <div class="ms-1">
-                                                                                        <h6 class="mb-1 text-normal"> <a href="project-details" class="float-start">Outils Agricoles</a> </h6>
-                                                                                    </div>
-                                                                                </div>
-                                                                            </div>
-                                                                            <div class="col-auto">
-                                                                                <div class="d-flex align-items-center">
-                                                                                    <div class="stars-main me-3">
-                                                                                        <i class="fa fa-star text-light star"></i>
-                                                                                    </div>
-                                                                                    <a href="#" class="option-dots" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fe fe-more-vertical"></i></a>
-                                                                                    <div class="dropdown-menu dropdown-menu-start">
-                                                                                        <a class="dropdown-item" href="project-edit"><i class="fe fe-edit me-2"></i> Edit</a>
-                                                                                        <a class="dropdown-item" href="#"><i class="fe fe-share me-2"></i> Suspend</a>
-                                                                                        <a class="dropdown-item" href="#"><i class="fe fe-trash me-2"></i> Delete</a>
-                                                                                    </div>
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-4">
-                                                        <div class="card">
-                                                            <div class="card-body">
-                                                                <div class="row">
-                                                                    <div class="col-md-12">
-                                                                        <div class="row">
-                                                                            <div class="col">
-                                                                                <div class="d-sm-flex align-items-center">
-                                                                                    <div class="avatar mb-2 p-2 lh-1 mb-sm-0 avatar-md rounded-circle bg-warning me-2">
-                                                                                        <img src="{% static 'assets/images/icons/infrastructure.png' %}" class="side-menu__icon" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
-                                                                                    </div>
-                                                                                    <div class="ms-1">
-                                                                                        <h6 class="mb-1 text-normal"> <a href="project-details" class="float-start">Infrastructure </a> </h6>   
-                                                                                    </div>
-                                                                                </div>
-                                                                            </div>
-                                                                            <div class="col-auto">
-                                                                                <div class="d-flex align-items-center">
-                                                                                    <div class="stars-main me-3">
-                                                                                        <i class="fa fa-star text-light star"></i>
-                                                                                    </div>
-                                                                                    <a href="#" class="option-dots" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fe fe-more-vertical"></i></a>
-                                                                                    <div class="dropdown-menu dropdown-menu-start">
-                                                                                        <a class="dropdown-item" href="#"><i class="fe fe-edit me-2"></i> Edit</a>
-                                                                                        <a class="dropdown-item" href="#"><i class="fe fe-share me-2"></i> Share</a>
-                                                                                        <a class="dropdown-item" href="#"><i class="fe fe-download me-2"></i> Clone</a>
-                                                                                        <a class="dropdown-item" href="#"><i class="fe fe-trash me-2"></i> Delete</a>
-                                                                                    </div>
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-4">
-                                                        <div class="card">
-                                                            <div class="card-body">
-                                                                <div class="row">
-                                                                    <div class="col-md-12">
-                                                                        <div class="row">
-                                                                            <div class="col">
-                                                                                <div class="d-sm-flex align-items-center">
-                                                                                    <div class="avatar mb-2 p-2 lh-1 mb-sm-0 avatar-md rounded-circle bg-info me-2">
-                                                                                        <img src="{% static 'assets/images/icons/fertilize.png' %}" class="side-menu__icon" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
-                                                                                    </div>
-                                                                                    <div class="ms-1">
-                                                                                        <h6 class="mb-1 text-normal"> <a href="project-details" class="float-start">Fertilisants et Traitements</a></h6>
-                                                                                    </div>
-                                                                                </div>
-                                                                            </div>
-                                                                            <div class="col-auto">
-                                                                                <div class="d-flex align-items-center">
-                                                                                    <div class="stars-main me-3">
-                                                                                        <i class="fa fa-star text-light star"></i>
-                                                                                    </div>
-                                                                                    <a href="#" class="option-dots" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fe fe-more-vertical"></i></a>
-                                                                                    <div class="dropdown-menu dropdown-menu-start">
-                                                                                        <a class="dropdown-item" href="#"><i class="fe fe-edit me-2"></i> Edit</a>
-                                                                                        <a class="dropdown-item" href="#"><i class="fe fe-share me-2"></i> Share</a>
-                                                                                        <a class="dropdown-item" href="#"><i class="fe fe-download me-2"></i> Clone</a>
-                                                                                        <a class="dropdown-item" href="#"><i class="fe fe-trash me-2"></i> Delete</a>
-                                                                                    </div>
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-4">
-                                                        <div class="card">
-                                                            <div class="card-body">
-                                                                <div class="row">
-                                                                    <div class="col-md-12">
-                                                                        <div class="row">
-                                                                            <div class="col">
-                                                                                <div class="d-sm-flex align-items-center">
-                                                                                    <div class="avatar mb-2 p-2 lh-1 mb-sm-0 avatar-md rounded-circle bg-primary me-2">
-                                                                                        <img src="{% static 'assets/images/icons/wheat-sack.png' %}" class="side-menu__icon" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
-                                                                                    </div>
-                                                                                    <div class="ms-1">
-                                                                                        <h6 class="mb-1 text-normal"> <a href="project-details" class="float-start">Graines et Pousses</a> </h6>
-                                                                                    </div>
-                                                                                </div>
-                                                                            </div>
-                                                                            <div class="col-auto">
-                                                                                <div class="d-flex align-items-center">
-                                                                                    <div class="stars-main me-3">
-                                                                                        <i class="fa fa-star text-light star"></i>
-                                                                                    </div>
-                                                                                    <a href="#" class="option-dots" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fe fe-more-vertical"></i></a>
-                                                                                    <div class="dropdown-menu dropdown-menu-start">
-                                                                                        <a class="dropdown-item" href="#"><i class="fe fe-edit me-2"></i> Edit</a>
-                                                                                        <a class="dropdown-item" href="#"><i class="fe fe-share me-2"></i> Share</a>
-                                                                                        <a class="dropdown-item" href="#"><i class="fe fe-download me-2"></i> Clone</a>
-                                                                                        <a class="dropdown-item" href="#"><i class="fe fe-trash me-2"></i> Delete</a>
-                                                                                    </div>
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-4">
-                                                        <div class="card">
-                                                            <div class="card-body">
-                                                                <div class="row">
-                                                                    <div class="col-md-12">
-                                                                        <div class="row">
-                                                                            <div class="col">
-                                                                                <div class="d-sm-flex align-items-center">
-                                                                                    <div class="avatar mb-2 p-2 lh-1 mb-sm-0 avatar-md rounded-circle bg-orange me-2">
-                                                                                        <img src="{% static 'assets/images/icons/gasoline.png' %}" class="side-menu__icon" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
-                                                                                    </div>
-                                                                                    <div class="ms-1">
-                                                                                        <h6 class="mb-1 text-normal"> <a href="project-details" class="float-start">Carburant</a> </h6>
-                                                                                    </div>
-                                                                                </div>
-                                                                            </div>
-                                                                            <div class="col-auto">
-                                                                                <div class="d-flex align-items-center">
-                                                                                    <div class="stars-main me-3">
-                                                                                        <i class="fa fa-star text-light star"></i>
-                                                                                    </div>
-                                                                                    <a href="#" class="option-dots" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fe fe-more-vertical"></i></a>
-                                                                                    <div class="dropdown-menu dropdown-menu-start">
-                                                                                        <a class="dropdown-item" href="#"><i class="fe fe-edit me-2"></i> Edit</a>
-                                                                                        <a class="dropdown-item" href="#"><i class="fe fe-share me-2"></i> Share</a>
-                                                                                        <a class="dropdown-item" href="#"><i class="fe fe-download me-2"></i> Clone</a>
-                                                                                        <a class="dropdown-item" href="#"><i class="fe fe-trash me-2"></i> Delete</a>
-                                                                                    </div>
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-4">
-                                                        <div class="card">
-                                                            <div class="card-body">
-                                                                <div class="row">
-                                                                    <div class="col-md-12">
-                                                                        <div class="row">
-                                                                            <div class="col">
-                                                                                <div class="d-sm-flex align-items-center">
-                                                                                    <div class="avatar mb-2 p-2 lh-1 mb-sm-0 avatar-md rounded-circle bg-warning me-2">
-                                                                                        <img src="{% static 'assets/images/icons/tire.png' %}" class="side-menu__icon" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
-                                                                                    </div>
-                                                                                    <div class="ms-1">
-                                                                                        <h6 class="mb-1 text-normal"> <a href="project-details" class="float-start">Pièces de rechange</a> </h6>
-                                                                                    </div>
-                                                                                </div>
-                                                                            </div>
-                                                                            <div class="col-auto">
-                                                                                <div class="d-flex align-items-center">
-                                                                                    <div class="stars-main me-3">
-                                                                                        <i class="fa fa-star text-light star"></i>
-                                                                                    </div>
-                                                                                    <a href="#" class="option-dots" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fe fe-more-vertical"></i></a>
-                                                                                    <div class="dropdown-menu dropdown-menu-start">
-                                                                                        <a class="dropdown-item" href="#"><i class="fe fe-edit me-2"></i> Edit</a>
-                                                                                        <a class="dropdown-item" href="#"><i class="fe fe-share me-2"></i> Share</a>
-                                                                                        <a class="dropdown-item" href="#"><i class="fe fe-download me-2"></i> Clone</a>
-                                                                                        <a class="dropdown-item" href="#"><i class="fe fe-trash me-2"></i> Delete</a>
-                                                                                    </div>
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-4">
-                                                        <div class="card">
-                                                            <div class="card-body">
-                                                                <div class="row">
-                                                                    <div class="col-md-12">
-                                                                        <div class="row">
-                                                                            <div class="col">
-                                                                                <div class="d-sm-flex align-items-center">
-                                                                                    <div class="avatar mb-2 p-2 lh-1 mb-sm-0 avatar-md rounded-circle bg-info me-2">
-                                                                                        <img src="{% static 'assets/images/icons/rh.png' %}" class="side-menu__icon" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
-                                                                                    </div>
-                                                                                    <div class="ms-1">
-                                                                                        <h6 class="mb-1 text-normal"> <a href="project-details" class="float-start">Ressources Humaines</a></h6>
-                                                                                    </div>
-                                                                                </div>
-                                                                            </div>
-                                                                            <div class="col-auto">
-                                                                                <div class="d-flex align-items-center">
-                                                                                    <div class="stars-main me-3">
-                                                                                        <i class="fa fa-star text-light star"></i>
-                                                                                    </div>
-                                                                                    <a href="#" class="option-dots" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fe fe-more-vertical"></i></a>
-                                                                                    <div class="dropdown-menu dropdown-menu-start">
-                                                                                        <a class="dropdown-item" href="#"><i class="fe fe-edit me-2"></i> Edit</a>
-                                                                                        <a class="dropdown-item" href="#"><i class="fe fe-share me-2"></i> Share</a>
-                                                                                        <a class="dropdown-item" href="#"><i class="fe fe-download me-2"></i> Clone</a>
-                                                                                        <a class="dropdown-item" href="#"><i class="fe fe-trash me-2"></i> Delete</a>
-                                                                                    </div>
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div> {% endcomment %}
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                            <!--ROW CLOSED-->
+                                <!--ROW CLOSED-->
                             
         {% endblock %} 
 		{% block modal %}
@@ -500,9 +248,9 @@
                                     <div class="avatar mb-2 p-2 lh-1 mb-sm-0 avatar-md rounded-circle  me-2">
                                         <img src="{% static 'assets/images/icons/euro.png' %}" class="side-menu__icon img" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
                                     </div>
-                                  <label for="prix-heure">Salaire par heure :</label>
+                                  <label for="salaire_heure">Salaire par heure :</label>
                                   <div class="input-icon">
-                                  <input class="form-control" id="Salaire-heure" type="number" name="Salaire_heure" placeholder="Entrer le Salaire par heure" onclick="displayIcon(this)">
+                                  <input class="form-control" id="salaire_heure" type="number" name="salaire_heure" placeholder="Entrer le Salaire par heure" onclick="displayIcon(this)">
                                   <span class="icon"><i class="fe fe-dollar-sign"></i></span>
                                   </div>
                                 </div>
@@ -512,9 +260,9 @@
                                     <div class="avatar mb-2 p-2 lh-1 mb-sm-0 avatar-md rounded-circle  me-2">
                                         <img src="{% static 'assets/images/icons/euro.png' %}" class="side-menu__icon img" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
                                     </div>
-                                  <label for="Salaire-jour">Salaire par jour :</label>
+                                  <label for="salaire-jour">Salaire par jour :</label>
                                   <div class="input-icon">
-                                  <input class="form-control" id="Salaire-jour" type="number" name="Salaire_jour" placeholder="Entrer le Salaire par jour" onclick="displayIcon(this)">
+                                  <input class="form-control" id="salaire-jour" type="number" name="salaire_jour" placeholder="Entrer le Salaire par jour" onclick="displayIcon(this)">
                                   <span class="icon"><i class="fe fe-dollar-sign"></i></span>
                                 </div>
                                 </div>
@@ -522,9 +270,9 @@
                                     <div class="avatar mb-2 p-2 lh-1 mb-sm-0 avatar-md rounded-circle  me-2">
                                         <img src="{% static 'assets/images/icons/euro.png' %}" class="side-menu__icon img" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
                                     </div>
-                                    <label for="Salaire-jour">Salaire par mois :</label>
+                                    <label for="salaire_mois">Salaire par mois :</label>
                                     <div class="input-icon">
-                                    <input class="form-control" id="Salaire-mois" type="number" name="Salaire_mois" placeholder="Entrer le Salaire par mois" onclick="displayIcon(this)">
+                                    <input class="form-control" id="Salaire-mois" type="number" name="salaire_mois" placeholder="Entrer le Salaire par mois" onclick="displayIcon(this)">
                                     <span class="icon"><i class="fe fe-dollar-sign"></i></span>
                                 </div>
                                 </div>
@@ -582,11 +330,358 @@
 		</div>
 		<!--/Modal-->
 
+        <!-- Edit Rh Modal -->
+        <div class="modal fade" id="editRhModal" tabindex="-1" aria-labelledby="editRhLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <div class="avatar mb-2 p-2 lh-1 mb-sm-0 avatar-md rounded-circle  me-2">
+                            <img src="{% static 'assets/images/icons/la-gestion.png' %}" class="side-menu__icon img" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
+                        </div>
+                        <h5 class="modal-title" id="editRhLabel">Modifier Ressources Humaines</h5>
+                        <button aria-label="Close" class="btn-close" data-bs-dismiss="modal"><span aria-hidden="true">&times;</span></button>
+                    </div>
+                    <div class="modal-body pd-0">
+                        <form id="editRhForm" method="POST" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <input type="hidden" id="editRhId">
+
+                            <div class="form-row">
+                                <div class="col-md-6 mb-3">
+                                  <div class="avatar mb-2 p-2 lh-1 mb-sm-0 avatar-md rounded-circle  me-2">
+                                      <img src="{% static 'assets/images/icons/nom-rh.png' %}" class="side-menu__icon img" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
+                                  </div>
+                                  <label for="editRhNom">Nom :</label>
+                                  <input class="form-control" id="editRhNom" type="text" name="nom"  required>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                  <div class="avatar mb-2 p-2 lh-1 mb-sm-0 avatar-md rounded-circle  me-2">
+                                      <img src="{% static 'assets/images/icons/nom-rh.png' %}" class="side-menu__icon img" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
+                                  </div>
+                                  <label for="editRhPrenom">Prénom :</label>
+                                  <input class="form-control" id="editRhPrenom" type="text" name="prenom"  required>
+                                </div>
+                              </div>
+                              <div class="form-row">
+                                  <div class="col-md-6 mb-3">
+                                      <div class="avatar mb-2 p-2 lh-1 mb-sm-0 avatar-md rounded-circle  me-2">
+                                          <img src="{% static 'assets/images/icons/responsable-des-ressources-humaines.png' %}" class="side-menu__icon img" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
+                                      </div>
+                                      <label for="editRhType">Type :</label>
+                                      <select class="form-control" id="editRhType" name="type_rh" required>
+                                        <option value="" selected disabled>Ouvrier</option>
+                                        {% for data in data %}
+                                            {% for type in data.types %}
+                                            <option value="{{ type.type_rh }}">{{ type.type_rh }}</option>
+                                            {% endfor %}
+                                        {% endfor %}
+                                        </select>  
+                                    </div> 
+                                <div class="col-md-6 mb-3">
+                                  <div class="avatar mb-2 p-2 lh-1 mb-sm-0 avatar-md rounded-circle  me-2">
+                                      <img src="{% static 'assets/images/icons/emplacement.png' %}" class="side-menu__icon img" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
+                                  </div>
+                                  <label for="editRhAdresse">Adresse :</label>
+                                  <input class="form-control" id="editRhAdresse" type="text" name="adresse"  required>
+                                  {% comment %} <textarea class="form-control" id="adresse" name="adresse" placeholder="Entrer l'adresse" rows="3" required></textarea> {% endcomment %}
+                                </div>
+                              </div>
+                              <div class="form-row">
+                                  <div class="col-md-6 mb-3">
+                                      <div class="avatar mb-2 p-2 lh-1 mb-sm-0 avatar-md rounded-circle  me-2">
+                                          <img src="{% static 'assets/images/icons/appel.png' %}" class="side-menu__icon img" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
+                                      </div>
+                                      <label for="editRhTelephone">Numéro de téléphone :</label>
+                                      <input class="form-control" id="editRhTelephone" type="tel" name="num_tel"  required>
+                                  </div>
+                                  <div class="col-md-6 mb-3">
+                                      <div class="avatar mb-2 p-2 lh-1 mb-sm-0 avatar-md rounded-circle  me-2">
+                                          <img src="{% static 'assets/images/icons/email.png' %}" class="side-menu__icon img" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
+                                      </div>
+                                      <label for="editRhEmail">Email :</label>
+                                      <input class="form-control" id="editRhEmail" type="email" name="email"  required>
+                                    </div>
+                              </div>
+                              <div class="form-row">
+                                  <div class="col-md-6 mb-3">
+                                      <div class="avatar mb-2 p-2 lh-1 mb-sm-0 avatar-md rounded-circle  me-2">
+                                          <img src="{% static 'assets/images/icons/fonction-rh.png' %}" class="side-menu__icon img" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
+                                      </div>
+                                      <label for="editRhFonction">Fonction :</label>
+                                      <input class="form-control" id="editRhFonction" type="text" name="fonction"  required>
+                                    </div>
+                                  <div class="col-md-6 mb-3">
+                                      <div class="avatar mb-2 p-2 lh-1 mb-sm-0 avatar-md rounded-circle  me-2">
+                                          <img src="{% static 'assets/images/icons/euro.png' %}" class="side-menu__icon img" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
+                                      </div>
+                                    <label for="editRhPrixHeure">Salaire par heure :</label>
+                                    <div class="input-icon">
+                                    <input class="form-control" id="editRhPrixHeure" type="number" name="salaire_heure"  onclick="displayIcon(this)">
+                                    <span class="icon"><i class="fe fe-dollar-sign"></i></span>
+                                    </div>
+                                  </div>
+                              </div>
+                              <div class="form-row">
+                                  <div class="col-md-6 mb-3">
+                                      <div class="avatar mb-2 p-2 lh-1 mb-sm-0 avatar-md rounded-circle  me-2">
+                                          <img src="{% static 'assets/images/icons/euro.png' %}" class="side-menu__icon img" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
+                                      </div>
+                                    <label for="editRhSalaireJour">Salaire par jour :</label>
+                                    <div class="input-icon">
+                                    <input class="form-control" id="editRhSalaireJour" type="number" name="salaire_jour"  onclick="displayIcon(this)">
+                                    <span class="icon"><i class="fe fe-dollar-sign"></i></span>
+                                  </div>
+                                  </div>
+                                  <div class="col-md-6 mb-3">
+                                      <div class="avatar mb-2 p-2 lh-1 mb-sm-0 avatar-md rounded-circle  me-2">
+                                          <img src="{% static 'assets/images/icons/euro.png' %}" class="side-menu__icon img" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
+                                      </div>
+                                      <label for="editRhSalaireMois">Salaire par mois :</label>
+                                      <div class="input-icon">
+                                      <input class="form-control" id="editRhSalaireMois" type="number" name="salaire_mois"  onclick="displayIcon(this)">
+                                      <span class="icon"><i class="fe fe-dollar-sign"></i></span>
+                                  </div>
+                                  </div>
+                              </div>
+                              <div class="form-row">
+                                  <div class="col-md-6 mb-3">
+                                      <div class="avatar mb-2 p-2 lh-1 mb-sm-0 avatar-md rounded-circle  me-2">
+                                          <img src="{% static 'assets/images/icons/plaque-dimmatriculation.png' %}" class="side-menu__icon img" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
+                                      </div>
+                                      <label for="editRhMatriculecnss">Matricule CNSS :</label>
+                                      <div class="input-icon">
+                                          <input class="form-control" id="editRhMatriculecnss" type="text" name="matricule_cnss"  required onclick="displayIcon(this)">
+                                          <span class="icon"><i class="fas fa-id-card text-info fa-10x"></i></span>
+                                      </div>  
+                                    </div>
+                                  <div class="col-md-6 mb-3">
+                                      <div class="avatar mb-2 p-2 lh-1 mb-sm-0 avatar-md rounded-circle  me-2">
+                                          <img src="{% static 'assets/images/icons/image-gallery.png' %}" class="side-menu__icon img" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
+                                      </div>
+                                      <label for="editRhImage">Image :</label>
+                                      <input class="form-control-file" id="editRhImage" type="file" name="image">
+                                  </div>
+                              </div>
+                              <div class="form-row">
+                                  <div class="col-md-6 mb-3">
+                                      <div class="avatar mb-2 p-2 lh-1 mb-sm-0 avatar-md rounded-circle  me-2">
+                                          <img src="{% static 'assets/images/icons/calendrier.png' %}" class="side-menu__icon img" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
+                                      </div>
+                                    <label for="editRhDateContrat">Date De Contrat :</label>
+                                    <input class="form-control" id="editRhDateContrat" type="date" name="date_contrat" required>
+                                  </div>
+                                  <div class="col-md-6 mb-3">
+                                      <div class="avatar mb-2 p-2 lh-1 mb-sm-0 avatar-md rounded-circle  me-2">
+                                          <img src="{% static 'assets/images/icons/projet.png' %}" class="side-menu__icon img" enable-background="new 0 0 24 24" viewBox="0 0 24 24"/>
+                                      </div>
+                                      <label for="editRhGeozone">Projets :</label>
+                                      <select class="form-control" id="editRhGeozone" name="geozone" required>
+                                          <option value="" selected disabled>Select Project</option>
+                                          {% for data in data %}
+                                              {% for project in data.projects %}
+                                              <option value="{{ project.geozone_id }}" {% if project.geozone_id == rh.geozone.id %}selected{% endif %}>{{ project.project_name }}</option>
+                                              {% endfor %}
+                                          {% endfor %}
+                                      </select>
+                                  </div>
+                              </div>
+                            
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                                <button type="button" class="btn btn-primary" onclick="saveEditRh()">Enregistrer les modifications</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /Edit Rh Modal -->
+
+        <!-- Modal Rh Details -->
+        <div class="modal fade" id="rhModal" tabindex="-1" aria-labelledby="rhModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="rhModalLabel">Détails de la ressource humaine</h5>
+                        <button aria-label="Close" class="btn-close" data-bs-dismiss="modal"><span aria-hidden="true">&times;</span></button>
+                    </div>
+                    <div class="modal-body" id="rh-modal-body">
+                        <!-- Les détails de la rh seront insérés ici -->
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /Modal Rh Details -->
+
         {% endblock %}
     {% block scripts %}
 
-    
+        <script>
 
+            // Open the Edit Rh Modal with the current data
+            function openEditRhModal(rhId) {
+                fetch(`/get-rh/${rhId}/`)
+                    .then(response => response.json())
+                    .then(data => {
+                        // Populate the modal fields with the current Rh data
+                        document.getElementById('editRhId').value = data.id;
+                        document.getElementById('editRhNom').value = data.nom;
+                        document.getElementById('editRhPrenom').value = data.prenom;
+                        document.getElementById('editRhAdresse').value = data.adresse;
+                        document.getElementById('editRhType').value = data.type;
+                        document.getElementById('editRhTelephone').value = data.num_tel;
+                        document.getElementById('editRhEmail').value = data.email;
+                        document.getElementById('editRhFonction').value = data.fonction;
+                        document.getElementById('editRhPrixHeure').value = data.salaire_heure;
+                        document.getElementById('editRhSalaireJour').value = data.salaire_jour;
+                        document.getElementById('editRhSalaireMois').value = data.salaire_mois;
+                        document.getElementById('editRhMatriculecnss').value = data.matricule_cnss;
+                        document.getElementById('editRhDateContrat').value = data.date_contrat;
+                        document.getElementById('editRhGeozone').value = data.geozone_id;
+
+                        // Show the modal
+                        const editModal = new bootstrap.Modal(document.getElementById('editRhModal'));
+                        editModal.show();
+                    })
+                    .catch(error => console.error('Error fetching Rh data:', error));
+            }
+
+            // Save the edited Rh
+            function saveEditRh() {
+                const rhId = document.getElementById('editRhId').value;
+                const formData = new FormData(document.getElementById('editRhForm'));
+
+                fetch(`/edit-rh/${rhId}/`, {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRFToken': getCookie('csrftoken')
+                    },
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(result => {
+                    if (result.success) {
+                        location.reload(); // Reload the page after successful save
+                    } else {
+                        alert(result.error || 'Une erreur s\'est produite.');
+                    }
+                })
+                .catch(error => console.error('Error saving rh:', error));
+            }
+
+            // Delete Rh with confirmation
+            function deleteRh(rhId) {
+                // Afficher la boîte de dialogue SweetAlert de confirmation
+                Swal.fire({
+                    title: 'Êtes-vous sûr ?',
+                    text: "Voulez-vous vraiment supprimer cette rh ?",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Oui, supprimer !',
+                    cancelButtonText: 'Annuler',
+                    customClass: {
+                        confirmButton: 'btn btn-primary',  // Bouton de confirmation en bleu
+                        cancelButton: 'btn btn-danger'     // Bouton d'annulation en rouge
+                    },
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // Si l'utilisateur confirme, procéder à la suppression
+                        fetch(`/delete-rh/${rhId}/`, {
+                            method: 'DELETE',
+                            headers: {
+                                'X-CSRFToken': getCookie('csrftoken'),  // Assurez-vous que le token CSRF est passé correctement
+                            }
+                        })
+                        .then(response => response.json())
+                        .then(result => {
+                            if (result.success) {
+                                // Afficher un message de succès avec SweetAlert
+                                Swal.fire(
+                                    'Supprimé!',
+                                    'La rh a été supprimée avec succès.',
+                                    'success'
+                                ).then(() => {
+                                    location.reload();  // Recharger la page après la suppression réussie
+                                });
+                            } else {
+                                // Afficher un message d'erreur avec SweetAlert
+                                Swal.fire(
+                                    'Erreur!',
+                                    result.error || 'Une erreur est survenue lors de la suppression de la rh.',
+                                    'error'
+                                );
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                            // En cas de problème de réseau ou d'erreur inattendue, afficher un message d'erreur
+                            Swal.fire(
+                                'Erreur!',
+                                'Une erreur est survenue lors de la suppression de la rh.',
+                                'error'
+                            );
+                        });
+                    }
+                });
+            }
+
+            // Helper function to get CSRF token from cookies
+            function getCookie(name) {
+                let cookieValue = null;
+                if (document.cookie && document.cookie !== '') {
+                    const cookies = document.cookie.split(';');
+                    for (let i = 0; i < cookies.length; i++) {
+                        const cookie = cookies[i].trim();
+                        if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                            break;
+                        }
+                    }
+                }
+                return cookieValue;
+            }
+
+            function fetchRhDetails(rhId) {
+                fetch(`/get-rh/${rhId}/`)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.error) {
+                            alert(data.error);
+                        } else {
+                            // Mettre à jour le contenu du modal avec les détails de la rh
+                            document.getElementById('rh-modal-body').innerHTML = `
+                                <p><strong>Nom:</strong> ${data.nom}</p>
+                                <p><strong>Prenom:</strong> ${data.prenom}</p>
+                                <p><strong>Type:</strong> ${data.type}</p>
+                                <p><strong>Adresse:</strong> ${data.adresse}</p>
+                                <p><strong>Num_Tel:</strong> ${data.num_tel}</p>
+                                <p><strong>Email:</strong> ${data.email}</p>
+                                <p><strong>Fonction:</strong> ${data.fonction}</p>
+                                <p><strong>Salaire par Heure:</strong> ${data.salaire_heure}</p>
+                                <p><strong>Salaire par Jour:</strong> ${data.salaire_jour}</p>
+                                <p><strong>Salaire par Mois:</strong> ${data.salaire_mois}</p>
+                                <p><strong>Matricule CNSS:</strong> ${data.matricule_cnss}</p>
+                                <p><strong>Date du Contrat:</strong> ${data.date_contrat}</p>
+                                <p><strong>Geozone (Projet):</strong> ${data.geozone_name}</p>
+                                <img src="${data.image}" alt="${data.nom}" class="img-fluid w-50" />
+                            `;
+            
+                            // Afficher le modal avec Bootstrap
+                            var myModal = new bootstrap.Modal(document.getElementById('rhModal'));
+                            myModal.show();
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Erreur lors du chargement des détails de la rh:', error);
+                    });
+            }
+        </script>
+
+    
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <!-- PROJECT JS-->
         <script src=" {% static 'assets/js/rh.js' %} "></script>
 

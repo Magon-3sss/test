@@ -393,8 +393,8 @@
                                     <select class="form-control" id="editGraineGeozone" name="geozone" required>
                                         <option value="" selected disabled>Projet 1</option>
                                         {% for data in data %}
-                                            {% for projet in data.projects %}
-                                            <option value="{{ projet.geozone_id }}">{{ projet.project_name }}</option>
+                                            {% for project in data.projects %}
+                                            <option value="{{ project.geozone_id }}" {% if project.geozone_id == graine.geozone.id %}selected{% endif %}>{{ project.project_name }}</option>
                                             {% endfor %}
                                         {% endfor %}
                                     </select>
@@ -455,7 +455,7 @@
                         document.getElementById('editGraineQuantite').value = data.quantite;
                         document.getElementById('editGraineCout').value = data.cout;
                         document.getElementById('editGraineDescription').value = data.description;
-                        document.getElementById('editGraineGeozone').value = data.geozone;
+                        document.getElementById('editGraineGeozone').value = data.geozone_id;
 
                         // Show the modal
                         const editModal = new bootstrap.Modal(document.getElementById('editGraineModal'));
@@ -576,6 +576,7 @@
                                 <p><strong>Origine:</strong> ${data.origine}</p>
                                 <p><strong>Quantité:</strong> ${data.quantite}</p>
                                 <p><strong>Coût:</strong> ${data.cout}</p>
+                                <p><strong>Geozone (Projet):</strong> ${data.geozone_name}</p>
                                 <p><strong>Description:</strong> ${data.description}</p>
                                 <img src="${data.image}" alt="${data.nom}" class="img-fluid w-50" />
                             `;
