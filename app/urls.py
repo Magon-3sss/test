@@ -57,9 +57,9 @@ urlpatterns = [
     
     
     
-    path('saveTraitement/',views.save_traitement),
-    path('saveEngrais/',views.save_engrai),
-    path('saveMoteur/',views.save_moteur),
+    
+    
+    
      
     path('register1',views.register1, name='register1'), 
     path('register',views.register, name='register'), 
@@ -266,21 +266,45 @@ urlpatterns = [
     path('get-rh/<int:rh_id>/', views.get_rh, name='get_rh'),
     path('edit-rh/<int:rh_id>/', views.edit_rh, name='edit_rh'),
     path('get-rh-details/<int:rh_id>/', views.get_rh_details, name='get_rh_details'),
+    ### Engrais ###
+    path('engrais', views.engrais, name='engrais'),
+    path('engrais-list', views.engrais_list, name='engrais-list'),
+    path('saveEngrais/',views.save_engrai),
+    path('delete-engrai/<int:engrai_id>/', views.delete_engrai, name='delete_engrai'),
+    path('get-engrai/<int:engrai_id>/', views.get_engrai, name='get_engrai'),
+    path('edit-engrai/<int:engrai_id>/', views.edit_engrai, name='edit_engrai'),
+    path('get-engrai-details/<int:engrai_id>/', views.get_engrai_details, name='get_engrai_details'),
+    ### Traitement ###
+    path('traitements', views.traitements, name='traitements'),
+    path('traitements-list', views.traitements_list, name='traitements-list'),
+    path('saveTraitement/',views.save_traitement),
+    path('delete-traitement/<int:traitement_id>/', views.delete_traitement, name='delete_traitement'),
+    path('get-traitement/<int:traitement_id>/', views.get_traitement, name='get_traitement'),
+    path('edit-traitement/<int:traitement_id>/', views.edit_traitement, name='edit_traitement'),
+    path('get-traitement-details/<int:traitement_id>/', views.get_traitement_details, name='get_traitement_details'),
+    ### Moteur ###
+    path('moteur', views.moteur, name='moteur'),
+    #path('moteur-list', views.moteur_list, name='moteur-list'),
+    path('saveMoteur/',views.save_moteur),
+    #path('delete-moteur/<int:moteur_id>/', views.delete_moteur, name='delete_moteur'),
+    #path('get-moteur/<int:moteur_id>/', views.get_moteur, name='get_moteur'),
+    #path('edit-moteur/<int:moteur_id>/', views.edit_moteur, name='edit_moteur'),
+    #path('get-moteur-details/<int:moteur_id>/', views.get_moteur_details, name='get_moteur_details'),
     
     path('reseaux-irrigation', views.reseaux_irrigation, name='reseaux-irrigation'),
     path('reseaux-electrique', views.reseaux_electrique, name='reseaux-electrique'),
     path('poste-transformateur', views.poste_transformateur, name='poste-transformateur'),
     path('panneaux-pv', views.panneaux_pv, name='panneaux-pv'),
     path('generatur', views.generatur, name='generatur'),
-    path('moteur', views.moteur, name='moteur'),
+    
     path('securite', views.securite, name='securite'),
     path('batiments', views.batiments, name='batiments'),
     path('maison-villa', views.maison_villa, name='maison-villa'),
     path('hangar-depot', views.hangar_depot, name='hangar-depot'),
     path('local-technique', views.local_technique, name='local-technique'),
     path('frigo', views.frigo, name='frigo'),
-    path('engrais', views.engrais, name='engrais'),
-    path('traitements', views.traitements, name='traitements'),
+    
+    
     path('autres', views.autres, name='autres'),
     path('meteo', views.meteo, name='meteo'),
     

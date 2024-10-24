@@ -288,6 +288,7 @@ class Traitement_Tables(models.Model):
     image = models.ImageField(upload_to=filepath , null=True, blank=True)
     geozone = models.ForeignKey(Zone,on_delete=models.CASCADE)
     description = models.TextField(null=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
     
 class Engrais_Tables(models.Model):
     nom = models.CharField(max_length=100)
@@ -302,6 +303,7 @@ class Engrais_Tables(models.Model):
     image = models.ImageField(upload_to=filepath , null=True, blank=True)
     geozone = models.ForeignKey(Zone,on_delete=models.CASCADE)
     description = models.TextField(null=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
     
 """ class Moteur_Tables(models.Model):
     nom=models.CharField(max_length=30)

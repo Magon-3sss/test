@@ -59,6 +59,7 @@
                                                             <th class="bg-transparent border-bottom-0">Origine</th>
                                                             <th class="bg-transparent border-bottom-0">quantité</th>
                                                             <th class="bg-transparent border-bottom-0">Coût</th>
+                                                            <th class="bg-transparent border-bottom-0">Projet</th>
                                                             <th class="bg-transparent border-bottom-0">Image</th>
                                                             <th class="bg-transparent border-bottom-0">Description</th>
                                                             <th class="bg-transparent border-bottom-0 no-btn">Action</th>
@@ -77,6 +78,9 @@
                                                                 <td class="text-muted fs-15 fw-semibold">{{ graine.origine|default_if_none:"N/A" }}</td>
                                                                 <td class="text-muted fs-15 fw-semibold">{{ graine.quantite|default:"N/A" }}</td>
                                                                 <td class="text-muted fs-15 fw-semibold">{{ graine.cout|default_if_none:"N/A" }}<br></td>
+                                                                <td class="text-muted fs-15 fw-semibold">
+                                                                    {{ graine.geozone.mapform_set.first.project_name|default_if_none:"N/A" }}<br>
+                                                                </td>
                                                                 <td>
                                                                     {% if graine.image %}
                                                                         <img src="{{ graine.image.url }}" alt="Image de l'graine" width="100" height="100">

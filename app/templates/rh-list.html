@@ -89,7 +89,9 @@
                                                                 </td>
                                                                 <td class="text-muted fs-15 fw-semibold">{{ rh.matricule_cnss|default_if_none:"N/A" }}<br></td>
                                                                 <td class="text-muted fs-15 fw-semibold">{{ rh.date_contrat|default_if_none:"N/A" }}<br></td>
-                                                                <td class="text-muted fs-15 fw-semibold">{{ rh.geozone|default_if_none:"N/A" }}<br></td>
+                                                                <td class="text-muted fs-15 fw-semibold">
+                                                                    {{ rh.geozone.mapform_set.first.project_name|default_if_none:"N/A" }}<br>
+                                                                </td>
                                                                 <td>
                                                                     {% if rh.image %}
                                                                         <img src="{{ rh.image.url }}" alt="Image de l'rh" width="100" height="100">

@@ -576,6 +576,28 @@ def activate(request, uidb64, token):
         return redirect('about')
 
 """ Moteur """
+def moteur (request):
+    list = []
+    #moteurs = Moteur_Tables.objects.all()
+    type_moteur = TypeMoteur.objects.all()
+    type_tension = TypeTensionMoteur.objects.all()
+    print(type_tension)
+    type_couplage = TypeCouplageMoteur.objects.all()
+    projects = MapForm.objects.all()
+    list.append({"types": type_moteur,"tensions": type_tension,"couplages": type_couplage,"projects": projects})
+    return render(request, 'moteur.html', {'data': list})
+
+def moteur_list (request):
+    list = []
+    #moteurs = Moteur_Tables.objects.all()
+    type_moteur = TypeMoteur.objects.all()
+    type_tension = TypeTensionMoteur.objects.all()
+    print(type_tension)
+    type_couplage = TypeCouplageMoteur.objects.all()
+    projects = MapForm.objects.all()
+    list.append({"types": type_moteur,"tensions": type_tension,"couplages": type_couplage,"projects": projects})
+    return render(request, 'moteur-list.html', {'data': list})
+
 @api_view(['POST'])
 def save_moteur(request):
     if request.method =='POST':
@@ -621,7 +643,28 @@ def save_moteur(request):
             return JsonResponse({"Erreur": "Some error occured"}, status=status.HTTP_201_CREATED) """
 
 """ Engrais """
+# List Engrais
+def engrais (request):
+    list = []
+    engrais = Engrais_Tables.objects.filter(user=request.user)
+    types_engrais = TypeEngrais.objects.all()
+    categories_Engrais = CategorieEngrais.objects.all()
+    projects = MapForm.objects.all()
+    list.append({"types": types_engrais,"categories": categories_Engrais, "engrais":engrais, "projects": projects})
+    return render(request, 'engrais.html', {'data': list})
+# List Tableau Engrais
+def engrais_list (request):
+    list = []
+    engrais = Engrais_Tables.objects.filter(user=request.user)
+    types_engrais = TypeEngrais.objects.all()
+    categories_Engrais = CategorieEngrais.objects.all()
+    projects = MapForm.objects.all()
+    list.append({"types": types_engrais,"categories": categories_Engrais, "engrais":engrais, "projects": projects})
+    return render(request, 'engrais-list.html', {'data': list})
+# Save Engrais
 @api_view(['POST'])
+@authentication_classes([SessionAuthentication])  
+@permission_classes([IsAuthenticated])
 def save_engrai(request):
     if request.method == "POST":
         nom = request.POST.get('nom')
@@ -660,7 +703,8 @@ def save_engrai(request):
                 "date_achat": date_achat,
                 "image": image,
                 "geozone": geozone,
-                "description": description
+                "description": description,
+                "user": request.user.id
             }
         
         engrai_serializer = EngraisSerializer(data=form)
@@ -672,18 +716,110 @@ def save_engrai(request):
         else:
             print('no')
             return JsonResponse({"Erreur": "Some error occured"}, status=status.HTTP_201_CREATED)
+# Afficher Engrais       
+def get_engrai(request, engrai_id):
+    try:
+        engrai = Engrais_Tables.objects.get(id=engrai_id)
+        project = MapForm.objects.filter(geozone=engrai.geozone).first()
+        data = {
+            'id': engrai.id,
+            'nom': engrai.nom,
+            'type': engrai.type,
+            'categorie': engrai.categorie,
+            'composition': engrai.composition,
+            'mode_utilisation': engrai.mode_utilisation,
+            'dosage': engrai.dosage,
+            'quantite': engrai.quantite,
+            'date_achat': engrai.date_achat,
+            'cout': engrai.cout,
+            'geozone_name': project.project_name if project else 'No project found',  # Add project name
+            'geozone_id': engrai.geozone.id if engrai.geozone else None,  # Add geozone ID
+            'description': engrai.description,
+            'image': engrai.image.url if engrai.image else '',
+        }
+        return JsonResponse(data, status=200)
+    except Engrais_Tables.DoesNotExist:
+        return JsonResponse({"error": "Engrais not found"}, status=404)
+# Details Engrais   
+def get_engrai_details(request, engrai_id):
+    try:
+        engrai = Engrais_Tables.objects.get(id=engrai_id)
+        project = MapForm.objects.filter(geozone=engrai.geozone).first()
+        data = {
+            'id': engrai.id,
+            'nom': engrai.nom,
+            'type': engrai.type,
+            'categorie': engrai.categorie,
+            'composition': engrai.composition,
+            'mode_utilisation': engrai.mode_utilisation,
+            'dosage': engrai.dosage,
+            'quantite': engrai.quantite,
+            'date_achat': engrai.date_achat,
+            'cout': engrai.cout,
+            'geozone_name': project.project_name if project else 'No project found',  # Add project name
+            'geozone_id': engrai.geozone.id if engrai.geozone else None,  # Add geozone ID
+            'description': engrai.description,
+            'image': engrai.image.url if engrai.image else '',
+        }
+        return JsonResponse(data, status=200)
+    except Engrais_Tables.DoesNotExist:
+        return JsonResponse({"error": "Engrais not found"}, status=404)
+# Edit Engrais details
+def edit_engrai(request, engrai_id):
+    try:
+        engrai = Engrais_Tables.objects.get(id=engrai_id)
+
+        engrai.nom = request.POST.get('nom')
+        engrai.type = request.POST.get('type_engrais')
+        engrai.categorie = request.POST.get('categorie_engrais')
+        engrai.composition = request.POST.get('composition')
+        engrai.mode_utilisation = request.POST.get('mode_utilisation')
+        engrai.dosage = request.POST.get('dosage')
+        engrai.quantite = request.POST.get('quantite')
+        engrai.date_achat = request.POST.get('date_achat')
+        engrai.cout = request.POST.get('cout')
+        engrai.description = request.POST.get('description')
+        engrai.geozone_id = request.POST.get('geozone')
+
+        if 'image' in request.FILES:
+            engrai.image = request.FILES['image']
+
+        engrai.save()
+
+        return JsonResponse({"success": "Engrais updated successfully"}, status=200)
+    except Engrais_Tables.DoesNotExist:
+        return JsonResponse({"error": "Engrais not found"}, status=404)
+# Delete Engrais
+def delete_engrai(request, engrai_id):
+    try:
+        engrai = Engrais_Tables.objects.get(id=engrai_id)
+        engrai.delete()
+        return JsonResponse({"success": "Engrais deleted successfully"}, status=200)
+    except Engrais_Tables.DoesNotExist:
+        return JsonResponse({"error": "Engrais not found"}, status=404)
 
 """ Traitements """
 def traitements (request):
     list = []
-    traitements = Traitement_Tables.objects.all()
+    traitements = Traitement_Tables.objects.filter(user=request.user)
     types_traitements = TypeTraitement.objects.all()
     categories_Traitements = CategorieTraitement.objects.all()
     projects = MapForm.objects.all()
     list.append({"types": types_traitements,"categories": categories_Traitements, "traitements":traitements, "projects": projects})
     return render(request, 'traitements.html', {'data': list})
 
+def traitements_list (request):
+    list = []
+    traitements = Traitement_Tables.objects.filter(user=request.user)
+    types_traitements = TypeTraitement.objects.all()
+    categories_Traitements = CategorieTraitement.objects.all()
+    projects = MapForm.objects.all()
+    list.append({"types": types_traitements,"categories": categories_Traitements, "traitements":traitements, "projects": projects})
+    return render(request, 'traitements-list.html', {'data': list})
+
 @api_view(['POST'])
+@authentication_classes([SessionAuthentication])  
+@permission_classes([IsAuthenticated])
 def save_traitement(request):
     if request.method == "POST":
         nom = request.POST.get('nom')
@@ -734,8 +870,90 @@ def save_traitement(request):
         else:
             print('no')
             return JsonResponse({"Erreur": "Some error occured"}, status=status.HTTP_201_CREATED)
+# Afficher Traitement       
+def get_traitement(request, traitement_id):
+    try:
+        traitement = Traitement_Tables.objects.get(id=traitement_id)
+        project = MapForm.objects.filter(geozone=traitement.geozone).first()
+        data = {
+            'id': traitement.id,
+            'nom': traitement.nom,
+            'type': traitement.type,
+            'categorie': traitement.categorie,
+            'composition': traitement.composition,
+            'mode_utilisation': traitement.mode_utilisation,
+            'dosage': traitement.dosage,
+            'quantite': traitement.quantite,
+            'date_achat': traitement.date_achat,
+            'cout': traitement.cout,
+            'geozone_name': project.project_name if project else 'No project found',  # Add project name
+            'geozone_id': traitement.geozone.id if traitement.geozone else None,  # Add geozone ID
+            'description': traitement.description,
+            'image': traitement.image.url if traitement.image else '',
+        }
+        return JsonResponse(data, status=200)
+    except Traitement_Tables.DoesNotExist:
+        return JsonResponse({"error": "Tratements not found"}, status=404)
+# Details Traitement   
+def get_traitement_details(request, traitement_id):
+    try:
+        traitement = Traitement_Tables.objects.get(id=traitement_id)
+        project = MapForm.objects.filter(geozone=traitement.geozone).first()
+        data = {
+            'id': traitement.id,
+            'nom': traitement.nom,
+            'type': traitement.type,
+            'categorie': traitement.categorie,
+            'composition': traitement.composition,
+            'mode_utilisation': traitement.mode_utilisation,
+            'dosage': traitement.dosage,
+            'quantite': traitement.quantite,
+            'date_achat': traitement.date_achat,
+            'cout': traitement.cout,
+            'geozone_name': project.project_name if project else 'No project found',  # Add project name
+            'geozone_id': traitement.geozone.id if traitement.geozone else None,  # Add geozone ID
+            'description': traitement.description,
+            'image': traitement.image.url if traitement.image else '',
+        }
+        return JsonResponse(data, status=200)
+    except Traitement_Tables.DoesNotExist:
+        return JsonResponse({"error": "Traitement not found"}, status=404)
+# Edit Traitements details
+def edit_traitement(request, traitement_id):
+    try:
+        traitement = Traitement_Tables.objects.get(id=traitement_id)
+
+        traitement.nom = request.POST.get('nom')
+        traitement.type = request.POST.get('type_traitement')
+        traitement.categorie = request.POST.get('categorie_traitement')
+        traitement.composition = request.POST.get('composition')
+        traitement.mode_utilisation = request.POST.get('mode_utilisation')
+        traitement.dosage = request.POST.get('dosage')
+        traitement.quantite = request.POST.get('quantite')
+        traitement.date_achat = request.POST.get('date_achat')
+        traitement.cout = request.POST.get('cout')
+        traitement.description = request.POST.get('description')
+        traitement.geozone_id = request.POST.get('geozone')
+
+        if 'image' in request.FILES:
+            traitement.image = request.FILES['image']
+
+        traitement.save()
+
+        return JsonResponse({"success": "Engrais updated successfully"}, status=200)
+    except Engrais_Tables.DoesNotExist:
+        return JsonResponse({"error": "Engrais not found"}, status=404)
+# Delete Traitement
+def delete_traitement(request, traitement_id):
+    try:
+        traitement = Traitement_Tables.objects.get(id=traitement_id)
+        traitement.delete()
+        return JsonResponse({"success": "Traitements deleted successfully"}, status=200)
+    except Traitement_Tables.DoesNotExist:
+        return JsonResponse({"error": "Traitements not found"}, status=404)
 
 """ Graines et Pousses """
+# List Graines et Pousses
 def graines_pousses (request):
     list = []
     graines = Graine_Tables.objects.filter(user=request.user)
@@ -744,7 +962,7 @@ def graines_pousses (request):
     projects = MapForm.objects.all()
     list.append({"types": types_graines,"categories": categories_graines, "graines":graines, "projects": projects})
     return render(request, 'graines-pousses.html', {'data': list})
-
+# List Tableau Graines et Pousses
 def graines_pousses_list (request):
     list = []
     graines = Graine_Tables.objects.filter(user=request.user)
@@ -753,7 +971,7 @@ def graines_pousses_list (request):
     projects = MapForm.objects.all()
     list.append({"types": types_graines,"categories": categories_graines, "graines":graines, "projects": projects})
     return render(request, 'graines-pousses-list.html', {'data': list})
-
+# Save Graines et Pousses
 @api_view(['POST'])
 @authentication_classes([SessionAuthentication])  
 @permission_classes([IsAuthenticated])
@@ -800,7 +1018,7 @@ def save_graine(request):
         else:
             print('no')
             return JsonResponse({"Erreur": "Some error occured"}, status=status.HTTP_201_CREATED)
-        
+# Afficher Graines et Pousses       
 def get_graine(request, graine_id):
     try:
         graine = Graine_Tables.objects.get(id=graine_id)
@@ -821,7 +1039,7 @@ def get_graine(request, graine_id):
         return JsonResponse(data, status=200)
     except Graine_Tables.DoesNotExist:
         return JsonResponse({"error": "Graine not found"}, status=404)
-    
+# Details Graines et Pousses   
 def get_graine_details(request, graine_id):
     try:
         graine = Graine_Tables.objects.get(id=graine_id)
@@ -841,7 +1059,6 @@ def get_graine_details(request, graine_id):
         return JsonResponse(data, status=200)
     except Graine_Tables.DoesNotExist:
         return JsonResponse({"error": "Graine not found"}, status=404)
-
 # Edit Graine details
 def edit_graine(request, graine_id):
     try:
@@ -864,7 +1081,6 @@ def edit_graine(request, graine_id):
         return JsonResponse({"success": "Graine updated successfully"}, status=200)
     except Graine_Tables.DoesNotExist:
         return JsonResponse({"error": "Graine not found"}, status=404)
-
 # Delete Graine
 def delete_graine(request, graine_id):
     try:
@@ -977,8 +1193,7 @@ def get_rh(request, rh_id):
         }
         return JsonResponse(data, status=200)
     except Rh_Tables.DoesNotExist:
-        return JsonResponse({"error": "Rh not found"}, status=404)
-    
+        return JsonResponse({"error": "Rh not found"}, status=404)  
 # Edit Rh details
 def edit_rh(request, rh_id):
     try:
@@ -1006,7 +1221,7 @@ def edit_rh(request, rh_id):
         return JsonResponse({"success": "Rh updated successfully"}, status=200)
     except Rh_Tables.DoesNotExist:
         return JsonResponse({"error": "Rh not found"}, status=404)
-           
+# Afficher Rh details          
 def get_rh_details(request, rh_id):
     try:
         rh = Rh_Tables.objects.get(id=rh_id)
@@ -1031,7 +1246,6 @@ def get_rh_details(request, rh_id):
         return JsonResponse(data, status=200)
     except Rh_Tables.DoesNotExist:
         return JsonResponse({"error": "Rh not found"}, status=404)
-    
 # Delete Rh
 def delete_rh(request, rh_id):
     try:
@@ -3667,17 +3881,6 @@ def panneaux_pv (request):
 def generatur (request):
     return render(request, 'generatur.html')
 
-def moteur (request):
-    list = []
-    #moteurs = Moteur_Tables.objects.all()
-    type_moteur = TypeMoteur.objects.all()
-    type_tension = TypeTensionMoteur.objects.all()
-    print(type_tension)
-    type_couplage = TypeCouplageMoteur.objects.all()
-    projects = MapForm.objects.all()
-    list.append({"types": type_moteur,"tensions": type_tension,"couplages": type_couplage,"projects": projects})
-    return render(request, 'moteur.html', {'data': list})
-
 def securite (request):
     return render(request, 'securite.html')
 def batiments (request):
@@ -3710,14 +3913,6 @@ def local_technique (request):
 def frigo (request):
     return render(request, 'frigo.html')
 
-def engrais (request):
-    list = []
-    engrais = Engrais_Tables.objects.all()
-    types_engrais = TypeEngrais.objects.all()
-    categories_Engrais = CategorieEngrais.objects.all()
-    projects = MapForm.objects.all()
-    list.append({"types": types_engrais,"categories": categories_Engrais, "engrais":engrais, "projects": projects})
-    return render(request, 'engrais.html', {'data': list})
 
 def autres (request):
     return render(request, 'autres.html')
