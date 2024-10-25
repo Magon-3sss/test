@@ -1,263 +1,188 @@
 {% extends 'components/base.html' %}
 {% load static %}
 
-    {% block styles %}
+{% block styles %}
+<style>
+	html {
+		height: 100vh;
+		width: 100%;
+		margin: 0;
+		padding: 0;
+	}
+</style> 
 
-    {% endblock %}
-    
-        {% block content %} 
-		
-		<meta charset="UTF-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-		<meta http-equiv="X-UA-Compatible" content="IE=edge">
-		<meta name="author" content="unsorry">
-        
+<style>
+	body {
+		margin: 0;
+		padding: 0;
+	}
 
-		<link rel="icon" type="image/x-icon" href="https://unsorry.net/assets-date/images/favicon.png">
-
-        
-
-		
-		<style>
-			html {
-				height: 100vh;
-				width: 100%;
-				margin: 0;
-				padding: 0;
-			}
-		</style> 
 	
-		<style>
-			body {
-				margin: 0;
-				padding: 0;
-			}
+	
+	#save {
+		position: absolute;
+		top: 5%;
+		right: 50%;
+		padding: 10px;
+		z-index: 400;
+		background-color: #4ea8cf8a;
+		border-radius: 15px;
+		cursor: pointer;
+	  }
 
-			
-			
-			#save {
-				position: absolute;
-				top: 5%;
-				right: 50%;
-				padding: 10px;
-				z-index: 400;
-				background-color: #4ea8cf8a;
-				border-radius: 15px;
-				cursor: pointer;
-			  }
+	.info {
+		padding: 6px 8px;
+		font: 12px/14px Arial, Helvetica, sans-serif;
+		color: white;
+		background: rgba(52,58,64,0.8);
+		box-shadow: 0 0 15px rgba(255,255,255,0.2);
+		border-radius: 5px;
+		text-align: left;
+	}
+	  
+	
+</style>
+<link rel="stylesheet" href="{% static 'assets/plugins/select2/select2.min.css' %}">
+{% endblock %}
 
-			.info {
-				padding: 6px 8px;
-				font: 12px/14px Arial, Helvetica, sans-serif;
-				color: white;
-				background: rgba(52,58,64,0.8);
-				box-shadow: 0 0 15px rgba(255,255,255,0.2);
-				border-radius: 5px;
-				text-align: left;
-			}
-			  
-			
-		</style>
+{% block content %}
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="author" content="unsorry">
 
-						<body onload= "execute()">
-							<!-- PAGE-HEADER -->
-							<div class="page-header">
-								<div>
-									<h1 class="page-title">Project New</h1>
-								</div>
-								<div class="ms-auto pageheader-btn">
-									<ol class="breadcrumb">
-										<li class="breadcrumb-item">Apps</li>
-										<li class="breadcrumb-item"><a href="javascript:void(0);">Projects</a></li>
-										<li class="breadcrumb-item active" aria-current="page">Project New</li>
-									</ol>
-								</div>
-							</div>
-							<!-- PAGE-HEADER END -->
-							
-							<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-							
-							<!--ROW OPENED-->
-							<div class="row">
-								<div class="col-lg-12 col-md-12">
-									<div  class="card">
-										<div class="card-header border-bottom">
-											<h4 class="mb-0">Project Details</h4>
-										</div>
-											<div class="card-body p-0 create-project-main">
-											<div class="row p-5 border-bottom">
-												<div class="col-sm-12 col-md-12 col-xl-3">
-													<div class="form-group">
-														<label for="project-name" class="form-label text-muted">Project Name:</label>
-														<div class="input-group">
-															<input id="project-name-id" type="text" class="form-control text-dark" placeholder="Enter Project Name" name="project_name">
-														</div>
-													</div>
-												</div>
-												<div class="col-sm-12 col-md-12 col-xl-3">
-													<div class="form-group">
-														<label for="project-start-date" class="form-label text-muted">Project Date:</label>
-														<div id="ps-datepicker" class="input-group date" data-date-format="dd-mm-yyyy">
-															<span class="input-group-addon input-group-text bg-primary-transparent"><i class="fe fe-calendar text-primary-dark"></i></span>
-															<input id="project-date-id" class="form-control" type="text" placeholder="Select Start Date" name="project_date"/>
-														</div>
-													</div>
-												</div>
-												
-												<div class="col-sm-12 col-md-12 col-xl-4">
-													<div class="form-group">
-														<label for="project-category" class="form-label text-muted">Culture :</label>
-														<select class="form-control select2-show-search" id="project-category-id" placeholder="Choose Type..." name="project_category">
-															<option label="Choose one"></option>
-															<option value="Grand Culture">Grand Culture</option>
-															<option value="Arbo-culture">Arbo-culture</option>
-															<option value="Palmier">Palmier</option>
-															<option value="Mixte">Mixte</option>
-														</select>
-													</div>
-												</div>
-												<div class="col-sm-12 col-md-12 col-xl-4">
-													<div class="form-group">
-														<label for="project-department" class="form-label text-muted">Type de culture </label>
-														<select class="form-control select2-show-search" id="project-department-id" data-placeholder="Choose Type..." name="project_department">
-															<option label="Choose one"></option>
-															<option value="Blé">Blé</option>
-															<option value="Alpha">Alpha</option>
-															<option value="Alpha-Alpha">Alpha-Alpha</option>
-															<option value="Oliver">Oliver</option>
-															<option value="Amandier">Amandier</option>
-															<option value="Pistachier">Pistachier</option>
-															<option value="Degla">Degla</option>
-															<option value="Beser">Beser</option>
-															<option value="Aligue">Aligue</option>
-														</select>
-													</div>
-												</div>
-												<div class="col-sm-12 col-md-12 col-xl-4">
-													<div class="form-group">
-														<label class="form-label text-muted">Client: </label>
-														<div class="input-group">
-															<input id="client-id" type="text" class="form-control text-dark" placeholder="Enter Client Name" name="client">
-														</div>
-													</div>
-												</div>
-												<div class="form-group note-form-group note-group-select-from-files">
-													<label for="note-dialog-image-file-16838859089971" class="note-form-label">Select from files</label>
-													<input id="note-dialog-image-file-16838859089971" class="note-image-input form-control-file note-form-control note-input" type="file" name="files" accept="image/*" >
-												</div>
-												<input id="zone-id" type="number" style="display: none;" name="zone_id"/>
-											</div>
-											
-											<div class="row p-5">
-												<div class="btn-list text-end">
-													<button class="btn btn-outline-danger">
-														<i class="fe fe-x-circle"></i>
-														Cancel
-													</button>
-													<button onclick="saveForm()" class="btn btn-primary">
-														<i  class="fe fe-check-circle"></i>
-														Save
-													</button>
-												</div>
-											</div>
+<link rel="icon" type="image/x-icon" href="https://unsorry.net/assets-date/images/favicon.png">
 
-										</div>
-									</div>
+<body onload="execute()">
+    <!-- PAGE-HEADER -->
+    <div class="page-header">
+        <div>
+            <h1 class="page-title">Nouveau Projet</h1>
+        </div>
+        <div class="ms-auto pageheader-btn">
+            <ol class="breadcrumb">
+                {% comment %} <li class="breadcrumb-item">Apps</li> {% endcomment %}
+                <li class="breadcrumb-item"><a href="{% url 'projects' %}">Projets</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Nouveau Projet</li>
+            </ol>
+        </div>
+    </div>
+    <!-- PAGE-HEADER END -->
+    
+    <!--ROW OPENED-->
+    <div class="row">
+        <div class="col-lg-12 col-md-12">
+            <div class="card">
+                <div class="card-header border-bottom">
+                    <h4 class="mb-0">Détails du Projet</h4>
+                </div>
+                <div class="card-body p-0 create-project-main">
+                    <form method="post" action="{% url 'project-new' %}">
+                        {% csrf_token %}
+                        <div class="row p-5 border-bottom">
+                            <div class="col-sm-12 col-md-12 col-xl-4">
+                                <div class="form-group">
+                                    <label for="project-name-id" class="form-label text-muted">Nom du Projet:</label>
+                                    <div class="input-group">
+                                        <input id="project-name-id" type="text" class="form-control text-dark" placeholder="Entrez le nom du projet" name="project_name" required>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-12 col-md-12 col-xl-4">
+                                <div class="form-group">
+                                    <label for="project-date-id" class="form-label text-muted">Date du Projet:</label>
+                                    <div class="input-group date" id="ps-datepicker" data-date-format="dd-mm-yyyy">
+                                        <span class="input-group-addon input-group-text bg-primary-transparent"><i class="fe fe-calendar text-primary-dark"></i></span>
+                                        <input id="project-date-id" class="form-control" type="text" placeholder="Sélectionnez la date de début" name="project_date" required>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-12 col-md-12 col-xl-4">
+                                <div class="form-group">
+                                    <label for="project-category-id" class="form-label text-muted">Culture :</label>
+                                    <select class="form-control select2-show-search" id="project-category-id" name="project_category" required>
+                                        <option label="Choisissez une option"></option>
+                                        <option value="Grand Culture">Grand Culture</option>
+                                        <option value="Arbo-culture">Arbo-culture</option>
+                                        <option value="Palmier">Palmier</option>
+                                        <option value="Mixte">Mixte</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-sm-12 col-md-12 col-xl-4">
+                                <div class="form-group">
+                                    <label for="project-department-id" class="form-label text-muted">Type de Culture:</label>
+                                    <select class="form-control select2-show-search" id="project-department-id" name="department" required>
+                                        <option label="Choisissez une option"></option>
+                                        <option value="Blé">Blé</option>
+                                        <option value="Alpha">Alpha</option>
+                                        <option value="Alpha-Alpha">Alpha-Alpha</option>
+                                        <option value="Oliver">Oliver</option>
+                                        <option value="Amandier">Amandier</option>
+                                        <option value="Pistachier">Pistachier</option>
+                                        <option value="Degla">Degla</option>
+                                        <option value="Beser">Beser</option>
+                                        <option value="Aligue">Aligue</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-sm-12 col-md-12 col-xl-4">
+                                <div class="form-group">
+                                    <label for="client-id" class="form-label text-muted">Client:</label>
+                                    <div class="input-group">
+                                        <input id="client-id" type="text" class="form-control text-dark" placeholder="Nom du Client" name="client" required>
+                                    </div>
+                                </div>
+                            </div>
+							<div class="col-sm-12 col-md-12 col-xl-4">
+								<div class="form-group note-form-group note-group-select-from-files">
+									<label for="image" class="form-label text-muted">Sélectionner une image :</label>
+									<input id="image" type="file" name="image" accept="image/*" class="form-control-file note-form-control note-input">
 								</div>
 							</div>
-						</body>
-							
-							<script>
-								function saveForm(){
-									let project_name = document.getElementById('project-name-id').value;
-									if(project_name === ''){
-									alert('Project name required !')
-									return;
-									}
-									let project_date = document.getElementById('project-date-id').value;
-									if(project_date === ''){
-									alert('Project date required !')
-									return;
-									}
-									let project_category = document.getElementById('project-category-id').value;
-									if(project_category === ''){
-									alert('Project category required !')
-									return;
-									}
-									let project_department = document.getElementById('project-department-id').value;
-									if(project_department === ''){
-									alert('Project department required !')
-									return;
-									}
-									let client = document.getElementById('client-id').value;
-									if(client === ''){
-									alert('Client name required !')
-									return;
-									}
+							{% comment %} <div class="col-sm-12 col-md-12 col-xl-4">
+								<div class="form-group note-form-group note-group-select-from-files">
+									<label for="note-dialog-image-file" class="form-label text-muted">Sélectionner un fichier :</label>
+									<input id="note-dialog-image-file" class="note-image-input form-control-file note-form-control note-input" type="file" name="files" accept="image/*">
+								</div>
+							</div> {% endcomment %}
+                            <input id="zone-id" type="hidden" name="geozone" value="">
+                        </div>
+                        <div class="row p-5">
+                            <div class="btn-list text-end">
+                                <button type="reset" class="btn btn-outline-danger">
+                                    <i class="fe fe-x-circle"></i>
+                                    Annuler
+                                </button>
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fe fe-check-circle"></i>
+                                    Enregistrer
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--ROW CLOSED-->
+</body>
+{% endblock %}
 
-									let zone_id = document.getElementById('zone-id').value;
-									console.log(zone_id);
+{% block scripts %}
+<script src="{% static 'assets/plugins/select2/select2.full.min.js' %}"></script>
+<script src="{% static 'assets/plugins/bootstrap-datepicker/js/datepicker.js' %}"></script>
 
-									let data = {
-										project_name: project_name,
-										project_date: project_date,
-										project_category: project_category,
-										department: project_department,
-										client: client,
-										geozone: Number(zone_id)
-									}
+<script>
+    $(document).ready(function() {
+        $('#ps-datepicker').datepicker(); // Initialiser le datepicker
+        $('.select2-show-search').select2(); // Initialiser les menus déroulants Select2
+    });
 
-									fetch('/save2/', {
-										method: 'POST',
-										headers: {
-											'Accept': 'application/json',
-											'Content-Type': 'application/json'
-										},
-										body: JSON.stringify(data)
-									})
-									   .then(response => response.json())
-									   .then(response => {
-										console.log(JSON.stringify(response))
-										document.location.href="projects";
-									})
-									
-								}
-
-								function execute(){
-									console.log("retrieve zone");
-									var zone = JSON.parse(localStorage.getItem('data'));
-		
-									zone_id = zone.id;
-									console.log(zone_id);
-									document.getElementById('zone-id').value= zone_id;
-								}
-							</script>
-							<!--ROW CLOSED-->
-
-        {% endblock %}
-
-    {% block scripts %}
-
-	    {% comment %} <script src="./lib/leaflet.browser.print.min.js"></script>
-		<script src="./lib/leaflet-measure.js"></script> {% endcomment %}
-
-		<!-- SELECT2 JS -->
-		<script src=" {% static 'assets/plugins/select2/select2.full.min.js' %} "></script>
-
-		<!-- bootstrap-datepicker js -->
-		<script src=" {% static 'assets/plugins/bootstrap-datepicker/js/datepicker.js' %} "></script>
-
-		<!-- INTERNAL Summernote Editor js -->
-		<script src=" {% static 'assets/plugins/summernote-editor/summernote1.js' %} "></script>
-
-		<!-- FILE UPLOAD JS -->
-        <script src=" {% static 'assets/plugins/fileuploads/js/fileupload.js' %} "></script>
-        <script src=" {% static 'assets/plugins/fileuploads/js/file-upload.js' %} "></script>
-
-		<!-- INVOICE CREATE JS-->
-		<script src=" {% static 'assets/js/projects-new.js' %} "></script>
-
-        <!-- THEMECOLORS JS -->
-        <script src="{% static 'assets/js/themeColors.js'%}"></script>
-
-    {% endblock %}
+    function execute() {
+        console.log("Retrieve zone");
+        const zone = JSON.parse(localStorage.getItem('data'));
+        document.getElementById('zone-id').value = zone ? zone.id : "";
+    }
+</script>
+{% endblock %}

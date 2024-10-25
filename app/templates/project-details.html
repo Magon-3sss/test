@@ -218,13 +218,13 @@
 							<!-- PAGE-HEADER -->
 							<div class="page-header">
 								<div>
-									<h1 class="page-title">Project-Details</h1>
+									<h1 class="page-title">Détails du projet</h1>
 								</div>
 								<div class="ms-auto pageheader-btn">
 									<ol class="breadcrumb">
-										<li class="breadcrumb-item">Apps</li>
-										{% comment %} <li class="breadcrumb-item"><a href="{% url 'project-new' %}">Projects</a></li> {% endcomment %}
-										<li class="breadcrumb-item active" aria-current="page">Project Details</li>
+										{% comment %} <li class="breadcrumb-item">Apps</li> {% endcomment %}
+										<li class="breadcrumb-item"><a href="{% url 'projects' %}">Tous les Projets</a></li>
+										<li class="breadcrumb-item active" aria-current="page">Détails du projet</li>
 									</ol>
 								</div>
 								<script src="https://api.sentinel-hub.com/js/sentinelhub-js-2.2.0.min.js"></script>
@@ -236,8 +236,8 @@
 									<div class="col-md-12">
 										<input id="data-id" style="display: none;" value="{{ data }}" />
 										<div class="btn-list text-end mb-3">
-											<a href="{% url 'index' %}" class="btn btn-primary active text-white me-2">Home</a>
-											<a href="project-edit" class="btn btn-outline-primary me-2">Edit</a>
+											<a href="{% url 'index' %}" class="btn btn-primary active text-white me-2">Magon</a>
+											<a href="#" class="btn btn-outline-primary me-2">Modifier</a>
 											{% comment %} <a href="{% url 'project-new' %}" class="btn btn-outline-primary me-2">New</a> {% endcomment %}
 										</div>
 										<div id="map">
@@ -389,14 +389,14 @@
 															<!--<a href="#" class="ms-1" id="checkElement"><i class="fe fe-edit"></i></a>-->
 														</h4>
 													</div>
-													<div class="col-xl-auto col-md0-1">
+													{% comment %} <div class="col-xl-auto col-md0-1">
 														<div class="btn-list">
 															<a href="javascript:void(0)" class="btn btn-primary-light text-center me-2" data-bs-placement="top" data-bs-toggle="tooltip" data-bs-original-title="Alarm"><i class="fe fe-clock"></i></a>
 															<a href="javascript:void(0)" class="btn btn-primary-light text-center me-2" data-bs-placement="top" data-bs-toggle="tooltip" data-bs-original-title="Comment"><i class="fe fe-message-circle"></i></a>
 															<a href="javascript:void(0)" class="btn btn-primary-light text-center me-2" data-bs-placement="top" data-bs-toggle="tooltip" data-bs-original-title="Upload Files"><i class="fe fe-upload"></i></a>
 															<a href="javascript:void(0)" class="btn btn-primary-light text-center me-2" data-bs-placement="top" data-bs-toggle="tooltip" data-bs-original-title="Mail"><i class="fe fe-mail"></i></a>
 														</div>
-													</div>
+													</div> {% endcomment %}
 												</div>
 											</div>
 											<div class="card-footer p-0">

@@ -33,15 +33,11 @@ urlpatterns = [
     path('api/test/refresh/',TokenRefreshView.as_view(), name='token_refresh'),
     path('api/user/', UserAPIView.as_view(), name='user'),
     path('signin', views.signin, name='signin'),
-    path('save/',savezone),
-    path('save2/',save_form),
-    path('get/zone/<int:pk>/',views.get_zone),
-    path('get/points/<int:pk>/',views.get_point),
+    
     #path('sentinelhub-api-example/', views.sentinel_hub_view, name='sentinel_hub_view'),
     #path('sentinelhub-api-example/', views.sentinelhub_api_example(time_interval=('2023-01-01', '2023-01-02')), name='sentinelhub_api_example'),
-    path('saveparcelle/',savezoneparcelle),
-    path('saveFormParcelle/',views.save_form_parcelle),
     
+    ### Operations Agricoles ###
     path('recommendations-ia', views.recommendations_ia, name='recommendations-ia'),
     path('operations-utilisateur', views.operations_utilisateur, name='operations-utilisateur'),
     path('ajouter-operation-agricole', views.ajouter_operation_agricole, name='ajouter-operation-agricole'),
@@ -171,6 +167,12 @@ urlpatterns = [
     path('products', views.products, name='products'),
     path('profile', views.profile, name='profile'),
     path('progress', views.progress, name='progress'),
+    
+    ### Projets ###
+    path('save/',savezone),
+    path('save2/',save_form),
+    path('get/zone/<int:pk>/',views.get_zone),
+    path('get/points/<int:pk>/',views.get_point),
     path('project-details/<int:id>/', views.project_details, name='project-details'),
     path('points/<int:parcelle_id>', views.get_points_for_parcelle, name='get_points_for_parcelle'),
     path('get-colors/', views.get_colors, name='get_colors'),
@@ -181,6 +183,9 @@ urlpatterns = [
     path('projects', views.projects, name='projects'),
     path('delete-project/<int:project_id>/', views.delete_project, name='delete_project'),
     path('project-modifier/<int:project_id>/', views.project_modifier, name='project-modifier'),
+    ### Parcelles ###
+    path('saveparcelle/',savezoneparcelle),
+    path('saveFormParcelle/',views.save_form_parcelle),
     path('parcelles', views.parcelles, name='parcelles'),
     path('parcelle-details/<int:id>/', views.parcelle_details, name='parcelle-details'),
     path('parcelle-edit', views.parcelle_edit, name='parcelle-edit'),
@@ -188,6 +193,7 @@ urlpatterns = [
     path('parcelle-new/<int:id>/', views.parcelle_new_for_project),
     path('parcelles-list', views.parcelles_list, name='parcelles-list'),
     path('parcelle-new-form', views.parcelle_new_form, name='parcelle-new-form'),
+    
     path('rangeslider', views.rangeslider, name='rangeslider'),
     path('rating', views.rating, name='rating'),
     path('register', views.register, name='register'),

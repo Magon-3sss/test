@@ -13,7 +13,11 @@ from django import forms
 # Create your models here.
 
 #####################
-
+def filepath(request, filename):
+    old_filename = filename
+    timeNow = datetime.datetime.now()
+    filename="%s %s" % (timeNow, old_filename)
+    return os.path.join('uploads/', filename)
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -92,13 +96,14 @@ class MapForm(models.Model):
     department=models.CharField(max_length=50)
     client=models.CharField(max_length=50)
     geozone= models.ForeignKey(Zone,on_delete=models.CASCADE)
+    image = models.ImageField(upload_to=filepath , null=True, blank=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
         
 class ZoneParcelle(models.Model):
     type=models.CharField(max_length=50)
     area=models.CharField(max_length=100)
     circle_radius=models.CharField(max_length=100)
     id_projet=models.TextField()
-    
  
 class PointParcelle(models.Model):
     latt=models.CharField(max_length=50)
@@ -183,11 +188,7 @@ class ColorReferenceMsavi(models.Model):
     color_css=models.CharField(max_length=50)
     description=models.TextField(null=True)
     
-def filepath(request, filename):
-    old_filename = filename
-    timeNow = datetime.datetime.now()
-    filename="%s %s" % (timeNow, old_filename)
-    return os.path.join('uploads/', filename)
+
 
     
 class Machines_Tables(models.Model):
@@ -533,6 +534,7 @@ class New_Oper_Tables(models.Model):
     description = models.CharField(max_length=500, null=True, blank=True)
     markers = models.ManyToManyField(Marker, related_name='operations')
     project = models.ForeignKey(MapForm, on_delete=models.CASCADE, related_name='operations', null=True, blank=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True, related_name='operations')
     
 class CategoriesPlantes(models.Model):
     nom_plante=models.CharField(max_length=50)

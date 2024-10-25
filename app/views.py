@@ -858,7 +858,7 @@ def save_traitement(request):
                 "date_achat": date_achat,
                 "image": image,
                 "geozone": geozone,
-                "description": description
+                "description": description,
             }
         
         traitement_serializer = TraitementSerializer(data=form)
@@ -1749,8 +1749,270 @@ def save_machine(request):
             print('no')
             return JsonResponse({"Erreur": "Some error occured"}, status=status.HTTP_400_BAD_REQUEST)
              
-
+##################################################################
 """ Projects  """
+def project_edit (request): 
+    return render(request, 'project-edit.html')
+
+""" @login_required
+def project_new (request):
+    cookie = request.COOKIES.get('jwtToken')
+    if cookie:
+        user_group = request.COOKIES.get('userGroup') or None
+        try:
+            profile = request.user.profile
+        except ObjectDoesNotExist:
+            profile = None
+        context = {
+            'jwtToken': cookie,
+            'userGroup': user_group,
+            'profile_user': profile,
+            'projects': list  # Ajoutez la liste des projets à votre contexte
+        }
+        print(context)
+        return render(request, 'project-new.html', context)
+    else:
+        # Si le jeton n'est pas présent, redirigez vers la page de connexion
+        return render(request, 'signin.html') """ 
+@login_required
+def project_new(request):
+    cookie = request.COOKIES.get('jwtToken')
+    if cookie:
+        user_group = request.COOKIES.get('userGroup') or None
+        try:
+            profile = request.user.profile
+        except ObjectDoesNotExist:
+            profile = None
+
+        if request.method == "POST":
+            project_name = request.POST.get('project_name')
+            project_date = request.POST.get('project_date')
+            project_category = request.POST.get('project_category')
+            department = request.POST.get('department')
+            client = request.POST.get('client')
+            geozone_id = request.POST.get('geozone')
+            image = request.FILES.get('image')  
+
+            MapForm.objects.create(
+                project_name=project_name,
+                project_date=project_date,
+                project_category=project_category,
+                department=department,
+                client=client,
+                geozone_id=geozone_id,
+                image=image,  
+                user=request.user  # Lier le projet à l'utilisateur connecté
+            )
+
+            return redirect('projects')
+
+        context = {
+            'jwtToken': cookie,
+            'userGroup': user_group,
+            'profile_user': profile,
+            'projects': [] 
+        }
+        return render(request, 'project-new.html', context)
+    else:
+        
+        return render(request, 'signin.html')
+
+def project_new_form (request):  
+    return render(request, 'project-new-form.html')
+
+def projects_list (request):
+    cookie = request.COOKIES.get('jwtToken')
+    try:
+        profile = request.user.profile
+    except ObjectDoesNotExist:
+        profile = None
+    if cookie:
+        user_group = request.COOKIES.get('userGroup') or None
+        context = {
+            'jwtToken': cookie,
+            'userGroup': user_group,
+            'profile_user': profile,
+            'projects': list  # Ajoutez la liste des projets à votre contexte
+        }
+        print(context)
+        return render(request, 'projects-list.html', context)
+    else:
+        # Si le jeton n'est pas présent, redirigez vers la page de connexion
+        return render(request, 'signin.html') 
+
+def projects (request): 
+    list = []
+    projects = reversed(MapForm.objects.filter(user=request.user).order_by('-id'))
+    for p in projects:
+        project_id = p.__dict__["geozone_id"]
+        parcelles =  MapFormParcelle.objects.all().filter(id_projet=project_id)
+        print(parcelles)
+        list.append({"project": p.__dict__, "parcelles": parcelles})
+    data = {
+        "list": list
+    }
+    dumped_data = json.dumps(data, indent=4, sort_keys=True, default=str)
+    cookie = request.COOKIES.get('jwtToken')
+    if cookie:
+        user_group = request.COOKIES.get('userGroup') or None
+        context = {
+            'jwtToken': cookie,
+            'userGroup': user_group,
+            'projects': list  # Ajoutez la liste des projets à votre contexte
+        }
+        print(context)
+        return render(request, 'projects.html', context)
+    else:
+        # Si le jeton n'est pas présent, redirigez vers la page de connexion
+        return render(request, 'signin.html')
+    
+@require_http_methods(["POST"])
+def delete_project(request, project_id):
+    try:
+        project = MapForm.objects.get(id=project_id)
+        project.delete()
+        return JsonResponse({"message": "Projet supprimé avec succès"}, status=200)
+    except MapForm.DoesNotExist:
+        return JsonResponse({"error": "Projet introuvable"}, status=404)
+    
+def project_modifier(request, project_id):
+    project = get_object_or_404(MapForm, id=project_id)
+
+    if request.method == 'POST':
+        # Récupérer les données soumises par le formulaire
+        project.project_name = request.POST.get('project_name', project.project_name)
+        project.project_date = request.POST.get('project_date', project.project_date)
+        project.project_category = request.POST.get('project_category', project.project_category)
+        project.department = request.POST.get('department', project.department)
+        project.client = request.POST.get('client', project.client)
+
+        # Sauvegarder les modifications dans la base de données
+        project.save()
+
+        # Rediriger vers la page des projets après la mise à jour
+        return redirect('projects')  # Remplacez 'projects' par le nom de votre vue de liste des projets
+
+    # Rendre la page de modification avec les données du projet
+    return render(request, 'project-modifier.html', {'project': project})
+
+def project_details(request, id):
+    zone = Zone.objects.get(pk=id)
+    zone_serializer = ZoneSerializer(zone)
+
+    map_form_data = serialize("json", MapForm.objects.all().filter(geozone=id))
+    points = serialize("json", Point.objects.all().filter(geozone=id))
+    zones_parcelles = ZoneParcelle.objects.all().filter(id_projet=id)
+
+    parcelles = []
+    for zp in zones_parcelles:
+        map_form_parcelle = MapFormParcelle.objects.filter(geozone=zp).first()
+        if map_form_parcelle:
+            parcelles.append({
+                'geozone_id': zp.pk,
+                'parcelle_name': map_form_parcelle.parcelle_name
+            })
+
+    points_parcelles_map = []
+    for zp in zones_parcelles:
+        points_zp = serialize("json", PointParcelle.objects.all().filter(geozone_id=zp.pk))
+        points_parcelles_map.append(points_zp)
+
+    z = zone_serializer.data
+    #print(points)
+    tp =  z["type"]
+    #print(tp)
+    radius = z["circle_radius"]
+    #print(radius)
+    cont = {
+        'form': map_form_data
+    }
+    if tp == "circle":
+            context = {
+        'type': tp,
+        'radius': radius,
+        'points': points,
+        }
+            
+    if tp == "polygon" or tp == "rectangle":
+            context = {
+        'type': tp,
+        'points': points,
+        }
+    if tp == "polyline":
+            context = {
+        'type': tp,
+        'points': points,
+        }
+    if tp == "marker":
+            context = {
+        'type': tp,
+        'points': points,
+        }
+
+    form_data = json.dumps(cont, indent=4, sort_keys=True, default=str)
+    map_points = json.dumps(context, indent=4, sort_keys=True, default=str)
+    filters = serialize("json", Filtre.objects.all())
+    colors = serialize("json", Color.objects.all())
+
+    context = {
+        'filters': filters,
+        'colors': colors,
+    }
+
+    filters_colors = json.dumps(context, indent=4, sort_keys=True, default=str)
+
+    data = {
+        'points': map_points,
+        'form': form_data,
+        'points_parcelles_map': points_parcelles_map,
+        'filters_colors': filters_colors
+    }
+
+    dumped_data = json.dumps(data, indent=4, sort_keys=True, default=str)
+
+    # Fetch filter options from the database
+    filtre_humidite = FiltreHumidite.objects.all()
+    filtre_irrigation = FiltreIrrigation.objects.all()
+    filtre_fertilisation = FiltreFertilisation.objects.all()
+    filtre_evolution = FiltreEvolution.objects.all()
+    filtre_maladie = FiltreMaladie.objects.all()
+    filtre_vegitation = FiltreVegitation.objects.all()
+
+    filter_categories = {
+        'végitation': filtre_vegitation,
+        'humidité': filtre_humidite,
+        'irrigation': filtre_irrigation,
+        'fertilisation': filtre_fertilisation,
+        'evolution': filtre_evolution,
+        'maladie': filtre_maladie,
+    }
+
+    return render(request, 'project-details.html', {
+        'data': dumped_data,
+        'project': {'parcelles': parcelles},
+        'filter_categories': filter_categories,
+    })
+    
+def get_colors(request):
+    filter_type = request.GET.get('filter')
+    if filter_type == 'NDRE':
+        colors = ColorReference.objects.all()
+    elif filter_type == 'NDVI':
+        colors = ColorReferenceNdvi.objects.all()
+    elif filter_type == 'NDMI':
+        colors = ColorReferenceNdmi.objects.all()
+    elif filter_type == 'MSAVI':
+        colors = ColorReferenceMsavi.objects.all()
+    else:
+        colors = []
+
+    color_data = [{'value': color.value, 'color_css': color.color_css, 'description': color.description} for color in colors]
+    return JsonResponse({'colors': color_data})
+
+def get_points_for_parcelle(request, parcelle_id):
+    points = PointParcelle.objects.filter(geozone_id=parcelle_id).values()
+    return JsonResponse(list(points), safe=False)
+
 @api_view(['POST'])    
 def savezone(request):
    if request.method == 'POST':
@@ -2033,8 +2295,108 @@ def get_point(request, pk):
                 return JsonResponse(zone_serializer.data,p,status=status.HTTP_200_OK, safe=False) """#{"msg": "point"}
         except Point.DoesNotExist:
             return JsonResponse({"msg": "erreur"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR )
+##################################################################
+""" Parcelles """
+def parcelles(request):
+    # Récupérer la liste des parcelles
+    parcelles = reversed(MapFormParcelle.objects.all())
+    print(parcelles)
 
-""" Parcelles """         
+    # Vérifier la présence du jeton JWT
+    cookie = request.COOKIES.get('jwtToken')
+    if cookie:
+        user_group = request.COOKIES.get('userGroup') or None
+        context = {
+            'jwtToken': cookie,
+            'userGroup': user_group,
+            'parcelles': parcelles  # Ajouter la liste des parcelles au contexte
+        }
+        print(context)
+        return render(request, 'parcelles.html', context)
+    else:
+        # Si le jeton n'est pas présent, rediriger vers la page de connexion
+        return render(request, 'signin.html')
+
+def parcelle_new (request):
+    cookie = request.COOKIES.get('jwtToken')
+    if cookie:
+        user_group = request.COOKIES.get('userGroup') or None
+        context = {
+            'jwtToken': cookie,
+            'userGroup': user_group,
+            'parcelles': list  # Ajoutez la liste des projets à votre contexte
+        }
+        print(context)
+        return render(request, 'parcelle-new.html', context)
+    else:
+        # Si le jeton n'est pas présent, redirigez vers la page de connexion
+        return render(request, 'signin.html')
+     
+def parcelle_new_for_project(request, id):
+    return render(request, 'parcelle-new.html', {'id_projet': id})
+def parcelle_new_form (request): 
+    return render(request, 'parcelle-new-form.html')
+def parcelle_details (request, id):
+    print(id)
+    zone_parcelle = ZoneParcelle.objects.get(pk=id) 
+    zone_parcelle_serializer = ZoneParcelleSerializer(zone_parcelle)
+    map_form_parcelle_data = serialize("json", MapFormParcelle.objects.all().filter(geozone=id))
+    points = serialize("json", PointParcelle.objects.all().filter(geozone=id))
+    z = zone_parcelle_serializer.data
+    print(points)
+    tp =  z["type"]
+    print(tp)
+    radius = z["circle_radius"]
+    print(radius)
+    cont = {
+        'form': map_form_parcelle_data
+    }
+    if tp == "circle":
+            context = {
+        'type': tp,
+        'radius': radius,
+        'points': points,
+        }
+            
+    if tp == "polygon" or tp == "rectangle":
+            context = {
+        'type': tp,
+        'points': points,
+        }
+    if tp == "polyline":
+            context = {
+        'type': tp,
+        'points': points,
+        }
+    if tp == "marker":
+            context = {
+        'type': tp,
+        'points': points,
+        }
+    form_data = json.dumps(cont, indent=4, sort_keys=True, default=str)
+    map_points = json.dumps(context, indent=4, sort_keys=True, default=str)
+    filters= serialize("json",Filtre.objects.all())
+    print(filters)
+    colors=  serialize("json",ColorReference.objects.all())
+    print(colors)
+    context = {
+    'filters': filters,
+    'colors': colors,
+    }
+    filters_colors = json.dumps(context, indent=4, sort_keys=True, default=str)
+    data = {
+        'points': map_points,
+        'form': form_data,
+        'filters_colors': filters_colors
+    }
+    dumped_data = json.dumps(data, indent=4, sort_keys=True, default=str)
+    return render(request, 'parcelle-details.html', {'data': dumped_data})
+
+def parcelles_list (request): 
+    return render(request, 'parcelles-list.html')
+def parcelle_edit (request): 
+    return render(request, 'parcelle-edit.html')
+         
 @api_view(['POST'])    
 def savezoneparcelle(request):
    if request.method == 'POST':
@@ -3289,400 +3651,10 @@ def profile (request):
     return render(request, 'profile.html')
 def progress (request): 
     return render(request, 'progress.html')
-
-def project_details(request, id):
-    zone = Zone.objects.get(pk=id)
-    zone_serializer = ZoneSerializer(zone)
-
-    map_form_data = serialize("json", MapForm.objects.all().filter(geozone=id))
-    points = serialize("json", Point.objects.all().filter(geozone=id))
-    zones_parcelles = ZoneParcelle.objects.all().filter(id_projet=id)
-
-    parcelles = []
-    for zp in zones_parcelles:
-        map_form_parcelle = MapFormParcelle.objects.filter(geozone=zp).first()
-        if map_form_parcelle:
-            parcelles.append({
-                'geozone_id': zp.pk,
-                'parcelle_name': map_form_parcelle.parcelle_name
-            })
-
-    points_parcelles_map = []
-    for zp in zones_parcelles:
-        points_zp = serialize("json", PointParcelle.objects.all().filter(geozone_id=zp.pk))
-        points_parcelles_map.append(points_zp)
-
-    z = zone_serializer.data
-    #print(points)
-    tp =  z["type"]
-    #print(tp)
-    radius = z["circle_radius"]
-    #print(radius)
-    cont = {
-        'form': map_form_data
-    }
-    if tp == "circle":
-            context = {
-        'type': tp,
-        'radius': radius,
-        'points': points,
-        }
-            
-    if tp == "polygon" or tp == "rectangle":
-            context = {
-        'type': tp,
-        'points': points,
-        }
-    if tp == "polyline":
-            context = {
-        'type': tp,
-        'points': points,
-        }
-    if tp == "marker":
-            context = {
-        'type': tp,
-        'points': points,
-        }
-
-    form_data = json.dumps(cont, indent=4, sort_keys=True, default=str)
-    map_points = json.dumps(context, indent=4, sort_keys=True, default=str)
-    filters = serialize("json", Filtre.objects.all())
-    colors = serialize("json", Color.objects.all())
-
-    context = {
-        'filters': filters,
-        'colors': colors,
-    }
-
-    filters_colors = json.dumps(context, indent=4, sort_keys=True, default=str)
-
-    data = {
-        'points': map_points,
-        'form': form_data,
-        'points_parcelles_map': points_parcelles_map,
-        'filters_colors': filters_colors
-    }
-
-    dumped_data = json.dumps(data, indent=4, sort_keys=True, default=str)
-
-    # Fetch filter options from the database
-    filtre_humidite = FiltreHumidite.objects.all()
-    filtre_irrigation = FiltreIrrigation.objects.all()
-    filtre_fertilisation = FiltreFertilisation.objects.all()
-    filtre_evolution = FiltreEvolution.objects.all()
-    filtre_maladie = FiltreMaladie.objects.all()
-    filtre_vegitation = FiltreVegitation.objects.all()
-
-    filter_categories = {
-        'végitation': filtre_vegitation,
-        'humidité': filtre_humidite,
-        'irrigation': filtre_irrigation,
-        'fertilisation': filtre_fertilisation,
-        'evolution': filtre_evolution,
-        'maladie': filtre_maladie,
-    }
-
-    return render(request, 'project-details.html', {
-        'data': dumped_data,
-        'project': {'parcelles': parcelles},
-        'filter_categories': filter_categories,
-    })
-    
-def get_colors(request):
-    filter_type = request.GET.get('filter')
-    if filter_type == 'NDRE':
-        colors = ColorReference.objects.all()
-    elif filter_type == 'NDVI':
-        colors = ColorReferenceNdvi.objects.all()
-    elif filter_type == 'NDMI':
-        colors = ColorReferenceNdmi.objects.all()
-    elif filter_type == 'MSAVI':
-        colors = ColorReferenceMsavi.objects.all()
-    else:
-        colors = []
-
-    color_data = [{'value': color.value, 'color_css': color.color_css, 'description': color.description} for color in colors]
-    return JsonResponse({'colors': color_data})
-
-def get_points_for_parcelle(request, parcelle_id):
-    points = PointParcelle.objects.filter(geozone_id=parcelle_id).values()
-    return JsonResponse(list(points), safe=False)
-       
-""" def project_details (request, id):
-    #print(id)
-    zone = Zone.objects.get(pk=id)
-    zone_serializer = ZoneSerializer(zone)
-    map_form_data = serialize("json", MapForm.objects.all().filter(geozone=id))
-    points = serialize("json", Point.objects.all().filter(geozone=id))
-    zones_parcelles = ZoneParcelle.objects.all().filter(id_projet=id)
-    parcelles = []
-    for zp in zones_parcelles:
-        map_form_parcelle = MapFormParcelle.objects.filter(geozone=zp).first()
-        if map_form_parcelle:
-            parcelles.append({
-                'geozone_id': zp.pk,
-                'parcelle_name': map_form_parcelle.parcelle_name
-            })
-    #print(zones_parcelles)
-    points_parcelles_map = []
-    for zp in zones_parcelles:
-        points_zp = serialize("json", PointParcelle.objects.all().filter(geozone_id=zp.pk))
-        points_parcelles_map.append(points_zp)
-    print(points_parcelles_map)    
-    z = zone_serializer.data
-    #print(points)
-    tp =  z["type"]
-    #print(tp)
-    radius = z["circle_radius"]
-    #print(radius)
-    cont = {
-        'form': map_form_data
-    }
-    if tp == "circle":
-            context = {
-        'type': tp,
-        'radius': radius,
-        'points': points,
-        }
-            
-    if tp == "polygon" or tp == "rectangle":
-            context = {
-        'type': tp,
-        'points': points,
-        }
-    if tp == "polyline":
-            context = {
-        'type': tp,
-        'points': points,
-        }
-    if tp == "marker":
-            context = {
-        'type': tp,
-        'points': points,
-        }
-    form_data = json.dumps(cont, indent=4, sort_keys=True, default=str)
-    map_points = json.dumps(context, indent=4, sort_keys=True, default=str)
-    filters= serialize("json",Filtre.objects.all())
-    filterhs= serialize("json",FiltreHumidite.objects.all())
-    print(filters)
-    colors=  serialize("json",ColorReference.objects.all())
-    print(colors)
-    context = {
-    'filters': filters,
-    'filterhs': filterhs,
-    'colors': colors,
-    }
-    filters_colors = json.dumps(context, indent=4, sort_keys=True, default=str)
-    data = {
-        'points': map_points,
-        'form': form_data,
-        'points_parcelles_map': points_parcelles_map,
-        'filters_colors': filters_colors
-    }
-    dumped_data = json.dumps(data, indent=4, sort_keys=True, default=str)
-    return render(request, 'project-details.html', {'data': dumped_data,'project': {'parcelles': parcelles},}) """
-
-def project_edit (request): 
-    return render(request, 'project-edit.html')
-
-@login_required
-def project_new (request):
-    cookie = request.COOKIES.get('jwtToken')
-    if cookie:
-        user_group = request.COOKIES.get('userGroup') or None
-        try:
-            profile = request.user.profile
-        except ObjectDoesNotExist:
-            profile = None
-        context = {
-            'jwtToken': cookie,
-            'userGroup': user_group,
-            'profile_user': profile,
-            'projects': list  # Ajoutez la liste des projets à votre contexte
-        }
-        print(context)
-        return render(request, 'project-new.html', context)
-    else:
-        # Si le jeton n'est pas présent, redirigez vers la page de connexion
-        return render(request, 'signin.html') 
-
-def project_new_form (request):  
-    return render(request, 'project-new-form.html')
-
-def projects_list (request):
-    cookie = request.COOKIES.get('jwtToken')
-    try:
-        profile = request.user.profile
-    except ObjectDoesNotExist:
-        profile = None
-    if cookie:
-        user_group = request.COOKIES.get('userGroup') or None
-        context = {
-            'jwtToken': cookie,
-            'userGroup': user_group,
-            'profile_user': profile,
-            'projects': list  # Ajoutez la liste des projets à votre contexte
-        }
-        print(context)
-        return render(request, 'projects-list.html', context)
-    else:
-        # Si le jeton n'est pas présent, redirigez vers la page de connexion
-        return render(request, 'signin.html') 
-
-def projects (request): 
-    list = []
-    projects = reversed(MapForm.objects.all())
-    for p in projects:
-        project_id = p.__dict__["geozone_id"]
-        parcelles =  MapFormParcelle.objects.all().filter(id_projet=project_id)
-        print(parcelles)
-        list.append({"project": p.__dict__, "parcelles": parcelles})
-    data = {
-        "list": list
-    }
-    dumped_data = json.dumps(data, indent=4, sort_keys=True, default=str)
-    cookie = request.COOKIES.get('jwtToken')
-    if cookie:
-        user_group = request.COOKIES.get('userGroup') or None
-        context = {
-            'jwtToken': cookie,
-            'userGroup': user_group,
-            'projects': list  # Ajoutez la liste des projets à votre contexte
-        }
-        print(context)
-        return render(request, 'projects.html', context)
-    else:
-        # Si le jeton n'est pas présent, redirigez vers la page de connexion
-        return render(request, 'signin.html')
-    
-@require_http_methods(["POST"])
-def delete_project(request, project_id):
-    try:
-        project = MapForm.objects.get(id=project_id)
-        project.delete()
-        return JsonResponse({"message": "Projet supprimé avec succès"}, status=200)
-    except MapForm.DoesNotExist:
-        return JsonResponse({"error": "Projet introuvable"}, status=404)
-    
-def project_modifier(request, project_id):
-    project = get_object_or_404(MapForm, id=project_id)
-
-    if request.method == 'POST':
-        # Récupérer les données soumises par le formulaire
-        project.project_name = request.POST.get('project_name', project.project_name)
-        project.project_date = request.POST.get('project_date', project.project_date)
-        project.project_category = request.POST.get('project_category', project.project_category)
-        project.department = request.POST.get('department', project.department)
-        project.client = request.POST.get('client', project.client)
-
-        # Sauvegarder les modifications dans la base de données
-        project.save()
-
-        # Rediriger vers la page des projets après la mise à jour
-        return redirect('projects')  # Remplacez 'projects' par le nom de votre vue de liste des projets
-
-    # Rendre la page de modification avec les données du projet
-    return render(request, 'project-modifier.html', {'project': project})
-
-def parcelles(request):
-    # Récupérer la liste des parcelles
-    parcelles = reversed(MapFormParcelle.objects.all())
-    print(parcelles)
-
-    # Vérifier la présence du jeton JWT
-    cookie = request.COOKIES.get('jwtToken')
-    if cookie:
-        user_group = request.COOKIES.get('userGroup') or None
-        context = {
-            'jwtToken': cookie,
-            'userGroup': user_group,
-            'parcelles': parcelles  # Ajouter la liste des parcelles au contexte
-        }
-        print(context)
-        return render(request, 'parcelles.html', context)
-    else:
-        # Si le jeton n'est pas présent, rediriger vers la page de connexion
-        return render(request, 'signin.html')
-
-def parcelle_new (request):
-    cookie = request.COOKIES.get('jwtToken')
-    if cookie:
-        user_group = request.COOKIES.get('userGroup') or None
-        context = {
-            'jwtToken': cookie,
-            'userGroup': user_group,
-            'parcelles': list  # Ajoutez la liste des projets à votre contexte
-        }
-        print(context)
-        return render(request, 'parcelle-new.html', context)
-    else:
-        # Si le jeton n'est pas présent, redirigez vers la page de connexion
-        return render(request, 'signin.html')
      
-def parcelle_new_for_project(request, id):
-    return render(request, 'parcelle-new.html', {'id_projet': id})
-def parcelle_new_form (request): 
-    return render(request, 'parcelle-new-form.html')
-def parcelle_details (request, id):
-    print(id)
-    zone_parcelle = ZoneParcelle.objects.get(pk=id) 
-    zone_parcelle_serializer = ZoneParcelleSerializer(zone_parcelle)
-    map_form_parcelle_data = serialize("json", MapFormParcelle.objects.all().filter(geozone=id))
-    points = serialize("json", PointParcelle.objects.all().filter(geozone=id))
-    z = zone_parcelle_serializer.data
-    print(points)
-    tp =  z["type"]
-    print(tp)
-    radius = z["circle_radius"]
-    print(radius)
-    cont = {
-        'form': map_form_parcelle_data
-    }
-    if tp == "circle":
-            context = {
-        'type': tp,
-        'radius': radius,
-        'points': points,
-        }
-            
-    if tp == "polygon" or tp == "rectangle":
-            context = {
-        'type': tp,
-        'points': points,
-        }
-    if tp == "polyline":
-            context = {
-        'type': tp,
-        'points': points,
-        }
-    if tp == "marker":
-            context = {
-        'type': tp,
-        'points': points,
-        }
-    form_data = json.dumps(cont, indent=4, sort_keys=True, default=str)
-    map_points = json.dumps(context, indent=4, sort_keys=True, default=str)
-    filters= serialize("json",Filtre.objects.all())
-    print(filters)
-    colors=  serialize("json",ColorReference.objects.all())
-    print(colors)
-    context = {
-    'filters': filters,
-    'colors': colors,
-    }
-    filters_colors = json.dumps(context, indent=4, sort_keys=True, default=str)
-    data = {
-        'points': map_points,
-        'form': form_data,
-        'filters_colors': filters_colors
-    }
-    dumped_data = json.dumps(data, indent=4, sort_keys=True, default=str)
-    return render(request, 'parcelle-details.html', {'data': dumped_data})
 
-def parcelles_list (request): 
-    return render(request, 'parcelles-list.html')
-def parcelle_edit (request): 
-    return render(request, 'parcelle-edit.html')
+
+##########################################################
 def rangeslider (request): 
     return render(request, 'rangeslider.html')
 def rating (request): 
@@ -3919,7 +3891,9 @@ def autres (request):
 
 """ Operation Agricole """
 def operations_utilisateur (request):
-    operations = New_Oper_Tables.objects.all()
+    if not request.user.is_authenticated:
+        return render(request, 'signin.html')
+    operations = New_Oper_Tables.objects.filter(user=request.user)
     cookie = request.COOKIES.get('jwtToken')
     if cookie:
         user_group = request.COOKIES.get('userGroup') or None
@@ -4206,7 +4180,10 @@ def operation_delete(request, id):
     operation.delete()
     return redirect(reverse('operations-utilisateur'))
 
+@login_required
 @api_view(['POST'])
+@authentication_classes([SessionAuthentication])  
+@permission_classes([IsAuthenticated])
 def save_operation(request):
     if request.method == "POST":
         project_id = request.POST.get('project_id')
@@ -4262,7 +4239,8 @@ def save_operation(request):
             quantite_engrais_utilisee=quantite_engrais_utilisee,
             type_traitement=type_traitement,
             quantite_traitement_utilisee=quantite_traitement_utilisee,
-            description=description
+            description=description,
+            user=request.user
         )
 
         # Add tools (outils) to the operation

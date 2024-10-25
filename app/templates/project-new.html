@@ -85,13 +85,13 @@
 							<!-- PAGE-HEADER -->
 							<div class="page-header">
 								<div>
-									<h1 class="page-title">Project New</h1>
+									<h1 class="page-title">Nouveau Projet</h1>
 								</div>
 								<div class="ms-auto pageheader-btn">
 									<ol class="breadcrumb">
-										<li class="breadcrumb-item">Apps</li>
-										<li class="breadcrumb-item"><a href="{% url 'projects' %}">Projects</a></li>
-										<li class="breadcrumb-item active" aria-current="page">Project New</li>
+										{% comment %} <li class="breadcrumb-item">Apps</li> {% endcomment %}
+										<li class="breadcrumb-item"><a href="{% url 'projects' %}">Projets</a></li>
+										<li class="breadcrumb-item active" aria-current="page">Nouveau Projet</li>
 									</ol>
 								</div>
 							</div>
@@ -447,15 +447,15 @@ function navigateToForm(){
 	<div class="btn-list text-end">
 		<button class="btn btn-outline-danger">
 			<i class="fe fe-x-circle"></i>
-			Cancel
+			Annuler
 		</button>
 		<button id="save" onclick="Save()" class="btn btn-primary">
 			<i  class="fe fe-check-circle"></i>
-			Save
+			Enregistrer
 		</button>
 		<button id="next" disabled class="btn btn-secondary" onclick="navigateToForm()">
 			<i  class="fe fe-check-circle"></i>
-			Next
+			Suivant
 		</button>
 	</div>
 </div>

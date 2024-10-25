@@ -10,13 +10,13 @@
 							<!-- PAGE-HEADER -->
 							<div class="page-header">
 								<div>
-									<h1 class="page-title">Edit Project</h1>
+									<h1 class="page-title">Modifier Projet</h1>
 								</div>
 								<div class="ms-auto pageheader-btn">
 									<ol class="breadcrumb">
-										<li class="breadcrumb-item">Apps</li>
-										<li class="breadcrumb-item"><a href="javascript:void(0);">Projects</a></li>
-										<li class="breadcrumb-item active" aria-current="page">Edit Project</li>
+										{% comment %} <li class="breadcrumb-item">Apps</li> {% endcomment %}
+										<li class="breadcrumb-item"><a href="{% url 'projects' %}">Tous les Projets</a></li>
+										<li class="breadcrumb-item active" aria-current="page">Modifier Projet</li>
 									</ol>
 								</div>
 							</div>
@@ -29,13 +29,13 @@
 										{% csrf_token %}
 									<div  class="card">
 										<div class="card-header border-bottom">
-											<h4 class="mb-0">Project Info</h4>
+											<h4 class="mb-0">Détails du projet</h4>
 										</div>
 										<div class="card-body p-0 project-edit-main">
 											<div class="row p-5 border-bottom">
 												<div class="col-sm-12 col-md-12 col-xl-3">
 													<div class="form-group">
-														<label for="project-name" class="form-label text-muted">Project Name:</label>
+														<label for="project-name" class="form-label text-muted">Nom du projet:</label>
 														<div class="input-group">
 															<input type="text" id="project-name" class="form-control text-dark" placeholder="Enter Project Name" name="project_name" value="{{ project.project_name }}">
 														</div>
@@ -43,7 +43,7 @@
 												</div>
 												<div class="col-sm-12 col-md-12 col-xl-3">
 													<div class="form-group">
-														<label for="project-start-date" class="form-label text-muted">Project Date:</label>
+														<label for="project-start-date" class="form-label text-muted">Date du projet:</label>
 														<div id="ps-datepicker" class="input-group date" data-date-format="dd-mm-yyyy">
 															<span class="input-group-addon input-group-text bg-primary-transparent"><i class="fe fe-calendar text-primary-dark"></i></span>
 															<input id="project-start-date" class="form-control" type="text" placeholder="Select Start Date"/>
@@ -69,7 +69,7 @@
 												</div>
 												<div class="col-sm-12 col-md-12 col-xl-4">
 													<div class="form-group">
-														<label for="project-category" class="form-label text-muted">Project Category:</label>
+														<label for="project-category" class="form-label text-muted">Catégorie de projet:</label>
 														<select class="form-control select2-show-search form-select select2-hidden-accessible text-dark" id="project-category" data-placeholder="Choose Type..." tabindex="-1" aria-hidden="true">
 															<option label="Choose one"></option>
 															<option value="empty">---</option>
@@ -84,7 +84,7 @@
 												</div>
 												<div class="col-sm-12 col-md-12 col-xl-4">
 													<div class="form-group">
-														<label for="project-department" class="form-label text-muted">Department:</label>
+														<label for="project-department" class="form-label text-muted">Département:</label>
 														<select class="form-control select2-show-search form-select select2-hidden-accessible text-dark" id="project-department" data-placeholder="Choose Type..." tabindex="-1" aria-hidden="true">
 															<option label="Choose one"></option>
 															<option value="empty">---</option>
