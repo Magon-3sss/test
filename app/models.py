@@ -89,6 +89,11 @@ class Point(models.Model):
     long=models.CharField(max_length=50)
     geozone = models.ForeignKey(Zone,on_delete=models.CASCADE)
     
+def filepath(request, filename):
+    old_filename = filename
+    timeNow = datetime.datetime.now()
+    filename="%s %s" % (timeNow, old_filename)
+    return os.path.join('uploads/', filename)   
 class MapForm(models.Model):
     project_name=models.CharField(max_length=100)
     project_date=models.CharField(max_length=100)
