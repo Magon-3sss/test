@@ -1881,7 +1881,10 @@ def project_modifier(request, project_id):
     if request.method == 'POST':
         # Récupérer les données soumises par le formulaire
         project.project_name = request.POST.get('project_name', project.project_name)
-        project.project_date = request.POST.get('project_date', project.project_date)
+        # Convertir la chaîne de caractères de la date en objet date
+        date_string = request.POST.get('project_date', project.project_date)
+        if date_string: 
+            project.project_date = datetime.strptime(date_string, '%d-%m-%Y').date()
         project.project_category = request.POST.get('project_category', project.project_category)
         project.department = request.POST.get('department', project.department)
         project.client = request.POST.get('client', project.client)
@@ -2815,10 +2818,10 @@ from sentinelhub import MimeType
 
 # Configuration de Sentinel Hub
 config = SHConfig()
-config.instance_id = "211dc98f-d4d3-4229-b540-703e8f0b8d9b"
+config.instance_id = "3d348504-117e-4018-a668-f8dc56712eeb"
 if not config.sh_client_id or not config.sh_client_secret:
-  config.sh_client_id = 'b75db3ae-30a5-4be2-a920-c5ea4973df49'
-  config.sh_client_secret = 'jORm8qGiwWy1VZgidGyyGapYsap19A0b'
+  config.sh_client_id = '0fd3ac52-31fb-4505-9edb-21c30953c5b9'
+  config.sh_client_secret = 'e7dDLn24tW2TR50rdl1SebWIqPJnomwW'
 from shapely.geometry import Polygon
 
 

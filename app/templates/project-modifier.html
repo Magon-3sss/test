@@ -2,6 +2,7 @@
 {% load static %}
 
     {% block styles %}
+	<link rel="stylesheet" href="{% static 'assets/plugins/bootstrap-datepicker/css/datepicker.css' %}">
 
     {% endblock %}
     
@@ -33,7 +34,7 @@
 										</div>
 										<div class="card-body p-0 project-edit-main">
 											<div class="row p-5 border-bottom">
-												<div class="col-sm-12 col-md-12 col-xl-3">
+												<div class="col-sm-12 col-md-12 col-xl-4">
 													<div class="form-group">
 														<label for="project-name" class="form-label text-muted">Nom du projet:</label>
 														<div class="input-group">
@@ -41,15 +42,15 @@
 														</div>
 													</div>
 												</div>
-												<div class="col-sm-12 col-md-12 col-xl-3">
+												<div class="col-sm-12 col-md-12 col-xl-4">
 													<div class="form-group">
-														<label for="project-start-date" class="form-label text-muted">Date du projet:</label>
-														<div id="ps-datepicker" class="input-group date" data-date-format="dd-mm-yyyy">
+														<label for="project-date" class="form-label text-muted">Date du projet:</label>
+														<div class="input-group date" data-date-format="dd-mm-yyyy">
+															<input type="text" class="form-control" id="project_date" name="project_date" value="{{ project.project_date|date:'d-m-Y' }}">
 															<span class="input-group-addon input-group-text bg-primary-transparent"><i class="fe fe-calendar text-primary-dark"></i></span>
-															<input id="project-start-date" class="form-control" type="text" placeholder="Select Start Date"/>
 														</div>
 													</div>
-												</div>
+												</div>												
 												{% comment %} <div class="col-sm-12 col-md-12 col-xl-3 end-date-container">
 													<div class="form-group">
 														<label for="project-end-date" class="form-label text-muted">End Date:</label>
@@ -59,161 +60,41 @@
 														</div>
 													</div>
 												</div> {% endcomment %}
-												<div class="col-sm-12 col-md-12 col-xl-3 no-date-checkbox">
+												<div class="col-sm-12 col-md-12 col-xl-4 ">
 													<div class="form-group">
-														<label class="custom-control custom-checkbox end-date-checkbox-container">
-															<input type="checkbox" class="custom-control-input end-date-checkbox" value="option2">
-															<span class="custom-control-label">No End Date.</span>
-														</label>
+														<label for="client" class="form-label text-muted">client :</label>
+														<div class="input-group">
+															<input type="text" id="client" class="form-control text-dark" placeholder="Enter Project Name" name="client" value="{{ project.client }}">
+														</div>
 													</div>
 												</div>
 												<div class="col-sm-12 col-md-12 col-xl-4">
 													<div class="form-group">
-														<label for="project-category" class="form-label text-muted">Catégorie de projet:</label>
-														<select class="form-control select2-show-search form-select select2-hidden-accessible text-dark" id="project-category" data-placeholder="Choose Type..." tabindex="-1" aria-hidden="true">
-															<option label="Choose one"></option>
-															<option value="empty">---</option>
-															<option value="NO" selected>Nonumy</option>
-															<option value="SE">Sea</option>
-															<option value="VE">Vero</option>
-															<option value="DO">Dolore</option>
-															<option value="LO">Lorem</option>
-															<option value="EO">Eos</option>
-														</select>
+														<label for="project-category" class="form-label text-muted">Culture :</label>
+														<select class="form-control select2-show-search" id="project-category" name="project_category">
+															<option label="Choisissez une option"></option>
+															<option value="Grand Culture" {% if project.project_category == "Grand Culture" %}selected{% endif %}>Grand Culture</option>
+															<option value="Arbo-culture" {% if project.project_category == "Arbo-culture" %}selected{% endif %}>Arbo-culture</option>
+															<option value="Palmier" {% if project.project_category == "Palmier" %}selected{% endif %}>Palmier</option>
+															<option value="Mixte" {% if project.project_category == "Mixte" %}selected{% endif %}>Mixte</option>
+														</select>														
 													</div>
 												</div>
 												<div class="col-sm-12 col-md-12 col-xl-4">
 													<div class="form-group">
-														<label for="project-department" class="form-label text-muted">Département:</label>
-														<select class="form-control select2-show-search form-select select2-hidden-accessible text-dark" id="project-department" data-placeholder="Choose Type..." tabindex="-1" aria-hidden="true">
-															<option label="Choose one"></option>
-															<option value="empty">---</option>
-															<option value="ITD" selected>IT Development</option>
-															<option value="SLS">Sales</option>
-															<option value="MKT">Marketing</option>
-															<option value="FNC">Finance</option>
-															<option value="STK">Stocks</option>
-															<option value="MDL">Medical</option>
-															<option value="HUR">Human Resources</option>
-														</select>
-													</div>
-												</div>
-												<div class="col-sm-12 col-md-12 col-xl-4">
-													<div class="form-group">
-														<label class="form-label text-muted">Client: </label>
-														<ul>
-															<li class="select-client">
-																<select class="form-control select2-client-search" data-placeholder="Select Client">
-																	<option value="1">Angeline Julliet</option>
-																	<option value="2">Helena Rose</option>
-																	<option value="13">Daniel Obrien</option>
-																	<option value="15">Jorah Randy</option>
-																	<option value="3">Emma Watson</option>
-																	<option value="5">Bonny Benett</option>
-																	<option value="7">Jessie Spears</option>
-																	<option value="9">Skyler Hilda</option>
-																	<option value="11">Randy Orton</option>
-																	<option value="14">Benjamin Button</option>
-																</select>
-															</li>
-														</ul>
-													</div>
-												</div>
-												<div class="col-sm-12 col-md-12 col-xl-6">
-													<label class="form-label text-muted">Project Summary: </label>
-													<div class="form-group">
-														<div id="summernote3"><p>Elitr consetetur ut voluptua invidunt sed aliquyam tempor dolores. Vero clita takimata clita justo. Dolore sed accusam sit amet voluptua.</p></div>
-													</div>
-												</div>
-												<div class="col-sm-12 col-md-12 col-xl-6">
-													<label class="form-label text-muted">Project Notes: </label>
-													<div class="form-group">
-														<div id="summernote4"><p>Dolor amet vero lorem diam lorem sit duo, vero sit stet takimata clita, lorem duo.</p></div>
-													</div>
-												</div>
-												<div class="col-sm-12 col-md-12 col-xl-4">
-													<div class="form-group">
-														<label class="form-label text-muted">Project Status: </label>
-														<ul>
-															<li class="select-status">
-																<select class="form-control select2-status-search" data-placeholder="Select Status">
-																	<option value="empty">---</option>
-																	<option value="IP" selected>In Progress</option>
-																	<option value="OH">On Hold</option>
-																	<option value="CP">Completed</option>
-																</select>
-															</li>
-														</ul>
-													</div>
-												</div>
-											</div>
-											<div class="row p-5 border-bottom">
-												<div class="col-xl-12">
-													<h4 class="mb-0 d-flex other-details">Other Details<i class="fe fe-chevron-down down-arrow fs-20"></i><i class="    fe fe-chevron-up up-arrow d-none fs-20"></i></h4>
-													<div class="row other-details-main d-none mt-4">
-														<div class="col-sm-12 col-md-12 col-xl-12">
-															<label class="form-label text-muted">Add Files: </label>
-															<div class="form-group">
-																<form method="post">
-																	<input type="file" class="dropify" data-bs-height="100" />
-																</form>
-															</div>
-														</div>
-														<div class="col-sm-12 col-md-12 col-xl-4">
-															<div class="form-group">
-																<label class="form-label text-muted">Currency:</label>
-																<div class="input-group">
-																	<select class="form-control select2-show-search form-select select2-hidden-accessible text-dark" id="currency-type" data-placeholder="Choose Type..." tabindex="-1" aria-hidden="true">
-																		<option label="Choose one"></option>
-																		<option value="day">USD($)</option>
-																		<option value="day">GBP(£)</option>
-																		<option value="day">EUR(€)</option>
-																		<option value="day">INR(₹)</option>
-																	</select>
-																</div>
-															</div>
-														</div>
-														<div class="col-sm-12 col-md-12 col-xl-4">
-															<div class="form-group">
-																<label class="form-label text-muted">Budget:</label>
-																<input type="number" class="form-control" placeholder="e.g. 1000" min="0">
-															</div>
-														</div>
-														<div class="col-sm-12 col-md-12 col-xl-4">
-															<div class="form-group">
-																<label class="form-label text-muted">Estimated Hours:</label>
-																<input type="number" class="form-control" placeholder="e.g. 700" min="0">
-															</div>
-														</div>
-														<div class="col-sm-12 col-md-12 col-xl-4 align-self-end">
-															<div class="form-group">
-																<label class="custom-control custom-checkbox">
-																	<input type="checkbox" class="custom-control-input">
-																	<span class="custom-control-label">Manual Time Logs.</span>
-																</label>
-															</div>
-														</div>
-														<div class="col-sm-12 col-md-12 col-xl-4">
-															<div class="form-group">
-																<label class="form-label text-muted">Assign To: </label>
-																<ul>
-																	<li class="select-client">
-																		<select class="form-control select2-assignTo-search" data-placeholder="Select Client">
-																			<option value="1">Angeline Julliet</option>
-																			<option value="2">Helena Rose</option>
-																			<option value="13">Daniel Obrien</option>
-																			<option value="15">Jorah Randy</option>
-																			<option value="3">Emma Watson</option>
-																			<option value="5">Bonny Benett</option>
-																			<option value="7">Jessie Spears</option>
-																			<option value="9">Skyler Hilda</option>
-																			<option value="11">Randy Orton</option>
-																			<option value="14">Benjamin Button</option>
-																		</select>
-																	</li>
-																</ul>
-															</div>
-														</div>
+														<label for="project-department" class="form-label text-muted">Type de Culture :</label>
+														<select class="form-control select2-show-search" id="project-department-id" name="department">
+															<option label="Choisissez une option"></option>
+															<option value="Blé" {% if project.department == "Blé" %}selected{% endif %}>Blé</option>
+															<option value="Alpha" {% if project.department == "Alpha" %}selected{% endif %}>Alpha</option>
+															<option value="Alpha-Alpha" {% if project.department == "Alpha-Alpha" %}selected{% endif %}>Alpha-Alpha</option>
+															<option value="Oliver" {% if project.department == "Oliver" %}selected{% endif %}>Oliver</option>
+															<option value="Amandier" {% if project.department == "Amandier" %}selected{% endif %}>Amandier</option>
+															<option value="Pistachier" {% if project.department == "Pistachier" %}selected{% endif %}>Pistachier</option>
+															<option value="Degla" {% if project.department == "Degla" %}selected{% endif %}>Degla</option>
+															<option value="Beser" {% if project.department == "Beser" %}selected{% endif %}>Beser</option>
+															<option value="Aligue" {% if project.department == "Aligue" %}selected{% endif %}>Aligue</option>
+														</select>														
 													</div>
 												</div>
 											</div>
@@ -238,6 +119,15 @@
         {% endblock %}
 
     {% block scripts %}
+		<script src="{% static 'assets/plugins/bootstrap-datepicker/js/datepicker.js' %}"></script>
+		<script>
+			$(document).ready(function() {
+				$('#project_date').datepicker({
+					format: 'dd-mm-yyyy',
+					autoclose: true
+				});
+			});
+		</script>
 
 		<!-- SELECT2 JS -->
 		<script src=" {% static 'assets/plugins/select2/select2.full.min.js' %} "></script>

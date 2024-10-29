@@ -165,7 +165,13 @@ function showFormData(){
     var client_text =document.createTextNode(client);
     var client_element = document.getElementById("client-id");
     client_element.appendChild(client_text);
-    }
+    var department_text = document.createTextNode(department);
+    var department_element = document.getElementById("department-id");
+    department_element.appendChild(department_text);
+    var project_category_text = document.createTextNode(project_category);
+    var project_category_element = document.getElementById("project-category-id");
+    project_category_element.appendChild(project_category_text);
+}
     function btn1(){
       document.getElementById("btn1").style.opacity = "0.4";
       document.querySelector('#btn1').disabled = true;
@@ -255,31 +261,31 @@ function showFormData(){
     // Ajoutez ces lignes pour que la carte s'adapte aux limites de l'image et de la bordure bleue
     map.fitBounds(imageBounds);
   } */
-var container = document.getElementById('reference-card');
-container.addEventListener('wheel', function(event) {
-   var delta = event.deltaY || event.detail || event.wheelDelta;
-   // Move the scroll position based on the wheel delta
-   container.scrollTop += delta;
-   // Prevent the default scrolling behavior of the page
-   event.preventDefault();
-});
-container.addEventListener('wheel', function(event) {
-   var delta = event.deltaY || event.detail || event.wheelDelta;
-   // Scroll to the top when the wheel is scrolled up and the container is already at the top
-   if (delta < 0 && container.scrollTop === 0) {
-      event.preventDefault();
-      // Scroll to the top
-      container.scrollTop = 0;
-      return;
-   }
-   // Scroll to the bottom when the wheel is scrolled down and the container is already at the bottom
-   if (delta > 0 && container.scrollTop + container.clientHeight >= container.scrollHeight) {
-      event.preventDefault();
-      // Scroll to the bottom
-      container.scrollTop = container.scrollHeight;
-      return; 
+  var container = document.getElementById('reference-card');
+  container.addEventListener('wheel', function(event) {
+    var delta = event.deltaY || event.detail || event.wheelDelta;
+    // Move the scroll position based on the wheel delta
+    container.scrollTop += delta;
+    // Prevent the default scrolling behavior of the page
+    event.preventDefault();
+  });
+  container.addEventListener('wheel', function(event) {
+    var delta = event.deltaY || event.detail || event.wheelDelta;
+    // Scroll to the top when the wheel is scrolled up and the container is already at the top
+    if (delta < 0 && container.scrollTop === 0) {
+        event.preventDefault();
+        // Scroll to the top
+        container.scrollTop = 0;
+        return;
     }
-});
+    // Scroll to the bottom when the wheel is scrolled down and the container is already at the bottom
+    if (delta > 0 && container.scrollTop + container.clientHeight >= container.scrollHeight) {
+        event.preventDefault();
+        // Scroll to the bottom
+        container.scrollTop = container.scrollHeight;
+        return; 
+      }
+  });
 
 
 

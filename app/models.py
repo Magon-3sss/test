@@ -96,7 +96,7 @@ def filepath(request, filename):
     return os.path.join('uploads/', filename)   
 class MapForm(models.Model):
     project_name=models.CharField(max_length=100)
-    project_date=models.CharField(max_length=100)
+    project_date = models.DateField()
     project_category=models.CharField(max_length=20)
     department=models.CharField(max_length=50)
     client=models.CharField(max_length=50)
