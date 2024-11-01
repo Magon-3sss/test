@@ -187,6 +187,41 @@ function showFormData(){
       document.getElementById("irrig").style.display = "none";
       document.getElementById("reference-card").style.display = "none";
   }
+  function pixelToLatLng(x, y, bounds) {
+    const [[minLat, minLon], [maxLat, maxLon]] = bounds;
+    const lat = minLat + (y / imageHeight) * (maxLat - minLat);
+    const lon = minLon + (x / imageWidth) * (maxLon - minLon);
+    return [lat, lon];
+  }
+  
+  
+  function showAnomaliesOnMap(anomalies) {
+    const anomalyIconUrl = "{% static 'assets/images/icons/detection.png' %}"; // Le chemin de l'icône
+  
+    anomalies.forEach(anomaly => {
+      // Utilisez les coordonnées d'anomalie dans le système de coordonnées de l'image raster
+      const [lat, lon] = pixelToLatLng(anomaly.x, anomaly.y, imageBounds);
+  
+      if (!lat || !lon) {
+        console.error(`Erreur lors de la conversion des coordonnées pour l'anomalie: ${anomaly}`);
+        return;
+      }
+  
+      // Créer un marqueur pour l'anomalie
+      const anomalyMarker = L.marker([lat, lon], {
+        icon: L.icon({
+          iconUrl: anomalyIconUrl,
+          iconSize: [25, 25],
+          iconAnchor: [12, 25]
+        })
+      }).addTo(map);
+  
+      // Optionnel : Ajouter un popup pour chaque anomalie
+      anomalyMarker.bindPopup(`Anomalie détectée : ${lat.toFixed(5)}, ${lon.toFixed(5)}`).openPopup();
+    });
+  }  
+  
+  
 
   async function getRasterImage() {
     let filtre_value = document.getElementById("filtre-select").value;
@@ -214,18 +249,44 @@ function showFormData(){
         },
         body: JSON.stringify(data)
       });
-      if (response.ok) {
+      /* if (response.ok) {
         const responseData = await response.json(); 
         const imageUrl = responseData.image_url; 
         console.log('Image URL:', imageUrl);
         showOverLay(imageUrl, points_parcelle);
       } else {
         console.error('Error fetching raster image:', await response.text());
+      } */
+        if (response.ok) {
+          const responseData = await response.json();
+          showOverLay(responseData.image_url, points_parcelle);
+
+          // Afficher les anomalies si elles existent
+    if (responseData.anomalies && responseData.anomalies.length > 0) {
+      showAnomaliesOnMap(responseData.anomalies);
+    } else {
+      console.warn("Aucune anomalie trouvée.");
+    }
+      } else {
+          console.error('Error fetching raster image:', await response.text());
       }
     } catch (error) {
       console.error('Error fetching raster image:', error);
     } 
   }
+  
+  
+// Check if anomalies are being processed correctly
+console.log('Anomalies:', responseData.anomalies);
+console.log('Bounding Box:', bbox);
+
+// Check if lat/lon is correctly calculated
+console.log('Converted LatLng for anomaly:', lat, lon);
+
+// Check if image overlay bounds and image URL are correct
+console.log('Overlay image URL:', imageUrlWithCacheBuster);
+console.log('Overlay bounds:', imageBounds);
+
     
   function showOverLay(imageUrl, coordinates) {
     console.log('Showing overlay with image URL:', imageUrl);

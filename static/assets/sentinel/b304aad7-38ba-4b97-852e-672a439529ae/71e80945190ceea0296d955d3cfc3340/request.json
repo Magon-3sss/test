@@ -1,0 +1,94 @@
+{
+    "headers": {
+        "accept": "image/png",
+        "content-type": "application/json"
+    },
+    "payload": {
+        "evalscript": "\n        //VERSION=3\n        function setup() {\n            return {\n                input: [\"B04\", \"B08\", \"dataMask\"],\n                output: { bands: 4 }\n            };\n        }\n\n        function evaluatePixel(samples) {\n            let ndvi = (samples.B08 - samples.B04) / (samples.B08 + samples.B04);\n            let pastNDVI = getPastNDVI();  // Placeholder pour l'impl\u00e9mentation de la moyenne NDVI des ann\u00e9es pass\u00e9es\n            let anomaly = ndvi - pastNDVI;\n            let r = anomaly > 0 ? Math.min(1.0, anomaly * 2) : 0;\n            let g = anomaly < 0 ? Math.min(1.0, -anomaly * 2) : 0;\n            return [r, g, 0, samples.dataMask];\n        }\n\n        function getPastNDVI() {\n            // Remplacez par une m\u00e9thode pour obtenir la moyenne des valeurs NDVI pass\u00e9es\n            return 0.5; // Valeur par d\u00e9faut\n        }\n    ",
+        "input": {
+            "bounds": {
+                "bbox": [
+                    28.46077,
+                    22.752656,
+                    28.574409,
+                    22.859281
+                ],
+                "geometry": {
+                    "coordinates": [
+                        [
+                            [
+                                28.4618,
+                                22.8577
+                            ],
+                            [
+                                28.4618,
+                                22.8577
+                            ],
+                            [
+                                28.573723,
+                                22.859281
+                            ],
+                            [
+                                28.573723,
+                                22.859281
+                            ],
+                            [
+                                28.574409,
+                                22.753922
+                            ],
+                            [
+                                28.574409,
+                                22.753922
+                            ],
+                            [
+                                28.462486,
+                                22.752656
+                            ],
+                            [
+                                28.462486,
+                                22.752656
+                            ],
+                            [
+                                28.46077,
+                                22.8577
+                            ],
+                            [
+                                28.4618,
+                                22.8577
+                            ]
+                        ]
+                    ],
+                    "type": "Polygon"
+                },
+                "properties": {
+                    "crs": "http://www.opengis.net/def/crs/EPSG/0/4326"
+                }
+            },
+            "data": [
+                {
+                    "dataFilter": {
+                        "timeRange": {
+                            "from": "2024-10-29T00:00:00Z",
+                            "to": "2024-10-29T23:59:59Z"
+                        }
+                    },
+                    "type": "sentinel-2-l2a"
+                }
+            ]
+        },
+        "output": {
+            "height": 512,
+            "responses": [
+                {
+                    "format": {
+                        "type": "image/png"
+                    },
+                    "identifier": "default"
+                }
+            ],
+            "width": 512
+        }
+    },
+    "timestamp": "2024-11-01T13:03:48.235830",
+    "url": "https://services.sentinel-hub.com/api/v1/process"
+}

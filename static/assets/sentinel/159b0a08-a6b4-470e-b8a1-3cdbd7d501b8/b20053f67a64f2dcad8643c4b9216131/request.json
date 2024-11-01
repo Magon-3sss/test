@@ -1,0 +1,122 @@
+{
+    "headers": {
+        "accept": "image/png",
+        "content-type": "application/json"
+    },
+    "payload": {
+        "evalscript": "\n        // VERSION=3\n        const config2 = {\n          default: {\n            nbPastYears: 3,\n            defaultOutputValue: -2,\n            ndviMinValue: -1,\n            currentIndexesMinValuesNumber: 1,\n            pastIndexesMinValuesNumber: 3\n          },\n          ndviAnomaly: {\n            pixelEvalMaxValue: 0.7\n          },\n        };\n\n        function setup() {\n          return {\n            input: [{ bands: [\"B04\", \"B08\"] }],\n            output: { bands: 3 },\n            mosaicking: \"ORBIT\"\n          };\n        }\n\n        function calculateNDVI(sample) {\n          let denom = sample.B04 + sample.B08;\n          if (denom === 0) return null;\n          return (sample.B08 - sample.B04) / denom;\n        }\n\n        function calculateIndexesForSamples(samples, scenes, processSampleMethod) {\n          const indexes = {};\n          for (let i = 0; i < samples.length; i++) {\n            let sample = samples[i];\n            let indexValue = processSampleMethod(sample);\n            if (indexValue === null) continue;\n            let sceneYear = scenes[i].date.getFullYear();\n            indexes[sceneYear] = indexes[sceneYear] || { sum: 0, count: 0 };\n            indexes[sceneYear].sum += indexValue;\n            indexes[sceneYear].count++;\n          }\n          return indexes;\n        }\n\n        function calculatePastIndexesAverage(indexes, currentYear, nbPastYears) {\n          let pastSum = 0, pastCount = 0;\n          for (let i = 1; i <= nbPastYears; i++) {\n            let pastYearData = indexes[currentYear - i];\n            if (pastYearData && pastYearData.count) {\n              pastSum += pastYearData.sum / pastYearData.count;\n              pastCount++;\n            }\n          }\n          return pastCount >= config2.default.pastIndexesMinValuesNumber ? pastSum / pastCount : null;\n        }\n\n        function calculateIndexAverages(samples, scenes) {\n          let indexes = calculateIndexesForSamples(samples, scenes, calculateNDVI);\n          let currentYear = scenes[0].date.getFullYear();\n          let currentAvg = indexes[currentYear] ? indexes[currentYear].sum / indexes[currentYear].count : null;\n          let pastAvg = calculatePastIndexesAverage(indexes, currentYear, config2.default.nbPastYears);\n          return { current: currentAvg, past: pastAvg };\n        }\n\n        function calculateNdviAnomaly(indexesAverages) {\n          if (indexesAverages.current === null || indexesAverages.past === null) return config2.default.defaultOutputValue;\n          return Math.max(Math.min(indexesAverages.current - indexesAverages.past, config2.ndviAnomaly.pixelEvalMaxValue), -config2.ndviAnomaly.pixelEvalMaxValue);\n        }\n\n        function evaluatePixel(samples, scenes) {\n          let indexesAverages = calculateIndexAverages(samples, scenes);\n          let anomaly = calculateNdviAnomaly(indexesAverages);\n          return anomaly > 0 ? [0, 1, 0] : [1, 0, 0];  // Use green for positive and red for negative anomalies\n        }\n        ",
+        "input": {
+            "bounds": {
+                "bbox": [
+                    9.332006,
+                    36.328126,
+                    9.338057,
+                    36.334142
+                ],
+                "geometry": {
+                    "coordinates": [
+                        [
+                            [
+                                9.334409,
+                                36.334142
+                            ],
+                            [
+                                9.334409,
+                                36.334142
+                            ],
+                            [
+                                9.338057,
+                                36.332085
+                            ],
+                            [
+                                9.338057,
+                                36.332085
+                            ],
+                            [
+                                9.337285,
+                                36.330615
+                            ],
+                            [
+                                9.337285,
+                                36.330615
+                            ],
+                            [
+                                9.336898,
+                                36.329561
+                            ],
+                            [
+                                9.336898,
+                                36.329561
+                            ],
+                            [
+                                9.336362,
+                                36.328126
+                            ],
+                            [
+                                9.336362,
+                                36.328126
+                            ],
+                            [
+                                9.332006,
+                                36.331151
+                            ],
+                            [
+                                9.332006,
+                                36.331151
+                            ],
+                            [
+                                9.332693,
+                                36.331998
+                            ],
+                            [
+                                9.332693,
+                                36.331998
+                            ],
+                            [
+                                9.333315,
+                                36.332932
+                            ],
+                            [
+                                9.333315,
+                                36.332932
+                            ],
+                            [
+                                9.334409,
+                                36.334142
+                            ]
+                        ]
+                    ],
+                    "type": "Polygon"
+                },
+                "properties": {
+                    "crs": "http://www.opengis.net/def/crs/EPSG/0/4326"
+                }
+            },
+            "data": [
+                {
+                    "dataFilter": {
+                        "timeRange": {
+                            "from": "2024-10-29T00:00:00Z",
+                            "to": "2024-10-29T23:59:59Z"
+                        }
+                    },
+                    "type": "sentinel-2-l2a"
+                }
+            ]
+        },
+        "output": {
+            "height": 512,
+            "responses": [
+                {
+                    "format": {
+                        "type": "image/png"
+                    },
+                    "identifier": "default"
+                }
+            ],
+            "width": 512
+        }
+    },
+    "timestamp": "2024-11-01T11:36:38.699982",
+    "url": "https://services.sentinel-hub.com/api/v1/process"
+}

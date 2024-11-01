@@ -2824,11 +2824,50 @@ if not config.sh_client_id or not config.sh_client_secret:
   config.sh_client_secret = 'e7dDLn24tW2TR50rdl1SebWIqPJnomwW'
 from shapely.geometry import Polygon
 
-
 def create_mask_geometry(points):
   polygon = Polygon(points)
   mask_geometry = Geometry(geometry=polygon, crs=CRS.WGS84)
   return mask_geometry
+
+# Define threshold values for each filter globally at the top of the file
+ANOMALY_THRESHOLDS = {
+    "NDVI": (0.2, 0.8),  # Example thresholds for vegetation
+    "NDMI": (-0.5, 0.5),  # Example thresholds for soil moisture
+    # Add additional filters and thresholds as needed
+}
+import numpy as np
+
+def convert_to_serializable(data):
+    """Converts NumPy arrays and data types to serializable Python types."""
+    if isinstance(data, np.ndarray):
+        return data.tolist()  # Converts array to list
+    elif isinstance(data, np.integer):
+        return int(data)      # Converts NumPy integers to Python int
+    elif isinstance(data, np.floating):
+        return float(data)    # Converts NumPy floats to Python float
+    return data
+
+def detect_anomalies(image_array, filter_value):
+    anomalies = []
+    min_threshold, max_threshold = ANOMALY_THRESHOLDS.get(filter_value, (None, None))
+
+    # Ensure threshold is set for the filter
+    if min_threshold is None or max_threshold is None:
+        return {"error": f"No thresholds defined for filter {filter_value}"}
+
+    # Scan through the image and detect pixels out of range
+    for x in range(image_array.shape[0]):
+        for y in range(image_array.shape[1]):
+            pixel_value = convert_to_serializable(image_array[x, y, 0])  # Convert pixel value
+
+            if pixel_value < min_threshold or pixel_value > max_threshold:
+                anomalies.append({
+                    "x": x,
+                    "y": y,
+                    "value": pixel_value
+                })
+
+    return anomalies
 
 @require_POST
 @api_view(['POST'])
@@ -2865,19 +2904,27 @@ def generate_raster_image(request):
   image_path = os.path.join(folder_path, "response.png")
   print(f"Image path: {image_path}")
   try:
-    response = sh_request.get_data(save_data=True)  
-    image_bytes = response[0] if response else None
+    response = sh_request.get_data(save_data=True)
+    image_array = np.array(response[0])  # Convert response to array
+
+    # Check if data is returned
+    if image_array is None:
+        raise ValueError("No image data received from SentinelHub.")  
+    #image_bytes = response[0] if response else None
     files = os.listdir(folder_path)
     sub_folder = [f for f in files if os.path.isdir(os.path.join(folder_path, f))][0]
     folder_with_image = os.path.join(folder_path, sub_folder)
-    if image_bytes is None:
-      raise ValueError("No image data received from SentinelHub.")
+    """ if image_bytes is None:
+      raise ValueError("No image data received from SentinelHub.") """
+    
+    # Detect anomalies
+    anomalies = detect_anomalies(image_array, filtre_value)
     image_url = request.build_absolute_uri(f'/static/assets/sentinel/{folder_with_image}/response.png')
     #image_url = request.build_absolute_uri(f'/static/assets/sentinel/{date}_response/response.png')
 
     #image_url = f"/static/assets/sentinel/{date}_response/response.png"
     #image_url = f"{data_folder}/{folder_name}/response.png"
-    return JsonResponse({"image_url": image_url})
+    return JsonResponse({"image_url": image_url, "anomalies": convert_to_serializable(anomalies)})
     #return JsonResponse({"image_url": "/static/assets/sentinel/2b8105841735d27341cdf126b3a4c6b6/response.png"})
   except Exception as e:
     print("Erreur lors de la récupération des données : ", str(e))
@@ -3116,10 +3163,9 @@ function evaluatePixel(samples) {
     return imgVals.concat([samples.dataMask]);
 }
 
-
     """
   else:
-    return "Invalid filter"
+    return "Invalid filter" 
   
 
 #################################################################################
