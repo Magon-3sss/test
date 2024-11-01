@@ -80,6 +80,7 @@
 				bottom: 25%;
 				left: 5%;
 				display: none;
+				margin-block: -142px;
 			  }
 			</style>
 		<meta charset="UTF-8">
@@ -367,7 +368,11 @@
 											</script> 	
 											<input type="date" id="datepicker" placeholder="Select date" onchange="getRasterImage()">
 											
-										</div>								
+										</div>
+										<script>
+											const anomalyIconUrl = "{% static 'assets/images/icons/detection.png' %}";
+										</script>
+																		
 										 <!-- leaflet js  -->
 									<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 									<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>

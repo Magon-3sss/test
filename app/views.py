@@ -2004,7 +2004,7 @@ def get_colors(request):
         colors = ColorReferenceNdvi.objects.all()
     elif filter_type == 'NDMI':
         colors = ColorReferenceNdmi.objects.all()
-    elif filter_type == 'MSAVI':
+    elif filter_type == 'MSAVI 2':
         colors = ColorReferenceMsavi.objects.all()
     else:
         colors = []
@@ -3119,7 +3119,8 @@ function evaluatePixel(samples) {
 
     """
   else:
-    return "Invalid filter"  
+    return "Invalid filter"
+  
 
 #################################################################################
 """ @api_view(['POST'])

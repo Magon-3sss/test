@@ -1,0 +1,94 @@
+{
+    "headers": {
+        "accept": "image/png",
+        "content-type": "application/json"
+    },
+    "payload": {
+        "evalscript": "\n      //VERSION=3\n\n// Cr\u00e9ez une instance de ColorRampVisualizer avec les rampes de couleur\nconst moistureRamps = [\n    [1, 0x004728],\n    [0.7, 0x005530],\n    [0.6, 0x00673A],\n    [0.5, 0x007E47],\n    [0.4, 0x009755],\n    [0.35, 0x14AA60],\n    [0.3, 0x53BD6B],\n    [0.27, 0x77CA6F],\n    [0.25, 0x9BD873],\n    [0.22, 0xB9E383],\n    [0.17, 0xEAF7AC],\n    [0.15, 0xFDFEC2],\n    [0.12, 0xFFEFAB],\n    [0.10, 0xFFE093],\n    [0.8, 0xFFC67D],\n    [0.6, 0xFFAB69],\n    [0.4, 0xFF8D5A],\n    [0.2, 0xFE6C4A],\n    [0, 0xAD0028],\n    [-1, 0xAD0028]\n];\n\nlet viz = new ColorRampVisualizer(moistureRamps);\n\nfunction evaluatePixel(samples) {\n    let a = 2.0 * samples.B08 - 1.0;\n    let val = (samples.B08 + 1.0) - 0.5 * Math.sqrt(a * a + 8.0 * samples.B04);\n    val = viz.process(val);\n    val.push(samples.dataMask);\n    return val;\n}\n\nfunction setup() {\n  return {\n    input: [{\n      bands: [\n        \"B04\",\n        \"B08\",\n        \"dataMask\"\n      ]\n    }],\n    output: {\n      bands: 4\n    }\n  }\n}\n\n    ",
+        "input": {
+            "bounds": {
+                "bbox": [
+                    28.46077,
+                    22.752656,
+                    28.574409,
+                    22.859281
+                ],
+                "geometry": {
+                    "coordinates": [
+                        [
+                            [
+                                28.4618,
+                                22.8577
+                            ],
+                            [
+                                28.4618,
+                                22.8577
+                            ],
+                            [
+                                28.573723,
+                                22.859281
+                            ],
+                            [
+                                28.573723,
+                                22.859281
+                            ],
+                            [
+                                28.574409,
+                                22.753922
+                            ],
+                            [
+                                28.574409,
+                                22.753922
+                            ],
+                            [
+                                28.462486,
+                                22.752656
+                            ],
+                            [
+                                28.462486,
+                                22.752656
+                            ],
+                            [
+                                28.46077,
+                                22.8577
+                            ],
+                            [
+                                28.4618,
+                                22.8577
+                            ]
+                        ]
+                    ],
+                    "type": "Polygon"
+                },
+                "properties": {
+                    "crs": "http://www.opengis.net/def/crs/EPSG/0/4326"
+                }
+            },
+            "data": [
+                {
+                    "dataFilter": {
+                        "timeRange": {
+                            "from": "2024-10-02T00:00:00Z",
+                            "to": "2024-10-02T23:59:59Z"
+                        }
+                    },
+                    "type": "sentinel-2-l2a"
+                }
+            ]
+        },
+        "output": {
+            "height": 512,
+            "responses": [
+                {
+                    "format": {
+                        "type": "image/png"
+                    },
+                    "identifier": "default"
+                }
+            ],
+            "width": 512
+        }
+    },
+    "timestamp": "2024-10-30T08:47:49.072790",
+    "url": "https://services.sentinel-hub.com/api/v1/process"
+}
