@@ -276,18 +276,7 @@ function showFormData(){
   }
   
   
-// Check if anomalies are being processed correctly
-console.log('Anomalies:', responseData.anomalies);
-console.log('Bounding Box:', bbox);
-
-// Check if lat/lon is correctly calculated
-console.log('Converted LatLng for anomaly:', lat, lon);
-
-// Check if image overlay bounds and image URL are correct
-console.log('Overlay image URL:', imageUrlWithCacheBuster);
-console.log('Overlay bounds:', imageBounds);
-
-    
+   
   function showOverLay(imageUrl, coordinates) {
     console.log('Showing overlay with image URL:', imageUrl);
     const imageUrlWithCacheBuster = imageUrl;

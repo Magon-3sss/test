@@ -1,0 +1,94 @@
+{
+    "headers": {
+        "accept": "image/png",
+        "content-type": "application/json"
+    },
+    "payload": {
+        "evalscript": "\n           //VERSION=3\nfunction setup() {\n    return {\n        input: [\"B08\", \"B04\", \"B11\", \"dataMask\"],\n        output: { bands: 4 }\n    };\n}\n\nfunction evaluatePixel(sample) {\n    // Calculate NDVI and NDMI indices\n    let ndvi = index(sample.B08, sample.B04);\n    let ndmi = index(sample.B08, sample.B11);\n    \n    // Debug conditions: Apply different colors for each condition\n    if (ndvi < 0.2 && ndmi > 0.4) {\n        // Red for detected anomaly (low NDVI and high NDMI)\n        return [1, 0, 0, sample.dataMask];\n    } else if (ndvi >= 0.2 && ndvi <= 0.6 && ndmi <= 0.4) {\n        // Yellow for moderate NDVI (example for different ranges)\n        return [1, 1, 0, sample.dataMask];\n    } else if (ndvi > 0.6) {\n        // Blue for high NDVI (example to indicate healthy vegetation)\n        return [0, 0, 1, sample.dataMask];\n    } else {\n        // Green for non-anomalous areas\n        return [0, 1, 0, sample.dataMask];\n    }\n}\n\n        ",
+        "input": {
+            "bounds": {
+                "bbox": [
+                    28.46077,
+                    22.752656,
+                    28.574409,
+                    22.859281
+                ],
+                "geometry": {
+                    "coordinates": [
+                        [
+                            [
+                                28.4618,
+                                22.8577
+                            ],
+                            [
+                                28.4618,
+                                22.8577
+                            ],
+                            [
+                                28.573723,
+                                22.859281
+                            ],
+                            [
+                                28.573723,
+                                22.859281
+                            ],
+                            [
+                                28.574409,
+                                22.753922
+                            ],
+                            [
+                                28.574409,
+                                22.753922
+                            ],
+                            [
+                                28.462486,
+                                22.752656
+                            ],
+                            [
+                                28.462486,
+                                22.752656
+                            ],
+                            [
+                                28.46077,
+                                22.8577
+                            ],
+                            [
+                                28.4618,
+                                22.8577
+                            ]
+                        ]
+                    ],
+                    "type": "Polygon"
+                },
+                "properties": {
+                    "crs": "http://www.opengis.net/def/crs/EPSG/0/4326"
+                }
+            },
+            "data": [
+                {
+                    "dataFilter": {
+                        "timeRange": {
+                            "from": "2024-10-21T00:00:00Z",
+                            "to": "2024-10-21T23:59:59Z"
+                        }
+                    },
+                    "type": "sentinel-2-l2a"
+                }
+            ]
+        },
+        "output": {
+            "height": 512,
+            "responses": [
+                {
+                    "format": {
+                        "type": "image/png"
+                    },
+                    "identifier": "default"
+                }
+            ],
+            "width": 512
+        }
+    },
+    "timestamp": "2024-11-04T11:38:37.948491",
+    "url": "https://services.sentinel-hub.com/api/v1/process"
+}

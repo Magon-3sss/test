@@ -2829,106 +2829,70 @@ def create_mask_geometry(points):
   mask_geometry = Geometry(geometry=polygon, crs=CRS.WGS84)
   return mask_geometry
 
-# Define threshold values for each filter globally at the top of the file
-ANOMALY_THRESHOLDS = {
-    "NDVI": (0.2, 0.8),  # Example thresholds for vegetation
-    "NDMI": (-0.5, 0.5),  # Example thresholds for soil moisture
-    # Add additional filters and thresholds as needed
-}
-import numpy as np
-
-def convert_to_serializable(data):
-    """Converts NumPy arrays and data types to serializable Python types."""
-    if isinstance(data, np.ndarray):
-        return data.tolist()  # Converts array to list
-    elif isinstance(data, np.integer):
-        return int(data)      # Converts NumPy integers to Python int
-    elif isinstance(data, np.floating):
-        return float(data)    # Converts NumPy floats to Python float
-    return data
-
-def detect_anomalies(image_array, filter_value):
-    anomalies = []
-    min_threshold, max_threshold = ANOMALY_THRESHOLDS.get(filter_value, (None, None))
-
-    # Ensure threshold is set for the filter
-    if min_threshold is None or max_threshold is None:
-        return {"error": f"No thresholds defined for filter {filter_value}"}
-
-    # Scan through the image and detect pixels out of range
-    for x in range(image_array.shape[0]):
-        for y in range(image_array.shape[1]):
-            pixel_value = convert_to_serializable(image_array[x, y, 0])  # Convert pixel value
-
-            if pixel_value < min_threshold or pixel_value > max_threshold:
-                anomalies.append({
-                    "x": x,
-                    "y": y,
-                    "value": pixel_value
-                })
-
-    return anomalies
-
 @require_POST
 @api_view(['POST'])
 @csrf_exempt
 def generate_raster_image(request):
-  if request.method == "POST":
-    data = request.data
-    date = data["date"]
-    points = data["points"]
-    filtre_value = data.get("filtre")
-    data_folder="D:/MAGON_3SSS/MAGON_3SSS/MAGON_3SSS-main/MAGON_3S/static/assets/sentinel"
-    folder_name = str(uuid.uuid4())
-    folder_path = os.path.join(data_folder, folder_name)
-    if not os.path.exists(folder_path):
-      os.makedirs(folder_path)
-    evalscript = get_evalscript(filtre_value)
-    bbox = create_bbox([(p[0], p[1]) for p in points])
-    mask_geometry = create_mask_geometry([(p[0], p[1]) for p in points])
-    sh_request = SentinelHubRequest(
-    data_folder=folder_path,
-    evalscript=evalscript,
-    geometry=mask_geometry,
-    input_data=[
-      SentinelHubRequest.input_data(
-        data_collection=DataCollection.SENTINEL2_L2A,
-        time_interval=(date, date),
-      )
-    ],
-    responses=[SentinelHubRequest.output_response("default", "png")],
-    bbox=bbox,
-    size=(512,512), 
-    config=config,
-    )
-  image_path = os.path.join(folder_path, "response.png")
-  print(f"Image path: {image_path}")
-  try:
-    response = sh_request.get_data(save_data=True)
-    image_array = np.array(response[0])  # Convert response to array
+    if request.method == "POST":
+        data = request.data
+        date = data["date"]
+        points = data["points"]
+        filtre_value = data.get("filtre")
+        
+        # Configuration du dossier
+        data_folder = "D:/MAGON_3SSS/MAGON_3SSS/MAGON_3SSS-main/MAGON_3S/static/assets/sentinel"
+        folder_name = str(uuid.uuid4())
+        folder_path = os.path.join(data_folder, folder_name)
+        if not os.path.exists(folder_path):
+            os.makedirs(folder_path)
+        
+        evalscript = get_evalscript(filtre_value)
+        bbox = create_bbox([(p[0], p[1]) for p in points])
+        mask_geometry = create_mask_geometry([(p[0], p[1]) for p in points])
+        
+        sh_request = SentinelHubRequest(
+            data_folder=folder_path,
+            evalscript=evalscript,
+            geometry=mask_geometry,
+            input_data=[
+                SentinelHubRequest.input_data(
+                    data_collection=DataCollection.SENTINEL2_L2A,
+                    time_interval=(date, date),
+                )
+            ],
+            responses=[SentinelHubRequest.output_response("default", MimeType.PNG)],
+            bbox=bbox,
+            size=(512, 512),
+            config=config,
+        )
+        
+        try:
+            # Récupération de l'image sous forme de tableau numpy
+            response = sh_request.get_data(save_data=True)
+            image_array = response[0]
+            
+            # Conversion du tableau numpy en image PIL et enregistrement
+            image = Image.fromarray(image_array)
+            image_path = os.path.join(folder_path, "response.png")
+            image.save(image_path)
+            
+            # Détection des anomalies sur l'image
+            anomalies = detect_anomalies(image_array)
+            
+            # Enregistrement de l'image d'anomalie
+            anomaly_path = os.path.join(folder_path, "anomaly.png")
+            Image.fromarray((anomalies * 255).astype(np.uint8)).save(anomaly_path)
+            
+            # Génération des URLs pour les images
+            image_url = request.build_absolute_uri(f'/static/assets/sentinel/{folder_name}/response.png')
+            anomaly_url = request.build_absolute_uri(f'/static/assets/sentinel/{folder_name}/anomaly.png')
+            
+            return JsonResponse({"image_url": image_url, "anomaly_url": anomaly_url})
+        
+        except Exception as e:
+            print("Erreur lors de la récupération des données : ", str(e))
+            return JsonResponse({"error": str(e)}, status=500)
 
-    # Check if data is returned
-    if image_array is None:
-        raise ValueError("No image data received from SentinelHub.")  
-    #image_bytes = response[0] if response else None
-    files = os.listdir(folder_path)
-    sub_folder = [f for f in files if os.path.isdir(os.path.join(folder_path, f))][0]
-    folder_with_image = os.path.join(folder_path, sub_folder)
-    """ if image_bytes is None:
-      raise ValueError("No image data received from SentinelHub.") """
-    
-    # Detect anomalies
-    anomalies = detect_anomalies(image_array, filtre_value)
-    image_url = request.build_absolute_uri(f'/static/assets/sentinel/{folder_with_image}/response.png')
-    #image_url = request.build_absolute_uri(f'/static/assets/sentinel/{date}_response/response.png')
-
-    #image_url = f"/static/assets/sentinel/{date}_response/response.png"
-    #image_url = f"{data_folder}/{folder_name}/response.png"
-    return JsonResponse({"image_url": image_url, "anomalies": convert_to_serializable(anomalies)})
-    #return JsonResponse({"image_url": "/static/assets/sentinel/2b8105841735d27341cdf126b3a4c6b6/response.png"})
-  except Exception as e:
-    print("Erreur lors de la récupération des données : ", str(e))
-    return JsonResponse({"error": str(e)}, status=500)
 
 # Fonction d'extraction des coordonnées
 def extract_coordinates(points):
@@ -2951,6 +2915,18 @@ def create_bbox(coordinates):
   bbox = BBox(bbox=[(min_lng, min_lat), (max_lng, max_lat)], crs=CRS.WGS84)
   print("BBox créée : ", repr(bbox))
   return bbox
+
+def detect_anomalies(image_data, threshold=0.3):
+    """
+    Détecte les anomalies dans les données d'image en fonction d'un seuil NDVI ou NDRE.
+    """
+    # Convertir l'image en tableau numpy
+    np_image = np.array(image_data)
+    # Calculer l'index de végétation
+    anomalies = np_image[:, :, 3] < threshold  # Utilise le canal NDVI
+    return anomalies
+
+    # Répétez pour d'autres indices si besoin
 
 # Fonction de génération du script Evalscript
 def get_evalscript(filtre_value):
@@ -2996,6 +2972,48 @@ function evaluatePixel(samples) {
    return imgVals.concat(samples.dataMask)
 }
     """
+  elif filtre_value == "NDVI_Anomaly":
+     return """
+           //VERSION=3
+function setup() {
+   return {
+      input: ["B04", "B08", "dataMask"],
+      output: { bands: 4 }
+   };
+}
+
+const ramp = [
+   [-1, 0xC5142A],
+   [0.05, 0xC5142A],
+   [0.1, 0xC5142A],
+   [0.15, 0xE02D2C],
+   [0.2, 0xEF4C3A],
+   [0.25, 0xFE6C4A],
+   [0.3, 0xFF8D5A],
+   [0.35, 0xFFAB69],
+   [0.4, 0xFFC67D],
+   [0.45, 0xFFE093],
+   [0.5, 0xFFEFAB],
+   [0.55, 0xFDFEC2],
+   [0.6, 0xEAF7AC],
+   [0.65, 0xD5EF94],
+   [0.7, 0xB9E383],
+   [0.75, 0x9BD873],
+   [0.8, 0x77CA6F],
+   [0.85, 0x53BD6B],
+   [0.9, 0x14AA60],
+   [0.95, 0x009755],
+   [1, 0x007E47],
+];
+
+const visualizer = new ColorRampVisualizer(ramp);
+function evaluatePixel(sample) {
+            let ndvi = index(sample.B08, sample.B04);
+            let anomaly = ndvi < 0.3 ? [1, 0, 0, sample.dataMask] : [0, 1, 0, sample.dataMask];
+            return anomaly;
+        }
+
+        """
   elif filtre_value == "NDRE":
     return """
       //VERSION=3
@@ -3165,7 +3183,7 @@ function evaluatePixel(samples) {
 
     """
   else:
-    return "Invalid filter" 
+    return "Invalid filter"
   
 
 #################################################################################
