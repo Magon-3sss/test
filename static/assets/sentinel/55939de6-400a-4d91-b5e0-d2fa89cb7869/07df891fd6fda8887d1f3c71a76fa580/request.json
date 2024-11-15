@@ -1,0 +1,94 @@
+{
+    "headers": {
+        "accept": "image/png",
+        "content-type": "application/json"
+    },
+    "payload": {
+        "evalscript": "\n           // VERSION=3\nfunction setup() {\n    return {\n        input: [\"B04\", \"B08\", \"dataMask\"],\n        output: { bands: 4 },\n        mosaicking: \"ORBIT\"\n    };\n}\n\n// Configuration parameters\nconst config = {\n    nbPastYears: 3,\n    defaultOutputValue: -2,\n    ndviMinValue: -1,\n    currentIndexesMinValuesNumber: 1,\n    pastIndexesMinValuesNumber: 3,\n    pixelEvalMaxValue: 0.7,\n    loss: {\n        lowerTriggerPremium: 0,\n        higherTriggerPremium: 1,\n        minimumAverageValuePremium: 0.1,\n        minimumPayoutPremium: 0\n    }\n};\n\n// Utility function to calculate NDVI\nfunction calculateNDVI(sample) {\n    const denom = sample.B04 + sample.B08;\n    if (denom === 0) return null;\n    const ndvi = (sample.B08 - sample.B04) / denom;\n    return ndvi > config.ndviMinValue ? ndvi : null;\n}\n\n// Function to filter scenes by past years\nfunction preProcessScenes(collections) {\n    collections.scenes.orbits = collections.scenes.orbits.filter(function (orbit) {\n        const orbitDateFrom = new Date(orbit.dateFrom);\n        return orbitDateFrom.getMonth() === collections.to.getMonth() &&\n            orbitDateFrom.getFullYear() >= collections.to.getFullYear() - config.nbPastYears;\n    });\n    return collections;\n}\n\n// Function to calculate past and current index averages\nfunction calculateIndexAverages(samples, scenes) {\n    const indexes = samples.reduce((acc, sample, index) => {\n        const ndvi = calculateNDVI(sample);\n        if (!ndvi) return acc;\n\n        const year = scenes[index].date.getFullYear();\n        if (!acc[year]) acc[year] = { count: 0, sum: 0 };\n        acc[year].count++;\n        acc[year].sum += ndvi;\n        return acc;\n    }, {});\n\n    const currentYear = scenes[0].date.getFullYear();\n    const current = indexes[currentYear] && indexes[currentYear].count >= config.currentIndexesMinValuesNumber\n        ? indexes[currentYear].sum / indexes[currentYear].count\n        : null;\n\n    const pastSum = Array.from({ length: config.nbPastYears }, (_, i) => currentYear - i - 1)\n        .reduce((sum, year) => {\n            const data = indexes[year];\n            if (data && data.count) return sum + data.sum / data.count;\n            return sum;\n        }, 0);\n\n    const past = pastSum > 0 && pastSum / config.nbPastYears >= config.pastIndexesMinValuesNumber ? pastSum : null;\n\n    return { current, past };\n}\n\n// Function to calculate NDVI anomaly\nfunction calculateNdviAnomaly(indexes) {\n    if (indexes.current === null || indexes.past === null) return config.defaultOutputValue;\n    const anomaly = indexes.current - indexes.past;\n    return Math.max(Math.min(anomaly, config.pixelEvalMaxValue), -config.pixelEvalMaxValue);\n}\n\n// Main pixel evaluation function\nfunction evaluatePixel(samples, scenes) {\n    const indexes = calculateIndexAverages(samples, scenes);\n    const anomaly = calculateNdviAnomaly(indexes);\n    const colorRamp = [\n        [-config.pixelEvalMaxValue, 0xC5142A],\n        [0, 0xFFFF00],\n        [config.pixelEvalMaxValue, 0x14AA60]\n    ];\n    const visualizer = new ColorRampVisualizer(colorRamp);\n    const rgb = visualizer.process(anomaly);\n\n    return [...rgb, samples[0].dataMask];\n}\n\n        ",
+        "input": {
+            "bounds": {
+                "bbox": [
+                    28.46077,
+                    22.752656,
+                    28.574409,
+                    22.859281
+                ],
+                "geometry": {
+                    "coordinates": [
+                        [
+                            [
+                                28.4618,
+                                22.8577
+                            ],
+                            [
+                                28.4618,
+                                22.8577
+                            ],
+                            [
+                                28.573723,
+                                22.859281
+                            ],
+                            [
+                                28.573723,
+                                22.859281
+                            ],
+                            [
+                                28.574409,
+                                22.753922
+                            ],
+                            [
+                                28.574409,
+                                22.753922
+                            ],
+                            [
+                                28.462486,
+                                22.752656
+                            ],
+                            [
+                                28.462486,
+                                22.752656
+                            ],
+                            [
+                                28.46077,
+                                22.8577
+                            ],
+                            [
+                                28.4618,
+                                22.8577
+                            ]
+                        ]
+                    ],
+                    "type": "Polygon"
+                },
+                "properties": {
+                    "crs": "http://www.opengis.net/def/crs/EPSG/0/4326"
+                }
+            },
+            "data": [
+                {
+                    "dataFilter": {
+                        "timeRange": {
+                            "from": "2024-10-22T00:00:00Z",
+                            "to": "2024-10-22T23:59:59Z"
+                        }
+                    },
+                    "type": "sentinel-2-l2a"
+                }
+            ]
+        },
+        "output": {
+            "height": 512,
+            "responses": [
+                {
+                    "format": {
+                        "type": "image/png"
+                    },
+                    "identifier": "default"
+                }
+            ],
+            "width": 512
+        }
+    },
+    "timestamp": "2024-11-08T16:19:08.265944",
+    "url": "https://services.sentinel-hub.com/api/v1/process"
+}

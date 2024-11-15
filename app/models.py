@@ -165,6 +165,11 @@ class FiltreMaladie(models.Model):
     descriptionAr=models.TextField()
     details=models.CharField(max_length=5000, default='default_value')
 
+class AnomalyDetection(models.Model):
+    location = models.CharField(max_length=255)
+    date = models.DateField()
+    ndvi_value = models.FloatField()
+    anomaly_detected = models.BooleanField(default=False)
 class Color(models.Model):
     value=models.CharField(max_length=50)
     color_css=models.CharField(max_length=50)
