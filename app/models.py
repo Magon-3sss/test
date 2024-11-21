@@ -78,7 +78,7 @@ class ProjectsPermission(models.Model):
         permissions = [
             ("view_projects", "Can view projects"),
         ]
-    
+   
 class Zone(models.Model):
     type=models.CharField(max_length=50)
     area=models.CharField(max_length=100)
@@ -197,8 +197,6 @@ class ColorReferenceMsavi(models.Model):
     value=models.CharField(max_length=50)
     color_css=models.CharField(max_length=50)
     description=models.TextField(null=True)
-    
-
 
     
 class Machines_Tables(models.Model):

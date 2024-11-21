@@ -2336,7 +2336,12 @@ def parcelle_new (request):
         return render(request, 'signin.html')
      
 def parcelle_new_for_project(request, id):
-    return render(request, 'parcelle-new.html', {'id_projet': id})
+    pointsproject = Point.objects.filter(geozone=id)
+    points_project_data = serialize("json", pointsproject)
+    points = PointParcelle.objects.filter(geozone__id_projet=id)
+    points_data = serialize("json", points)
+    return render(request, 'parcelle-new.html', {'id_projet': id, 'points': points_data, 'pointsproject':points_project_data})
+
 def parcelle_new_form (request): 
     return render(request, 'parcelle-new-form.html')
 def parcelle_details (request, id):

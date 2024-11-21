@@ -82,6 +82,11 @@
                                 <div>
                                     <h1 class="page-title">parcelle New</h1>
                                     <input id="id-projet" style="display: none;" value="{{ id_projet }}" />
+                                    <input type="hidden" id="points-data" value='{{ points|safe }}' />
+                                    <input type="hidden" id="points-project-data" value='{{ pointsproject|safe }}' />
+                                    {% comment %} <input type="hidden" id="parcelles-data" value='{{ parcelles|safe }}' />
+                                    <input type="hidden" id="projects-data" value='{{ projects|safe }}' /> {% endcomment %}
+
                                 </div>
                                 <div class="ms-auto pageheader-btn">
                                     <ol class="breadcrumb">
@@ -120,6 +125,53 @@
     // Map initialization 
     var mapcenter = [51.505, -0.09];
     var map = L.map('map', {zoomControl: false}).setView(mapcenter, 11);
+
+    // Récupérer les données des points depuis l'élément caché
+const pointsData = JSON.parse(document.getElementById('points-data').value);
+const pointsProjectData = JSON.parse(document.getElementById('points-project-data').value);
+
+// Regrouper les points par géozone pour former des géométries
+const groupedPoints = {};
+pointsData.forEach(point => {
+    const geozoneId = point.fields.geozone;
+    if (!groupedPoints[geozoneId]) {
+        groupedPoints[geozoneId] = [];
+    }
+    groupedPoints[geozoneId].push([parseFloat(point.fields.latt), parseFloat(point.fields.long)]);
+});
+
+const groupedPointsProject = {};
+pointsProjectData.forEach(point => {
+    const geozoneId = point.fields.geozone;
+    if (!groupedPointsProject[geozoneId]) {
+        groupedPointsProject[geozoneId] = [];
+    }
+    groupedPointsProject[geozoneId].push([parseFloat(point.fields.latt), parseFloat(point.fields.long)]);
+});
+
+// Ajouter les géométries (polygones ou lignes) à la carte
+Object.values(groupedPoints).forEach(latlngs => {
+    // Dessiner des polygones ou des lignes avec les points regroupés
+    if (latlngs.length > 2) {
+        const polygon = L.polygon(latlngs, { color: 'blue', fillOpacity: 0 }).addTo(map);
+        polygon.bindPopup('Zone Parcelle'); 
+    } else if (latlngs.length === 2) {
+        const polyline = L.polyline(latlngs, { color: 'green' }).addTo(map);
+        polyline.bindPopup('Ligne Parcelle'); 
+    }
+});
+
+Object.values(groupedPointsProject).forEach(latlngs => {
+    // Dessiner des polygones ou des lignes avec les points regroupés
+    if (latlngs.length > 2) {
+        const polygon = L.polygon(latlngs, { color: 'red', fillOpacity: 0 }).addTo(map);
+        polygon.bindPopup('Zone Parcelle'); 
+    } else if (latlngs.length === 2) {
+        const polyline = L.polyline(latlngs, { color: 'green' }).addTo(map);
+        polyline.bindPopup('Ligne Parcelle'); 
+    }
+});
+
 
     //google satellite
     googleSat = L.tileLayer('http://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}', {
