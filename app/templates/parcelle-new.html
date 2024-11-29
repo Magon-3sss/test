@@ -84,6 +84,7 @@
                                     <input id="id-projet" style="display: none;" value="{{ id_projet }}" />
                                     <input type="hidden" id="points-data" value='{{ points|safe }}' />
                                     <input type="hidden" id="points-project-data" value='{{ pointsproject|safe }}' />
+                                    <input type="hidden" id="map-center" value="{{ center|default:'[51.505, -0.09]' }}" />
                                     {% comment %} <input type="hidden" id="parcelles-data" value='{{ parcelles|safe }}' />
                                     <input type="hidden" id="projects-data" value='{{ projects|safe }}' /> {% endcomment %}
 
@@ -123,8 +124,12 @@
 
 <script>
     // Map initialization 
-    var mapcenter = [51.505, -0.09];
-    var map = L.map('map', {zoomControl: false}).setView(mapcenter, 11);
+    // Récupérer la position initiale du centre depuis l'input caché
+const center = JSON.parse(document.getElementById('map-center').value);
+
+// Initialiser la carte sur la position du projet
+var map = L.map('map', { zoomControl: false }).setView(center, 12);
+
 
     // Récupérer les données des points depuis l'élément caché
 const pointsData = JSON.parse(document.getElementById('points-data').value);

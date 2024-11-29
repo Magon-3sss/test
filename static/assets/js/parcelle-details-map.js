@@ -1,10 +1,40 @@
 let map;
 let pointsToBeDrawed;
 let points_parcelles_map;
+let raster_image_url;
+let imageUrl;
 
 window.onload = function () {
   let data = document.getElementById("data-id").value;
   let d = JSON.parse(data);
+
+  const filters_select = document.getElementById("filtre-select");
+  var filters_colors = JSON.parse(d.filters_colors);
+  console.log(filters_colors);
+  var filters = JSON.parse(filters_colors.filters);
+  console.log(filters);
+  for (let i = 0; i < filters.length; i++) {
+    const option = document.createElement("option");
+    option.value = filters[i].fields.abreviation;
+    option.text = filters[i].fields.abreviation;
+    filters_select.add(option);
+  }
+  var colors = JSON.parse(filters_colors.colors);
+  console.log(colors);
+  const references_table = document.getElementById("reference_id");
+  for (let i = 0; i < colors.length; i++) {
+    const tr = references_table.insertRow(i);
+    var button = document.createElement('button');
+    button.style.backgroundColor = colors[i].fields.color_css;
+    button.style.width = '20px';
+    button.style.height = '20px';
+    const color_td = tr.insertCell(0);
+    const value_td = tr.insertCell(1);
+    const desc_td = tr.insertCell(2);
+    color_td.appendChild(button);
+    value_td.innerHTML = colors[i].fields.value;
+    desc_td.innerHTML = colors[i].fields.description;
+  }
  
   let points = JSON.parse(d.points);
   pointsToBeDrawed = JSON.parse(points.points);
@@ -123,6 +153,73 @@ function showFormData() {
   var client_text = document.createTextNode(client);
   var client_element = document.getElementById("client-id");
   client_element.appendChild(client_text);
+}
+function btn1(){
+  document.getElementById("btn1").style.opacity = "0.4";
+  document.querySelector('#btn1').disabled = true;
+  document.querySelector('#btn2').disabled = false;
+  document.getElementById("btn2").style.opacity = "1";
+  document.getElementById("irrig").style.display = "inline";
+}
+function btn2(){
+  document.getElementById("btn2").style.opacity = "0.4";
+  document.querySelector('#btn2').disabled = true;
+  document.querySelector('#btn1').disabled = false;
+  document.getElementById("btn1").style.opacity = "1";
+  document.getElementById("irrig").style.display = "none";
+  document.getElementById("reference-card").style.display = "none";
+}
+async function getRasterImage() {
+  let filtre_value = document.getElementById("filtre-select").value;
+  let dateElement = document.getElementById("datepicker");
+  if (!dateElement) {
+    console.error('Date picker element not found');
+    return;
+  }
+    let date = dateElement.value;
+  if (!date) {
+    console.error('Date is required and must be selected');
+    return;
+  }  
+  let points_parcelle = pointsToBeDrawed.map(p => [p.fields.long, p.fields.latt]);
+  let data = {
+    date: date,
+    points: points_parcelle,
+    filtre: filtre_value,
+  };
+  try {
+    const response = await fetch('/sentinelhub-raster-image/', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data)
+    });
+    if (response.ok) {
+      const responseData = await response.json(); 
+      const imageUrl = responseData.image_url; 
+      console.log('Image URL:', imageUrl);
+      showOverLay(imageUrl, points_parcelle);
+    } else {
+      console.error('Error fetching raster image:', await response.text());
+    }
+  } catch (error) {
+    console.error('Error fetching raster image:', error);
+  } 
+}
+function showOverLay(imageUrl, coordinates) {
+  const imageUrlWithCacheBuster = imageUrl + '?_t=' + new Date().getTime(); 
+  var bounds = coordinates.map(coord => [coord[1], coord[0]]);
+  var imageBounds = L.latLngBounds(bounds);
+  
+  // Si un overlay existait déjà, retirez-le
+  if (window.imageOverlay) {
+    map.removeLayer(window.imageOverlay);
+  }
+  // Créer un nouveau overlay et l'ajouter à la carte
+  window.imageOverlay = L.imageOverlay(imageUrlWithCacheBuster, imageBounds, {opacity: 1, interactive: true}).addTo(map);
+  // Ajoutez ces lignes pour que la carte s'adapte aux limites de l'image
+  map.fitBounds(imageBounds);
 }
 
 

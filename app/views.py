@@ -2335,12 +2335,35 @@ def parcelle_new (request):
         # Si le jeton n'est pas présent, redirigez vers la page de connexion
         return render(request, 'signin.html')
      
+""" def parcelle_new_for_project(request, id):
+    pointsproject = Point.objects.filter(geozone=id)
+    points_project_data = serialize("json", pointsproject)
+    points = PointParcelle.objects.filter(geozone__id_projet=id)
+    points_data = serialize("json", points)
+    return render(request, 'parcelle-new.html', {'id_projet': id, 'points': points_data, 'pointsproject':points_project_data}) """
+
 def parcelle_new_for_project(request, id):
     pointsproject = Point.objects.filter(geozone=id)
     points_project_data = serialize("json", pointsproject)
     points = PointParcelle.objects.filter(geozone__id_projet=id)
     points_data = serialize("json", points)
-    return render(request, 'parcelle-new.html', {'id_projet': id, 'points': points_data, 'pointsproject':points_project_data})
+    center = None
+
+    if pointsproject.exists():
+        first_point = pointsproject.first()
+        center = [float(first_point.latt), float(first_point.long)]
+
+    return render(
+        request,
+        'parcelle-new.html',
+        {
+            'id_projet': id,
+            'points': points_data,
+            'pointsproject': points_project_data,
+            'center': center,
+        }
+    )
+
 
 def parcelle_new_form (request): 
     return render(request, 'parcelle-new-form.html')
