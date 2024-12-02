@@ -183,6 +183,7 @@ urlpatterns = [
     path('projects', views.projects, name='projects'),
     path('delete-project/<int:project_id>/', views.delete_project, name='delete_project'),
     path('project-modifier/<int:project_id>/', views.project_modifier, name='project-modifier'),
+    path('save-modified-data/', views.save_modified_data, name='save_modified_data'),
     ### Parcelles ###
     path('saveparcelle/',savezoneparcelle),
     path('saveFormParcelle/',views.save_form_parcelle),

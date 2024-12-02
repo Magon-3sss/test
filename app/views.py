@@ -1877,14 +1877,28 @@ def delete_project(request, project_id):
     
 def project_modifier(request, project_id):
     project = get_object_or_404(MapForm, id=project_id)
+    points = Point.objects.filter(geozone=project.geozone)
+    parcelles = ZoneParcelle.objects.filter(id_projet=project.geozone.id)
+
+    # Formatage des points pour Leaflet (ligne ou polygone)
+    points_data = [{"lat": float(p.latt), "lng": float(p.long)} for p in points]
+
+    # Formatage des parcelles pour Leaflet (polygone)
+    parcelles_data = [
+        [
+            {"lat": float(point.latt), "lng": float(point.long)}
+            for point in PointParcelle.objects.filter(geozone=parcelle)
+        ]
+        for parcelle in parcelles
+    ]
 
     if request.method == 'POST':
         # Récupérer les données soumises par le formulaire
         project.project_name = request.POST.get('project_name', project.project_name)
         # Convertir la chaîne de caractères de la date en objet date
-        date_string = request.POST.get('project_date', project.project_date)
+        """ date_string = request.POST.get('project_date', project.project_date)
         if date_string: 
-            project.project_date = datetime.strptime(date_string, '%d-%m-%Y').date()
+            project.project_date = datetime.strptime(date_string, '%d-%m-%Y').date() """
         project.project_category = request.POST.get('project_category', project.project_category)
         project.department = request.POST.get('department', project.department)
         project.client = request.POST.get('client', project.client)
@@ -1896,7 +1910,30 @@ def project_modifier(request, project_id):
         return redirect('projects')  # Remplacez 'projects' par le nom de votre vue de liste des projets
 
     # Rendre la page de modification avec les données du projet
-    return render(request, 'project-modifier.html', {'project': project})
+    return render(request, 'project-modifier.html', {'project': project,
+        'points': json.dumps(points_data),
+        'parcelles': json.dumps(parcelles_data),})
+    
+@require_http_methods(["POST"])
+def save_modified_data(request):
+    try:
+        data = json.loads(request.body)
+        updated_data = data.get('updatedData', [])
+
+        # Parcourir les données et mettre à jour les points/parcelles
+        for shape in updated_data:
+            if isinstance(shape, list):  # Vérifiez si c'est un polygone ou une ligne
+                for coord in shape:
+                    # Exemple : Mise à jour des points (adapter selon votre logique)
+                    Point.objects.filter(latt=coord['lat'], long=coord['lng']).update(
+                        latt=coord['lat'],
+                        long=coord['lng']
+                    )
+
+        return JsonResponse({"message": "Données mises à jour avec succès"}, status=200)
+
+    except Exception as e:
+        return JsonResponse({"error": str(e)}, status=400)
 
 def project_details(request, id):
     zone = Zone.objects.get(pk=id)
