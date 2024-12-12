@@ -49,6 +49,8 @@ urlpatterns = [
     path('operation/<int:id>/delete/', views.operation_delete, name='operation-delete'),
     
     path('sentinelhub-raster-image/', views.generate_raster_image, name='sentinelhub-raster-image'),
+    path('get/points/multiple', views.get_points_for_multiple_parcelles, name='get_points_for_multiple'),
+
     path('saveMachine/',views.save_machine, name='save_machine'),
     
     
@@ -71,7 +73,7 @@ urlpatterns = [
     path('update-profile-image/', views.update_profile_image, name='update-profile-image'),
     path('update-company-info/', views.update_company_info, name='update-company-info'),
     
-    path('test', views.test, name='test'),
+    
     path('about', views.about, name='about'),
     path('accordion', views.accordion, name='accordion'),
     path('alerts', views.alerts, name='alerts'),
@@ -184,6 +186,10 @@ urlpatterns = [
     path('delete-project/<int:project_id>/', views.delete_project, name='delete_project'),
     path('project-modifier/<int:project_id>/', views.project_modifier, name='project-modifier'),
     path('save-modified-data/', views.save_modified_data, name='save_modified_data'),
+    
+    path('ajouter-equipement', views.ajouter_equipement, name='ajouter-equipement'),
+    path('projet/<int:projet_id>/points/', views.get_project_points, name='get_project_points'),
+    
     ### Parcelles ###
     path('saveparcelle/',savezoneparcelle),
     path('saveFormParcelle/',views.save_form_parcelle),

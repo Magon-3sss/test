@@ -83,7 +83,6 @@ class Zone(models.Model):
     type=models.CharField(max_length=50)
     area=models.CharField(max_length=100)
     circle_radius=models.CharField(max_length=100)
- 
 class Point(models.Model):
     latt=models.CharField(max_length=50)
     long=models.CharField(max_length=50)

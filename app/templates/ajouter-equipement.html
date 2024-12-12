@@ -1,0 +1,191 @@
+{% extends 'components/base.html' %}
+{% load static %}
+
+{% block styles %}
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <style>
+        #map { height: 400px; width: 600px;}
+    </style>
+{% endblock %}
+
+{% block content %}
+    <div class="page-header">
+        <div>
+            <h1 class="page-title">Ajouter Equipement</h1>
+        </div>
+        <div class="ms-auto pageheader-btn">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="javascript:void(0);">Ajouter Equipement</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Projets</li>
+            </ol>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-body project-type-container projects p-4">
+                            {% comment %} <h4 class="m-0" id="typeTitle">Ajouter Equipement</h4> {% endcomment %}
+                            <form method="POST" id="ajouter-equipement-form">
+                                {% csrf_token %}
+                                <div class="form-group">
+                                    <label for="projet">Choisir un projet :</label>
+                                    <select id="projet" name="projet" class="form-control">
+                                        {% for projet in projets %}
+                                            <option value="{{ projet.id }}">{{ projet.project_name }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="type-marker">Type de marqueur :</label>
+                                    <select id="type-marker" name="type_marker" class="form-control">
+                                        <option value="machine">Machine</option>
+                                        <option value="outil">Outil</option>
+                                        <option value="batiment">Bâtiment</option>
+                                        <option value="securite">Sécurité</option>
+                                    </select>
+                                </div>                                
+
+                                <div id="map"></div>
+
+                                <div class="form-group">
+                                    <label for="nom">Nom de l'équipement :</label>
+                                    <input type="text" id="nom" name="nom" class="form-control" required>
+                                </div>
+                                <button type="submit" class="btn btn-primary">Ajouter Equipement</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block scripts %}
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script>
+        var map = L.map('map').setView([51.505, -0.09], 13); 
+
+        // Ajout d'un fond de carte
+        {% comment %} L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map); {% endcomment %}
+
+        googleSat = L.tileLayer('http://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}', {
+            maxZoom: 20,
+            subdomains: ['mt0', 'mt1', 'mt2', 'mt3']
+        });googleSat.addTo(map)
+
+        var markers = []; 
+        var selectedProjectId = null;
+        function loadProjectPoints(projetId) {
+            fetch(`/projet/${projetId}/points/`) 
+                .then(response => response.json())
+                .then(data => {
+                    data.points.forEach(function(point) {
+                        var marker = L.marker([point.latitude, point.longitude]).addTo(map);
+                        markers.push(marker);
+                    });
+                });
+        }
+
+        // Ajouter un équipement et sa position
+        map.on('click', function(e) {
+            if (selectedProjectId) {
+                var lat = e.latlng.lat;
+                var lng = e.latlng.lng;
+
+                // Ajouter un marqueur au clic
+                var marker = L.marker([lat, lng]).addTo(map);
+                markers.push(marker);
+
+                // Ajouter la position dans le formulaire
+                document.getElementById('ajouter-equipement-form').onsubmit = function(event) {
+                    event.preventDefault();
+                    fetch('/ajouter-equipement', {
+                        method: 'POST',
+                        body: new FormData(document.getElementById('ajouter-equipement-form')),
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        alert('Équipement ajouté avec succès!');
+                    });
+                };
+            }
+        });
+
+        // Charger les points quand un projet est sélectionné
+        document.getElementById('projet').addEventListener('change', function(e) {
+            selectedProjectId = e.target.value;
+            loadProjectPoints(selectedProjectId);
+        });
+
+        var machineIcon = L.icon({
+            iconUrl: "{% static 'assets/images/icons/machine.png' %}",
+            iconSize: [32, 32],
+            iconAnchor: [16, 32],
+        });
+        
+        var outilIcon = L.icon({
+            iconUrl: "{% static 'assets/images/icons/outil.png' %}",
+            iconSize: [32, 32],
+            iconAnchor: [16, 32],
+        });
+        
+        var batimentIcon = L.icon({
+            iconUrl: "{% static 'assets/images/icons/batiment.png' %}",
+            iconSize: [32, 32],
+        });
+        
+        var securiteIcon = L.icon({
+            iconUrl: "{% static 'assets/images/icons/securite.png' %}",
+            iconSize: [32, 32],
+        });
+        
+        map.on('click', function (e) {
+    if (selectedProjectId) {
+        var lat = e.latlng.lat;
+        var lng = e.latlng.lng;
+        var type = document.getElementById('type-marker').value;
+
+        var icon;
+        if (type === "machine") {
+            icon = machineIcon;
+        } else if (type === "outil") {
+            icon = outilIcon;
+        } else if (type === "batiment") {
+            icon = batimentIcon;
+        } else if (type === "securite") {
+            icon = securiteIcon;
+        }
+
+        var marker = L.marker([lat, lng], { icon: icon }).addTo(map);
+        markers.push(marker);
+
+        // Ajouter la position et le type dans le formulaire pour l'enregistrement
+        document.getElementById('ajouter-equipement-form').onsubmit = function (event) {
+            event.preventDefault();
+            var formData = new FormData(this);
+            formData.append('latitude', lat);
+            formData.append('longitude', lng);
+            formData.append('type_marker', type);
+
+            fetch('/ajouter-equipement', {
+                method: 'POST',
+                body: formData,
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert('Équipement ajouté avec succès!');
+            });
+        };
+    }
+});
+
+    </script>
+{% endblock %}

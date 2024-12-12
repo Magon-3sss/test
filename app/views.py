@@ -642,25 +642,51 @@ def save_moteur(request):
             print('no')
             return JsonResponse({"Erreur": "Some error occured"}, status=status.HTTP_201_CREATED) """
 
+
+
 """ Engrais """
 # List Engrais
 def engrais (request):
+    jwt_token = request.COOKIES.get('jwtToken')  
+    user_group = request.COOKIES.get('userGroup')   
+    try:
+        profile = request.user.profile
+    except ObjectDoesNotExist:
+        profile = None
     list = []
     engrais = Engrais_Tables.objects.filter(user=request.user)
     types_engrais = TypeEngrais.objects.all()
     categories_Engrais = CategorieEngrais.objects.all()
     projects = MapForm.objects.all()
     list.append({"types": types_engrais,"categories": categories_Engrais, "engrais":engrais, "projects": projects})
-    return render(request, 'engrais.html', {'data': list})
+    context = {
+                'data': list,
+                'jwtToken': jwt_token,  
+                'userGroup': user_group, 
+                'profile_user': profile 
+            }
+    return render(request, 'engrais.html', context)
 # List Tableau Engrais
 def engrais_list (request):
+    jwt_token = request.COOKIES.get('jwtToken')  
+    user_group = request.COOKIES.get('userGroup')   
+    try:
+        profile = request.user.profile
+    except ObjectDoesNotExist:
+        profile = None
     list = []
     engrais = Engrais_Tables.objects.filter(user=request.user)
     types_engrais = TypeEngrais.objects.all()
     categories_Engrais = CategorieEngrais.objects.all()
     projects = MapForm.objects.all()
     list.append({"types": types_engrais,"categories": categories_Engrais, "engrais":engrais, "projects": projects})
-    return render(request, 'engrais-list.html', {'data': list})
+    context = {
+                'data': list,
+                'jwtToken': jwt_token,  
+                'userGroup': user_group, 
+                'profile_user': profile 
+            }
+    return render(request, 'engrais-list.html', context)
 # Save Engrais
 @api_view(['POST'])
 @authentication_classes([SessionAuthentication])  
@@ -800,22 +826,46 @@ def delete_engrai(request, engrai_id):
 
 """ Traitements """
 def traitements (request):
+    jwt_token = request.COOKIES.get('jwtToken')  
+    user_group = request.COOKIES.get('userGroup')   
+    try:
+        profile = request.user.profile
+    except ObjectDoesNotExist:
+        profile = None
     list = []
     traitements = Traitement_Tables.objects.filter(user=request.user)
     types_traitements = TypeTraitement.objects.all()
     categories_Traitements = CategorieTraitement.objects.all()
     projects = MapForm.objects.all()
     list.append({"types": types_traitements,"categories": categories_Traitements, "traitements":traitements, "projects": projects})
-    return render(request, 'traitements.html', {'data': list})
+    context = {
+                'data': list,
+                'jwtToken': jwt_token,  
+                'userGroup': user_group, 
+                'profile_user': profile 
+            }
+    return render(request, 'traitements.html', context)
 
 def traitements_list (request):
+    jwt_token = request.COOKIES.get('jwtToken')  
+    user_group = request.COOKIES.get('userGroup')   
+    try:
+        profile = request.user.profile
+    except ObjectDoesNotExist:
+        profile = None
     list = []
     traitements = Traitement_Tables.objects.filter(user=request.user)
     types_traitements = TypeTraitement.objects.all()
     categories_Traitements = CategorieTraitement.objects.all()
     projects = MapForm.objects.all()
     list.append({"types": types_traitements,"categories": categories_Traitements, "traitements":traitements, "projects": projects})
-    return render(request, 'traitements-list.html', {'data': list})
+    context = {
+                'data': list,
+                'jwtToken': jwt_token,  
+                'userGroup': user_group, 
+                'profile_user': profile 
+            }
+    return render(request, 'traitements-list.html', context)
 
 @api_view(['POST'])
 @authentication_classes([SessionAuthentication])  
@@ -955,22 +1005,46 @@ def delete_traitement(request, traitement_id):
 """ Graines et Pousses """
 # List Graines et Pousses
 def graines_pousses (request):
+    jwt_token = request.COOKIES.get('jwtToken')  
+    user_group = request.COOKIES.get('userGroup')   
+    try:
+        profile = request.user.profile
+    except ObjectDoesNotExist:
+        profile = None
     list = []
     graines = Graine_Tables.objects.filter(user=request.user)
     types_graines = TypeGrainesPousses.objects.all()
     categories_graines = CategorieGrainesPousses.objects.all()
     projects = MapForm.objects.all()
     list.append({"types": types_graines,"categories": categories_graines, "graines":graines, "projects": projects})
-    return render(request, 'graines-pousses.html', {'data': list})
+    context = {
+                'data': list,
+                'jwtToken': jwt_token,  
+                'userGroup': user_group, 
+                'profile_user': profile 
+            }
+    return render(request, 'graines-pousses.html', context)
 # List Tableau Graines et Pousses
 def graines_pousses_list (request):
+    jwt_token = request.COOKIES.get('jwtToken')  
+    user_group = request.COOKIES.get('userGroup')   
+    try:
+        profile = request.user.profile
+    except ObjectDoesNotExist:
+        profile = None
     list = []
     graines = Graine_Tables.objects.filter(user=request.user)
     types_graines = TypeGrainesPousses.objects.all()
     categories_graines = CategorieGrainesPousses.objects.all()
     projects = MapForm.objects.all()
     list.append({"types": types_graines,"categories": categories_graines, "graines":graines, "projects": projects})
-    return render(request, 'graines-pousses-list.html', {'data': list})
+    context = {
+                'data': list,
+                'jwtToken': jwt_token,  
+                'userGroup': user_group, 
+                'profile_user': profile 
+            }
+    return render(request, 'graines-pousses-list.html', context)
 # Save Graines et Pousses
 @api_view(['POST'])
 @authentication_classes([SessionAuthentication])  
@@ -1092,20 +1166,44 @@ def delete_graine(request, graine_id):
 
 """ Ressources Humaines"""
 def rh (request):
+    jwt_token = request.COOKIES.get('jwtToken')  
+    user_group = request.COOKIES.get('userGroup')   
+    try:
+        profile = request.user.profile
+    except ObjectDoesNotExist:
+        profile = None
     list = []
     rhs = Rh_Tables.objects.filter(user=request.user)
     types_rhs = TypeRh.objects.all()
     projects = MapForm.objects.all()
     list.append({"types": types_rhs,"rhs": rhs, "projects": projects})
-    return render(request, 'rh.html', {'data': list})
+    context = {
+                'data': list,
+                'jwtToken': jwt_token,  
+                'userGroup': user_group, 
+                'profile_user': profile 
+            }
+    return render(request, 'rh.html', context)
 
 def rh_list (request):
+    jwt_token = request.COOKIES.get('jwtToken')  
+    user_group = request.COOKIES.get('userGroup')   
+    try:
+        profile = request.user.profile
+    except ObjectDoesNotExist:
+        profile = None
     list = []
     rhs = Rh_Tables.objects.filter(user=request.user)
     types_rhs = TypeRh.objects.all()
     projects = MapForm.objects.all()
     list.append({"types": types_rhs,"rhs": rhs, "projects": projects})
-    return render(request, 'rh-list.html', {'data': list})
+    context = {
+                'data': list,
+                'jwtToken': jwt_token,  
+                'userGroup': user_group, 
+                'profile_user': profile 
+            }
+    return render(request, 'rh-list.html', context)
 
 @api_view(['POST'])
 @authentication_classes([SessionAuthentication])  
@@ -1257,18 +1355,42 @@ def delete_rh(request, rh_id):
 
 """ pieces de rechange """
 def pieces_rechange (request):
+    jwt_token = request.COOKIES.get('jwtToken')  
+    user_group = request.COOKIES.get('userGroup')   
+    try:
+        profile = request.user.profile
+    except ObjectDoesNotExist:
+        profile = None
     list = []
     pieces = Pieces_Tables.objects.filter(user=request.user)
     types_pieces = TypePieces.objects.all()
     list.append({"types": types_pieces,"pieces": pieces})
-    return render(request, 'pieces-rechange.html', {'data': list})
+    context = {
+                'data': list,
+                'jwtToken': jwt_token,  
+                'userGroup': user_group, 
+                'profile_user': profile 
+            }
+    return render(request, 'pieces-rechange.html', context)
 
 def pieces_rechange_list (request):
+    jwt_token = request.COOKIES.get('jwtToken')  
+    user_group = request.COOKIES.get('userGroup')   
+    try:
+        profile = request.user.profile
+    except ObjectDoesNotExist:
+        profile = None
     list = []
     pieces = Pieces_Tables.objects.filter(user=request.user)
     types_pieces = TypePieces.objects.all()
     list.append({"types": types_pieces,"pieces": pieces})
-    return render(request, 'pieces-rechange-list.html', {'data': list})
+    context = {
+                'data': list,
+                'jwtToken': jwt_token,  
+                'userGroup': user_group, 
+                'profile_user': profile 
+            }
+    return render(request, 'pieces-rechange-list.html', context)
 
 @api_view(['POST'])
 @authentication_classes([SessionAuthentication])  
@@ -1380,20 +1502,44 @@ def get_piece_details(request, piece_id):
 
 """ carburant """
 def carburant (request):
+    jwt_token = request.COOKIES.get('jwtToken')  
+    user_group = request.COOKIES.get('userGroup')   
+    try:
+        profile = request.user.profile
+    except ObjectDoesNotExist:
+        profile = None
     list = []
     carburants = Carburants_Tables.objects.filter(user=request.user)
     #carburants = Carburants_Tables.objects.all()
     types_carburants = TypeCarburant.objects.all()
     list.append({"types": types_carburants,"carburants": carburants})
-    return render(request, 'carburant.html', {'data': list})
+    context = {
+                'data': list,
+                'jwtToken': jwt_token,  
+                'userGroup': user_group, 
+                'profile_user': profile 
+            }
+    return render(request, 'carburant.html', context)
 
 def carburant_list (request):
+    jwt_token = request.COOKIES.get('jwtToken')  
+    user_group = request.COOKIES.get('userGroup')   
+    try:
+        profile = request.user.profile
+    except ObjectDoesNotExist:
+        profile = None
     list = []
     carburants = Carburants_Tables.objects.filter(user=request.user)
     #carburants = Carburants_Tables.objects.all()
     types_carburants = TypeCarburant.objects.all()
     list.append({"types": types_carburants,"carburants": carburants})
-    return render(request, 'carburant-list.html', {'data': list})
+    context = {
+                'data': list,
+                'jwtToken': jwt_token,  
+                'userGroup': user_group, 
+                'profile_user': profile 
+            }
+    return render(request, 'carburant-list.html', context)
 
 @require_http_methods(["DELETE"])
 def delete_carburant(request, carburant_id):
@@ -1490,18 +1636,42 @@ def get_carburant_details(request, carburant_id):
 
 """ Outils Agricoles"""
 def outils_agricoles (request):
+    jwt_token = request.COOKIES.get('jwtToken')  
+    user_group = request.COOKIES.get('userGroup')   
+    try:
+        profile = request.user.profile
+    except ObjectDoesNotExist:
+        profile = None 
     list = []
     outils = Outils_Tables.objects.filter(user=request.user)
     types_outils = TypeOutilsAgricoles.objects.all()
     list.append({"types": types_outils,"outils": outils})
-    return render(request, 'outils-agricoles.html', {'data': list})
+    context = {
+                'data': list,
+                'jwtToken': jwt_token,  
+                'userGroup': user_group, 
+                'profile_user': profile 
+            }
+    return render(request, 'outils-agricoles.html', context)
 
 def outils_agricoles_list (request):
+    jwt_token = request.COOKIES.get('jwtToken')  
+    user_group = request.COOKIES.get('userGroup')   
+    try:
+        profile = request.user.profile
+    except ObjectDoesNotExist:
+        profile = None
     list = []
     outils = Outils_Tables.objects.filter(user=request.user)
     types_outils = TypeOutilsAgricoles.objects.all()
     list.append({"types": types_outils,"outils": outils})
-    return render(request, 'outils-agricoles-list.html', {'data': list})
+    context = {
+                'data': list,
+                'jwtToken': jwt_token,  
+                'userGroup': user_group, 
+                'profile_user': profile 
+            }
+    return render(request, 'outils-agricoles-list.html', context)
 
 @api_view(['POST'])
 @authentication_classes([SessionAuthentication])  
@@ -1654,19 +1824,26 @@ def get_outil_details(request, outil_id):
         return JsonResponse({'error': 'Outil non trouvé'}, status=404)
         
 """ Machines & Engins """
-def machines_engins (request):
+def machines_engins(request):
+    jwt_token = request.COOKIES.get('jwtToken') 
+    user_group = request.COOKIES.get('userGroup')  
+    try:
+        profile = request.user.profile
+    except ObjectDoesNotExist:
+        profile = None  
     list = []
     machines = Machines_Tables.objects.all()
     types_machines = TypeMachineEngins.objects.all()
-    list.append({"types": types_machines,"machines": machines})
-    """ user = request.user
-    print(user)
-    groups = user.groups.filter(name='regular')
-    print(groups)
-    if groups.exists(): """
-    return render(request, 'machines-engins.html', {'data': list})
-    """ else:
-        return redirect('permission_denied') """
+    list.append({"types": types_machines, "machines": machines})
+    context = {
+        'data': list,
+        'jwtToken': jwt_token,
+        'userGroup': user_group, 
+        'profile_user': profile 
+    }
+
+    return render(request, 'machines-engins.html', context)
+
 
 def machines_engins_new (request):
     return render(request, 'machines-engins-new.html')
@@ -1858,7 +2035,7 @@ def projects (request):
         context = {
             'jwtToken': cookie,
             'userGroup': user_group,
-            'projects': list  # Ajoutez la liste des projets à votre contexte
+            'projects': list,
         }
         print(context)
         return render(request, 'projects.html', context)
@@ -1893,47 +2070,80 @@ def project_modifier(request, project_id):
     ]
 
     if request.method == 'POST':
-        # Récupérer les données soumises par le formulaire
         project.project_name = request.POST.get('project_name', project.project_name)
         # Convertir la chaîne de caractères de la date en objet date
-        """ date_string = request.POST.get('project_date', project.project_date)
+        date_string = request.POST.get('project_date', project.project_date)
         if date_string: 
-            project.project_date = datetime.strptime(date_string, '%d-%m-%Y').date() """
+            project.project_date = datetime.datetime.strptime(date_string, '%d-%m-%Y').date()
         project.project_category = request.POST.get('project_category', project.project_category)
         project.department = request.POST.get('department', project.department)
         project.client = request.POST.get('client', project.client)
 
-        # Sauvegarder les modifications dans la base de données
         project.save()
 
-        # Rediriger vers la page des projets après la mise à jour
-        return redirect('projects')  # Remplacez 'projects' par le nom de votre vue de liste des projets
+        return redirect('projects')  
 
-    # Rendre la page de modification avec les données du projet
     return render(request, 'project-modifier.html', {'project': project,
         'points': json.dumps(points_data),
         'parcelles': json.dumps(parcelles_data),})
-    
+from pyproj import Proj, transform
+def calculate_area(points):
+    proj_wgs84 = Proj(init="epsg:4326")  
+    proj_utm = Proj(proj="utm", zone=33, ellps="WGS84")  
+
+    # Transformer les coordonnées en mètres
+    coords = [
+        transform(proj_wgs84, proj_utm, float(point["lng"]), float(point["lat"]))
+        for point in points
+    ]
+    polygon = Polygon(coords)
+
+    return polygon.area
+   
+from django.db import transaction
 @require_http_methods(["POST"])
+@transaction.atomic
 def save_modified_data(request):
     try:
         data = json.loads(request.body)
-        updated_data = data.get('updatedData', [])
+        print("Données reçues :", data)
 
-        # Parcourir les données et mettre à jour les points/parcelles
+        updated_data = data.get('updatedData', [])
+        project_id = request.GET.get('project_id')
+        project = get_object_or_404(MapForm, id=project_id)
+        geozone = project.geozone
+
         for shape in updated_data:
-            if isinstance(shape, list):  # Vérifiez si c'est un polygone ou une ligne
+            if isinstance(shape, list):  # Polygones ou lignes
+                # Calculer l'aire du polygone modifié en hectares
+                new_area = calculate_area(shape)
+
+                # Mettre à jour les points
                 for coord in shape:
-                    # Exemple : Mise à jour des points (adapter selon votre logique)
-                    Point.objects.filter(latt=coord['lat'], long=coord['lng']).update(
+                    points = Point.objects.filter(
                         latt=coord['lat'],
-                        long=coord['lng']
+                        long=coord['lng'],
+                        geozone=geozone
                     )
+                    if points.exists():
+                        points.update(latt=coord['lat'], long=coord['lng'])
+                    else:
+                        Point.objects.create(
+                            latt=coord['lat'],
+                            long=coord['lng'],
+                            geozone=geozone
+                        )
+
+                # Mettre à jour l'aire dans la base de données en hectares
+                geozone.area = f"{new_area:.2f} ha"  # Convertir en chaîne avec 2 décimales et unité "ha"
+                geozone.save()
 
         return JsonResponse({"message": "Données mises à jour avec succès"}, status=200)
 
     except Exception as e:
+        print("Erreur lors de la mise à jour :", str(e))
         return JsonResponse({"error": str(e)}, status=400)
+
 
 def project_details(request, id):
     zone = Zone.objects.get(pk=id)
@@ -2883,10 +3093,10 @@ from sentinelhub import MimeType
 
 # Configuration de Sentinel Hub
 config = SHConfig()
-config.instance_id = "3d348504-117e-4018-a668-f8dc56712eeb"
+config.instance_id = "27940401-522c-49c2-8ae3-e6c091921bcd"
 if not config.sh_client_id or not config.sh_client_secret:
-  config.sh_client_id = '0fd3ac52-31fb-4505-9edb-21c30953c5b9'
-  config.sh_client_secret = 'e7dDLn24tW2TR50rdl1SebWIqPJnomwW'
+  config.sh_client_id = 'cabaafdb-7606-40be-a58a-db6d422fad3a'
+  config.sh_client_secret = 'oVNWaXgfZoRJ6GzJFpfRA4KbEEMN42KN'
 from shapely.geometry import Polygon
 
 def create_mask_geometry(points):
@@ -2894,7 +3104,101 @@ def create_mask_geometry(points):
   mask_geometry = Geometry(geometry=polygon, crs=CRS.WGS84)
   return mask_geometry
 
+import json  # Assurez-vous que le module json est importé
+
+@csrf_exempt
 @require_POST
+def generate_raster_image(request):
+    try:
+        # Charger les données JSON du corps de la requête
+        data = json.loads(request.body)
+
+        # Debug : afficher les données reçues
+        print("Données reçues :", data)
+
+        # Récupérer les données depuis le frontend
+        date = data.get("date")
+        selected_parcelles = data.get("parcelle_ids", [])  # Liste des ID des parcelles
+        filtre_value = data.get("filtre")
+
+        # Validation : vérifier si des parcelles sont sélectionnées
+        if not selected_parcelles:
+            return JsonResponse({"error": "Aucune parcelle sélectionnée."}, status=400)
+
+        # Récupérer tous les points des parcelles sélectionnées
+        all_points = []
+        for parcelle_id in selected_parcelles:
+            parcelle_points = PointParcelle.objects.filter(geozone_id=parcelle_id)
+            # Debug : afficher les points pour chaque parcelle
+            print(f"Points pour la parcelle {parcelle_id} :", list(parcelle_points))
+
+            all_points.extend([(float(p.long), float(p.latt)) for p in parcelle_points])
+
+        # Validation : vérifier si des points ont été trouvés
+        if not all_points:
+            return JsonResponse({"error": "Aucun point trouvé pour les parcelles sélectionnées."}, status=400)
+
+        # Générer la géométrie et la bbox
+        mask_geometry = create_mask_geometry(all_points)
+        bbox = create_bbox(all_points)
+
+        # Charger le script Evalscript en fonction du filtre
+        evalscript = get_evalscript(filtre_value)
+
+        # Créer un dossier pour les données Sentinel
+        data_folder = "D:/MAGON_3SSS/MAGON_3SSS/MAGON_3SSS-main/MAGON_3S/static/assets/sentinel"
+        folder_name = str(uuid.uuid4())
+        folder_path = os.path.join(data_folder, folder_name)
+        if not os.path.exists(folder_path):
+            os.makedirs(folder_path)
+
+        # Configurer la requête Sentinel Hub
+        sh_request = SentinelHubRequest(
+            data_folder=folder_path,
+            evalscript=evalscript,
+            geometry=mask_geometry,
+            input_data=[
+                SentinelHubRequest.input_data(
+                    data_collection=DataCollection.SENTINEL2_L2A,
+                    time_interval=(date, date),
+                )
+            ],
+            responses=[SentinelHubRequest.output_response("default", MimeType.PNG)],
+            bbox=bbox,
+            size=(512, 512),
+            config=config,
+        )
+
+        # Récupérer les données de l'API Sentinel Hub
+        response = sh_request.get_data(save_data=True)
+        image_array = response[0]
+
+        # Conversion du tableau numpy en image PIL et enregistrement
+        image = Image.fromarray(image_array)
+        image_path = os.path.join(folder_path, "response.png")
+        image.save(image_path)
+        
+        image_url = request.build_absolute_uri(f'/static/assets/sentinel/{folder_name}/response.png')
+
+        # Retourner la réponse JSON avec l'URL de l'image générée
+        return JsonResponse({"image_url": image_url})
+
+    except Exception as e:
+        # Debug : afficher l'erreur
+        print("Erreur lors de la récupération des données :", str(e))
+        return JsonResponse({"error": str(e)}, status=500)
+    
+
+@csrf_exempt
+@require_POST
+def get_points_for_multiple_parcelles(request):
+    data = json.loads(request.body)
+    parcelle_ids = data.get("parcelle_ids", [])
+
+    points = PointParcelle.objects.filter(geozone_id__in=parcelle_ids).values("latt", "long")
+    return JsonResponse(list(points), safe=False)
+
+""" @require_POST
 @api_view(['POST'])
 @csrf_exempt
 def generate_raster_image(request):
@@ -2956,7 +3260,7 @@ def generate_raster_image(request):
         
         except Exception as e:
             print("Erreur lors de la récupération des données : ", str(e))
-            return JsonResponse({"error": str(e)}, status=500)
+            return JsonResponse({"error": str(e)}, status=500) """
 
 
 # Fonction d'extraction des coordonnées
@@ -3361,8 +3665,60 @@ def generate_raster_image(request):
         #return JsonResponse(raster_image_url, status=status.HTTP_200_OK, safe=False)
         #return JsonResponse({"msg": "test en cours"}, status=status.HTTP_200_OK, safe=False) """
 
-def test (request): 
-    return render(request, 'test.html')
+def ajouter_equipement(request):
+    cookie = request.COOKIES.get('jwtToken')
+    if cookie:
+        user_group = request.COOKIES.get('userGroup') or None
+        try:
+            profile = request.user.profile
+        except ObjectDoesNotExist:
+            profile = None
+
+        projets = MapForm.objects.all()
+        context = {
+            'jwtToken': cookie,
+            'userGroup': user_group,
+            'profile_user': profile,
+            'projets': projets,
+        }
+
+        if request.method == 'POST':
+            nom = request.POST.get('nom')
+            latitude = request.POST.get('latitude')
+            longitude = request.POST.get('longitude')
+            projet_id = request.POST.get('projet')
+            type_marker = request.POST.get('type_marker')  # Vérifiez si ce champ est requis
+
+            try:
+                projet = MapForm.objects.get(id=projet_id)
+                equipement = Equipement.objects.create(
+                    nom=nom,
+                    latitude=latitude,
+                    longitude=longitude,
+                    projet=projet,
+                    type_marker=type_marker  # Ajoutez ce champ si le modèle l'utilise
+                )
+                return JsonResponse({'status': 'success', 'equipement': equipement.id})
+            except MapForm.DoesNotExist:
+                return JsonResponse({'status': 'error', 'message': 'Projet introuvable'}, status=400)
+            except Exception as e:
+                return JsonResponse({'status': 'error', 'message': str(e)}, status=500)
+
+        return render(request, 'ajouter-equipement.html', context)
+    else:
+        return render(request, 'signin.html')
+
+    
+def get_project_points(request, projet_id):
+    projet = MapForm.objects.get(id=projet_id)
+    points = Point.objects.filter(geozone=projet.geozone)  # Utiliser la géozone associée
+    data = []
+    for point in points:
+        data.append({
+            'latitude': point.latt,
+            'longitude': point.long
+        })
+    return JsonResponse({'points': data})
 
 def about (request): 
     return render(request, 'about.html')
@@ -3941,9 +4297,14 @@ def logistiques(request):
     cookie = request.COOKIES.get('jwtToken')
     if cookie:
         user_group = request.COOKIES.get('userGroup') or None
+        try:
+            profile = request.user.profile
+        except ObjectDoesNotExist:
+            profile = None
         context = {
             'jwtToken': cookie,
             'userGroup': user_group,
+            'profile_user': profile,
         }
 
         if 'permissions' in access_response:
@@ -3975,9 +4336,34 @@ def fertilisants_traitements (request):
     return render(request, 'fertilisants-traitements.html')
 
 def reseaux_irrigation (request):
-    return render(request, 'reseaux-irrigation.html')
+    jwt_token = request.COOKIES.get('jwtToken')  
+    user_group = request.COOKIES.get('userGroup')   
+    try:
+        profile = request.user.profile
+    except ObjectDoesNotExist:
+        profile = None
+    context = {
+                'data': list,
+                'jwtToken': jwt_token,  
+                'userGroup': user_group, 
+                'profile_user': profile 
+            }
+    return render(request, 'reseaux-irrigation.html', context)
+
 def reseaux_electrique (request):
-    return render(request, 'reseaux-electrique.html')
+    jwt_token = request.COOKIES.get('jwtToken')  
+    user_group = request.COOKIES.get('userGroup')   
+    try:
+        profile = request.user.profile
+    except ObjectDoesNotExist:
+        profile = None
+    context = {
+                'data': list,
+                'jwtToken': jwt_token,  
+                'userGroup': user_group, 
+                'profile_user': profile 
+            }
+    return render(request, 'reseaux-electrique.html', context)
 
 def poste_transformateur (request):
     return render(request, 'poste-transformateur.html')
@@ -3987,9 +4373,34 @@ def generatur (request):
     return render(request, 'generatur.html')
 
 def securite (request):
-    return render(request, 'securite.html')
+    jwt_token = request.COOKIES.get('jwtToken')  
+    user_group = request.COOKIES.get('userGroup')   
+    try:
+        profile = request.user.profile
+    except ObjectDoesNotExist:
+        profile = None
+    context = {
+                'data': list,
+                'jwtToken': jwt_token,  
+                'userGroup': user_group, 
+                'profile_user': profile 
+            }
+    return render(request, 'securite.html', context)
+
 def batiments (request):
-    return render(request, 'batiments.html')
+    jwt_token = request.COOKIES.get('jwtToken')  
+    user_group = request.COOKIES.get('userGroup')   
+    try:
+        profile = request.user.profile
+    except ObjectDoesNotExist:
+        profile = None
+    context = {
+                'data': list,
+                'jwtToken': jwt_token,  
+                'userGroup': user_group, 
+                'profile_user': profile 
+            }
+    return render(request, 'batiments.html', context)
 
 def maison_villa (request):
     list = []
@@ -4030,10 +4441,15 @@ def operations_utilisateur (request):
     cookie = request.COOKIES.get('jwtToken')
     if cookie:
         user_group = request.COOKIES.get('userGroup') or None
+        try:
+            profile = request.user.profile
+        except ObjectDoesNotExist:
+            profile = None
         context = {
             'jwtToken': cookie,
             'userGroup': user_group,
             'operations': operations,
+            'profile_user': profile
         }
         print(context)
         return render(request, 'operations-utilisateur.html', context)
@@ -4046,6 +4462,12 @@ def get_points(request, geozone_id):
     return JsonResponse(data, safe=False)
 
 def ajouter_operation_agricole (request):
+    jwt_token = request.COOKIES.get('jwtToken')  
+    user_group = request.COOKIES.get('userGroup')  
+    try:
+        profile = request.user.profile
+    except ObjectDoesNotExist:
+        profile = None
     list = []
     operations_agricoles = New_Oper_Tables.objects.all()
     type_rh = Rh_Tables.objects.all()
@@ -4057,8 +4479,25 @@ def ajouter_operation_agricole (request):
     type_engrais  = TypeEngrais.objects.all() 
     type_graines_pousses  =TypeGrainesPousses.objects.all() 
     type_traitement = TypeTraitement.objects.all()
-    list.append({"type_rh": type_rh,"machines_tables": machines_tables, "carburants": type_carburant, "outils": outil,"pieces": type_pieces,"graines" :type_graines_pousses,"engraiss" : type_engrais, "traitements" : type_traitement,   "operations": operations_agricoles, "projects": projects})
-    return render(request, 'ajouter-operation-agricole.html', {'data': list})
+    list.append({
+                 "type_rh": type_rh,
+                 "machines_tables": machines_tables,
+                 "carburants": type_carburant,
+                 "outils": outil,
+                 "pieces": type_pieces,
+                 "graines" :type_graines_pousses,
+                 "engraiss" : type_engrais,
+                 "traitements" : type_traitement,
+                 "operations": operations_agricoles,
+                 "projects": projects
+                })
+    context = {
+        'data': list,
+        'jwtToken': jwt_token,  
+        'userGroup': user_group,  
+        'profile_user': profile  
+    }
+    return render(request, 'ajouter-operation-agricole.html', context)
    
 
 def operation_view(request, id):
@@ -4100,17 +4539,28 @@ def operation_view(request, id):
                 'latitude': point.latt,
                 'longitude': point.long
             })
-
-    context = {
-        'operation': operation,
-        'main_doeuvres': main_doeuvres,
-        'machine_carburants': machine_carburants,
-        'outils': outils,
-        'pieces': pieces,
-        'markers': marker_data,  
-        'project_points': project_points_data,
-    }
-    return render(request, 'operation-view.html', context)
+    cookie = request.COOKIES.get('jwtToken')
+    if cookie:
+        user_group = request.COOKIES.get('userGroup') or None
+        try:
+            profile = request.user.profile
+        except ObjectDoesNotExist:
+            profile = None
+        context = {
+            'jwtToken': cookie,
+            'userGroup': user_group,
+            'profile_user': profile,
+            'operation': operation,
+            'main_doeuvres': main_doeuvres,
+            'machine_carburants': machine_carburants,
+            'outils': outils,
+            'pieces': pieces,
+            'markers': marker_data,  
+            'project_points': project_points_data,
+        }
+        return render(request, 'operation-view.html', context)
+    else:
+        return render(request, 'signin.html')
     
 """ def operation_edit(request, id):
     operation = get_object_or_404(New_Oper_Tables, pk=id)
@@ -4286,26 +4736,36 @@ def operation_edit(request, id):
         
         
         return redirect('operation-view', id=operation.id)
-
-    context = {
-        'operation': operation,
-        'main_doeuvres': main_doeuvres,
-        'all_rh': all_rh,
-        'machines_tables': machines_tables,
-        'machine_carburants': machine_carburants,
-        'carburants': carburants,
-        'outils': outils,
-        'selected_outils_ids': [outil.id for outil in selected_outils],
-        'type_engrais': type_engrais,
-        'type_graines_pousses': type_graines_pousses,
-        'type_traitement': type_traitement,
-        'pieces': pieces,
-        'type_pieces': type_pieces,
-        'markers': markers,
-        'markers': marker_data,  
-        'project_points': project_points_data,
-    }
-    return render(request, 'operation-edit.html', context)
+    cookie = request.COOKIES.get('jwtToken')
+    if cookie:
+        user_group = request.COOKIES.get('userGroup') or None
+        try:
+            profile = request.user.profile
+        except ObjectDoesNotExist:
+            profile = None
+        context = {
+            'jwtToken': cookie,
+            'userGroup': user_group,
+            'profile_user': profile,
+            'operation': operation,
+            'main_doeuvres': main_doeuvres,
+            'all_rh': all_rh,
+            'machines_tables': machines_tables,
+            'machine_carburants': machine_carburants,
+            'carburants': carburants,
+            'outils': outils,
+            'selected_outils_ids': [outil.id for outil in selected_outils],
+            'type_engrais': type_engrais,
+            'type_graines_pousses': type_graines_pousses,
+            'type_traitement': type_traitement,
+            'pieces': pieces,
+            'type_pieces': type_pieces,
+            'markers': markers,
+            'markers': marker_data,  
+            'project_points': project_points_data,
+        }
+        return render(request, 'operation-edit.html', context)
+    
 
 
 def operation_delete(request, id):
@@ -4451,9 +4911,14 @@ def recommendations_ia (request):
     cookie = request.COOKIES.get('jwtToken')
     if cookie:
         user_group = request.COOKIES.get('userGroup') or None
+        try:
+            profile = request.user.profile
+        except ObjectDoesNotExist:
+            profile = None
         context = {
             'jwtToken': cookie,
             'userGroup': user_group,
+            'profile_user': profile
         }
         print(context)
         return render(request, 'recommendations-ia.html', context)
@@ -4513,6 +4978,12 @@ def preprocess_image_for_red_text(image_path):
 from django.db.models import Q
 
 def analyse(request):
+    jwt_token = request.COOKIES.get('jwtToken')  
+    user_group = request.COOKIES.get('userGroup')  
+    try:
+        profile = request.user.profile
+    except ObjectDoesNotExist:
+        profile = None
     query = request.GET.get('q')
     sort_by = request.GET.get('sort_by')
     images = UploadedImage.objects.all().order_by('-id')
@@ -4571,8 +5042,18 @@ def analyse(request):
 
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
+    context = {
+        'form': form,
+        'images': images,
+        'page_obj': page_obj,
+        'plants': plants,
+        'jwtToken': jwt_token,  
+        'userGroup': user_group,  
+        'profile_user': profile 
+    }
 
-    return render(request, 'analyse.html', {'form': form, 'images': images, 'page_obj': page_obj, 'plants': plants})
+    return render(request, 'analyse.html', context)
+    #return render(request, 'analyse.html', {'form': form, 'images': images, 'page_obj': page_obj, 'plants': plants})
 
 """ def analyse(request):
     images = UploadedImage.objects.all().order_by('-id')

@@ -140,6 +140,8 @@
 												<script src="{% static './data/test.js' %}"></script>
 												<script src="{% static './dist/main.js' %}"></script>
 												<script src="{% static './dist/web-GIS.js' %}"></script>
+												<script src="{% static 'path/to/leaflet.markercluster.js' %}"></script>
+												<script src="{% static 'lib/leaflet.markercluster.js' %}"></script>
 					
 												<!-- leaflet draw plugin  -->
 												<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/0.4.2/leaflet.draw.css"/>
@@ -191,7 +193,7 @@
 
         // Ajouter les parcelles comme des polygones
         parcelles.forEach(function (parcelle) {
-            var polygon = L.polygon(parcelle, { color: 'blue', weight: 2, fillOpacity: 0.4 }).addTo(drawnItems);
+            var polygon = L.polygon(parcelle, { color: 'blue', weight: 2, fillOpacity: 0 }).addTo(drawnItems);
         });
 
         // Initialiser Leaflet.Draw
@@ -203,36 +205,36 @@
         });
         map.addControl(drawControl);
 
-        // Événement de sauvegarde des modifications
         map.on(L.Draw.Event.EDITED, function (e) {
-            var layers = e.layers;
-
-            // Collecter les données modifiées
-            var updatedData = [];
-            layers.eachLayer(function (layer) {
-                if (layer instanceof L.Polygon || layer instanceof L.Polyline) {
-                    updatedData.push(layer.getLatLngs());
-                }
-            });
-
-            // Envoyer les données au backend via une requête AJAX
-            fetch("{% url 'save_modified_data' %}", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    "X-CSRFToken": "{{ csrf_token }}",
-                },
-                body: JSON.stringify({ updatedData: updatedData }),
-            })
-                .then((response) => response.json())
-                .then((data) => {
-                    alert("Les modifications ont été enregistrées !");
-                })
-                .catch((error) => {
-                    console.error("Erreur:", error);
-                    alert("Une erreur est survenue lors de l'enregistrement des modifications.");
-                });
-        });
+			var layers = e.layers;
+			var updatedData = [];
+			var projectId = "{{ project.id }}"; // Récupérer l'ID du projet depuis le template
+		
+			layers.eachLayer(function (layer) {
+				if (layer instanceof L.Polygon || layer instanceof L.Polyline) {
+					var latLngs = layer.getLatLngs();
+					if (Array.isArray(latLngs[0])) {
+						updatedData.push(latLngs[0].map(ll => ({ lat: ll.lat, lng: ll.lng })));
+					} else {
+						updatedData.push(latLngs.map(ll => ({ lat: ll.lat, lng: ll.lng })));
+					}
+				}
+			});
+		
+			console.log("Données envoyées :", updatedData);
+		
+			fetch("{% url 'save_modified_data' %}?project_id=" + projectId, {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+					"X-CSRFToken": "{{ csrf_token }}",
+				},
+				body: JSON.stringify({ updatedData: updatedData }),
+			})
+				.then(response => response.json())
+				.then(data => alert(data.message || "Modifications enregistrées avec succès !"))
+				.catch(error => alert("Erreur lors de l'enregistrement : " + error));
+		});				
 													});
 												</script>
 										</div> 

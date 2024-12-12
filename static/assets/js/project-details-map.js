@@ -224,60 +224,66 @@ function showFormData(){
   
 
   async function getRasterImage() {
-    let filtre_value = document.getElementById("filtre-select").value;
-    let dateElement = document.getElementById("datepicker");
-    if (!dateElement) {
-      console.error('Date picker element not found');
-      return;
-    }
-      let date = dateElement.value;
-    if (!date) {
-      console.error('Date is required and must be selected');
-      return;
-    }  
-    let points_parcelle = pointsToBeDrawed.map(p => [p.fields.long, p.fields.latt]);
-    let data = {
-      date: date,
-      points: points_parcelle,
-      filtre: filtre_value,
-    };
-    try {
-      const response = await fetch('/sentinelhub-raster-image/', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data)
-      });
-      /* if (response.ok) {
-        const responseData = await response.json(); 
-        const imageUrl = responseData.image_url; 
-        console.log('Image URL:', imageUrl);
-        showOverLay(imageUrl, points_parcelle);
-      } else {
-        console.error('Error fetching raster image:', await response.text());
-      } */
-        if (response.ok) {
-          const responseData = await response.json();
-          showOverLay(responseData.image_url, points_parcelle);
+    // Récupérer les IDs des parcelles sélectionnées
+    let selectedParcelles = Array.from(
+        document.querySelectorAll('input[name="parcelle"]:checked')
+    ).map(checkbox => checkbox.value);
 
-          // Afficher les anomalies si elles existent
-    if (responseData.anomalies && responseData.anomalies.length > 0) {
-      showAnomaliesOnMap(responseData.anomalies);
-    } else {
-      console.warn("Aucune anomalie trouvée.");
+    console.log("Parcelles sélectionnées :", selectedParcelles);  // Vérifiez que les IDs sont capturés
+
+    // Vérification si aucune parcelle n'est sélectionnée
+    if (!selectedParcelles.length) {
+        alert("Veuillez sélectionner au moins une parcelle.");
+        return;
     }
-      } else {
-          console.error('Error fetching raster image:', await response.text());
-      }
+
+    let data = {
+        date: document.getElementById("datepicker").value,
+        parcelle_ids: selectedParcelles,  // Ajout des parcelle_ids
+        filtre: document.getElementById("filtre-select").value,
+    };
+
+    try {
+        const response = await fetch('/sentinelhub-raster-image/', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data),
+        });
+
+        if (response.ok) {
+            const responseData = await response.json();
+            showOverLay(responseData.image_url, selectedParcelles);
+        } else {
+            console.error("Erreur lors de la récupération de l'image raster :", await response.text());
+        }
     } catch (error) {
-      console.error('Error fetching raster image:', error);
-    } 
-  }
-  
+        console.error("Erreur :", error);
+    }
+}
+
+function showOverLay(imageUrl, parcelleIds) {
+  fetch('/get/points/multiple', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ parcelle_ids: parcelleIds }),
+  })
+  .then(response => response.json())
+  .then(points => {
+      const bounds = points.map(p => [p.latt, p.long]);
+      const imageBounds = L.latLngBounds(bounds);
+      
+      if (window.imageOverlay) {
+          map.removeLayer(window.imageOverlay);
+      }
+      
+      window.imageOverlay = L.imageOverlay(imageUrl, imageBounds, { opacity: 0.8 }).addTo(map);
+      map.fitBounds(imageBounds);
+  });
+}
+
   
    
-  function showOverLay(imageUrl, coordinates) {
+  /* function showOverLay(imageUrl, coordinates) {
     console.log('Showing overlay with image URL:', imageUrl);
     const imageUrlWithCacheBuster = imageUrl;
     //const imageUrlWithCacheBuster = imageUrl + '?_t=' + new Date().getTime();
@@ -292,7 +298,7 @@ function showFormData(){
     window.imageOverlay = L.imageOverlay(imageUrlWithCacheBuster, imageBounds, {opacity: 1, interactive: true}).addTo(map);
     // Ajoutez ces lignes pour que la carte s'adapte aux limites de l'image
     map.fitBounds(imageBounds);
-  } 
+  } */ 
 
   /* function showOverLay(imageUrl, coordinates) {
     const imageUrlWithCacheBuster = imageUrl + '?_t=' + new Date().getTime(); 
