@@ -2032,10 +2032,15 @@ def projects (request):
     cookie = request.COOKIES.get('jwtToken')
     if cookie:
         user_group = request.COOKIES.get('userGroup') or None
+        try:
+            profile = request.user.profile
+        except ObjectDoesNotExist:
+            profile = None
         context = {
             'jwtToken': cookie,
             'userGroup': user_group,
             'projects': list,
+            'profile_user': profile
         }
         print(context)
         return render(request, 'projects.html', context)
@@ -2146,6 +2151,115 @@ def save_modified_data(request):
 
 
 def project_details(request, id):
+    # Récupération des données spécifiques au projet
+    zone = Zone.objects.get(pk=id)
+    zone_serializer = ZoneSerializer(zone)
+
+    map_form_data = serialize("json", MapForm.objects.all().filter(geozone=id))
+    points = serialize("json", Point.objects.all().filter(geozone=id))
+    zones_parcelles = ZoneParcelle.objects.all().filter(id_projet=id)
+
+    parcelles = []
+    for zp in zones_parcelles:
+        map_form_parcelle = MapFormParcelle.objects.filter(geozone=zp).first()
+        if map_form_parcelle:
+            parcelles.append({
+                'geozone_id': zp.pk,
+                'parcelle_name': map_form_parcelle.parcelle_name
+            })
+
+    points_parcelles_map = []
+    for zp in zones_parcelles:
+        points_zp = serialize("json", PointParcelle.objects.all().filter(geozone_id=zp.pk))
+        points_parcelles_map.append(points_zp)
+
+    z = zone_serializer.data
+    tp = z["type"]
+    radius = z["circle_radius"]
+    cont = {
+        'form': map_form_data
+    }
+
+    # Définir le contexte selon le type de géométrie
+    if tp == "circle":
+        geometry_context = {
+            'type': tp,
+            'radius': radius,
+            'points': points,
+        }
+    else:
+        geometry_context = {
+            'type': tp,
+            'points': points,
+        }
+
+    form_data = json.dumps(cont, indent=4, sort_keys=True, default=str)
+    map_points = json.dumps(geometry_context, indent=4, sort_keys=True, default=str)
+    filters = serialize("json", Filtre.objects.all())
+    colors = serialize("json", Color.objects.all())
+
+    filters_colors = json.dumps({
+        'filters': filters,
+        'colors': colors,
+    }, indent=4, sort_keys=True, default=str)
+
+    data = {
+        'points': map_points,
+        'form': form_data,
+        'points_parcelles_map': points_parcelles_map,
+        'filters_colors': filters_colors
+    }
+
+    dumped_data = json.dumps(data, indent=4, sort_keys=True, default=str)
+
+    # Récupérer les options de filtre
+    filtre_humidite = FiltreHumidite.objects.all()
+    filtre_irrigation = FiltreIrrigation.objects.all()
+    filtre_fertilisation = FiltreFertilisation.objects.all()
+    filtre_evolution = FiltreEvolution.objects.all()
+    filtre_maladie = FiltreMaladie.objects.all()
+    filtre_vegitation = FiltreVegitation.objects.all()
+
+    filter_categories = {
+        'végitation': filtre_vegitation,
+        'humidité': filtre_humidite,
+        'irrigation': filtre_irrigation,
+        'fertilisation': filtre_fertilisation,
+        'evolution': filtre_evolution,
+        'maladie': filtre_maladie,
+    }
+
+    # Récupération des cookies et du profil utilisateur
+    cookie = request.COOKIES.get('jwtToken')
+    user_group = request.COOKIES.get('userGroup') or None
+    try:
+        profile = request.user.profile
+    except ObjectDoesNotExist:
+        profile = None
+
+    # Inclusion des données dans le contexte
+    return render(request, 'project-details.html', {
+        'data': dumped_data,
+        'project': {'parcelles': parcelles},
+        'filter_categories': filter_categories,
+        'jwtToken': cookie,
+        'userGroup': user_group,
+        'profile_user': profile,
+    })
+
+def sentinelhub_raster_image(request):
+    try:
+        data = json.loads(request.body)
+        print(f"Parcelles reçues : {data.get('parcelle_ids')}")
+        print(f"Date sélectionnée : {data.get('date')}")
+        print(f"Filtre sélectionné : {data.get('filtre')}")
+        # Logique pour récupérer l'image
+    except Exception as e:
+        print(f"Erreur rencontrée : {e}")
+        return JsonResponse({"error": str(e)}, status=500)
+
+
+""" def project_details(request, id):
     zone = Zone.objects.get(pk=id)
     zone_serializer = ZoneSerializer(zone)
 
@@ -2241,7 +2355,7 @@ def project_details(request, id):
         'data': dumped_data,
         'project': {'parcelles': parcelles},
         'filter_categories': filter_categories,
-    })
+    }) """
     
 def get_colors(request):
     filter_type = request.GET.get('filter')

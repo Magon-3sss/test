@@ -269,6 +269,7 @@ function showOverLay(imageUrl, parcelleIds) {
   })
   .then(response => response.json())
   .then(points => {
+      console.log("Points des parcelles :", points);
       const bounds = points.map(p => [p.latt, p.long]);
       const imageBounds = L.latLngBounds(bounds);
       
@@ -280,7 +281,6 @@ function showOverLay(imageUrl, parcelleIds) {
       map.fitBounds(imageBounds);
   });
 }
-
   
    
   /* function showOverLay(imageUrl, coordinates) {
@@ -342,9 +342,6 @@ function showOverLay(imageUrl, parcelleIds) {
         return; 
       }
   });
-
-
-
 
 
 //...
