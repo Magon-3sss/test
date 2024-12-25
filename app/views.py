@@ -2149,7 +2149,6 @@ def save_modified_data(request):
         print("Erreur lors de la mise à jour :", str(e))
         return JsonResponse({"error": str(e)}, status=400)
 
-
 def project_details(request, id):
     # Récupération des données spécifiques au projet
     zone = Zone.objects.get(pk=id)
@@ -2775,14 +2774,35 @@ def parcelle_details (request, id):
     'filters': filters,
     'colors': colors,
     }
-    filters_colors = json.dumps(context, indent=4, sort_keys=True, default=str)
+    filters_colors = json.dumps({
+        'filters': filters,
+        'colors': colors,
+    }, indent=4, sort_keys=True, default=str)
     data = {
         'points': map_points,
         'form': form_data,
         'filters_colors': filters_colors
     }
     dumped_data = json.dumps(data, indent=4, sort_keys=True, default=str)
-    return render(request, 'parcelle-details.html', {'data': dumped_data})
+
+    # Récupérer les options de filtre
+    filtre_humidite = FiltreHumidite.objects.all()
+    filtre_irrigation = FiltreIrrigation.objects.all()
+    filtre_fertilisation = FiltreFertilisation.objects.all()
+    filtre_evolution = FiltreEvolution.objects.all()
+    filtre_maladie = FiltreMaladie.objects.all()
+    filtre_vegitation = FiltreVegitation.objects.all()
+
+    filter_categories = {
+        'végitation': filtre_vegitation,
+        'humidité': filtre_humidite,
+        'irrigation': filtre_irrigation,
+        'fertilisation': filtre_fertilisation,
+        'evolution': filtre_evolution,
+        'maladie': filtre_maladie,
+    }
+    
+    return render(request, 'parcelle-details.html', {'data': dumped_data, 'filter_categories': filter_categories})
 
 def parcelles_list (request): 
     return render(request, 'parcelles-list.html')
@@ -3311,7 +3331,7 @@ def get_points_for_multiple_parcelles(request):
 
     points = PointParcelle.objects.filter(geozone_id__in=parcelle_ids).values("latt", "long")
     return JsonResponse(list(points), safe=False)
-
+#raster image pour tout le projet 
 """ @require_POST
 @api_view(['POST'])
 @csrf_exempt
@@ -5128,7 +5148,7 @@ def analyse(request):
             image_path = uploaded_image.image.path
             with open(image_path, 'rb') as image_file:
                 files = {'file': image_file}
-                ngrok_url = 'https://bcd4-34-147-114-245.ngrok-free.app/predict'
+                ngrok_url = 'https://89a6-34-67-87-39.ngrok-free.app/predict'
                 response = requests.post(ngrok_url, files=files)
                 if response.status_code == 200:
                     result_image_dir = 'D:/MAGON_3SSS/MAGON_3SSS/MAGON_3SSS-main/MAGON_3S/static/assets/results/'

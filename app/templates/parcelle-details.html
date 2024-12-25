@@ -127,6 +127,20 @@
 				left: 5%;
 				display: none;
 			  }
+			  #filtre-select {
+				/* Styles pour personnaliser l'apparence du select */
+				width: 200px; /* Ajustez la largeur selon vos besoins */
+				font-family: Arial, sans-serif;
+				font-size: 14px;
+				border: 1px solid #ccc;
+				border-radius: 5px;
+				padding: 5px;
+				background-color: #fff;
+			}
+			  
+			#filtre-select optgroup {
+				font-weight: bold;
+			}
 		</style>
 
 
@@ -191,15 +205,30 @@
 										<div class="irrigation" id="irrig">
 											<input type="date" id="datepicker" placeholder="Select date" onchange="getRasterImage()">
 											{% comment %} <a href="parcelles/{{ parcelle.geozone_id }}/"> {% endcomment %}
-												<select id="parcelle" name="parcelle" >
-													{% comment %} <option value="">Select a parcelle</option> {% endcomment %}
+												{% comment %} <select id="parcelle" name="parcelle" >
+													<option value="">Select a parcelle</option>
 													<option value="1"></option>
 													<option value="2">Select all parcelle</option>
-												</select>
+												</select> {% endcomment %}
 										    {% comment %} </a> {% endcomment %}
 											
-											<select id="filtre-select">
+											{% comment %} <select id="filtre-select">
 												<option></option>
+											</select> {% endcomment %}
+											<select id="filtre-select" onchange="updateColorTable()">
+												<option>Filtre</option>
+												{% for category, filters in filter_categories.items %}
+													<optgroup label="{{ category|title }}">
+														{% for filter in filters %}
+															<option value="{{ filter.abreviation }}"
+																	data-toggle="tooltip"
+																	data-placement="top"
+																	title="{{ filter.details }}">
+																{{ filter.abreviation }}
+															</option>
+														{% endfor %}
+													</optgroup>
+												{% endfor %}
 											</select>
 											{% comment %} <button onclick="getRasterImage()">Obtenir l'image raster</button> {% endcomment %}
 
@@ -881,30 +910,6 @@
 																				<a href="javascript:;"><span class="badge btn-info-light rounded-pill py-2 px-3 my-1"><i class="fe fe-corner-up-left me-1"></i>Reply</span></a>
 																			</span>
 																		</div>
-																	</div>
-																</div>
-																<div class="row mb-5 form-group-wrapper">
-																	<h3 class="card-title">Comment here:</h3>
-																	<div class="col-md-6">
-																		<div class="main-form-group">
-																			<input class="form-control" id="name" placeholder="Name" type="text">
-																			<label for="name" class="form-label mb-1">Name</label>
-																		</div><!-- main-form-group -->
-																	</div>
-																	<div class="col-md-6 mail-cmnt">
-																		<div class="main-form-group">
-																			<input class="form-control" id="mail" placeholder="Mail" type="email">
-																			<label for="mail" class="form-label mb-1">Mail</label>
-																		</div><!-- main-form-group -->
-																	</div>
-																	<div class="col-md-12 mt-2">
-																		<div class="main-form-group">
-																			<textarea name="message" id="message" class="form-control text-area" placeholder="Message" rows="3"></textarea>
-																			<label for="message" class="form-label mb-1">Message</label>
-																		</div>
-																	</div>
-																	<div class="col-md-12 mt-2">
-																		<button class="btn btn-success text-white float-end">Submit</button>
 																	</div>
 																</div>
 															</div>
